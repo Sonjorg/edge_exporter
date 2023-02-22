@@ -1,5 +1,6 @@
 package main
 
+
 import (
 	"crypto/tls"
 	"fmt"
@@ -16,7 +17,7 @@ import (
 // curl -k --data "Username=student&Password=PanneKake23" -i -v https://10.233.230.11/rest/login
 
 // TODO: This is insecure; use only in dev environments.
-func fetchAPIdata() {
+func main() {
 
 tr := &http.Transport{
 	TLSClientConfig: &tls.Config{InsecureSkipVerify: true},

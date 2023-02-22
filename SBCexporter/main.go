@@ -39,10 +39,16 @@ type SBCdata struct {
 }
 
 type isdnsg struct {
-	Href                 string `xml:"href,attr"`
-	Id                   string `xml:"id,attr"`
-	IncomingCallattempts int    `xml:"rt_IncomingCallattempts"`
-	IncomingCallaccepts  int    `xml:"rt_IncomingCallaccepts"`
+	Href                  string `xml:"href,attr"`
+	Id                    string `xml:"id,attr"`
+	IncomingCallattempts  int    `xml:"rt_IncomingCallattempts"`
+	IncomingCallaccepts   int    `xml:"rt_IncomingCallaccepts"`
+	IncomingCallrejects   int    `xml:"rt_IncomingCallrejects"`
+	IncomingCallcompletes int    `xml:"rt_IncomingCallcompletes"`
+	OutgoingCallattempts  int    `xml:"rt_OutgoingCallattempts"`
+	OutgoingCallaccepts   int    `xml:"rt_OutgoingCallaccepts"`
+	OutgoingCallrejects   int    `xml:"rt_OutgoingCallrejects"`
+	OutgoingCallcompletes int    `xml:"rt_OutgoingCallcompletes"`
 }
 
 type metrics struct {
@@ -55,12 +61,12 @@ type metrics struct {
 func newFooCollector() *metrics {
 	return &metrics{
 		IncomingCallattempts: prometheus.NewDesc("incoming_call_attempts",
-			"Shows whether a foo has occurred in our cluster",
-			[]string{"Id", "Href"}, nil,
+			"Shows incoming call attempts.",
+			[]string{"Id", "Href", "HTTP_status"}, nil,
 		),
 		IncomingCallaccepts: prometheus.NewDesc("incoming_call_accepts",
-			"Shows whether a bar has occurred in our cluster",
-			[]string{"Id", "Href"}, nil,
+			"Shows incoming call accepts.",
+			[]string{"Id", "Href","HTTP_status"}, nil,
 		),
 	}
 }
@@ -104,10 +110,11 @@ func (collector *metrics) Collect(ch chan<- prometheus.Metric) {
 	//HTTPcode = float64(sbc.Status.HTTPcode)
 	metricValue1 = float64(sbc.Isdnsg.IncomingCallattempts)
 	metricValue2 = float64(sbc.Isdnsg.IncomingCallaccepts)
+	
 	//Write latest value for each metric in the prometheus metric channel.
 	//Note that you can pass CounterValue, GaugeValue, or UntypedValue types here.
-	m1 := prometheus.MustNewConstMetric(collector.IncomingCallattempts, prometheus.GaugeValue, metricValue1, sbc.Isdnsg.Id, sbc.Isdnsg.Href)
-	m2 := prometheus.MustNewConstMetric(collector.IncomingCallaccepts, prometheus.GaugeValue, metricValue2, sbc.Isdnsg.Id, sbc.Isdnsg.Href)
+	m1 := prometheus.MustNewConstMetric(collector.IncomingCallattempts, prometheus.GaugeValue, metricValue1, sbc.Isdnsg.Id, sbc.Isdnsg.Href,sbc.Status.HTTPcode)
+	m2 := prometheus.MustNewConstMetric(collector.IncomingCallaccepts, prometheus.GaugeValue, metricValue2, sbc.Isdnsg.Id, sbc.Isdnsg.Href,sbc.Status.HTTPcode)
 	m1 = prometheus.NewMetricWithTimestamp(time.Now().Add(-time.Hour), m1)
 	m2 = prometheus.NewMetricWithTimestamp(time.Now(), m2)
 	ch <- m1
