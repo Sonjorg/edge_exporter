@@ -46,7 +46,7 @@ func main() {
 		resp.Cookies().string()
 	}*/
 	//str := strconv.Itoa(resp.Cookies())
-	fmt.Println(resp.Body, "HER KOMMER COOKIES ", resp.Cookies())
+	fmt.Println("HER KOMMER COOKIES ", resp.Cookies())
 	defer resp.Body.Close()
 	///////////////////////////////////////////////////////////////////////
 	// new request with cookie from authentication
@@ -78,7 +78,7 @@ func main() {
 	//req2.AddCookie()
 	//url := "https://10.233.230.11/rest/isdnsg/10001"
 	//u1, _ :=
-	client2.Jar.SetCookies(req.URL, resp.Cookies())
+	client2.Jar.SetCookies(req2.URL, resp.Cookies())
 
 	resp2, err := client2.Do(req2)
 	if err != nil {
