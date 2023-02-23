@@ -48,7 +48,6 @@ func main() {
 	//str := strconv.Itoa(resp.Cookies())
 	fmt.Println(resp.Body, "HER KOMMER COOKIES ", resp.Cookies())
 	defer resp.Body.Close()
-
 	///////////////////////////////////////////////////////////////////////
 	// new request with cookie from authentication
 	// https://golangbyexample.com/set-cookie-http-golang/
@@ -85,6 +84,7 @@ func main() {
 	if err != nil {
 		// handle err
 	}
+	println(resp2)
 	defer resp2.Body.Close()
 
 }
