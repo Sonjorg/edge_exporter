@@ -95,7 +95,7 @@ defer resp.Body.Close()
     }
 
 	cookie1 := &http.Cookie{
-        Name:   "PHPSESSID",
+        Name:   "PHPSESSID=",
         Value:  phpsessid,
         MaxAge: 300,
     }
