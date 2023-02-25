@@ -102,7 +102,7 @@ fmt.Println(c)
 	}
 
 
-	println(resp2)
+	println(resp2.StatusCode,"\n",resp2.Body)
 	defer resp2.Body.Close()
 
 }
