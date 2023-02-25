@@ -42,18 +42,18 @@ func main() {
 	}
 	defer resp.Body.Close()
 
-	/*var c string;
+	var c string;
 	for _, cookie := range resp.Cookies() {
 		fmt.Println("Found a cookie named:", cookie.Value)
 	 	c = cookie.Value//"PHPSESSID=" + cookie.Value//fmt.Sprintf("%s", cookie.Value)
 		 
-	  }*/
-	  cookie, err := req.Cookie("PHPSESSID")
+	  }
+	 /* cookie, err := req.Cookie("PHPSESSID")
 		if err != nil {
 			panic(err.Error())
 		}
-value := cookie.Value
-fmt.Println(value)
+value := cookie.Value*/
+fmt.Println(c)
 
 	//str := strconv.Itoa(resp.Cookies())
 	/*
@@ -87,7 +87,7 @@ fmt.Println(value)
 
 	cookie1 := &http.Cookie{
         Name:   "PHPSESSID",
-        Value:  value,
+        Value:  c,
         MaxAge: 300,
     }
 
