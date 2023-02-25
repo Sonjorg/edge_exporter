@@ -128,7 +128,7 @@ client2 := &http.Client{Transport: tr2}
 cookie1 := &http.Cookie{
 	Name:   "PHPSESSID",
 	Value:  phpsessid,
-	Path:     "/",
+	//Path:     "/",
 	MaxAge:   3600,
 	HttpOnly: false,
 	Secure:   true,
