@@ -130,7 +130,7 @@ cookie1 := &http.Cookie{
 	Value:  phpsessid,
 	Path:     "/",
 	MaxAge:   3600,
-	HttpOnly: true,
+	HttpOnly: false,
 	Secure:   true,
 }
 req2, err := http.NewRequest("GET", "https://10.233.230.11/rest/isdnsg/10001", nil)
@@ -142,7 +142,7 @@ resp2, err := client2.Do(req2)
 if err != nil {
 	// handle err
 }
-fmt.Println(resp2.Body)
+fmt.Println(resp2)
 defer resp.Body.Close()
 
 }
