@@ -11,6 +11,7 @@ import (
 //"net/http/cookiejar"
 	//"net/http/cookiejar"
 	"net/url"
+	//"regexp"
 	//"strconv"
 )
 
@@ -42,16 +43,22 @@ func main() {
 		// handle err
 	}
 	
-	c2 := resp.Cookies()
+	//var c2 string = resp.Cookies()
 	var c string;
-	for _, cookie := range resp.Cookies() {
+	/*for _, cookie := range resp.Cookies() {
 		//c = cookie.
 		c = fmt.Sprintf(cookie.Value)
 	 	//c = cookie.Value//"PHPSESSID=" + cookie.Value//fmt.Sprintf("%s", cookie.Value)
+	  }*/
+	  m := make(map[string]string)
+	  for _, c := range resp.Cookies() {
+		 m[c.Name] = c.Value
 	  }
-
+	  fmt.Println(m)
 	  fmt.Println(c,"\n")
-	  fmt.Println(c2)
+	  //var exp = regexp.MustCompile(`PHPSESSID=.+;`)
+	  //matchType := exp.FindStringSubmatch(c2)
+	 // fmt.Println(matchType)
 	  
 //value := cookie.Value
 //fmt.Println(c)
