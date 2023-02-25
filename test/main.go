@@ -8,7 +8,6 @@ import (
 	//"io/ioutil"
 	"net/http"
 	//"net/http/cookiejar"
-	//"net/http/cookiejar"
 	"net/url"
 	//"strconv"
 
@@ -44,11 +43,10 @@ func main() {
 	
 	for _, cookie := range resp.Cookies() {
 		fmt.Println("Found a cookie named:", cookie.Value)
+		c := cookie.Value
 	  }
 
-	/*func (e *PHPSessionEncoder) Decode(raw string) (phpencode.PhpSession, error) {
-		resp.Cookies().string()
-	}*/
+
 	//str := strconv.Itoa(resp.Cookies())
 	/*
 	fmt.Println("HER KOMMER COOKIES ", resp.Cookies())*/
@@ -67,7 +65,7 @@ func main() {
 	// curl --cookie SkrivInnCookieHer \ -i -k https://10.233.230.11/rest/isdnsg/10001
 
 	// TODO: This is insecure; use only in dev environments.
-	/*
+	
 	tr2 := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
@@ -83,7 +81,7 @@ func main() {
 	//req2.AddCookie()
 	//url := "https://10.233.230.11/rest/isdnsg/10001"
 	//u1, _ :=
-	client2.Jar.SetCookies(req2.URL, resp.Cookies())
+	client2.Jar.SetCookies(req2.URL, c)
 
 	resp2, err := client2.Do(req2)
 	if err != nil {
@@ -93,5 +91,5 @@ func main() {
 
 	println(resp2)
 	defer resp2.Body.Close()
-*/
+
 }
