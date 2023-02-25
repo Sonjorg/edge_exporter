@@ -54,8 +54,8 @@ func main() {
 	  for _, c := range resp.Cookies() {
 		 m[c.Name] = c.Value
 	  }
-	  fmt.Println(m)
-	  fmt.Println(c,"\n")
+	  fmt.Println(m["PHPSESSID"])
+	  fmt.Println(c)
 	  //var exp = regexp.MustCompile(`PHPSESSID=.+;`)
 	  //matchType := exp.FindStringSubmatch(c2)
 	 // fmt.Println(matchType)
