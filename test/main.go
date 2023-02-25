@@ -7,7 +7,7 @@ import (
 	//"github.com/tiket-oss/phpsessgo"
 	//"io/ioutil"
 	"net/http"
-	//"net/http/cookiejar"
+	"net/http/cookiejar"
 	"net/url"
 	//"strconv"
 
@@ -40,10 +40,12 @@ func main() {
 	if err != nil {
 		// handle err
 	}
-	
+
+	var c string;
 	for _, cookie := range resp.Cookies() {
 		fmt.Println("Found a cookie named:", cookie.Value)
-		c := cookie.Value
+	 	c = cookie.Value//fmt.Sprintf("%s", cookie.Value)
+	 
 	  }
 
 
@@ -57,32 +59,32 @@ func main() {
 
 	//string := resp.Cookies().token
 	/*cookie := &http.Cookie{
-		Name:   "token",
-		Value:  resp.Cookies().string(),
+		Name:   "PHPSESSID",
+		Value:  c,
 		MaxAge: 300,
 	}*/
 
-	// curl --cookie SkrivInnCookieHer \ -i -k https://10.233.230.11/rest/isdnsg/10001
 
 	// TODO: This is insecure; use only in dev environments.
-	
+	jar, err := cookiejar.New(nil)
+
 	tr2 := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
-	client2 := &http.Client{Transport: tr2}
+	client2 := &http.Client{Transport: tr2,	Jar: jar,
+	}
+	
+
 
 	req2, err := http.NewRequest("GET", "https://10.233.230.11/rest/isdnsg/10001", nil)
 	if err != nil {
 		// handle err
 	}
-	
-	//req2.ph
-	//legger ved cookie før request
-	//req2.AddCookie()
+
 	//url := "https://10.233.230.11/rest/isdnsg/10001"
 	//u1, _ :=
-	client2.Jar.SetCookies(req2.URL, c)
-
+	//client2.Jar.SetCookies(req2.URL, c)
+	req2.Header.Set("Cookie", c)
 	resp2, err := client2.Do(req2)
 	if err != nil {
 		// handle err
