@@ -41,15 +41,17 @@ func main() {
 	if err != nil {
 		// handle err
 	}
+	
 	for _, cookie := range resp.Cookies() {
-		fmt.Println("Found a cookie named:", cookie.Name)
+		fmt.Println("Found a cookie named:", cookie.Name, cookie.Value, cookie.String())
 	  }
 
 	/*func (e *PHPSessionEncoder) Decode(raw string) (phpencode.PhpSession, error) {
 		resp.Cookies().string()
 	}*/
 	//str := strconv.Itoa(resp.Cookies())
-	fmt.Println("HER KOMMER COOKIES ", resp.Cookies())
+	/*
+	fmt.Println("HER KOMMER COOKIES ", resp.Cookies())*/
 	defer resp.Body.Close()
 	///////////////////////////////////////////////////////////////////////
 	// new request with cookie from authentication
