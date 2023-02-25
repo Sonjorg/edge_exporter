@@ -9,7 +9,7 @@ import (
 	//"io/ioutil"
 	"net/http"
 //"net/http/cookiejar"
-	//"net/http/cookiejar"
+	"net/http/cookiejar"
 	"net/url"
 	//"regexp"
 	//"strconv"
@@ -44,7 +44,7 @@ func main() {
 	}
 	
 	//var c2 string = resp.Cookies()
-	var c string;
+	//var c string;
 	/*for _, cookie := range resp.Cookies() {
 		//c = cookie.
 		c = fmt.Sprintf(cookie.Value)
@@ -55,7 +55,8 @@ func main() {
 		 m[c.Name] = c.Value
 	  }
 	  fmt.Println(m["PHPSESSID"])
-	  fmt.Println(c)
+	  phpsessid := m["PHPSESSID"]
+	  
 	  //var exp = regexp.MustCompile(`PHPSESSID=.+;`)
 	  //matchType := exp.FindStringSubmatch(c2)
 	 // fmt.Println(matchType)
@@ -83,7 +84,7 @@ defer resp.Body.Close()
 	/*tr2 := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	} */
-	/*jar, err := cookiejar.New(nil)
+	jar, err := cookiejar.New(nil)
     if err != nil {
       //  log.Fatalf("Got error while creating cookie jar %s", err.Error())
     }
@@ -95,7 +96,7 @@ defer resp.Body.Close()
 
 	cookie1 := &http.Cookie{
         Name:   "PHPSESSID",
-        Value:  c,
+        Value:  phpsessid,
         MaxAge: 300,
     }
 
@@ -113,9 +114,9 @@ defer resp.Body.Close()
 	if err != nil {
 		// handle err
 	}
-*/
 
-	//println(resp2.StatusCode,"\n",resp2.Body)
-	//defer resp2.Body.Close()
+
+	println(resp2)
+	defer resp2.Body.Close()
 
 }
