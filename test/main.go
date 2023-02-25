@@ -40,19 +40,24 @@ func main() {
 	if err != nil {
 		// handle err
 	}
+	defer resp.Body.Close()
 
-	var c string;
+	/*var c string;
 	for _, cookie := range resp.Cookies() {
 		fmt.Println("Found a cookie named:", cookie.Value)
 	 	c = cookie.Value//"PHPSESSID=" + cookie.Value//fmt.Sprintf("%s", cookie.Value)
 		 
-	  }
-fmt.Println(c)
+	  }*/
+	  cookie, err := req.Cookie("PHPSESSID")
+		if err != nil {
+			panic(err.Error())
+		}
+value := cookie.Value
+fmt.Println(value)
 
 	//str := strconv.Itoa(resp.Cookies())
 	/*
 	fmt.Println("HER KOMMER COOKIES ", resp.Cookies())*/
-	//defer resp.Body.Close()
 	///////////////////////////////////////////////////////////////////////
 	// new request with cookie from authentication
 	// https://golangbyexample.com/set-cookie-http-golang/
@@ -80,9 +85,9 @@ fmt.Println(c)
         Jar: jar,
     }
 
-	cookie := &http.Cookie{
+	cookie1 := &http.Cookie{
         Name:   "PHPSESSID=",
-        Value:  c,
+        Value:  value,
         MaxAge: 300,
     }
 
@@ -95,7 +100,7 @@ fmt.Println(c)
 	//url := "https://10.233.230.11/rest/isdnsg/10001"
 	//u1, _ :=
 	//client2.Jar.SetCookies(req2.URL, c)
-	req2.AddCookie(cookie)
+	req2.AddCookie(cookie1)
 	resp2, err := client2.Do(req2)
 	if err != nil {
 		// handle err
