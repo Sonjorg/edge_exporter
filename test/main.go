@@ -48,7 +48,7 @@ func main() {
 	 	c = cookie.Value//"PHPSESSID=" + cookie.Value//fmt.Sprintf("%s", cookie.Value)
 		 
 	  }*/
-	  cookie, err := req.Cookie("PHPSESSID=")
+	  cookie, err := req.Cookie("PHPSESSID")
 		if err != nil {
 			panic(err.Error())
 		}
@@ -86,7 +86,7 @@ fmt.Println(value)
     }
 
 	cookie1 := &http.Cookie{
-        Name:   "PHPSESSID=",
+        Name:   "PHPSESSID",
         Value:  value,
         MaxAge: 300,
     }
