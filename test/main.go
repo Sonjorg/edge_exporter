@@ -44,9 +44,9 @@ func main() {
 
 	var c string;
 	for _, cookie := range resp.Cookies() {
-		c = cookie.Value
+		//c = cookie.
+		c = fmt.Sprintf(cookie.Value)
 	 	//c = cookie.Value//"PHPSESSID=" + cookie.Value//fmt.Sprintf("%s", cookie.Value)
-		 
 	  }
 
 	  fmt.Println(c)
