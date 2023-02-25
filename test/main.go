@@ -44,7 +44,7 @@ func main() {
 	var c string;
 	for _, cookie := range resp.Cookies() {
 		fmt.Println("Found a cookie named:", cookie.Value)
-	 	c = cookie.Value//fmt.Sprintf("%s", cookie.Value)
+	 	c = cookie.Name//fmt.Sprintf("%s", cookie.Value)
 	 
 	  }
 
