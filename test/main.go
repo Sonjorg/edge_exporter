@@ -43,7 +43,7 @@ func main() {
 	}
 	
 	for _, cookie := range resp.Cookies() {
-		fmt.Println("Found a cookie named:", cookie.Name, cookie.Value, cookie.String())
+		fmt.Println("Found a cookie named:", cookie.Value)
 	  }
 
 	/*func (e *PHPSessionEncoder) Decode(raw string) (phpencode.PhpSession, error) {
