@@ -45,14 +45,14 @@ func main() {
 	for _, cookie := range resp.Cookies() {
 		fmt.Println("Found a cookie named:", cookie.Value)
 	 	c = cookie.Value//"PHPSESSID=" + cookie.Value//fmt.Sprintf("%s", cookie.Value)
-	 
+		 
 	  }
 fmt.Println(c)
 
 	//str := strconv.Itoa(resp.Cookies())
 	/*
 	fmt.Println("HER KOMMER COOKIES ", resp.Cookies())*/
-	defer resp.Body.Close()
+	//defer resp.Body.Close()
 	///////////////////////////////////////////////////////////////////////
 	// new request with cookie from authentication
 	// https://golangbyexample.com/set-cookie-http-golang/
