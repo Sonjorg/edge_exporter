@@ -43,13 +43,6 @@ func main() {
 		// handle err
 	}
 	
-	//var c2 string = resp.Cookies()
-	//var c string;
-	/*for _, cookie := range resp.Cookies() {
-		//c = cookie.
-		c = fmt.Sprintf(cookie.Value)
-	 	//c = cookie.Value//"PHPSESSID=" + cookie.Value//fmt.Sprintf("%s", cookie.Value)
-	  }*/
 	  m := make(map[string]string)
 	  for _, c := range resp.Cookies() {
 		 m[c.Name] = c.Value
@@ -95,9 +88,12 @@ defer resp.Body.Close()
     }
 
 	cookie1 := &http.Cookie{
-        Name:   "PHPSESSID=",
+        Name:   "PHPSESSID",
         Value:  phpsessid,
-        MaxAge: 300,
+		Path:     "/",
+        MaxAge:   3600,
+        HttpOnly: true,
+        Secure:   true,
     }
 
 
@@ -115,6 +111,6 @@ defer resp.Body.Close()
 		fmt.Println(err)
 	}
 	println(resp2.Body)
-	defer resp2.Body.Close()
+	resp2.Body.Close()
 
 }
