@@ -47,7 +47,7 @@ func main() {
 	 	c = cookie.Value//"PHPSESSID=" + cookie.Value//fmt.Sprintf("%s", cookie.Value)
 	 
 	  }
-
+fmt.Println(c)
 
 	//str := strconv.Itoa(resp.Cookies())
 	/*
@@ -81,7 +81,7 @@ func main() {
     }
 
 	cookie := &http.Cookie{
-        Name:   "PHPSESSID",
+        Name:   "PHPSESSID=",
         Value:  c,
         MaxAge: 300,
     }
