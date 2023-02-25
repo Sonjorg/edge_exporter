@@ -86,7 +86,7 @@ defer resp.Body.Close()
 	} */
 	jar, err := cookiejar.New(nil)
     if err != nil {
-      //  log.Fatalf("Got error while creating cookie jar %s", err.Error())
+      fmt.Println(err)//  log.Fatalf("Got error while creating cookie jar %s", err.Error())
     }
 	var client2 http.Client
 
@@ -103,7 +103,7 @@ defer resp.Body.Close()
 
 	req2, err := http.NewRequest("GET", "https://10.233.230.11/rest/isdnsg/10001", nil)
 	if err != nil {
-		// handle err
+		fmt.Println(err)
 	}
 
 	//url := "https://10.233.230.11/rest/isdnsg/10001"
@@ -112,7 +112,7 @@ defer resp.Body.Close()
 	req2.AddCookie(cookie1)
 	resp2, err := client2.Do(req2)
 	if err != nil {
-		// handle err
+		fmt.Println(err)
 	}
 	println(resp2.Body)
 	defer resp2.Body.Close()
