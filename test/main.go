@@ -114,9 +114,7 @@ defer resp.Body.Close()
 	if err != nil {
 		// handle err
 	}
-
-
-	println(resp2)
+	println(resp2.Body)
 	defer resp2.Body.Close()
 
 }
