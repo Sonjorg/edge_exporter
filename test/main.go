@@ -7,7 +7,7 @@ import (
 	//"github.com/tiket-oss/phpsessgo"
 	//"io/ioutil"
 	"net/http"
-	"net/http/cookiejar"
+	//"net/http/cookiejar"
 	"net/url"
 	//"strconv"
 
@@ -45,7 +45,7 @@ func main() {
 	var c string;
 	for _, cookie := range resp.Cookies() {
 		//c = cookie.
-		c = fmt.Sprintf(cookie.Raw)
+		c = fmt.Sprintf(cookie.String())
 	 	//c = cookie.Value//"PHPSESSID=" + cookie.Value//fmt.Sprintf("%s", cookie.Value)
 	  }
 
@@ -74,7 +74,7 @@ defer resp.Body.Close()
 	/*tr2 := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	} */
-	jar, err := cookiejar.New(nil)
+	/*jar, err := cookiejar.New(nil)
     if err != nil {
       //  log.Fatalf("Got error while creating cookie jar %s", err.Error())
     }
@@ -104,9 +104,9 @@ defer resp.Body.Close()
 	if err != nil {
 		// handle err
 	}
+*/
 
-
-	println(resp2.StatusCode,"\n",resp2.Body)
-	defer resp2.Body.Close()
+	//println(resp2.StatusCode,"\n",resp2.Body)
+	//defer resp2.Body.Close()
 
 }
