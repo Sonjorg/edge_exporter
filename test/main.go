@@ -4,7 +4,7 @@ import (
 	"crypto/tls"
 	"fmt"
 	"strings"
-
+    "bufio"
 	//"github.com/tiket-oss/phpsessgo"
 	//"io/ioutil"
 	"net/http"
@@ -142,7 +142,12 @@ resp2, err := client2.Do(req2)
 if err != nil {
 	// handle err
 }
-fmt.Println(resp2.Request.Body)
+    scanner := bufio.NewScanner(resp2.Body)
+    scanner.Split(bufio.ScanBytes)
+    for scanner.Scan() {
+        fmt.Print(scanner.Text())
+    }
+//fmt.Println(resp2)
 defer resp2.Body.Close()
 
 }
