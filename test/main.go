@@ -40,21 +40,20 @@ func main() {
 	if err != nil {
 		// handle err
 	}
-	defer resp.Body.Close()
+	
 
 	var c string;
 	for _, cookie := range resp.Cookies() {
-		fmt.Println("Found a cookie named:", cookie.Value)
-	 	c = cookie.Value//"PHPSESSID=" + cookie.Value//fmt.Sprintf("%s", cookie.Value)
+		c = cookie.Value
+	 	//c = cookie.Value//"PHPSESSID=" + cookie.Value//fmt.Sprintf("%s", cookie.Value)
 		 
 	  }
-	 /* cookie, err := req.Cookie("PHPSESSID")
-		if err != nil {
-			panic(err.Error())
-		}
-value := cookie.Value*/
-fmt.Println(c)
 
+	  fmt.Println(c)
+	  
+//value := cookie.Value
+//fmt.Println(c)
+defer resp.Body.Close()
 	//str := strconv.Itoa(resp.Cookies())
 	/*
 	fmt.Println("HER KOMMER COOKIES ", resp.Cookies())*/
