@@ -9,7 +9,6 @@ import (
 	//"bufio"
 	"encoding/xml"
 	"fmt"
-	//"fmt"
 	//"io/ioutil"
 	"time"
 
@@ -145,9 +144,7 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 	sbc := &sSBCdata{}
 	xml.Unmarshal([]byte(data), &sbc)
 
-
-
-	//fmt.Println("Incoming call attempts/accepts: ", sbc.Isdnsg.IncomingCallattempts, "/", sbc.Isdnsg.IncomingCallaccepts, "\nSBC router ID: ", sbc.Isdnsg.Id, "\nRouter href: ", sbc.Isdnsg.Href)
+	fmt.Println(sbc.Isdnsg.Href, ": \n", data)
 
 	/*if s, err := strconv.ParseFloat(sbc.Status.HTTPcode, 64); err == nil {
 		HTTPcode = s
