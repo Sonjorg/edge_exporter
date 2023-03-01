@@ -30,22 +30,22 @@ type sStatus struct {
 }
 
 type sSBCdata struct {
-	XMLname     xml.Name     `xml:"root"`
-	Status      sStatus      `xml:"status"`
-	SystemData  systemData   `xml:"historicalstatistics"`
+	XMLname    xml.Name   `xml:"root"`
+	Status     sStatus    `xml:"status"`
+	SystemData systemData `xml:"historicalstatistics"`
 
 }
 type systemData struct {
-	Href                  string `xml:"href,attr"`
-	Rt_CPUUsage           int    `xml:"rt_CPUUsage"`   // Average percent usage of the CPU.
-	Rt_MemoryUsage        int    `xml:"rt_MemoryUsage"` // Average percent usage of system memory. int
-	Rt_CPUUptime          int    `xml:"rt_CPUUptime"`
-	Rt_FDUsage            int    `xml:"rt_FDUsage"`
-	Rt_CPULoadAverage1m   int    `xml:"rt_CPULoadAverage1m"`
-	Rt_CPULoadAverage5m   int    `xml:"rt_CPULoadAverage5m"`
-	Rt_CPULoadAverage15m  int    `xml:"rt_CPULoadAverage15m"`
-	Rt_TmpPartUsage       int    `xml:"rt_TmpPartUsage"` // Percentage of the temporary partition used. int
-	Rt_LoggingPartUsage   int    `xml:"rt_LoggingPartUsage"`
+	Href                 string `xml:"href,attr"`
+	Rt_CPUUsage          int    `xml:"rt_CPUUsage"`   // Average percent usage of the CPU.
+	Rt_MemoryUsage       int    `xml:"rt_MemoryUsage"` // Average percent usage of system memory. int
+	Rt_CPUUptime         int    `xml:"rt_CPUUptime"`
+	Rt_FDUsage           int    `xml:"rt_FDUsage"`
+	Rt_CPULoadAverage1m  int    `xml:"rt_CPULoadAverage1m"`
+	Rt_CPULoadAverage5m  int    `xml:"rt_CPULoadAverage5m"`
+	Rt_CPULoadAverage15m int    `xml:"rt_CPULoadAverage15m"`
+	Rt_TmpPartUsage      int    `xml:"rt_TmpPartUsage"` // Percentage of the temporary partition used. int
+	Rt_LoggingPartUsage  int    `xml:"rt_LoggingPartUsage"`
 }
 
 type sMetrics struct{
@@ -104,7 +104,7 @@ func systemCollector() *sMetrics {
 
 // Each and every collector must implement the Describe function.
 // It essentially writes all descriptors to the prometheus desc channel.
-func (collector *sMetrics) sDescribe(ch chan<- *prometheus.Desc) {
+func (collector *sMetrics) Describe(ch chan<- *prometheus.Desc) {
 
 	//Update this section with the each metric you create for a given collector
 	ch <- collector.Rt_CPULoadAverage15m
@@ -121,7 +121,7 @@ func (collector *sMetrics) sDescribe(ch chan<- *prometheus.Desc) {
 
 //Collect implements required collect function for all promehteus collectors
 
-func (collector *sMetrics) sCollect(ch chan<- prometheus.Metric) {
+func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 
 	//Implement logic here to determine proper metric value to return to prometheus
 	//for each descriptor or call other functions that do so.
@@ -147,14 +147,16 @@ func (collector *sMetrics) sCollect(ch chan<- prometheus.Metric) {
 	/*if err != nil {
 	}*/
 	xml.Unmarshal([]byte(data), &sbc)
-	fmt.Println(data)
+	//fmt.Println(data)
 
-	fmt.Println(sbc)
+	//fmt.Println(sbc)
 
 	/*if s, err := strconv.ParseFloat(sbc.Status.HTTPcode, 64); err == nil {
 		HTTPcode = s
 		fmt.Println(s) // 3.1415927410125732
 	}*/
+
+
 	//HTTPcode = float64(sbc.Status.HTTPcode)
 	metricValue1 = float64(sbc.SystemData.Rt_CPULoadAverage15m)
 	metricValue2 = float64(sbc.SystemData.Rt_CPULoadAverage1m)
