@@ -85,10 +85,11 @@ if err != nil {
 req2.AddCookie(cookie1)
 resp2, err := client2.Do(req2)
 if err != nil {
-	return "error"
+	return "Error: apicall.go -> fetchdata"
 }
     scanner := bufio.NewScanner(resp2.Body)
     scanner.Split(bufio.ScanBytes)
+	r := strings.NewReader(scanner.Text())
     /*for scanner.Scan() {
         fmt.Print(scanner.Text())
     }*/
@@ -97,5 +98,6 @@ if err != nil {
 
 
 	defer resp2.Body.Close()
-return scanner.Text()
+return r
+
 }
