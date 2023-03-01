@@ -95,9 +95,9 @@ if err != nil {
     }*/
 	/*sbc := &SBCdata{}
 	xml.Unmarshal([]byte(data), &sbc)*/
-
+	fmt.Println(scanner.Text())
 
 	defer resp2.Body.Close()
-return scanner.Text()
+return string(scanner.Bytes())
 
 }
