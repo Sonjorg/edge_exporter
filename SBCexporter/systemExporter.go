@@ -50,15 +50,15 @@ type systemData struct {
 type sMetrics struct{
 
 	Href                  *prometheus.Desc
-	rt_CPUUsage           *prometheus.Desc
-	rt_MemoryUsage        *prometheus.Desc
-	rt_CPUUptime          *prometheus.Desc
-	rt_FDUsage            *prometheus.Desc
-	rt_CPULoadAverage1m   *prometheus.Desc
-	rt_CPULoadAverage5m   *prometheus.Desc
-	rt_CPULoadAverage15m  *prometheus.Desc
-	rt_TmpPartUsage       *prometheus.Desc
-	rt_LoggingPartUsage   *prometheus.Desc
+	Rt_CPUUsage           *prometheus.Desc
+	Rt_MemoryUsage        *prometheus.Desc
+	Rt_CPUUptime          *prometheus.Desc
+	Rt_FDUsage            *prometheus.Desc
+	Rt_CPULoadAverage1m   *prometheus.Desc
+	Rt_CPULoadAverage5m   *prometheus.Desc
+	Rt_CPULoadAverage15m  *prometheus.Desc
+	Rt_TmpPartUsage       *prometheus.Desc
+	Rt_LoggingPartUsage   *prometheus.Desc
 }
 
 func systemCollector() *sMetrics {
