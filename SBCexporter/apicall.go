@@ -78,18 +78,18 @@ cookie1 := &http.Cookie{
 	HttpOnly: false,
 	Secure:   true,
 }
-req2, err := http.NewRequest("GET", "https://10.233.230.11/rest/isdnsg/10001", nil)
+req2, err := http.NewRequest("GET", url, nil)
 if err != nil {
-	return "error"
+
 }
 req2.AddCookie(cookie1)
 resp2, err := client2.Do(req2)
 if err != nil {
-	return "Error: apicall.go -> fetchdata"
+
 }
     scanner := bufio.NewScanner(resp2.Body)
     scanner.Split(bufio.ScanBytes)
-	r := strings.NewReader(scanner.Text())
+	//r := strings.NewReader(scanner.Text())
     /*for scanner.Scan() {
         fmt.Print(scanner.Text())
     }*/
@@ -98,6 +98,6 @@ if err != nil {
 
 
 	defer resp2.Body.Close()
-return r
+return scanner.Text()
 
 }
