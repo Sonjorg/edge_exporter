@@ -7,7 +7,7 @@ import (
     "bufio"
 	//"io/ioutil"
 	//"github.com/tiket-oss/phpsessgo"
-	"io/ioutil"
+	//"io/ioutil"
 	"net/http"
 //"net/http/cookiejar"
 	//"net/http/cookiejar"
@@ -95,7 +95,7 @@ if err != nil {
        fmt.Println(scanner.Text())
 
     }
-	b, err := ioutil.ReadAll(resp2.Body)
+	//b, err := ioutil.ReadAll(resp2.Body)
 
 
 	/*sbc := &SBCdata{}
@@ -103,7 +103,8 @@ if err != nil {
 	//fmt.Println(scanner.Text())
 
 	defer resp2.Body.Close()
-	return string(b)
+	return string(scanner.Bytes())
+
 }
 
 func apicalltest(){
