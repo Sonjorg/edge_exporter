@@ -63,39 +63,39 @@ type sMetrics struct{
 
 func systemCollector() *sMetrics {
 	return &sMetrics{
-		rt_CPUUsage: prometheus.NewDesc("rt_CPUUsage",
+		Rt_CPUUsage: prometheus.NewDesc("rt_CPUUsage",
 			"NoDescriptionYet",
 			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
 		),
-		rt_MemoryUsage: prometheus.NewDesc("rt_MemoryUsage",
+		Rt_MemoryUsage: prometheus.NewDesc("rt_MemoryUsage",
 			"NoDescriptionYet",
 			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
 		),
-		rt_CPUUptime: prometheus.NewDesc("rt_CPUUptime",
+		Rt_CPUUptime: prometheus.NewDesc("rt_CPUUptime",
 			"NoDescriptionYet",
 			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
 		),
-		rt_FDUsage: prometheus.NewDesc("rt_FDUsage",
+		Rt_FDUsage: prometheus.NewDesc("rt_FDUsage",
 			"NoDescriptionYet",
 			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
 		),
-		rt_CPULoadAverage1m: prometheus.NewDesc("rt_CPULoadAverage1m",
+		Rt_CPULoadAverage1m: prometheus.NewDesc("rt_CPULoadAverage1m",
 			"NoDescriptionYet.",
 			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
 		),
-		rt_CPULoadAverage5m: prometheus.NewDesc("rt_CPULoadAverage5m",
+		Rt_CPULoadAverage5m: prometheus.NewDesc("rt_CPULoadAverage5m",
 			"NoDescriptionYet",
 			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
 		),
-		rt_CPULoadAverage15m: prometheus.NewDesc("rt_CPULoadAverage15m",
+		Rt_CPULoadAverage15m: prometheus.NewDesc("rt_CPULoadAverage15m",
 			"NoDescriptionYet",
 			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
 		),
-		rt_TmpPartUsage: prometheus.NewDesc("rt_TmpPartUsage",
+		Rt_TmpPartUsage: prometheus.NewDesc("Rt_TmpPartUsage",
 			"NoDescriptionYet",
 			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
 		),
-		rt_LoggingPartUsage: prometheus.NewDesc("rt_LoggingPartUsage",
+		Rt_LoggingPartUsage: prometheus.NewDesc("Rt_LoggingPartUsage",
 			"NoDescriptionYet",
 			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
 		),
@@ -107,15 +107,15 @@ func systemCollector() *sMetrics {
 func (collector *sMetrics) Describe(ch chan<- *prometheus.Desc) {
 
 	//Update this section with the each metric you create for a given collector
-	ch <- collector.rt_CPULoadAverage15m
-	ch <- collector.rt_CPULoadAverage1m
-	ch <- collector.rt_CPULoadAverage5m
-	ch <- collector.rt_CPUUptime
-	ch <- collector.rt_CPUUsage
-	ch <- collector.rt_FDUsage
-	ch <- collector.rt_LoggingPartUsage
-	ch <- collector.rt_MemoryUsage
-	ch <- collector.rt_TmpPartUsage
+	ch <- collector.Rt_CPULoadAverage15m
+	ch <- collector.Rt_CPULoadAverage1m
+	ch <- collector.Rt_CPULoadAverage5m
+	ch <- collector.Rt_CPUUptime
+	ch <- collector.Rt_CPUUsage
+	ch <- collector.Rt_FDUsage
+	ch <- collector.Rt_LoggingPartUsage
+	ch <- collector.Rt_MemoryUsage
+	ch <- collector.Rt_TmpPartUsage
 
 }
 
@@ -168,15 +168,15 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 
 	//Write latest value for each metric in the prometheus metric channel.
 	//Note that you can pass CounterValue, GaugeValue, or UntypedValue types here.
-	m1 := prometheus.MustNewConstMetric(collector.rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue1, "see href","test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
-	m2 := prometheus.MustNewConstMetric(collector.rt_CPULoadAverage1m, prometheus.GaugeValue, metricValue2, "see href","test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
-	m3 := prometheus.MustNewConstMetric(collector.rt_CPULoadAverage5m, prometheus.GaugeValue, metricValue3, "see href", "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
-	m4 := prometheus.MustNewConstMetric(collector.rt_CPUUptime, prometheus.GaugeValue, metricValue4, "see href", "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
-	m5 := prometheus.MustNewConstMetric(collector.rt_CPUUsage, prometheus.GaugeValue, metricValue5, "see href", "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
-	m6 := prometheus.MustNewConstMetric(collector.rt_FDUsage, prometheus.GaugeValue, metricValue6, "see href", "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
-	m7 := prometheus.MustNewConstMetric(collector.rt_LoggingPartUsage, prometheus.GaugeValue, metricValue7, "see href", "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
-	m8 := prometheus.MustNewConstMetric(collector.rt_MemoryUsage, prometheus.GaugeValue, metricValue8, "see href", "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
-	m9 := prometheus.MustNewConstMetric(collector.rt_TmpPartUsage, prometheus.GaugeValue, metricValue9, "see href", "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
+	m1 := prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue1, "see href","test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
+	m2 := prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage1m, prometheus.GaugeValue, metricValue2, "see href","test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
+	m3 := prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage5m, prometheus.GaugeValue, metricValue3, "see href", "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
+	m4 := prometheus.MustNewConstMetric(collector.Rt_CPUUptime, prometheus.GaugeValue, metricValue4, "see href", "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
+	m5 := prometheus.MustNewConstMetric(collector.Rt_CPUUsage, prometheus.GaugeValue, metricValue5, "see href", "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
+	m6 := prometheus.MustNewConstMetric(collector.Rt_FDUsage, prometheus.GaugeValue, metricValue6, "see href", "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
+	m7 := prometheus.MustNewConstMetric(collector.Rt_LoggingPartUsage, prometheus.GaugeValue, metricValue7, "see href", "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
+	m8 := prometheus.MustNewConstMetric(collector.Rt_MemoryUsage, prometheus.GaugeValue, metricValue8, "see href", "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
+	m9 := prometheus.MustNewConstMetric(collector.Rt_TmpPartUsage, prometheus.GaugeValue, metricValue9, "see href", "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
 
 	m1 = prometheus.NewMetricWithTimestamp(time.Now().Add(-time.Hour), m1)
 	m2 = prometheus.NewMetricWithTimestamp(time.Now(), m2)
