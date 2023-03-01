@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"time"
-	
+
 	//"strconv"
 	"log"
 	//"bytes"
@@ -122,7 +122,9 @@ func (collector *metrics) Collect(ch chan<- prometheus.Metric) {
 }
 
 func main() {
-
+	phpsessid := APISessionAuth(`student`, `PanneKake23`, "https://10.233.230.11/rest/login")
+	data := getAPIData("https://10.233.230.11/rest/system/historicalstatistics/1", phpsessid)
+	fmt.Println(data)
 	systemExporter()
 	foo := newFooCollector()
 	prometheus.MustRegister(foo)
