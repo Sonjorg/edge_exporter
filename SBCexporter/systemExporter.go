@@ -9,7 +9,7 @@ import (
 	//"bufio"
 	"encoding/xml"
 	"fmt"
-	"io/ioutil"
+	//"io/ioutil"
 	"time"
 
 	//"log"
@@ -142,12 +142,11 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 	phpsessid := APISessionAuth("student", "PanneKake23", "https://10.233.230.11/rest/login")
 	data := getAPIData("https://10.233.230.11/rest/system/historicalstatistics/1", phpsessid)
 	sbc := &sSBCdata{}
-	//b := []byte(data)
-	b, err := ioutil.ReadAll(data)
+	b := []byte(data)
+	//b, err := ioutil.ReadAll(data)
 	if err != nil {
-		
 	}
-	xml.Unmarshal(b, &sbc)
+	xml.Unmarshal([]byte(b), &sbc)
 
 	fmt.Println(sbc.SystemData.Rt_CPULoadAverage15m, ": \n", sbc)
 
