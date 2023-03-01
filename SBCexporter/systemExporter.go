@@ -64,39 +64,39 @@ func systemCollector() *sMetrics {
 	return &sMetrics{
 		Rt_CPUUsage: prometheus.NewDesc("rt_CPUUsage",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job"}, nil,
+			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
 		),
 		Rt_MemoryUsage: prometheus.NewDesc("rt_MemoryUsage",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job"}, nil,
+			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
 		),
 		Rt_CPUUptime: prometheus.NewDesc("rt_CPUUptime",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job"}, nil,
+			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
 		),
 		Rt_FDUsage: prometheus.NewDesc("rt_FDUsage",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job"}, nil,
+			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
 		),
 		Rt_CPULoadAverage1m: prometheus.NewDesc("rt_CPULoadAverage1m",
 			"NoDescriptionYet.",
-			[]string{"Instance", "hostname", "job"}, nil,
+			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
 		),
 		Rt_CPULoadAverage5m: prometheus.NewDesc("rt_CPULoadAverage5m",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job"}, nil,
+			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
 		),
 		Rt_CPULoadAverage15m: prometheus.NewDesc("rt_CPULoadAverage15m",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job"}, nil,
+			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
 		),
 		Rt_TmpPartUsage: prometheus.NewDesc("Rt_TmpPartUsage",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job"}, nil,
+			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
 		),
 		Rt_LoggingPartUsage: prometheus.NewDesc("Rt_LoggingPartUsage",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job"}, nil,
+			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
 		),
 	}
 }
@@ -146,7 +146,7 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 	/*if err != nil {
 	}*/
 	xml.Unmarshal([]byte(b), &ssbc)
-	fmt.Println(b)
+	fmt.Println(ssbc)
 
 	//fmt.Println(sbc)
 
