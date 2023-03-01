@@ -47,8 +47,8 @@ type systemData struct {
 	Rt_TmpPartUsage       int    `xml:"rt_TmpPartUsage"` // Percentage of the temporary partition used. int
 	Rt_LoggingPartUsage   int    `xml:"rt_LoggingPartUsage"`
 }
-type sMetrics struct{
 
+type sMetrics struct{
 	Href                  *prometheus.Desc
 	Rt_CPUUsage           *prometheus.Desc
 	Rt_MemoryUsage        *prometheus.Desc
@@ -142,13 +142,13 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 	phpsessid := APISessionAuth("student", "PanneKake23", "https://10.233.230.11/rest/login")
 	data := getAPIData("https://10.233.230.11/rest/system/historicalstatistics/1", phpsessid)
 	sbc := &sSBCdata{}
-	b := []byte(data)
+	//b := []byte(data)
 	//b, err := ioutil.ReadAll(data)
 	/*if err != nil {
 	}*/
-	xml.Unmarshal([]byte(b), &sbc)
+	xml.Unmarshal([]byte(data), &sbc)
 
-	fmt.Println(sbc.SystemData.Rt_CPULoadAverage15m, ": \n", sbc)
+	fmt.Println(sbc)
 
 	/*if s, err := strconv.ParseFloat(sbc.Status.HTTPcode, 64); err == nil {
 		HTTPcode = s

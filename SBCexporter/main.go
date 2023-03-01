@@ -125,14 +125,14 @@ func main() {
 	//phpsessid := APISessionAuth(`student`, `PanneKake23`, "https://10.233.230.11/rest/login")
 	//data := getAPIData("https://10.233.230.11/rest/system/historicalstatistics/1", phpsessid)
 	//fmt.Println(data)
-	phpsessid := APISessionAuth("student", "PanneKake23", "https://10.233.230.11/rest/login")
-	data := getAPIData("https://10.233.230.11/rest/system/historicalstatistics/1", phpsessid)
-	fmt.Println(data)
+	//phpsessid := APISessionAuth("student", "PanneKake23", "https://10.233.230.11/rest/login")
+	//data := getAPIData("https://10.233.230.11/rest/system/historicalstatistics/1", phpsessid)
+	//fmt.Println(data)
 	systemExporter()
 	foo := newFooCollector()
 	prometheus.MustRegister(foo)
 
-	http.Handle("/console/metrics", promhttp.Handler())
-	log.Fatal(http.ListenAndServe(":9101", nil))
+	http.Handle("/metrics", promhttp.Handler())
+	log.Fatal(http.ListenAndServe(":9100", nil))
 
 }
