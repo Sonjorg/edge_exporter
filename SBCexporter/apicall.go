@@ -20,7 +20,7 @@ import (
 // curl -k --data "Username=student&Password=PanneKake23" -i -v https://10.233.230.11/rest/login
 
 // TODO: This is insecure; use only in dev environments.
-func APISessionAuth(/*username string, password string, IPadr string*/) string {
+func APISessionAuth(username string, password string, loginURL string) string {
 
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
@@ -28,11 +28,11 @@ func APISessionAuth(/*username string, password string, IPadr string*/) string {
 	client := &http.Client{Transport: tr}
 
 	params := url.Values{}
-	params.Add("Username", `student`)
-	params.Add("Password", `PanneKake23`)
+	params.Add("Username", username)
+	params.Add("Password", password)
 	body := strings.NewReader(params.Encode())
 
-	req, err := http.NewRequest("POST", "https://10.233.230.11/rest/login", body)
+	req, err := http.NewRequest("POST", loginURL, body)
 	if err != nil {
 		return "error"
 	}
@@ -65,7 +65,7 @@ func APISessionAuth(/*username string, password string, IPadr string*/) string {
 // TODO: This is insecure; use only in dev environments.
 
 func getAPIData(url string, phpsessid string) string{
-	
+
 tr2 := &http.Transport{
 	TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 }
