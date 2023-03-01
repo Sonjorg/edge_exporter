@@ -14,7 +14,7 @@ import (
 
 	//"log"
 	"github.com/prometheus/client_golang/prometheus"
-	//"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	//"github.com/tiket-oss/phpsessgo"
 	//"io/ioutil"
 	//"net/http"
@@ -48,17 +48,17 @@ type systemData struct {
 	Rt_LoggingPartUsage  int    `xml:"rt_LoggingPartUsage"`
 }
 
-type sMetrics struct{
-	Href                  *prometheus.Desc
-	Rt_CPUUsage           *prometheus.Desc
-	Rt_MemoryUsage        *prometheus.Desc
-	Rt_CPUUptime          *prometheus.Desc
-	Rt_FDUsage            *prometheus.Desc
-	Rt_CPULoadAverage1m   *prometheus.Desc
-	Rt_CPULoadAverage5m   *prometheus.Desc
-	Rt_CPULoadAverage15m  *prometheus.Desc
-	Rt_TmpPartUsage       *prometheus.Desc
-	Rt_LoggingPartUsage   *prometheus.Desc
+type sMetrics struct {
+	Href                 *prometheus.Desc
+	Rt_CPUUsage          *prometheus.Desc
+	Rt_MemoryUsage       *prometheus.Desc
+	Rt_CPUUptime         *prometheus.Desc
+	Rt_FDUsage           *prometheus.Desc
+	Rt_CPULoadAverage1m  *prometheus.Desc
+	Rt_CPULoadAverage5m  *prometheus.Desc
+	Rt_CPULoadAverage15m *prometheus.Desc
+	Rt_TmpPartUsage      *prometheus.Desc
+	Rt_LoggingPartUsage  *prometheus.Desc
 }
 
 func systemCollector() *sMetrics {
@@ -181,7 +181,7 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 	m8 := prometheus.MustNewConstMetric(collector.Rt_MemoryUsage, prometheus.GaugeValue, metricValue8, "see href", "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
 	m9 := prometheus.MustNewConstMetric(collector.Rt_TmpPartUsage, prometheus.GaugeValue, metricValue9, "see href", "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
 
-	m1 = prometheus.NewMetricWithTimestamp(time.Now().Add(-time.Hour), m1)
+	m1 = prometheus.NewMetricWithTimestamp(time.Now(), m1)
 	m2 = prometheus.NewMetricWithTimestamp(time.Now(), m2)
 	m3 = prometheus.NewMetricWithTimestamp(time.Now(), m3)
 	m4 = prometheus.NewMetricWithTimestamp(time.Now(), m4)
