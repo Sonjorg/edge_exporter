@@ -106,8 +106,8 @@ if err != nil {
 	return string(b)
 }
 
-func apicalltest(){
-	phpsessid := APISessionAuth("student", "PanneKake23", "https://10.233.230.11/rest/login")
-	data := getAPIData("https://10.233.230.11/rest/system/historicalstatistics/1", phpsessid)
-	fmt.Println(data)
-}
+/*func apicalltest(){
+	//phpsessid := APISessionAuth("student", "PanneKake23", "https://10.233.230.11/rest/login")
+	//data := getAPIData("https://10.233.230.11/rest/system/historicalstatistics/1", phpsessid)
+	//fmt.Println(data)
+}*/
