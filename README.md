@@ -6,8 +6,11 @@ https://www.youtube.com/watch?v=9TJx7QTrTyo&t=712s
 Use
 ``` docker compose up -d ```
 in the current dir
+## test go exporters:
+``` go run . ``` in SBCexporter dir
+```curl localhost:9100/metrics``` in another windows
 
-## test to see if it works:
+## test docker:
 ### get ip address of grafana container
 ``` sudo docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' grafana ```
 
