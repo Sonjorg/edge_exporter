@@ -5,8 +5,9 @@ import (
 	"fmt"
 	"strings"
     "bufio"
-	//"github.com/tiket-oss/phpsessgo"
 	//"io/ioutil"
+	//"github.com/tiket-oss/phpsessgo"
+	"io/ioutil"
 	"net/http"
 //"net/http/cookiejar"
 	//"net/http/cookiejar"
@@ -91,16 +92,20 @@ if err != nil {
     scanner.Split(bufio.ScanBytes)
 	//r := strings.NewReader(scanner.Text())
     for scanner.Scan() {
-        fmt.Print(scanner.Text())
+       fmt.Println(scanner.Text())
+
     }
+	b, err := ioutil.ReadAll(resp2.Body)
+
+
 	/*sbc := &SBCdata{}
 	xml.Unmarshal([]byte(data), &sbc)*/
 	//fmt.Println(scanner.Text())
 
 	defer resp2.Body.Close()
-return string(scanner.Bytes())
-
+	return string(b)
 }
+
 func main(){
 	phpsessid := APISessionAuth("student", "PanneKake23", "https://10.233.230.11/rest/login")
 	data := getAPIData("https://10.233.230.11/rest/system/historicalstatistics/1", phpsessid)
