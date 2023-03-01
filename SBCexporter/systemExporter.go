@@ -104,7 +104,7 @@ func systemCollector() *sMetrics {
 
 // Each and every collector must implement the Describe function.
 // It essentially writes all descriptors to the prometheus desc channel.
-func (collector *sMetrics) Describe(ch chan<- *prometheus.Desc) {
+func (collector *sMetrics) sDescribe(ch chan<- *prometheus.Desc) {
 
 	//Update this section with the each metric you create for a given collector
 	ch <- collector.Rt_CPULoadAverage15m
@@ -121,7 +121,7 @@ func (collector *sMetrics) Describe(ch chan<- *prometheus.Desc) {
 
 //Collect implements required collect function for all promehteus collectors
 
-func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
+func (collector *sMetrics) sCollect(ch chan<- prometheus.Metric) {
 
 	//Implement logic here to determine proper metric value to return to prometheus
 	//for each descriptor or call other functions that do so.
@@ -147,6 +147,7 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 	/*if err != nil {
 	}*/
 	xml.Unmarshal([]byte(data), &sbc)
+	fmt.Println(data)
 
 	fmt.Println(sbc)
 
