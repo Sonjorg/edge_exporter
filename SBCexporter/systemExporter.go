@@ -142,7 +142,7 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 	phpsessid := APISessionAuth("student", "PanneKake23", "https://10.233.230.11/rest/login")
 	data := getAPIData("https://10.233.230.11/rest/system/historicalstatistics/1", phpsessid)
 	ssbc := &sSBCdata{}
-	b := []byte(data)
+	b := byte(data)
 	//b, err := ioutil.ReadAll(data)
 	/*if err != nil {
 	}*/
