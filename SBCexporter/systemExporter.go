@@ -145,7 +145,7 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 	sbc := &sSBCdata{}
 	xml.Unmarshal([]byte(data), &sbc)
 
-	fmt.Println("system statistics, current values: \n", getAPIData("https://10.233.230.11/rest/system/historicalstatistics/1", phpsessid))
+
 
 	//fmt.Println("Incoming call attempts/accepts: ", sbc.Isdnsg.IncomingCallattempts, "/", sbc.Isdnsg.IncomingCallaccepts, "\nSBC router ID: ", sbc.Isdnsg.Id, "\nRouter href: ", sbc.Isdnsg.Href)
 
@@ -199,7 +199,7 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 
 
 //fetching data from api
-func systemExporterTest() {
+func systemExporter() {
 
 	//APISessionAuth()
 	/*if err != nil {
@@ -207,45 +207,9 @@ func systemExporterTest() {
 	}*/
 	sc := systemCollector()
 	prometheus.MustRegister(sc)
-
 	//phpsessid := APISessionAuth()
 	//fmt.Println(getAPIData("test", phpsessid))
 	//fmt.Println(text)
 }
 
 
-
-
-/*
-	func getAPIData(url string, phpsessid string) string {
-		tr2 := &http.Transport{
-			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-		}
-		client2 := &http.Client{Transport: tr2}
-		cookie1 := &http.Cookie{
-			Name:   "PHPSESSID",
-			Value:  phpsessid,
-			//Path:     "/",
-			MaxAge:   3600,
-			HttpOnly: false,
-			Secure:   true,
-		}
-		req2, err := http.NewRequest("GET", "https://10.233.230.11/rest/isdnsg/10001", nil)
-		if err != nil {
-			// handle err
-		}
-		req2.AddCookie(cookie1)
-		resp2, err := client2.Do(req2)
-		if err != nil {
-			// handle err
-		}
-			scanner := bufio.NewScanner(resp2.Body)
-			scanner.Split(bufio.ScanBytes)
-			for scanner.Scan() {
-				fmt.Print(scanner.Text())
-			}
-		defer resp2.Body.Close()
-		return scanner.Text()
-
-		}
-*/

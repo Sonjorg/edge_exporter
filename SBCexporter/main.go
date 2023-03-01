@@ -123,7 +123,7 @@ func (collector *metrics) Collect(ch chan<- prometheus.Metric) {
 
 func main() {
 
-	systemExporterTest()
+	systemExporter()
 	foo := newFooCollector()
 	prometheus.MustRegister(foo)
 

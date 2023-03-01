@@ -89,9 +89,9 @@ if err != nil {
 }
     scanner := bufio.NewScanner(resp2.Body)
     scanner.Split(bufio.ScanBytes)
-    for scanner.Scan() {
+    /*for scanner.Scan() {
         fmt.Print(scanner.Text())
-    }
+    }*/
 	/*sbc := &SBCdata{}
 	xml.Unmarshal([]byte(data), &sbc)*/
 
