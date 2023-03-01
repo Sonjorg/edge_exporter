@@ -200,6 +200,9 @@ func systemExporterTest() {
 	/*if err != nil {
 		fmt.Println("Apisession auth not working: ", err)
 	}*/
+	sc := systemCollector()
+	prometheus.MustRegister(sc)
+	
 	phpsessid := APISessionAuth()
 	fmt.Println(getAPIData("test", phpsessid))
 	//fmt.Println(text)

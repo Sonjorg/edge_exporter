@@ -65,6 +65,7 @@ func APISessionAuth(/*username string, password string, IPadr string*/) string {
 // TODO: This is insecure; use only in dev environments.
 
 func getAPIData(url string, phpsessid string) string{
+	
 tr2 := &http.Transport{
 	TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 }
