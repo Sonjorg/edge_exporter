@@ -91,10 +91,10 @@ if err != nil {
     scanner := bufio.NewScanner(resp2.Body)
     scanner.Split(bufio.ScanBytes)
 	//r := strings.NewReader(scanner.Text())
-    for scanner.Scan() {
+    /*for scanner.Scan() {
        fmt.Print(scanner.Text())
 
-    }
+    }*/
 	b, err := ioutil.ReadAll(resp2.Body)
 
 

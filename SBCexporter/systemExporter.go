@@ -140,12 +140,13 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 	//data, _ := ioutil.ReadFile("sbcsystem.xml")
 	phpsessid := APISessionAuth("student", "PanneKake23", "https://10.233.230.11/rest/login")
 	data := getAPIData("https://10.233.230.11/rest/system/historicalstatistics/1", phpsessid)
-	ssbc := sSBCdata{}
+	ssbc := &sSBCdata{}
 	b := []byte(data)
 	//b, err := ioutil.ReadAll(data)
 	/*if err != nil {
 	}*/
-	xml.Unmarshal(b, ssbc)
+	xml.Unmarshal(b, &ssbc)
+	fmt("b: \n\n", b)
 	fmt.Println(ssbc)
 
 	//fmt.Println(sbc)
