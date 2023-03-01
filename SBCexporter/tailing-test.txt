@@ -1,1 +1,0 @@
-<ChannelClearingDelay>10</ChannelClearingDelay>
