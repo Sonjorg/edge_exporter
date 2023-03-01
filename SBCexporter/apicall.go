@@ -7,7 +7,7 @@ import (
     "bufio"
 	//"io/ioutil"
 	//"github.com/tiket-oss/phpsessgo"
-	//"io/ioutil"
+	"io/ioutil"
 	"net/http"
 //"net/http/cookiejar"
 	//"net/http/cookiejar"
@@ -65,7 +65,7 @@ func APISessionAuth(username string, password string, loginURL string) string {
 
 // TODO: This is insecure; use only in dev environments.
 
-func getAPIData(url string, phpsessid string) []byte{
+func getAPIData(url string, phpsessid string) string{
 
 tr2 := &http.Transport{
 	TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
@@ -92,10 +92,10 @@ if err != nil {
     scanner.Split(bufio.ScanBytes)
 	//r := strings.NewReader(scanner.Text())
     for scanner.Scan() {
-       fmt.Println(scanner.Text())
+       fmt.Print(scanner.Text())
 
     }
-	//b, err := ioutil.ReadAll(resp2.Body)
+	b, err := ioutil.ReadAll(resp2.Body)
 
 
 	/*sbc := &SBCdata{}
@@ -103,8 +103,7 @@ if err != nil {
 	//fmt.Println(scanner.Text())
 
 	defer resp2.Body.Close()
-	return scanner.Bytes()
-
+	return string(b)
 }
 
 func apicalltest(){
