@@ -162,15 +162,15 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 
 	//Write latest value for each metric in the prometheus metric channel.
 	//Note that you can pass CounterValue, GaugeValue, or UntypedValue types here.
-	m1 := prometheus.MustNewConstMetric(collector.rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue1, "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
-	m2 := prometheus.MustNewConstMetric(collector.rt_CPULoadAverage1m, prometheus.GaugeValue, metricValue2, "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
-	m3 := prometheus.MustNewConstMetric(collector.rt_CPULoadAverage5m, prometheus.GaugeValue, metricValue3, "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
-	m4 := prometheus.MustNewConstMetric(collector.rt_CPUUptime, prometheus.GaugeValue, metricValue4, "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
-	m5 := prometheus.MustNewConstMetric(collector.rt_CPUUsage, prometheus.GaugeValue, metricValue5, "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
-	m6 := prometheus.MustNewConstMetric(collector.rt_FDUsage, prometheus.GaugeValue, metricValue6, "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
-	m7 := prometheus.MustNewConstMetric(collector.rt_LoggingPartUsage, prometheus.GaugeValue, metricValue7, "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
-	m8 := prometheus.MustNewConstMetric(collector.rt_MemoryUsage, prometheus.GaugeValue, metricValue8, "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
-	m9 := prometheus.MustNewConstMetric(collector.rt_TmpPartUsage, prometheus.GaugeValue, metricValue9, "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
+	m1 := prometheus.MustNewConstMetric(collector.rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue1, "see href","test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
+	m2 := prometheus.MustNewConstMetric(collector.rt_CPULoadAverage1m, prometheus.GaugeValue, metricValue2, "see href","test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
+	m3 := prometheus.MustNewConstMetric(collector.rt_CPULoadAverage5m, prometheus.GaugeValue, metricValue3, "see href", "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
+	m4 := prometheus.MustNewConstMetric(collector.rt_CPUUptime, prometheus.GaugeValue, metricValue4, "see href", "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
+	m5 := prometheus.MustNewConstMetric(collector.rt_CPUUsage, prometheus.GaugeValue, metricValue5, "see href", "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
+	m6 := prometheus.MustNewConstMetric(collector.rt_FDUsage, prometheus.GaugeValue, metricValue6, "see href", "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
+	m7 := prometheus.MustNewConstMetric(collector.rt_LoggingPartUsage, prometheus.GaugeValue, metricValue7, "see href", "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
+	m8 := prometheus.MustNewConstMetric(collector.rt_MemoryUsage, prometheus.GaugeValue, metricValue8, "see href", "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
+	m9 := prometheus.MustNewConstMetric(collector.rt_TmpPartUsage, prometheus.GaugeValue, metricValue9, "see href", "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
 
 	m1 = prometheus.NewMetricWithTimestamp(time.Now().Add(-time.Hour), m1)
 	m2 = prometheus.NewMetricWithTimestamp(time.Now(), m2)
@@ -202,7 +202,7 @@ func systemExporterTest() {
 	}*/
 	sc := systemCollector()
 	prometheus.MustRegister(sc)
-	
+
 	phpsessid := APISessionAuth()
 	fmt.Println(getAPIData("test", phpsessid))
 	//fmt.Println(text)
