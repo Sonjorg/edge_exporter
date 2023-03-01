@@ -144,7 +144,7 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 	sbc := &sSBCdata{}
 	xml.Unmarshal([]byte(data), &sbc)
 
-	fmt.Println(sbc.SystemData.Href, ": \n", data)
+	fmt.Println(sbc.SystemData.Href, ": \n", sbc)
 
 	/*if s, err := strconv.ParseFloat(sbc.Status.HTTPcode, 64); err == nil {
 		HTTPcode = s
