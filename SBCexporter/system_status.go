@@ -30,21 +30,21 @@ type sStatus struct {
 
 type sSBCdata struct {
 	XMLname     xml.Name     `xml:"root"`
-	Status      sStatus       `xml:"status"`
+	Status      sStatus      `xml:"status"`
 	SystemData  systemData   `xml:"historicalstatistics"`
 
 }
 type systemData struct {
 	Href                  string `xml:"href,attr"`
-	rt_CPUUsage           int    `xml:"rt_CPUUsage"`   // Average percent usage of the CPU.
-	rt_MemoryUsage        int    `xml:"rt_MemoryUsage"` // Average percent usage of system memory. int
-	rt_CPUUptime          int    `xml:"rt_CPUUptime"`
-	rt_FDUsage            int    `xml:"rt_FDUsage"`
-	rt_CPULoadAverage1m   int    `xml:"rt_CPULoadAverage1m"`
-	rt_CPULoadAverage5m   int    `xml:"rt_CPULoadAverage5m"`
-	rt_CPULoadAverage15m  int    `xml:"rt_CPULoadAverage15m"`
-	rt_TmpPartUsage       int    `xml:"rt_TmpPartUsage"` // Percentage of the temporary partition used. int
-	rt_LoggingPartUsage   int    `xml:"rt_LoggingPartUsage"`
+	Rt_CPUUsage           int    `xml:"rt_CPUUsage"`   // Average percent usage of the CPU.
+	Rt_MemoryUsage        int    `xml:"rt_MemoryUsage"` // Average percent usage of system memory. int
+	Rt_CPUUptime          int    `xml:"rt_CPUUptime"`
+	Rt_FDUsage            int    `xml:"rt_FDUsage"`
+	Rt_CPULoadAverage1m   int    `xml:"rt_CPULoadAverage1m"`
+	Rt_CPULoadAverage5m   int    `xml:"rt_CPULoadAverage5m"`
+	Rt_CPULoadAverage15m  int    `xml:"rt_CPULoadAverage15m"`
+	Rt_TmpPartUsage       int    `xml:"rt_TmpPartUsage"` // Percentage of the temporary partition used. int
+	Rt_LoggingPartUsage   int    `xml:"rt_LoggingPartUsage"`
 }
 type sMetrics struct{
 
@@ -147,15 +147,15 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 		fmt.Println(s) // 3.1415927410125732
 	}*/
 	//HTTPcode = float64(sbc.Status.HTTPcode)
-	metricValue1 = float64(sbc.SystemData.rt_CPULoadAverage15m)
-	metricValue2 = float64(sbc.SystemData.rt_CPULoadAverage1m)
-	metricValue3 = float64(sbc.SystemData.rt_CPULoadAverage5m)
-	metricValue4 = float64(sbc.SystemData.rt_CPUUptime)
-	metricValue5 = float64(sbc.SystemData.rt_CPUUsage)
-	metricValue6 = float64(sbc.SystemData.rt_FDUsage)
-	metricValue7 = float64(sbc.SystemData.rt_LoggingPartUsage)
-	metricValue8 = float64(sbc.SystemData.rt_MemoryUsage)
-	metricValue9 = float64(sbc.SystemData.rt_TmpPartUsage)
+	metricValue1 = float64(sbc.SystemData.Rt_CPULoadAverage15m)
+	metricValue2 = float64(sbc.SystemData.Rt_CPULoadAverage1m)
+	metricValue3 = float64(sbc.SystemData.Rt_CPULoadAverage5m)
+	metricValue4 = float64(sbc.SystemData.Rt_CPUUptime)
+	metricValue5 = float64(sbc.SystemData.Rt_CPUUsage)
+	metricValue6 = float64(sbc.SystemData.Rt_FDUsage)
+	metricValue7 = float64(sbc.SystemData.Rt_LoggingPartUsage)
+	metricValue8 = float64(sbc.SystemData.Rt_MemoryUsage)
+	metricValue9 = float64(sbc.SystemData.Rt_TmpPartUsage)
 
 
 	//Write latest value for each metric in the prometheus metric channel.
