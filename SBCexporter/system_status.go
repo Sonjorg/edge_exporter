@@ -1,0 +1,241 @@
+package main
+//system status exporter
+//rest/system/historicalstatistics/1
+
+import (
+	//"crypto/tls"
+	//"strings"
+    //"bufio"
+	"encoding/xml"
+	//"fmt"
+	"io/ioutil"
+	"time"
+	//"log"
+	"github.com/prometheus/client_golang/prometheus"
+	//"github.com/prometheus/client_golang/prometheus/promhttp"
+	//"github.com/tiket-oss/phpsessgo"
+	//"io/ioutil"
+	//"net/http"
+
+//"net/http/cookiejar"
+	//"net/http/cookiejar"
+	//"net/url"
+	//"regexp"
+	//"strconv"
+)
+
+type sStatus struct {
+	HTTPcode string `xml:"http_code"`
+}
+
+type sSBCdata struct {
+	XMLname     xml.Name     `xml:"root"`
+	Status      sStatus       `xml:"status"`
+	SystemData  systemData   `xml:"historicalstatistics"`
+
+}
+type systemData struct {
+	Href                  string `xml:"href,attr"`
+	rt_CPUUsage           int    `xml:"rt_CPUUsage"`   // Average percent usage of the CPU.
+	rt_MemoryUsage        int    `xml:"rt_MemoryUsage"` // Average percent usage of system memory. int
+	rt_CPUUptime          int    `xml:"rt_CPUUptime"`
+	rt_FDUsage            int    `xml:"rt_FDUsage"`
+	rt_CPULoadAverage1m   int    `xml:"rt_CPULoadAverage1m"`
+	rt_CPULoadAverage5m   int    `xml:"rt_CPULoadAverage5m"`
+	rt_CPULoadAverage15m  int    `xml:"rt_CPULoadAverage15m"`
+	rt_TmpPartUsage       int    `xml:"rt_TmpPartUsage"` // Percentage of the temporary partition used. int
+	rt_LoggingPartUsage   int    `xml:"rt_LoggingPartUsage"`
+}
+type sMetrics struct{
+
+	Href                  *prometheus.Desc
+	rt_CPUUsage           *prometheus.Desc
+	rt_MemoryUsage        *prometheus.Desc
+	rt_CPUUptime          *prometheus.Desc
+	rt_FDUsage            *prometheus.Desc
+	rt_CPULoadAverage1m   *prometheus.Desc
+	rt_CPULoadAverage5m   *prometheus.Desc
+	rt_CPULoadAverage15m  *prometheus.Desc
+	rt_TmpPartUsage       *prometheus.Desc
+	rt_LoggingPartUsage   *prometheus.Desc
+}
+
+func systemCollector() *sMetrics {
+	return &sMetrics{
+		rt_CPUUsage: prometheus.NewDesc("rt_CPUUsage",
+			"NoDescriptionYet",
+			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
+		),
+		rt_MemoryUsage: prometheus.NewDesc("rt_MemoryUsage",
+			"NoDescriptionYet",
+			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
+		),
+		rt_CPUUptime: prometheus.NewDesc("rt_CPUUptime",
+			"NoDescriptionYet",
+			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
+		),
+		rt_FDUsage: prometheus.NewDesc("rt_FDUsage",
+			"NoDescriptionYet",
+			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
+		),
+		rt_CPULoadAverage1m: prometheus.NewDesc("rt_CPULoadAverage1m",
+			"NoDescriptionYet.",
+			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
+		),
+		rt_CPULoadAverage5m: prometheus.NewDesc("rt_CPULoadAverage5m",
+			"NoDescriptionYet",
+			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
+		),
+		rt_CPULoadAverage15m: prometheus.NewDesc("rt_CPULoadAverage15m",
+			"NoDescriptionYet",
+			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
+		),
+		rt_TmpPartUsage: prometheus.NewDesc("rt_TmpPartUsage",
+			"NoDescriptionYet",
+			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
+		),
+		rt_LoggingPartUsage: prometheus.NewDesc("rt_LoggingPartUsage",
+			"NoDescriptionYet",
+			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
+		),
+	}
+}
+
+// Each and every collector must implement the Describe function.
+// It essentially writes all descriptors to the prometheus desc channel.
+func (collector *sMetrics) Describe(ch chan<- *prometheus.Desc) {
+
+	//Update this section with the each metric you create for a given collector
+	ch <- collector.rt_CPULoadAverage15m
+	ch <- collector.rt_CPULoadAverage1m
+	ch <- collector.rt_CPULoadAverage5m
+	ch <- collector.rt_CPUUptime
+	ch <- collector.rt_CPUUsage
+	ch <- collector.rt_FDUsage
+	ch <- collector.rt_LoggingPartUsage
+	ch <- collector.rt_MemoryUsage
+	ch <- collector.rt_TmpPartUsage
+
+}
+
+//Collect implements required collect function for all promehteus collectors
+
+func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
+
+	//Implement logic here to determine proper metric value to return to prometheus
+	//for each descriptor or call other functions that do so.
+	var metricValue1 float64
+	var metricValue2 float64
+	var metricValue3 float64
+	var metricValue4 float64
+	var metricValue5 float64
+	var metricValue6 float64
+	var metricValue7 float64
+	var metricValue8 float64
+	var metricValue9 float64
+
+
+	//var HTTPcode float64
+
+	data, _ := ioutil.ReadFile("sbcsystem.xml")
+	sbc := &sSBCdata{}
+	xml.Unmarshal([]byte(data), &sbc)
+	//fmt.Println("Incoming call attempts/accepts: ", sbc.Isdnsg.IncomingCallattempts, "/", sbc.Isdnsg.IncomingCallaccepts, "\nSBC router ID: ", sbc.Isdnsg.Id, "\nRouter href: ", sbc.Isdnsg.Href)
+
+	/*if s, err := strconv.ParseFloat(sbc.Status.HTTPcode, 64); err == nil {
+		HTTPcode = s
+		fmt.Println(s) // 3.1415927410125732
+	}*/
+	//HTTPcode = float64(sbc.Status.HTTPcode)
+	metricValue1 = float64(sbc.SystemData.rt_CPULoadAverage15m)
+	metricValue2 = float64(sbc.SystemData.rt_CPULoadAverage1m)
+	metricValue3 = float64(sbc.SystemData.rt_CPULoadAverage5m)
+	metricValue4 = float64(sbc.SystemData.rt_CPUUptime)
+	metricValue5 = float64(sbc.SystemData.rt_CPUUsage)
+	metricValue6 = float64(sbc.SystemData.rt_FDUsage)
+	metricValue7 = float64(sbc.SystemData.rt_LoggingPartUsage)
+	metricValue8 = float64(sbc.SystemData.rt_MemoryUsage)
+	metricValue9 = float64(sbc.SystemData.rt_TmpPartUsage)
+
+
+	//Write latest value for each metric in the prometheus metric channel.
+	//Note that you can pass CounterValue, GaugeValue, or UntypedValue types here.
+	m1 := prometheus.MustNewConstMetric(collector.rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue1, "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
+	m2 := prometheus.MustNewConstMetric(collector.rt_CPULoadAverage1m, prometheus.GaugeValue, metricValue2, "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
+	m3 := prometheus.MustNewConstMetric(collector.rt_CPULoadAverage5m, prometheus.GaugeValue, metricValue3, "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
+	m4 := prometheus.MustNewConstMetric(collector.rt_CPUUptime, prometheus.GaugeValue, metricValue4, "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
+	m5 := prometheus.MustNewConstMetric(collector.rt_CPUUsage, prometheus.GaugeValue, metricValue5, "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
+	m6 := prometheus.MustNewConstMetric(collector.rt_FDUsage, prometheus.GaugeValue, metricValue6, "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
+	m7 := prometheus.MustNewConstMetric(collector.rt_LoggingPartUsage, prometheus.GaugeValue, metricValue7, "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
+	m8 := prometheus.MustNewConstMetric(collector.rt_MemoryUsage, prometheus.GaugeValue, metricValue8, "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
+	m9 := prometheus.MustNewConstMetric(collector.rt_TmpPartUsage, prometheus.GaugeValue, metricValue9, "test", "systemstats", sbc.SystemData.Href,sbc.Status.HTTPcode)
+
+	m1 = prometheus.NewMetricWithTimestamp(time.Now().Add(-time.Hour), m1)
+	m2 = prometheus.NewMetricWithTimestamp(time.Now(), m2)
+	m3 = prometheus.NewMetricWithTimestamp(time.Now(), m3)
+	m4 = prometheus.NewMetricWithTimestamp(time.Now(), m4)
+	m5 = prometheus.NewMetricWithTimestamp(time.Now(), m5)
+	m6 = prometheus.NewMetricWithTimestamp(time.Now(), m6)
+	m7 = prometheus.NewMetricWithTimestamp(time.Now(), m7)
+	m8 = prometheus.NewMetricWithTimestamp(time.Now(), m8)
+	m9 = prometheus.NewMetricWithTimestamp(time.Now(), m9)
+	ch <- m1
+	ch <- m2
+	ch <- m3
+	ch <- m4
+	ch <- m5
+	ch <- m6
+	ch <- m7
+	ch <- m8
+	ch <- m9
+}
+
+
+//fetching data from api
+func systemExporterTest() {
+
+	//APISessionAuth()
+	/*if err != nil {
+		fmt.Println("Apisession auth not working: ", err)
+	}*/
+	phpsessid := APISessionAuth()
+	getAPIData("test", phpsessid)
+	//fmt.Println(text)
+}
+
+
+
+
+/*
+	func getAPIData(url string, phpsessid string) string {
+		tr2 := &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		}
+		client2 := &http.Client{Transport: tr2}
+		cookie1 := &http.Cookie{
+			Name:   "PHPSESSID",
+			Value:  phpsessid,
+			//Path:     "/",
+			MaxAge:   3600,
+			HttpOnly: false,
+			Secure:   true,
+		}
+		req2, err := http.NewRequest("GET", "https://10.233.230.11/rest/isdnsg/10001", nil)
+		if err != nil {
+			// handle err
+		}
+		req2.AddCookie(cookie1)
+		resp2, err := client2.Do(req2)
+		if err != nil {
+			// handle err
+		}
+			scanner := bufio.NewScanner(resp2.Body)
+			scanner.Split(bufio.ScanBytes)
+			for scanner.Scan() {
+				fmt.Print(scanner.Text())
+			}
+		defer resp2.Body.Close()
+		return scanner.Text()
+
+		}
+*/
