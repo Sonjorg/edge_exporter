@@ -101,7 +101,7 @@ func (collector *metrics) Collect(ch chan<- prometheus.Metric) {
 	data, _ := ioutil.ReadFile("APIoutput.xml")
 	sbc := &SBCdata{}
 	xml.Unmarshal([]byte(data), &sbc)
-	fmt.Println("Incoming call attempts/accepts: ", sbc.Isdnsg.IncomingCallattempts, "/", sbc.Isdnsg.IncomingCallaccepts, "\nSBC router ID: ", sbc.Isdnsg.Id, "\nRouter href: ", sbc.Isdnsg.Href)
+	//fmt.Println("Incoming call attempts/accepts: ", sbc.Isdnsg.IncomingCallattempts, "/", sbc.Isdnsg.IncomingCallaccepts, "\nSBC router ID: ", sbc.Isdnsg.Id, "\nRouter href: ", sbc.Isdnsg.Href)
 
 	/*if s, err := strconv.ParseFloat(sbc.Status.HTTPcode, 64); err == nil {
 		HTTPcode = s
