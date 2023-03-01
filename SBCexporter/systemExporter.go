@@ -49,7 +49,6 @@ type systemData struct {
 }
 
 type sMetrics struct {
-	Href                 *prometheus.Desc
 	Rt_CPUUsage          *prometheus.Desc
 	Rt_MemoryUsage       *prometheus.Desc
 	Rt_CPUUptime         *prometheus.Desc
