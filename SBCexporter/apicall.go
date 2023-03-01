@@ -65,7 +65,7 @@ func APISessionAuth(username string, password string, loginURL string) string {
 
 // TODO: This is insecure; use only in dev environments.
 
-func getAPIData(url string, phpsessid string) string{
+func getAPIData(url string, phpsessid string) []byte{
 
 tr2 := &http.Transport{
 	TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
@@ -103,7 +103,7 @@ if err != nil {
 	//fmt.Println(scanner.Text())
 
 	defer resp2.Body.Close()
-	return string(scanner.Bytes())
+	return scanner.Bytes()
 
 }
 
