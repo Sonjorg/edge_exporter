@@ -146,8 +146,8 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 	/*if err != nil {
 	}*/
 	xml.Unmarshal(b, &ssbc)
-	fmt.Println("b: \n\n", b)
-	fmt.Println(ssbc)
+	//fmt.Println("b: \n\n", b)
+	fmt.Println(ssbc.SystemData)
 
 	//fmt.Println(sbc)
 
