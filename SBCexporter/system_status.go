@@ -1,27 +1,29 @@
 package main
+
 //system status exporter
 //rest/system/historicalstatistics/1
 
 import (
 	//"crypto/tls"
 	//"strings"
-    //"bufio"
+	//"bufio"
 	"encoding/xml"
+	"fmt"
 	//"fmt"
 	"io/ioutil"
 	"time"
+
 	//"log"
 	"github.com/prometheus/client_golang/prometheus"
 	//"github.com/prometheus/client_golang/prometheus/promhttp"
 	//"github.com/tiket-oss/phpsessgo"
 	//"io/ioutil"
 	//"net/http"
-
-//"net/http/cookiejar"
-	//"net/http/cookiejar"
-	//"net/url"
-	//"regexp"
-	//"strconv"
+	// "net/http/cookiejar"
+	// "net/http/cookiejar"
+	// "net/url"
+	// "regexp"
+	// "strconv"
 )
 
 type sStatus struct {
@@ -199,7 +201,7 @@ func systemExporterTest() {
 		fmt.Println("Apisession auth not working: ", err)
 	}*/
 	phpsessid := APISessionAuth()
-	getAPIData("test", phpsessid)
+	fmt.Println(getAPIData("test", phpsessid))
 	//fmt.Println(text)
 }
 
