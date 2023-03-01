@@ -143,7 +143,7 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 	data := getAPIData("https://10.233.230.11/rest/system/historicalstatistics/1", phpsessid)
 	sbc := &sSBCdata{}
 	b := []byte(data)
-	xml.Unmarshal(b, &sbc)
+	xml.Unmarshal(data, &sbc)
 
 	fmt.Println(sbc.SystemData.Href, ": \n", b, data, sbc)
 
