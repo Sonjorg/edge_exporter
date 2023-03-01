@@ -37,14 +37,14 @@ type sSBCdata struct {
 }
 type systemData struct {
 	Href                 string `xml:"href,attr"`
-	Rt_CPUUsage          int    `xml:"rt_CPUUsage"`   // Average percent usage of the CPU.
-	Rt_MemoryUsage       int    `xml:"rt_MemoryUsage"` // Average percent usage of system memory. int
+	Rt_CPUUsage          int    `xml:"rt_CPUUsage"`// Average percent usage of the CPU.
+	Rt_MemoryUsage       int    `xml:"rt_MemoryUsage"`// Average percent usage of system memory. int
 	Rt_CPUUptime         int    `xml:"rt_CPUUptime"`
 	Rt_FDUsage           int    `xml:"rt_FDUsage"`
 	Rt_CPULoadAverage1m  int    `xml:"rt_CPULoadAverage1m"`
 	Rt_CPULoadAverage5m  int    `xml:"rt_CPULoadAverage5m"`
 	Rt_CPULoadAverage15m int    `xml:"rt_CPULoadAverage15m"`
-	Rt_TmpPartUsage      int    `xml:"rt_TmpPartUsage"` // Percentage of the temporary partition used. int
+	Rt_TmpPartUsage      int    `xml:"rt_TmpPartUsage"`//Percentage of the temporary partition used. int
 	Rt_LoggingPartUsage  int    `xml:"rt_LoggingPartUsage"`
 }
 
@@ -142,11 +142,11 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 	phpsessid := APISessionAuth("student", "PanneKake23", "https://10.233.230.11/rest/login")
 	data := getAPIData("https://10.233.230.11/rest/system/historicalstatistics/1", phpsessid)
 	ssbc := &sSBCdata{}
-	b := byte(data)
+	b := []byte(data)
 	//b, err := ioutil.ReadAll(data)
 	/*if err != nil {
 	}*/
-	xml.Unmarshal(b, &ssbc)
+	xml.Unmarshal([]byte(b), &ssbc)
 	fmt.Println(b)
 
 	//fmt.Println(sbc)
