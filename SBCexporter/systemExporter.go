@@ -144,8 +144,8 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 	sbc := &sSBCdata{}
 	b := []byte(data)
 	//b, err := ioutil.ReadAll(data)
-	if err != nil {
-	}
+	/*if err != nil {
+	}*/
 	xml.Unmarshal([]byte(b), &sbc)
 
 	fmt.Println(sbc.SystemData.Rt_CPULoadAverage15m, ": \n", sbc)
