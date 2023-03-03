@@ -10,17 +10,27 @@ type hostConfig struct {
 
 type hosts []hostConfig
 
-func getIPNotExl(exporterName string, hosts hostConfig) []string{
+func getIpAdrExp(exporterName string, hosts hostConfig) []string{
 
 	var list []string
-	//var i = hosts.index.size
-	if (exporterName == "systemExporter") {
 
-		for i := 0; i < hosts.index; i++ {
-			if (hosts.systemExporter == true) {
-				list = append(list, hosts.ipaddress)
-				}
-		}
+	for i := 0; i < hosts.index; i++ {
+		if (hosts.systemExporter == true) {
+			list = append(list, hosts.ipaddress)
+			}
+	}
+return list
+}
+func getIPNotExl(exporterName string, hosts hostConfig) []string {
+	var list []string
+
+	switch exporterName {
+	case "systemExporter":
+			list = getIpAdrExp(exporterName, hosts)
+	//var i = hosts.index.size
+	case "telephoneStats":
+			list = getIpAdrExp(exporterName, hosts)
+		//INFO: have a switch case on all exporters made, NB!: must remember exact exporternames inside each exporter
 	}
 	return list
 }

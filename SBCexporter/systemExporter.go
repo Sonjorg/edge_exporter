@@ -160,7 +160,7 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 	//ipaddresses[0] = "10.233.230.11"
 	ipaddresses = getIPNotExl("systemExporter", testConfig)
 	//phpsessid := APISessionAuth("student", "PanneKake23", "https://10.233.230.11/rest/login")
-	
+
 	for i := range ipaddresses {
 		phpsessid =  APISessionAuth(username, password, "https://" + ipaddresses[i] + "/rest/login")
 		data := getAPIData("https://"+ipaddresses[i]+"/rest/system/historicalstatistics/1", phpsessid)
@@ -236,9 +236,9 @@ func systemExporter() {
 
 	if (getIPNotExl("systemExporter", testConfig) == 0) {
 			return
-		}
-		sc := systemCollector()
-		prometheus.MustRegister(sc)
+	}
+	sc := systemCollector()
+	prometheus.MustRegister(sc)
 		//phpsessid := APISessionAuth()
 		//fmt.Println(getAPIData("test", phpsessid))
 		//fmt.Println(text)
