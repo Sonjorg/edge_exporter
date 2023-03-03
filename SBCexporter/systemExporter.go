@@ -234,7 +234,7 @@ func systemExporter() {
 	}*/
 
 
-	if (getIPNotExl("systemExporter", testConfig) == 0) {
+	if (getIPNotExl("systemStatsExporter", testConfig) == 0) {
 			return
 	}
 	sc := systemCollector()

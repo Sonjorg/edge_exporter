@@ -25,10 +25,10 @@ func getIPNotExl(exporterName string, hosts hostConfig) []string {
 	var list []string
 
 	switch exporterName {
-	case "systemExporter":
+	case "systemStatsExporter":
 			list = getIpAdrExp(exporterName, hosts)
 	//var i = hosts.index.size
-	case "telephoneStats":
+	case "teleStatsExporter":
 			list = getIpAdrExp(exporterName, hosts)
 		//INFO: have a switch case on all exporters made, NB!: must remember exact exporternames inside each exporter
 	}
