@@ -9,6 +9,7 @@ import (
 	//"bufio"
 	"encoding/xml"
 	"fmt"
+
 	//"io/ioutil"
 	"time"
 
@@ -33,18 +34,17 @@ type sSBCdata struct {
 	XMLname    xml.Name   `xml:"root"`
 	Status     sStatus    `xml:"status"`
 	SystemData systemData `xml:"historicalstatistics"`
-
 }
 type systemData struct {
 	Href                 string `xml:"href,attr"`
-	Rt_CPUUsage          int    `xml:"rt_CPUUsage"`// Average percent usage of the CPU.
-	Rt_MemoryUsage       int    `xml:"rt_MemoryUsage"`// Average percent usage of system memory. int
+	Rt_CPUUsage          int    `xml:"rt_CPUUsage"`    // Average percent usage of the CPU.
+	Rt_MemoryUsage       int    `xml:"rt_MemoryUsage"` // Average percent usage of system memory. int
 	Rt_CPUUptime         int    `xml:"rt_CPUUptime"`
 	Rt_FDUsage           int    `xml:"rt_FDUsage"`
 	Rt_CPULoadAverage1m  int    `xml:"rt_CPULoadAverage1m"`
 	Rt_CPULoadAverage5m  int    `xml:"rt_CPULoadAverage5m"`
 	Rt_CPULoadAverage15m int    `xml:"rt_CPULoadAverage15m"`
-	Rt_TmpPartUsage      int    `xml:"rt_TmpPartUsage"`//Percentage of the temporary partition used. int
+	Rt_TmpPartUsage      int    `xml:"rt_TmpPartUsage"` //Percentage of the temporary partition used. int
 	Rt_LoggingPartUsage  int    `xml:"rt_LoggingPartUsage"`
 }
 
@@ -134,76 +134,84 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 	var metricValue8 float64
 	var metricValue9 float64
 
-
+	var ipaddresses []string
+	var username string
+	var password string
+	var phpsessids []string
 	//var HTTPcode float64
-
+	//10.233.230.11
 	//data, _ := ioutil.ReadFile("sbcsystem.xml")
-	phpsessid := APISessionAuth("student", "PanneKake23", "https://10.233.230.11/rest/login")
-	data := getAPIData("https://10.233.230.11/rest/system/historicalstatistics/1", phpsessid)
-	ssbc := &sSBCdata{}
-	b := []byte(data)
-	//b, err := ioutil.ReadAll(data)
-	/*if err != nil {
-	}*/
-	xml.Unmarshal(b, &ssbc)
-	//fmt.Println("b: \n\n", b)
-	fmt.Println(data)
-	fmt.Println(ssbc.SystemData)
+	/*	for i := range ipaddresses {
+			phpsessids[i] =  APISessionAuth(username, password, "https://" + ipadresses[i] + "/rest/login")
+		}
+	*/
+	ipaddresses[0] = "10.233.230.11"
 
-	//fmt.Println(sbc)
+	//phpsessid := APISessionAuth("student", "PanneKake23", "https://10.233.230.11/rest/login")
+	for i := range ipaddresses {
+		data := getAPIData("https://"+ipaddresses[i]+"/rest/system/historicalstatistics/1", phpsessid[i])
+		ssbc := &sSBCdata{}
+		b := []byte(data)
+		//b, err := ioutil.ReadAll(data)
+		/*if err != nil {
+		}*/
+		xml.Unmarshal(b, &ssbc)
+		//fmt.Println("b: \n\n", b)
+		fmt.Println(data)
+		fmt.Println(ssbc.SystemData)
 
-	/*if s, err := strconv.ParseFloat(sbc.Status.HTTPcode, 64); err == nil {
-		HTTPcode = s
-		fmt.Println(s) // 3.1415927410125732
-	}*/
+		//fmt.Println(sbc)
 
+		/*if s, err := strconv.ParseFloat(sbc.Status.HTTPcode, 64); err == nil {
+			HTTPcode = s
+			fmt.Println(s) // 3.1415927410125732
+		}*/
 
-	//HTTPcode = float64(sbc.Status.HTTPcode)
-	metricValue1 = float64(ssbc.SystemData.Rt_CPULoadAverage15m)
-	metricValue2 = float64(ssbc.SystemData.Rt_CPULoadAverage1m)
-	metricValue3 = float64(ssbc.SystemData.Rt_CPULoadAverage5m)
-	metricValue4 = float64(ssbc.SystemData.Rt_CPUUptime)
-	metricValue5 = float64(ssbc.SystemData.Rt_CPUUsage)
-	metricValue6 = float64(ssbc.SystemData.Rt_FDUsage)
-	metricValue7 = float64(ssbc.SystemData.Rt_LoggingPartUsage)
-	metricValue8 = float64(ssbc.SystemData.Rt_MemoryUsage)
-	metricValue9 = float64(ssbc.SystemData.Rt_TmpPartUsage)
+		//HTTPcode = float64(sbc.Status.HTTPcode)
+		metricValue1 = float64(ssbc.SystemData.Rt_CPULoadAverage15m)
+		metricValue2 = float64(ssbc.SystemData.Rt_CPULoadAverage1m)
+		metricValue3 = float64(ssbc.SystemData.Rt_CPULoadAverage5m)
+		metricValue4 = float64(ssbc.SystemData.Rt_CPUUptime)
+		metricValue5 = float64(ssbc.SystemData.Rt_CPUUsage)
+		metricValue6 = float64(ssbc.SystemData.Rt_FDUsage)
+		metricValue7 = float64(ssbc.SystemData.Rt_LoggingPartUsage)
+		metricValue8 = float64(ssbc.SystemData.Rt_MemoryUsage)
+		metricValue9 = float64(ssbc.SystemData.Rt_TmpPartUsage)
 
+		//Write latest value for each metric in the prometheus metric channel.
+		//Note that you can pass CounterValue, GaugeValue, or UntypedValue types here.
+		m1 := prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue1, "see href", "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
+		m2 := prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage1m, prometheus.GaugeValue, metricValue2, "see href", "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
+		m3 := prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage5m, prometheus.GaugeValue, metricValue3, "see href", "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
+		m4 := prometheus.MustNewConstMetric(collector.Rt_CPUUptime, prometheus.GaugeValue, metricValue4, "see href", "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
+		m5 := prometheus.MustNewConstMetric(collector.Rt_CPUUsage, prometheus.GaugeValue, metricValue5, "see href", "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
+		m6 := prometheus.MustNewConstMetric(collector.Rt_FDUsage, prometheus.GaugeValue, metricValue6, "see href", "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
+		m7 := prometheus.MustNewConstMetric(collector.Rt_LoggingPartUsage, prometheus.GaugeValue, metricValue7, "see href", "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
+		m8 := prometheus.MustNewConstMetric(collector.Rt_MemoryUsage, prometheus.GaugeValue, metricValue8, "see href", "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
+		m9 := prometheus.MustNewConstMetric(collector.Rt_TmpPartUsage, prometheus.GaugeValue, metricValue9, "see href", "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
 
-	//Write latest value for each metric in the prometheus metric channel.
-	//Note that you can pass CounterValue, GaugeValue, or UntypedValue types here.
-	m1 := prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue1, "see href","test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
-	m2 := prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage1m, prometheus.GaugeValue, metricValue2, "see href","test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
-	m3 := prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage5m, prometheus.GaugeValue, metricValue3, "see href", "test", "systemstats", ssbc.SystemData.Href,ssbc.Status.HTTPcode)
-	m4 := prometheus.MustNewConstMetric(collector.Rt_CPUUptime, prometheus.GaugeValue, metricValue4, "see href", "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
-	m5 := prometheus.MustNewConstMetric(collector.Rt_CPUUsage, prometheus.GaugeValue, metricValue5, "see href", "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
-	m6 := prometheus.MustNewConstMetric(collector.Rt_FDUsage, prometheus.GaugeValue, metricValue6, "see href", "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
-	m7 := prometheus.MustNewConstMetric(collector.Rt_LoggingPartUsage, prometheus.GaugeValue, metricValue7, "see href", "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
-	m8 := prometheus.MustNewConstMetric(collector.Rt_MemoryUsage, prometheus.GaugeValue, metricValue8, "see href", "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
-	m9 := prometheus.MustNewConstMetric(collector.Rt_TmpPartUsage, prometheus.GaugeValue, metricValue9, "see href", "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
-
-	m1 = prometheus.NewMetricWithTimestamp(time.Now(), m1)
-	m2 = prometheus.NewMetricWithTimestamp(time.Now(), m2)
-	m3 = prometheus.NewMetricWithTimestamp(time.Now(), m3)
-	m4 = prometheus.NewMetricWithTimestamp(time.Now(), m4)
-	m5 = prometheus.NewMetricWithTimestamp(time.Now(), m5)
-	m6 = prometheus.NewMetricWithTimestamp(time.Now(), m6)
-	m7 = prometheus.NewMetricWithTimestamp(time.Now(), m7)
-	m8 = prometheus.NewMetricWithTimestamp(time.Now(), m8)
-	m9 = prometheus.NewMetricWithTimestamp(time.Now(), m9)
-	ch <- m1
-	ch <- m2
-	ch <- m3
-	ch <- m4
-	ch <- m5
-	ch <- m6
-	ch <- m7
-	ch <- m8
-	ch <- m9
+		m1 = prometheus.NewMetricWithTimestamp(time.Now(), m1)
+		m2 = prometheus.NewMetricWithTimestamp(time.Now(), m2)
+		m3 = prometheus.NewMetricWithTimestamp(time.Now(), m3)
+		m4 = prometheus.NewMetricWithTimestamp(time.Now(), m4)
+		m5 = prometheus.NewMetricWithTimestamp(time.Now(), m5)
+		m6 = prometheus.NewMetricWithTimestamp(time.Now(), m6)
+		m7 = prometheus.NewMetricWithTimestamp(time.Now(), m7)
+		m8 = prometheus.NewMetricWithTimestamp(time.Now(), m8)
+		m9 = prometheus.NewMetricWithTimestamp(time.Now(), m9)
+		ch <- m1
+		ch <- m2
+		ch <- m3
+		ch <- m4
+		ch <- m5
+		ch <- m6
+		ch <- m7
+		ch <- m8
+		ch <- m9
+	}
 }
 
-
-//fetching data from api
+// fetching data from api
 func systemExporter() {
 
 	//APISessionAuth()
@@ -215,6 +223,5 @@ func systemExporter() {
 	//phpsessid := APISessionAuth()
 	//fmt.Println(getAPIData("test", phpsessid))
 	//fmt.Println(text)
+
 }
-
-
