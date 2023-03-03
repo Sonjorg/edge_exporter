@@ -137,7 +137,7 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 	var ipaddresses []string
 	var username string
 	var password string
-	var phpsessids []string
+	var phpsessid string
 	//var HTTPcode float64
 	//10.233.230.11
 	//data, _ := ioutil.ReadFile("sbcsystem.xml")
@@ -149,7 +149,8 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 
 	//phpsessid := APISessionAuth("student", "PanneKake23", "https://10.233.230.11/rest/login")
 	for i := range ipaddresses {
-		data := getAPIData("https://"+ipaddresses[i]+"/rest/system/historicalstatistics/1", phpsessid[i])
+		phpsessid =  APISessionAuth(username, password, "https://" + ipaddresses[i] + "/rest/login")
+		data := getAPIData("https://"+ipaddresses[i]+"/rest/system/historicalstatistics/1", phpsessid)
 		ssbc := &sSBCdata{}
 		b := []byte(data)
 		//b, err := ioutil.ReadAll(data)
