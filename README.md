@@ -4,8 +4,8 @@
 
 ### Deployment of golang and used golang packages
 - Download golang using the official download page and remember to reboot
-- To start the exporter and download all packages, navigate to SBCexporter directory and run
-``` go build ```
+- To start the exporter and download all necessary packages, navigate to the SBCexporter directory and run
+``` go install ```
 
 ## Grafana and prometheus setup with docker
 
