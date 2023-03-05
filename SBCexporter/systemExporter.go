@@ -167,7 +167,7 @@ func sysCollector(collector *sMetrics)  []prometheus.Metric {//(ch chan<- promet
 	*/
 	ipaddresses = append(ipaddresses, "10.233.230.11")
 	//ipaddresses = append(ipaddresses, "10.233.230.11")
-	//ipaddresses = append(ipaddresses, "45")
+	ipaddresses = append(ipaddresses, "45")
 	//ipaddresses[1] = "23.233.676.45"
 
 	//DO NOT DELETE: ipaddresses = getIPNotExl("systemExporter", testConfig)
