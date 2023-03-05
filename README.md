@@ -1,9 +1,10 @@
 # Readme
 ## SBC Exporter written in golang
-#### The prometheus golang exporter resides in the SBCexporter folder
+**The prometheus golang exporter resides in the SBCexporter folder**
 
-### Deployment of the SBCexporter
-- Download golang using the official download page and remember to reboot
+### Deployment of the SBCexporter on a linux server
+**The exporter is developed and tested for the official ubuntu server image found at https://ubuntu.com/download/server.**
+- Download golang using the official download page: [install golang](https://go.dev/doc/install), and remember to reboot
 - To start the exporter and download all necessary packages, navigate to the SBCexporter directory and run
 ``` go install ```
 ### To test go exporters:
