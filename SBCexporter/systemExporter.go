@@ -267,7 +267,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 	m := sysCollector(&sMetrics{})
 
 	for range m {
-		c <- m.metric
+		c <- m
 	}
 }
 
