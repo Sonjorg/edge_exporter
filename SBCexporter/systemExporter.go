@@ -184,14 +184,15 @@ func sysCollector(collector *sMetrics)  []prometheus.Metric {//(ch chan<- promet
 		fmt.Println(len(ipaddresses))
 
 	//for i := range ipaddresses  {
-
-		phpsessid, err =  APISessionAuth(username, password, "https://" + ipaddresses[i] + "/rest/login")
+		authStr := "https://" +ipaddresses[i] + "/rest/login"
+		dataStr := "https://"+ipaddresses[i]+"/rest/system/historicalstatistics/1"
+		phpsessid, err =  APISessionAuth(username, password,authStr)
 		if err != nil {
 			log.Flags()
 			fmt.Println("error in systemExporter:", err)
 			break //trying next ip address
 		}
-		data, error := getAPIData("https://"+ipaddresses[i]+"/rest/system/historicalstatistics/1", phpsessid)
+		data, error := getAPIData(dataStr, phpsessid)
 		if error != nil {
 			log.Flags()
 			fmt.Println("error in systemExporter:", error)
