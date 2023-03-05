@@ -180,7 +180,7 @@ func sysCollector(collector *sMetrics)  []prometheus.Metric {//(ch chan<- promet
 	m := []prometheus.Metric{}
 	fmt.Println(len(ipaddresses))
 
-	for i := 1; i <= len(ipaddresses); i++ {
+	for i := 0; i < len(ipaddresses)-1; i++ {
 		fmt.Println(len(ipaddresses))
 
 	//for i := range ipaddresses  {
@@ -268,7 +268,7 @@ func sysCollector(collector *sMetrics)  []prometheus.Metric {//(ch chan<- promet
 func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 	// Collect result of new probe functions
 	//m := []prometheus.Metric
-	m := sysCollector(&sMetrics{})
+	m := sysCollector(collector)
 
 	for i := range m {
 		c <- m[i]
