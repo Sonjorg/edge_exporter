@@ -189,13 +189,13 @@ func sysCollector(collector *sMetrics)  []prometheus.Metric {//(ch chan<- promet
 		phpsessid, err =  APISessionAuth(username, password,authStr)
 		if err != nil {
 			log.Flags()
-			fmt.Println("error in systemExporter:", err)
+			fmt.Println("error in systemExporter auth func:", err)
 			break //trying next ip address
 		}
 		data, error := getAPIData(dataStr, phpsessid)
 		if error != nil {
 			log.Flags()
-			fmt.Println("error in systemExporter:", error)
+			fmt.Println("error in systemExporter data func:", error)
 			break //trying next ip address
 		}
 		b := []byte(data)
@@ -305,6 +305,7 @@ func systemExporter() {
 		sc := systemCollector()//prometheus.NewRegistry()
 		//systemCollector(sc)
 		prometheus.MustRegister(sc)
+
 			//phpsessid := APISessionAuth()
 			//fmt.Println(getAPIData("test", phpsessid))
 			//fmt.Println(text)

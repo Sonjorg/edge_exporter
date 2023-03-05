@@ -22,7 +22,7 @@ import (
 // curl -k --data "Username=student&Password=PanneKake23" -i -v https://10.233.230.11/rest/login
 
 // TODO: This is insecure; use only in dev environments.
-func APISessionAuth(username string, password string, loginURL string) (string, error) {
+func APISessionAuth(username string, password string, loginURL string) (string) {
 
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
@@ -37,7 +37,7 @@ func APISessionAuth(username string, password string, loginURL string) (string, 
 	req, err := http.NewRequest("POST", loginURL, body)
 	if err != nil {
 		log.Flags()
-			fmt.Println("error in systemExporter:", err)
+			fmt.Println("error in auth:", err)
 		//	fmt.Println("error in systemExporter:", error)
 	}
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
@@ -45,7 +45,7 @@ func APISessionAuth(username string, password string, loginURL string) (string, 
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Flags()
-		fmt.Println("error in systemExporter:", err)
+		fmt.Println("error in auth:", err)
 		//fmt.Println("error in systemExporter:", err)
 	}
 
@@ -57,7 +57,7 @@ func APISessionAuth(username string, password string, loginURL string) (string, 
 	  phpsessid := m["PHPSESSID"]
 
 	defer resp.Body.Close()
-	return phpsessid, nil
+	return phpsessid
 
 }
 //The following two comments are produced by the curl-to-go utility: https://mholt.github.io/curl-to-go/
@@ -67,7 +67,7 @@ func APISessionAuth(username string, password string, loginURL string) (string, 
 
 // TODO: This is insecure; use only in dev environments.
 
-func getAPIData(url string, phpsessid string) (string, error){
+func getAPIData(url string, phpsessid string) (string){
 
 tr2 := &http.Transport{
 	TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
@@ -83,17 +83,17 @@ cookie1 := &http.Cookie{
 }
 req2, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-
+		fmt.Println("error in http request:", err)
 }
 req2.AddCookie(cookie1)
 	resp2, err := client2.Do(req2)
 	if err != nil {
-
+		fmt.Println("error in http request:", err)
 }
 
 	b, err := ioutil.ReadAll(resp2.Body)
 
 	defer resp2.Body.Close()
-	return string(b),nil
+	return string(b)
 }
 
