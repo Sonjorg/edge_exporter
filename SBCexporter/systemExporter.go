@@ -139,9 +139,9 @@ func (collector *sMetrics) Describe(ch chan<- *prometheus.Desc) {
 }
 
 //Collect implements required collect function for all promehteus collectors
-
-func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
-
+//(ch chan<- prometheus.Metric) {//
+//func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
+func (collector *sMetrics) sysCollector()[]prometheus.Metric{
 	//Implement logic here to determine proper metric value to return to prometheus
 	//for each descriptor or call other functions that do so.
 	var metricValue1 float64
@@ -248,12 +248,19 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 			m = append(m, prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue8, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode))
 			m = append(m, prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue9, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode))
 
-			for i := range m {
-				ch <- m[i]
-			}
+			//for i := range m {
+			//	ch <- m[i]
+			//}
 	//	}
 	//}
-	//return m, true
+	return m
+	}
+}
+
+func (p *ProbeCollector) Collect(c chan<- prometheus.Metric) {
+	// Collect result of new probe functions
+	for _, m := range p.metrics {
+		c <- m
 	}
 }
 
