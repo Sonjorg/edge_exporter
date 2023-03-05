@@ -179,7 +179,7 @@ func sysCollector(collector *sMetrics)  []prometheus.Metric {//(ch chan<- promet
 	var err error
 	m := []prometheus.Metric{}
 	for i := 0; i < len(ipaddresses)-1; i++ {
-		fmt.Println(ipaddresses[i])
+		fmt.Println(len(ipaddresses))
 
 	//for i := range ipaddresses  {
 
