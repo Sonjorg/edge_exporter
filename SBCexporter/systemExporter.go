@@ -176,7 +176,7 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 		if err != nil {
 			log.Flags()
 			fmt.Println("error in systemExporter:", err)
-			break //trying next ip address
+			continue //trying next ip address
 		}
 		data, error := getAPIData("https://"+ipaddresses[i]+"/rest/system/historicalstatistics/1", phpsessid)
 		if error != nil {
@@ -257,10 +257,23 @@ func systemExporter() {
 	//if (getIPNotExl("systemStatsExporter", testConfig) == 0) {
 	//		return
 	//}
-	sc := systemCollector()
-	prometheus.MustRegister(sc)
-		//phpsessid := APISessionAuth()
-		//fmt.Println(getAPIData("test", phpsessid))
-		//fmt.Println(text)
+	var ipaddresses []string
+	//var HTTPcode float64
+	//10.233.230.11
+	//data, _ := ioutil.ReadFile("sbcsystem.xml")
+	/*	for i := range ipaddresses {
+			phpsessids[i] =  APISessionAuth(username, password, "https://" + ipadresses[i] + "/rest/login")
+		}
+	*/
+	//ipaddresses[0] = "10.233.230.11"
+	ipaddresses = append(ipaddresses, "10.233.230.11")
+	ipaddresses = append(ipaddresses, "45")
 
+	for range ipaddresses  {
+		sc := systemCollector()
+		prometheus.MustRegister(sc)
+			//phpsessid := APISessionAuth()
+			//fmt.Println(getAPIData("test", phpsessid))
+			//fmt.Println(text)
+	}
 }
