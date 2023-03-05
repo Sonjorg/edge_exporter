@@ -2,12 +2,15 @@
 ## SBC Exporter written in golang
 #### The prometheus golang exporter resides in the SBCexporter folder
 
-### Deployment of golang and used golang packages
+### Deployment of the SBCexporter
 - Download golang using the official download page and remember to reboot
 - To start the exporter and download all necessary packages, navigate to the SBCexporter directory and run
 ``` go install ```
 ### To test go exporters:
 ``` go run . ``` 
+### To test a specific file, for use
+``` go run main.go ``` 
+However this will not make use of dependencies from other files
 in the SBCexporter directory
 then use
 ```curl localhost:9100/metrics``` 
