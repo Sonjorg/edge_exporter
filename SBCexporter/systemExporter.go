@@ -182,7 +182,8 @@ func sysCollector(collector *sMetrics)  []prometheus.Metric {//(ch chan<- promet
 
 	for i := 0; i < len(ipaddresses)-1; i++ {
 		fmt.Println(len(ipaddresses))
-
+		username = `student`
+		password = `PanneKake23`
 	//for i := range ipaddresses  {
 		authStr := "https://" +ipaddresses[i] + "/rest/login"
 		dataStr := "https://"+ipaddresses[i]+"/rest/system/historicalstatistics/1"
