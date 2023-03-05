@@ -141,7 +141,7 @@ func (collector *sMetrics) Describe(ch chan<- *prometheus.Desc) {
 //Collect implements required collect function for all promehteus collectors
 //(ch chan<- prometheus.Metric) {//
 //func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
-func (collector *sMetrics) sysCollector() []prometheus.Metric {//(ch chan<- prometheus.Metric){
+func sysCollector(collector *sMetrics)  []prometheus.Metric {//(ch chan<- prometheus.Metric){
 	//Implement logic here to determine proper metric value to return to prometheus
 	//for each descriptor or call other functions that do so.
 	var metricValue1 float64
@@ -233,8 +233,7 @@ func (collector *sMetrics) sysCollector() []prometheus.Metric {//(ch chan<- prom
 	//	m8 := prometheus.MustNewConstMetric(collector.Rt_MemoryUsage, prometheus.GaugeValue, metricValue8, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
 	//	m9 := prometheus.MustNewConstMetric(collector.Rt_TmpPartUsage, prometheus.GaugeValue, metricValue9, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
 		//https://github.com/bluecmd/fortigate_exporter/blob/master/pkg/probe/system_available_certificates.go
-		//ch := make(chan int)
-
+		//ch := make(chan []prometheus.Metric)
 
 	//for _, response := range combinedResponses {
 	//	for _, result := range response.Results {
@@ -251,7 +250,7 @@ func (collector *sMetrics) sysCollector() []prometheus.Metric {//(ch chan<- prom
 
 
 		/*for range m {
-			ch <- m.da
+			ch <- m
 		}*/
 
 	}
@@ -260,10 +259,12 @@ func (collector *sMetrics) sysCollector() []prometheus.Metric {//(ch chan<- prom
 	return m
 
 }
-
+//m := sysCollector(&sMetrics{})
+//sysCollector()
 func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 	// Collect result of new probe functions
-	m := sysCollector(collector)
+	//m := []prometheus.Metric
+	m := sysCollector(&sMetrics{})
 
 	for range m {
 		c <- m.metric
