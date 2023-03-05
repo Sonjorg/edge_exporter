@@ -36,14 +36,16 @@ func APISessionAuth(username string, password string, loginURL string) (string, 
 
 	req, err := http.NewRequest("POST", loginURL, body)
 	if err != nil {
-		log.Fatal(err)
+		log.Flags()
+			fmt.Println("error in systemExporter:", err)
 		//	fmt.Println("error in systemExporter:", error)
 	}
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		log.Flags()
+		fmt.Println("error in systemExporter:", err)
 		//fmt.Println("error in systemExporter:", err)
 	}
 
