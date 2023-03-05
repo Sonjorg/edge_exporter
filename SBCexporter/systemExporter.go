@@ -70,7 +70,7 @@ type sMetrics struct {
 	Rt_LoggingPartUsage  *prometheus.Desc
 }
 
-func systemCollector(reg prometheus.Registerer){
+func systemCollector()*sMetrics{
 
 	var ipaddresses []string
 
@@ -79,7 +79,7 @@ func systemCollector(reg prometheus.Registerer){
 	ipaddresses = append(ipaddresses, "45")
 
 //for range ipaddresses {
-	 m := &sMetrics{
+	 return &sMetrics{
 		Rt_CPUUsage: prometheus.NewDesc("rt_CPUUsage",
 			"NoDescriptionYet",
 			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
@@ -116,8 +116,8 @@ func systemCollector(reg prometheus.Registerer){
 			"NoDescriptionYet",
 			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
 		),
-	}
-	reg.MustRegister(m)
+	 }
+
 //}
 }
 
