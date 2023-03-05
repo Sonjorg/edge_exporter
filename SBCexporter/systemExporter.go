@@ -182,7 +182,7 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 		if error != nil {
 			log.Flags()
 			fmt.Println("error in systemExporter:", error)
-
+			return
 		}
 		b := []byte(data)
 		ssbc := &sSBCdata{}
