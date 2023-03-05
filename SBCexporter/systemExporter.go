@@ -232,6 +232,8 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 	//	m8 := prometheus.MustNewConstMetric(collector.Rt_MemoryUsage, prometheus.GaugeValue, metricValue8, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
 	//	m9 := prometheus.MustNewConstMetric(collector.Rt_TmpPartUsage, prometheus.GaugeValue, metricValue9, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
 		//https://github.com/bluecmd/fortigate_exporter/blob/master/pkg/probe/system_available_certificates.go
+		//m := make(chan int)
+
 		m := []prometheus.Metric{}
 
 	//for _, response := range combinedResponses {
@@ -245,10 +247,12 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 			m = append(m, prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue7, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode))
 			m = append(m, prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue8, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode))
 			m = append(m, prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue9, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode))
-			ch <- m
+
+			for i := range m {
+				ch <- m[i]
+			}
 	//	}
 	//}
-	return m, true
 
 	}
 }
