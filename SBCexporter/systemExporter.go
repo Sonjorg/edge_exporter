@@ -189,13 +189,13 @@ func sysCollector(collector *sMetrics)  []prometheus.Metric {//(ch chan<- promet
 		if err != nil {
 			log.Flags()
 			fmt.Println("error in systemExporter:", err)
-			continue //trying next ip address
+			break //trying next ip address
 		}
 		data, error := getAPIData("https://"+ipaddresses[i]+"/rest/system/historicalstatistics/1", phpsessid)
 		if error != nil {
 			log.Flags()
 			fmt.Println("error in systemExporter:", error)
-			continue //trying next ip address
+			break //trying next ip address
 		}
 		b := []byte(data)
 		ssbc := &sSBCdata{}
