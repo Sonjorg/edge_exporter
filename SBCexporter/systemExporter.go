@@ -165,6 +165,9 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 
 	//phpsessid := APISessionAuth("student", "PanneKake23", "https://10.233.230.11/rest/login")
 
+	username = "student"
+	password = "PanneKake23"
+
 	for i := range ipaddresses  {
 		phpsessid =  APISessionAuth(username, password, "https://" + ipaddresses[i] + "/rest/login")
 		/*if err != nil {
