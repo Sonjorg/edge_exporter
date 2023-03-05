@@ -178,7 +178,7 @@ func sysCollector(collector *sMetrics)  []prometheus.Metric {//(ch chan<- promet
 	password = "PanneKake23"
 	var err error
 	m := []prometheus.Metric{}
-	for i := 0; i < len(m); i++ {
+	for i := 0; i < len(ipaddresses); i++ {
 		fmt.Println(ipaddresses[i])
 
 	//for i := range ipaddresses  {
