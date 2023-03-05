@@ -7,14 +7,10 @@
 - To start the exporter and download all necessary packages, navigate to the SBCexporter directory and run
 ``` go install ```
 ### To test go exporters:
-``` go run . ``` 
+``` go run . ``` in the SBCexporter directory, then use ```curl localhost:9100/metrics``` in another windows to view live metrics data that can be collected by prometheus
 ### To test a specific file, for use
-``` go run main.go ``` 
-However this will not make use of dependencies from other files
-in the SBCexporter directory
-then use
-```curl localhost:9100/metrics``` 
-in another windows
+``` go run main.go ``` However this will not make use of dependencies from other files
+
 
 ## Grafana and prometheus setup with docker
 
