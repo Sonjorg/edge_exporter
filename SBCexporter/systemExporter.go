@@ -158,14 +158,14 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 		}
 	*/
 	//ipaddresses[0] = "10.233.230.11"
-	ipaddresses[0]="10.233.230.11"
-	ipaddresses[1] = "23.233.676.45"
+	ipaddresses = append(ipaddresses, "10.233.230.11")
+	//ipaddresses[1] = "23.233.676.45"
 
 	//DO NOT DELETE: ipaddresses = getIPNotExl("systemExporter", testConfig)
 
 	//phpsessid := APISessionAuth("student", "PanneKake23", "https://10.233.230.11/rest/login")
 
-	for i := range ipaddresses {
+	for i := range ipaddresses  {
 		phpsessid =  APISessionAuth(username, password, "https://" + ipaddresses[i] + "/rest/login")
 		/*if err != nil {
 			log.Fatal(err)
