@@ -178,10 +178,9 @@ func sysCollector(collector *sMetrics)  []prometheus.Metric {//(ch chan<- promet
 	password = "PanneKake23"
 	//var err error
 	m := []prometheus.Metric{}
-	fmt.Println(len(ipaddresses))
 
 	for i := 0; i < len(ipaddresses)-1; i++ {
-		fmt.Println(len(ipaddresses))
+		fmt.Println(ipaddresses[i])
 		username = `student`
 		password = `PanneKake23`
 	//for i := range ipaddresses  {
@@ -252,6 +251,7 @@ func sysCollector(collector *sMetrics)  []prometheus.Metric {//(ch chan<- promet
 			m = append(m, prometheus.MustNewConstMetric(collector.Rt_LoggingPartUsage, prometheus.GaugeValue, metricValue7, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode))
 			m = append(m, prometheus.MustNewConstMetric(collector.Rt_MemoryUsage, prometheus.GaugeValue, metricValue8, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode))
 			m = append(m, prometheus.MustNewConstMetric(collector.Rt_TmpPartUsage, prometheus.GaugeValue, metricValue9, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode))
+
 
 
 
