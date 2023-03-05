@@ -11,7 +11,7 @@ import (
 	"fmt"
 
 	//"io/ioutil"
-	"time"
+	//"time"
 
 	"log"
 	"github.com/prometheus/client_golang/prometheus"
@@ -78,7 +78,7 @@ func systemCollector(reg prometheus.Registerer){
 	ipaddresses = append(ipaddresses, "10.233.230.11")
 	ipaddresses = append(ipaddresses, "45")
 
-for range ipaddresses {
+//for range ipaddresses {
 	 m := &sMetrics{
 		Rt_CPUUsage: prometheus.NewDesc("rt_CPUUsage",
 			"NoDescriptionYet",
@@ -118,7 +118,7 @@ for range ipaddresses {
 		),
 	}
 	reg.MustRegister(m)
-}
+//}
 }
 
 // Each and every collector must implement the Describe function.
@@ -222,34 +222,34 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 
 		//Write latest value for each metric in the prometheus metric channel.
 		//Note that you can pass CounterValue, GaugeValue, or UntypedValue types here.
-		m1 := prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue1, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
-		m2 := prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage1m, prometheus.GaugeValue, metricValue2, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
-		m3 := prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage5m, prometheus.GaugeValue, metricValue3, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
-		m4 := prometheus.MustNewConstMetric(collector.Rt_CPUUptime, prometheus.GaugeValue, metricValue4, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
-		m5 := prometheus.MustNewConstMetric(collector.Rt_CPUUsage, prometheus.GaugeValue, metricValue5, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
-		m6 := prometheus.MustNewConstMetric(collector.Rt_FDUsage, prometheus.GaugeValue, metricValue6, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
-		m7 := prometheus.MustNewConstMetric(collector.Rt_LoggingPartUsage, prometheus.GaugeValue, metricValue7, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
-		m8 := prometheus.MustNewConstMetric(collector.Rt_MemoryUsage, prometheus.GaugeValue, metricValue8, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
-		m9 := prometheus.MustNewConstMetric(collector.Rt_TmpPartUsage, prometheus.GaugeValue, metricValue9, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
+	//	m1 := prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue1, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
+	//	m2 := prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage1m, prometheus.GaugeValue, metricValue2, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
+	//	m3 := prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage5m, prometheus.GaugeValue, metricValue3, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
+	//	m4 := prometheus.MustNewConstMetric(collector.Rt_CPUUptime, prometheus.GaugeValue, metricValue4, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
+	//	m5 := prometheus.MustNewConstMetric(collector.Rt_CPUUsage, prometheus.GaugeValue, metricValue5, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
+	//	m6 := prometheus.MustNewConstMetric(collector.Rt_FDUsage, prometheus.GaugeValue, metricValue6, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
+	//	m7 := prometheus.MustNewConstMetric(collector.Rt_LoggingPartUsage, prometheus.GaugeValue, metricValue7, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
+	//	m8 := prometheus.MustNewConstMetric(collector.Rt_MemoryUsage, prometheus.GaugeValue, metricValue8, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
+	//	m9 := prometheus.MustNewConstMetric(collector.Rt_TmpPartUsage, prometheus.GaugeValue, metricValue9, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
+		//https://github.com/bluecmd/fortigate_exporter/blob/master/pkg/probe/system_available_certificates.go
+		m := []prometheus.Metric{}
 
-		m1 = prometheus.NewMetricWithTimestamp(time.Now(), m1)
-		m2 = prometheus.NewMetricWithTimestamp(time.Now(), m2)
-		m3 = prometheus.NewMetricWithTimestamp(time.Now(), m3)
-		m4 = prometheus.NewMetricWithTimestamp(time.Now(), m4)
-		m5 = prometheus.NewMetricWithTimestamp(time.Now(), m5)
-		m6 = prometheus.NewMetricWithTimestamp(time.Now(), m6)
-		m7 = prometheus.NewMetricWithTimestamp(time.Now(), m7)
-		m8 = prometheus.NewMetricWithTimestamp(time.Now(), m8)
-		m9 = prometheus.NewMetricWithTimestamp(time.Now(), m9)
-		ch <- m1
-		ch <- m2
-		ch <- m3
-		ch <- m4
-		ch <- m5
-		ch <- m6
-		ch <- m7
-		ch <- m8
-		ch <- m9
+	//for _, response := range combinedResponses {
+	//	for _, result := range response.Results {
+			m = append(m, prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue1, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode))
+			m = append(m, prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue2, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode))
+			m = append(m, prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue3, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode))
+			m = append(m, prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue4, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode))
+			m = append(m, prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue5, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode))
+			m = append(m, prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue6, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode))
+			m = append(m, prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue7, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode))
+			m = append(m, prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue8, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode))
+			m = append(m, prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue9, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode))
+			ch <- m
+	//	}
+	//}
+	return m, true
+
 	}
 }
 
