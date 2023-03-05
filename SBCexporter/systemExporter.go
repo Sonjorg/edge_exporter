@@ -168,17 +168,19 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 
 	username = "student"
 	password = "PanneKake23"
+	var err error
 
 	for i := range ipaddresses  {
-		phpsessid =  APISessionAuth(username, password, "https://" + ipaddresses[i] + "/rest/login")
-		/*if err != nil {
-			log.Fatal(err)
+
+		phpsessid, err =  APISessionAuth(username, password, "https://" + ipaddresses[i] + "/rest/login")
+		if err != nil {
+			log.Flags()
 			fmt.Println("error in systemExporter:", err)
 
-		}*/
+		}
 		data, error := getAPIData("https://"+ipaddresses[i]+"/rest/system/historicalstatistics/1", phpsessid)
 		if error != nil {
-			log.Fatal(error)
+			log.Flags()
 			fmt.Println("error in systemExporter:", error)
 
 		}
