@@ -166,8 +166,10 @@ func sysCollector(collector *sMetrics)  []prometheus.Metric {//(ch chan<- promet
 		}
 	*/
 	ipaddresses = append(ipaddresses, "10.233.230.11")
-	//ipaddresses = append(ipaddresses, "10.233.230.11")
 	ipaddresses = append(ipaddresses, "45")
+	ipaddresses = append(ipaddresses, "46.333.534.22")
+	ipaddresses = append(ipaddresses, "test")
+
 	//ipaddresses[1] = "23.233.676.45"
 
 	//DO NOT DELETE: ipaddresses = getIPNotExl("systemExporter", testConfig)
@@ -226,22 +228,6 @@ func sysCollector(collector *sMetrics)  []prometheus.Metric {//(ch chan<- promet
 		metricValue8 = float64(ssbc.SystemData.Rt_MemoryUsage)
 		metricValue9 = float64(ssbc.SystemData.Rt_TmpPartUsage)
 
-		//Write latest value for each metric in the prometheus metric channel.
-		//Note that you can pass CounterValue, GaugeValue, or UntypedValue types here.
-	//	m1 := prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue1, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
-	//	m2 := prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage1m, prometheus.GaugeValue, metricValue2, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
-	//	m3 := prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage5m, prometheus.GaugeValue, metricValue3, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
-	//	m4 := prometheus.MustNewConstMetric(collector.Rt_CPUUptime, prometheus.GaugeValue, metricValue4, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
-	//	m5 := prometheus.MustNewConstMetric(collector.Rt_CPUUsage, prometheus.GaugeValue, metricValue5, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
-	//	m6 := prometheus.MustNewConstMetric(collector.Rt_FDUsage, prometheus.GaugeValue, metricValue6, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
-	//	m7 := prometheus.MustNewConstMetric(collector.Rt_LoggingPartUsage, prometheus.GaugeValue, metricValue7, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
-	//	m8 := prometheus.MustNewConstMetric(collector.Rt_MemoryUsage, prometheus.GaugeValue, metricValue8, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
-	//	m9 := prometheus.MustNewConstMetric(collector.Rt_TmpPartUsage, prometheus.GaugeValue, metricValue9, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode)
-		//https://github.com/bluecmd/fortigate_exporter/blob/master/pkg/probe/system_available_certificates.go
-		//ch := make(chan []prometheus.Metric)
-
-	//for _, response := range combinedResponses {
-	//	for _, result := range response.Results {
 			m = append(m, prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue1, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode))
 			m = append(m, prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage1m, prometheus.GaugeValue, metricValue2, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode))
 			m = append(m, prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage5m, prometheus.GaugeValue, metricValue3, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode))
@@ -252,24 +238,13 @@ func sysCollector(collector *sMetrics)  []prometheus.Metric {//(ch chan<- promet
 			m = append(m, prometheus.MustNewConstMetric(collector.Rt_MemoryUsage, prometheus.GaugeValue, metricValue8, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode))
 			m = append(m, prometheus.MustNewConstMetric(collector.Rt_TmpPartUsage, prometheus.GaugeValue, metricValue9, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode))
 
-
-
-
-		/*for range m {
-			ch <- m
-		}*/
-
 	}
 
-	//}
 	return m
 
 }
-//m := sysCollector(&sMetrics{})
-//sysCollector()
+
 func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
-	// Collect result of new probe functions
-	//m := []prometheus.Metric
 	m := sysCollector(collector)
 
 	for i := range m {
@@ -279,36 +254,6 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 
 // fetching data from api
 func systemExporter() {
-
-	//APISessionAuth()
-	/*if err != nil {
-		fmt.Println("Apisession auth not working: ", err)
-	}*/
-
-//	Dont delete! test:
-	//if (getIPNotExl("systemStatsExporter", testConfig) == 0) {
-	//		return
-	//}
-	var ipaddresses []string
-	//var HTTPcode float64
-	//10.233.230.11
-	//data, _ := ioutil.ReadFile("sbcsystem.xml")
-	/*	for i := range ipaddresses {
-			phpsessids[i] =  APISessionAuth(username, password, "https://" + ipadresses[i] + "/rest/login")
-		}
-	*/
-	//ipaddresses[0] = "10.233.230.11"
-	ipaddresses = append(ipaddresses, "10.233.230.11")
-	ipaddresses = append(ipaddresses, "45")
-	//reg := prometheus.NewRegistry()
-	//reg.MustRegister(bc)
-	//for range ipaddresses  {
-		sc := systemCollector()//prometheus.NewRegistry()
-		//systemCollector(sc)
+		sc := systemCollector()
 		prometheus.MustRegister(sc)
-
-			//phpsessid := APISessionAuth()
-			//fmt.Println(getAPIData("test", phpsessid))
-			//fmt.Println(text)
-	//}
 }
