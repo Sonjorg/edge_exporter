@@ -297,9 +297,9 @@ func systemExporter() {
 
 	//reg.MustRegister(bc)
 	//for range ipaddresses  {
-		sc := prometheus.NewRegistry()
-		systemCollector(sc)
-		//prometheus.MustRegister(sc)
+		sc := systemCollector()//prometheus.NewRegistry()
+		//systemCollector(sc)
+		prometheus.MustRegister(sc)
 			//phpsessid := APISessionAuth()
 			//fmt.Println(getAPIData("test", phpsessid))
 			//fmt.Println(text)
