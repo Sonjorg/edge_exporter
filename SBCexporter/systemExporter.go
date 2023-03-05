@@ -253,7 +253,7 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 			}
 	//	}
 	//}
-
+	//return m, true
 	}
 }
 
@@ -282,12 +282,12 @@ func systemExporter() {
 	ipaddresses = append(ipaddresses, "45")
 
 	//reg.MustRegister(bc)
-	for range ipaddresses  {
+	//for range ipaddresses  {
 		sc := prometheus.NewRegistry()
 		systemCollector(sc)
 		//prometheus.MustRegister(sc)
 			//phpsessid := APISessionAuth()
 			//fmt.Println(getAPIData("test", phpsessid))
 			//fmt.Println(text)
-	}
+	//}
 }
