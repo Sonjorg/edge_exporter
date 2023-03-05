@@ -70,9 +70,15 @@ type sMetrics struct {
 	Rt_LoggingPartUsage  *prometheus.Desc
 }
 
-func systemCollector() *sMetrics {
+func systemCollector([]string) *sMetrics {
 
+	var ipaddresses []string
 
+	//ipaddresses[0] = "10.233.230.11"
+	ipaddresses = append(ipaddresses, "10.233.230.11")
+	ipaddresses = append(ipaddresses, "45")
+
+for range ipaddresses {
 	return &sMetrics{
 		Rt_CPUUsage: prometheus.NewDesc("rt_CPUUsage",
 			"NoDescriptionYet",
@@ -111,6 +117,7 @@ func systemCollector() *sMetrics {
 			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
 		),
 	}
+}
 }
 
 // Each and every collector must implement the Describe function.
@@ -270,7 +277,7 @@ func systemExporter() {
 	ipaddresses = append(ipaddresses, "45")
 
 	for range ipaddresses  {
-		sc := systemCollector()
+		sc := systemCollector(ipaddresses)
 		prometheus.MustRegister(sc)
 			//phpsessid := APISessionAuth()
 			//fmt.Println(getAPIData("test", phpsessid))
