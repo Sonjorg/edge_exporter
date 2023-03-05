@@ -176,13 +176,13 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 		if err != nil {
 			log.Flags()
 			fmt.Println("error in systemExporter:", err)
-
+			continue //trying next ip address
 		}
 		data, error := getAPIData("https://"+ipaddresses[i]+"/rest/system/historicalstatistics/1", phpsessid)
 		if error != nil {
 			log.Flags()
 			fmt.Println("error in systemExporter:", error)
-			return
+			continue //trying next ip address
 		}
 		b := []byte(data)
 		ssbc := &sSBCdata{}
