@@ -180,6 +180,7 @@ func sysCollector(collector *sMetrics)  []prometheus.Metric {//(ch chan<- promet
 	password = "PanneKake23"
 	var err error
 	m := []prometheus.Metric{}
+	fmt.Println(ipaddresses)
 
 	for i := 0; i < len(ipaddresses)-1; i++ {
 		fmt.Println(ipaddresses[i])
@@ -192,7 +193,7 @@ func sysCollector(collector *sMetrics)  []prometheus.Metric {//(ch chan<- promet
 		if err != nil {
 			log.Flags()
 			fmt.Println("error in systemExporter auth func:", err)
-			break //trying next ip address
+			continue //trying next ip address
 		}
 		data := getAPIData(dataStr, phpsessid)
 		/*if error != nil {
