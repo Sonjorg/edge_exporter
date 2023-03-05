@@ -165,8 +165,8 @@ func sysCollector(collector *sMetrics)  []prometheus.Metric {//(ch chan<- promet
 			phpsessids[i] =  APISessionAuth(username, password, "https://" + ipadresses[i] + "/rest/login")
 		}
 	*/
-	//ipaddresses[0] = "10.233.230.11"
-	ipaddresses = append(ipaddresses, "10.233.230.11")
+	ipaddresses[0] = "10.233.230.11"
+	//ipaddresses = append(ipaddresses, "10.233.230.11")
 	//ipaddresses = append(ipaddresses, "45")
 	//ipaddresses[1] = "23.233.676.45"
 
