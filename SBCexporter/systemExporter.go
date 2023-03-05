@@ -70,7 +70,7 @@ type sMetrics struct {
 	Rt_LoggingPartUsage  *prometheus.Desc
 }
 
-func systemCollector([]string) *sMetrics {
+func systemCollector(reg prometheus.Registerer){
 
 	var ipaddresses []string
 
@@ -79,7 +79,7 @@ func systemCollector([]string) *sMetrics {
 	ipaddresses = append(ipaddresses, "45")
 
 for range ipaddresses {
-	return &sMetrics{
+	 m := &sMetrics{
 		Rt_CPUUsage: prometheus.NewDesc("rt_CPUUsage",
 			"NoDescriptionYet",
 			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
@@ -117,6 +117,7 @@ for range ipaddresses {
 			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
 		),
 	}
+	reg.MustRegister(m)
 }
 }
 
@@ -276,9 +277,11 @@ func systemExporter() {
 	ipaddresses = append(ipaddresses, "10.233.230.11")
 	ipaddresses = append(ipaddresses, "45")
 
+	//reg.MustRegister(bc)
 	for range ipaddresses  {
-		sc := systemCollector(ipaddresses)
-		prometheus.MustRegister(sc)
+		sc := prometheus.NewRegistry()
+		systemCollector(sc)
+		//prometheus.MustRegister(sc)
 			//phpsessid := APISessionAuth()
 			//fmt.Println(getAPIData("test", phpsessid))
 			//fmt.Println(text)
