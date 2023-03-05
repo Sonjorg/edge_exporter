@@ -6,6 +6,12 @@
 - Download golang using the official download page and remember to reboot
 - To start the exporter and download all necessary packages, navigate to the SBCexporter directory and run
 ``` go install ```
+### To test go exporters:
+``` go run . ``` 
+in the SBCexporter directory
+then use
+```curl localhost:9100/metrics``` 
+in another windows
 
 ## Grafana and prometheus setup with docker
 
@@ -18,9 +24,7 @@ The config for all docker images used, resides in the docker-compose.yml file
 Use
 ``` docker compose up -d ```
 in the current dir
-## test go exporters:
-``` go run . ``` in SBCexporter dir
-```curl localhost:9100/metrics``` in another windows
+
 
 ## test docker:
 ### get ip address of grafana container
