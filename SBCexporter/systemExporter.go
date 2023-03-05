@@ -13,7 +13,7 @@ import (
 	//"io/ioutil"
 	"time"
 
-	//"log"
+	"log"
 	"github.com/prometheus/client_golang/prometheus"
 	//"github.com/prometheus/client_golang/prometheus/promhttp"
 	//"github.com/tiket-oss/phpsessgo"
@@ -166,7 +166,12 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 
 	for i := range ipaddresses {
 		phpsessid =  APISessionAuth(username, password, "https://" + ipaddresses[i] + "/rest/login")
-		data := getAPIData("https://"+ipaddresses[i]+"/rest/system/historicalstatistics/1", phpsessid)
+		data, error := getAPIData("https://"+ipaddresses[i]+"/rest/system/historicalstatistics/1", phpsessid)
+		if error != nil {
+			log.Fatal(error)
+			fmt.Println("error in systemExporter:", error)
+
+		}
 		b := []byte(data)
 		ssbc := &sSBCdata{}
 		//b, err := ioutil.ReadAll(data)

@@ -13,6 +13,7 @@ import (
 	"net/url"
 	//"regexp"
 	//"strconv"
+	"log"
 )
 
 //The functions APISessionAuth(...) and getAPIData(...) utilizes curl-to-go translator but is modified: https://mholt.github.io/curl-to-go/
@@ -21,7 +22,7 @@ import (
 // curl -k --data "Username=student&Password=PanneKake23" -i -v https://10.233.230.11/rest/login
 
 // TODO: This is insecure; use only in dev environments.
-func APISessionAuth(username string, password string, loginURL string) string {
+func APISessionAuth(username string, password string, loginURL string) (string, error) {
 
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
@@ -35,13 +36,15 @@ func APISessionAuth(username string, password string, loginURL string) string {
 
 	req, err := http.NewRequest("POST", loginURL, body)
 	if err != nil {
-		return "error"
+		log.Fatal(err)
+		//	fmt.Println("error in systemExporter:", error)
 	}
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
 	resp, err := client.Do(req)
 	if err != nil {
-		return "error"
+		log.Fatal(err)
+		//fmt.Println("error in systemExporter:", err)
 	}
 
 	  m := make(map[string]string)
@@ -52,7 +55,7 @@ func APISessionAuth(username string, password string, loginURL string) string {
 	  phpsessid := m["PHPSESSID"]
 
 	defer resp.Body.Close()
-	return phpsessid
+	return phpsessid, err
 
 }
 //The following two comments are produced by the curl-to-go utility: https://mholt.github.io/curl-to-go/
@@ -62,7 +65,7 @@ func APISessionAuth(username string, password string, loginURL string) string {
 
 // TODO: This is insecure; use only in dev environments.
 
-func getAPIData(url string, phpsessid string) string{
+func getAPIData(url string, phpsessid string) (string, error){
 
 tr2 := &http.Transport{
 	TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
@@ -89,6 +92,6 @@ req2.AddCookie(cookie1)
 	b, err := ioutil.ReadAll(resp2.Body)
 
 	defer resp2.Body.Close()
-	return string(b)
+	return string(b),nil
 }
 
