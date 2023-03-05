@@ -13,7 +13,7 @@ import (
 	//"io/ioutil"
 	//"time"
 
-	//"log"
+	"log"
 	"github.com/prometheus/client_golang/prometheus"
 	//"github.com/prometheus/client_golang/prometheus/promhttp"
 	//"github.com/tiket-oss/phpsessgo"
@@ -176,7 +176,7 @@ func sysCollector(collector *sMetrics)  []prometheus.Metric {//(ch chan<- promet
 
 	username = "student"
 	password = "PanneKake23"
-	//var err error
+	var err error
 	m := []prometheus.Metric{}
 
 	for i := 0; i < len(ipaddresses)-1; i++ {
@@ -186,12 +186,12 @@ func sysCollector(collector *sMetrics)  []prometheus.Metric {//(ch chan<- promet
 	//for i := range ipaddresses  {
 		authStr := "https://" +ipaddresses[i] + "/rest/login"
 		dataStr := "https://"+ipaddresses[i]+"/rest/system/historicalstatistics/1"
-		phpsessid =  APISessionAuth(username, password,authStr)
-		/*if err != nil {
+		phpsessid,err =  APISessionAuth(username, password,authStr)
+		if err != nil {
 			log.Flags()
 			fmt.Println("error in systemExporter auth func:", err)
 			break //trying next ip address
-		}*/
+		}
 		data := getAPIData(dataStr, phpsessid)
 		/*if error != nil {
 			log.Flags()
