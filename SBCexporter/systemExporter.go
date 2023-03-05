@@ -294,10 +294,10 @@ func systemExporter() {
 	//ipaddresses[0] = "10.233.230.11"
 	ipaddresses = append(ipaddresses, "10.233.230.11")
 	ipaddresses = append(ipaddresses, "45")
-
+	reg := prometheus.NewRegistry()
 	//reg.MustRegister(bc)
 	//for range ipaddresses  {
-		sc := systemCollector()//prometheus.NewRegistry()
+		sc := systemCollector(reg)//prometheus.NewRegistry()
 		//systemCollector(sc)
 		prometheus.MustRegister(sc)
 			//phpsessid := APISessionAuth()
