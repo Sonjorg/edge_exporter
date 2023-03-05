@@ -70,7 +70,7 @@ type sMetrics struct {
 	Rt_LoggingPartUsage  *prometheus.Desc
 }
 
-func systemCollector(reg prometheus.NewRegistry)*sMetrics{
+func systemCollector(*prometheus.Registry)*sMetrics{
 
 	var ipaddresses []string
 
