@@ -22,7 +22,7 @@ import (
 // curl -k --data "Username=student&Password=PanneKake23" -i -v https://10.233.230.11/rest/login
 
 // TODO: This is insecure; use only in dev environments.
-func APISessionAuth(username string, password string, loginURL string) (string, error) {
+func APISessionAuth(username string, password string, loginURL string) (string) {
 
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
@@ -55,7 +55,7 @@ func APISessionAuth(username string, password string, loginURL string) (string, 
 	  phpsessid := m["PHPSESSID"]
 
 	defer resp.Body.Close()
-	return phpsessid, err
+	return phpsessid
 
 }
 //The following two comments are produced by the curl-to-go utility: https://mholt.github.io/curl-to-go/

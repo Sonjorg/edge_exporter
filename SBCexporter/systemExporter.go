@@ -166,6 +166,11 @@ func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 
 	for i := range ipaddresses {
 		phpsessid =  APISessionAuth(username, password, "https://" + ipaddresses[i] + "/rest/login")
+		/*if err != nil {
+			log.Fatal(err)
+			fmt.Println("error in systemExporter:", err)
+
+		}*/
 		data, error := getAPIData("https://"+ipaddresses[i]+"/rest/system/historicalstatistics/1", phpsessid)
 		if error != nil {
 			log.Fatal(error)
@@ -241,10 +246,10 @@ func systemExporter() {
 		fmt.Println("Apisession auth not working: ", err)
 	}*/
 
-
-	if (getIPNotExl("systemStatsExporter", testConfig) == 0) {
-			return
-	}
+//	Dont delete! test:
+	//if (getIPNotExl("systemStatsExporter", testConfig) == 0) {
+	//		return
+	//}
 	sc := systemCollector()
 	prometheus.MustRegister(sc)
 		//phpsessid := APISessionAuth()
