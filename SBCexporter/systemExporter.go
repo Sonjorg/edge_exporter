@@ -36,14 +36,13 @@ testConfig := []Host{
 	},
 }*/
 
-type sStatus struct {
-	HTTPcode string `xml:"http_code"`
-}
-
 type sSBCdata struct {
 	XMLname    xml.Name   `xml:"root"`
 	Status     sStatus    `xml:"status"`
 	SystemData systemData `xml:"historicalstatistics"`
+}
+type sStatus struct {
+	HTTPcode string `xml:"http_code"`
 }
 type systemData struct {
 	Href                 string `xml:"href,attr"`
@@ -137,8 +136,16 @@ func (collector *sMetrics) Describe(ch chan<- *prometheus.Desc) {
 	ch <- collector.Rt_TmpPartUsage
 
 }
-
 //Collect implements required collect function for all promehteus collectors
+
+func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
+	m := sysCollector(collector)
+
+	for i := range m {
+		c <- m[i]
+	}
+}
+
 //(ch chan<- prometheus.Metric) {//
 //func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
 func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prometheus.Metric){
@@ -193,7 +200,7 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 		if err != nil {
 			log.Flags()
 			log.Println("error in systemExporter auth func:", err)
-			break //trying next ip address
+			continue //trying next ip address
 		}
 		data,err := getAPIData(dataStr, phpsessid)
 		if err != nil {
@@ -214,7 +221,7 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 		}*/
 		xml.Unmarshal(b, &ssbc)
 		//fmt.Println("b: \n\n", b)
-		fmt.Println(data)
+		//fmt.Println(data)
 		fmt.Println(ssbc.SystemData)
 
 		//fmt.Println(sbc)
@@ -248,18 +255,9 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 	}
 
 	return m
-
 }
 
-func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
-	m := sysCollector(collector)
-
-	for i := range m {
-		c <- m[i]
-	}
-}
-
-// fetching data from api
+// Initializing the exporter
 func systemExporter() {
 		sc := systemCollector()
 		prometheus.MustRegister(sc)
