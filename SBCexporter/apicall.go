@@ -11,6 +11,7 @@ import (
 	"net/http"
 //"net/http/cookiejar"
 	"net/url"
+	"time"
 	//"regexp"
 	//"strconv"
 	"log"
@@ -27,7 +28,7 @@ func APISessionAuth(username string, password string, loginURL string) (string,e
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
-	client := &http.Client{Transport: tr}
+	client := &http.Client{Transport: tr,Timeout: 5 * time.Second}
 
 	params := url.Values{}
 	params.Add("Username", username)
