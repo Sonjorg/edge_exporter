@@ -165,19 +165,11 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 	var username string
 	var password string
 	var phpsessid string
-	//var HTTPcode float64
-	//10.233.230.11
-	//data, _ := ioutil.ReadFile("sbcsystem.xml")
-	/*	for i := range ipaddresses {
-			phpsessids[i] =  APISessionAuth(username, password, "https://" + ipadresses[i] + "/rest/login")
-		}
-	*/
+
 	ipaddresses = append(ipaddresses, "10.233.230.11")
 	ipaddresses = append(ipaddresses, "10.233.230.11")
 	ipaddresses = append(ipaddresses, "46.333.534.22")
 	ipaddresses = append(ipaddresses, "46.363.557.22")
-
-	//ipaddresses[1] = "23.233.676.45"
 
 	//DO NOT DELETE: ipaddresses = getIPNotExl("systemExporter", testConfig)
 
@@ -224,7 +216,6 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 
 		//Registering the metrics and adds labels
 		nr := strconv.Itoa(i)
-
 			m = append(m, prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue1, ipaddresses[i], "test", "systemstats-host-",nr, ssbc.SystemData.Href, ssbc.Status.HTTPcode))
 			m = append(m, prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage1m, prometheus.GaugeValue, metricValue2, ipaddresses[i], "test", "systemstats",nr, ssbc.SystemData.Href, ssbc.Status.HTTPcode))
 			m = append(m, prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage5m, prometheus.GaugeValue, metricValue3, ipaddresses[i], "test", "systemstats",nr, ssbc.SystemData.Href, ssbc.Status.HTTPcode))

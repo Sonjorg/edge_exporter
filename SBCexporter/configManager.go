@@ -35,7 +35,6 @@ func getIPNotExl(exporterName string, hosts hostConfig) []string {
 	return list
 }
 
-
 /*
 if hosts[i].Exporter3Excl == true {
 	//Exporter2()

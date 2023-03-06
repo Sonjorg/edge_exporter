@@ -32,10 +32,6 @@ type SBCdata struct {
 	Status  status   `xml:"status"`
 	Isdnsg  isdnsg   `xml:"isdnsg"`
 
-	//HTTPcode 				int      `xml:"status>http_code"`
-	//Isdnsg					xml.Name `xml:"isdnsg"`
-	//ActionsetTableNumber	int		 `xml:"isdnsg>ActionsetTableNumber"`
-	//
 }
 
 type isdnsg struct {
@@ -122,16 +118,6 @@ func (collector *metrics) Collect(ch chan<- prometheus.Metric) {
 }
 
 func main() {
-
-
-
-	//phpsessid := APISessionAuth(`student`, `PanneKake23`, "https://10.233.230.11/rest/login")
-	//data := getAPIData("https://10.233.230.11/rest/system/historicalstatistics/1", phpsessid)
-	//fmt.Println(data)
-	//phpsessid := APISessionAuth("student", "PanneKake23", "https://10.233.230.11/rest/login")
-	//data := getAPIData("https://10.233.230.11/rest/system/historicalstatistics/1", phpsessid)
-	//fmt.Println(data)
-
 
 	systemExporter()
 	foo := newFooCollector()
