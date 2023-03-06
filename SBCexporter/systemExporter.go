@@ -198,8 +198,8 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 		data,err := getAPIData(dataStr, phpsessid)
 		if err != nil {
 			log.Flags()
-				fmt.Println("error in getAPIData(): ", err)
-				return "Error fetching data", err
+				fmt.Println("Error collecting from a host: ", err)
+				//return "Error fetching data", err
 			//	fmt.Println("error in systemExporter:", error)
 		}
 		/*if error != nil {
