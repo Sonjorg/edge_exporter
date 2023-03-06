@@ -70,7 +70,7 @@ func APISessionAuth(username string, password string, loginURL string) (string,e
 
 // TODO: This is insecure; use only in dev environments.
 
-func getAPIData(url string, phpsessid string) (string){
+func getAPIData(url string, phpsessid string) (string,error){
 
 tr2 := &http.Transport{
 	TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
@@ -85,18 +85,24 @@ cookie1 := &http.Cookie{
 	Secure:   true,
 }
 req2, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		fmt.Println("error in http request:", err)
+if err != nil {
+	log.Flags()
+		fmt.Println("error in getapidata():", err)
+		return "Error fetching data", err
+	//	fmt.Println("error in systemExporter:", error)
 }
 req2.AddCookie(cookie1)
 	resp2, err := client2.Do(req2)
 	if err != nil {
-		fmt.Println("error in http request:", err)
-}
+		log.Flags()
+			fmt.Println("error in getapidata():", err)
+			return "Error fetching data", err
+		//	fmt.Println("error in systemExporter:", error)
+	}
 
 	b, err := ioutil.ReadAll(resp2.Body)
 
 	defer resp2.Body.Close()
-	return string(b)
+	return string(b),err
 }
 

@@ -195,7 +195,13 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 			log.Println("error in systemExporter auth func:", err)
 			break //trying next ip address
 		}
-		data := getAPIData(dataStr, phpsessid)
+		data,err := getAPIData(dataStr, phpsessid)
+		if err != nil {
+			log.Flags()
+				fmt.Println("error in getAPIData(): ", err)
+				return "Error fetching data", err
+			//	fmt.Println("error in systemExporter:", error)
+		}
 		/*if error != nil {
 			log.Flags()
 			fmt.Println("error in systemExporter data func:", error)
