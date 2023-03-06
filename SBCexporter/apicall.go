@@ -39,6 +39,7 @@ func APISessionAuth(username string, password string, loginURL string) (string,e
 	if err != nil {
 		log.Flags()
 			fmt.Println("error in auth:", err)
+			return "Error fetching data", err
 		//	fmt.Println("error in systemExporter:", error)
 	}
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
@@ -47,6 +48,7 @@ func APISessionAuth(username string, password string, loginURL string) (string,e
 	if err != nil {
 		log.Flags()
 		fmt.Println("error in auth:", err)
+		return "Error fetching data", err
 		//fmt.Println("error in systemExporter:", err)
 	}
 

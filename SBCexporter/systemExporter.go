@@ -141,7 +141,7 @@ func (collector *sMetrics) Describe(ch chan<- *prometheus.Desc) {
 //Collect implements required collect function for all promehteus collectors
 //(ch chan<- prometheus.Metric) {//
 //func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
-func sysCollector(collector *sMetrics)  []prometheus.Metric {//(ch chan<- prometheus.Metric){
+func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prometheus.Metric){
 	//Implement logic here to determine proper metric value to return to prometheus
 	//for each descriptor or call other functions that do so.
 	var metricValue1 float64
