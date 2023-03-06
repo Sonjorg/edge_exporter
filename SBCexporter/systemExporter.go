@@ -202,7 +202,7 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 		b := []byte(data) //Converting string of data to bytestream
 		ssbc := &sSBCdata{}
 		xml.Unmarshal(b, &ssbc) //Converting XML data to variables
-		fmt.Println("Successful API call data: ",ssbc.SystemData,"\n")
+		fmt.Println("Successful API call data: ",ssbc.SystemData,"\n",b,"\n")
 
 		metricValue1 = float64(ssbc.SystemData.Rt_CPULoadAverage15m)
 		metricValue2 = float64(ssbc.SystemData.Rt_CPULoadAverage1m)
