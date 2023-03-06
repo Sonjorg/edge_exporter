@@ -189,7 +189,7 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 	m := []prometheus.Metric{}
 	fmt.Println(ipaddresses)
 
-	for i := 0; i < len(ipaddresses)-1; i++ {
+	for i := 0; i < len(ipaddresses); i++ {
 		fmt.Println(ipaddresses[i])
 		username = `student`
 		password = `PanneKake23`
