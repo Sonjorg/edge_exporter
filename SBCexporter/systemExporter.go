@@ -175,7 +175,7 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 	ipaddresses = append(ipaddresses, "10.233.230.11")
 	ipaddresses = append(ipaddresses, "45")
 	ipaddresses = append(ipaddresses, "46.333.534.22")
-	ipaddresses = append(ipaddresses, "test")
+	ipaddresses = append(ipaddresses, "46.363.557.22")
 
 	//ipaddresses[1] = "23.233.676.45"
 
