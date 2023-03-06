@@ -81,39 +81,39 @@ func systemCollector()*sMetrics{
 	 return &sMetrics{
 		Rt_CPUUsage: prometheus.NewDesc("rt_CPUUsage",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
+			[]string{"Instance", "hostname", "job","host_nr", "Href", "HTTP_status"}, nil,
 		),
 		Rt_MemoryUsage: prometheus.NewDesc("rt_MemoryUsage",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
+			[]string{"Instance", "hostname", "job","host_nr", "Href", "HTTP_status"}, nil,
 		),
 		Rt_CPUUptime: prometheus.NewDesc("rt_CPUUptime",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
+			[]string{"Instance", "hostname", "job","host_nr", "Href", "HTTP_status"}, nil,
 		),
 		Rt_FDUsage: prometheus.NewDesc("rt_FDUsage",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
+			[]string{"Instance", "hostname", "job","host_nr", "Href", "HTTP_status"}, nil,
 		),
 		Rt_CPULoadAverage1m: prometheus.NewDesc("rt_CPULoadAverage1m",
 			"NoDescriptionYet.",
-			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
+			[]string{"Instance", "hostname", "job","host_nr", "Href", "HTTP_status"}, nil,
 		),
 		Rt_CPULoadAverage5m: prometheus.NewDesc("rt_CPULoadAverage5m",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
+			[]string{"Instance", "hostname", "job","host_nr", "Href", "HTTP_status"}, nil,
 		),
 		Rt_CPULoadAverage15m: prometheus.NewDesc("rt_CPULoadAverage15m",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
+			[]string{"Instance", "hostname", "job","host_nr", "Href", "HTTP_status"}, nil,
 		),
 		Rt_TmpPartUsage: prometheus.NewDesc("Rt_TmpPartUsage",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
+			[]string{"Instance", "hostname", "job","host_nr", "Href", "HTTP_status"}, nil,
 		),
 		Rt_LoggingPartUsage: prometheus.NewDesc("Rt_LoggingPartUsage",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job", "Href", "HTTP_status"}, nil,
+			[]string{"Instance", "hostname", "job","host_nr", "Href", "HTTP_status"}, nil,
 		),
 	 }
 
@@ -222,15 +222,15 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 		metricValue9 = float64(ssbc.SystemData.Rt_TmpPartUsage)
 
 		//Registering the metrics and adds labels
-			m = append(m, prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue1, ipaddresses[i], "test", "systemstats-host-"+string(i), ssbc.SystemData.Href, ssbc.Status.HTTPcode))
-			m = append(m, prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage1m, prometheus.GaugeValue, metricValue2, ipaddresses[i], "test", "systemstats-host-"+string(i), ssbc.SystemData.Href, ssbc.Status.HTTPcode))
-			m = append(m, prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage5m, prometheus.GaugeValue, metricValue3, ipaddresses[i], "test", "systemstats-host-"+string(i), ssbc.SystemData.Href, ssbc.Status.HTTPcode))
-			m = append(m, prometheus.MustNewConstMetric(collector.Rt_CPUUptime, prometheus.GaugeValue, metricValue4, ipaddresses[i], "test", "systemstats-host-"+string(i), ssbc.SystemData.Href, ssbc.Status.HTTPcode))
-			m = append(m, prometheus.MustNewConstMetric(collector.Rt_CPUUsage, prometheus.GaugeValue, metricValue5, ipaddresses[i], "test", "systemstats-host-"+string(i), ssbc.SystemData.Href, ssbc.Status.HTTPcode))
-			m = append(m, prometheus.MustNewConstMetric(collector.Rt_FDUsage, prometheus.GaugeValue, metricValue6, ipaddresses[i], "test", "systemstats-host-"+string(i), ssbc.SystemData.Href, ssbc.Status.HTTPcode))
-			m = append(m, prometheus.MustNewConstMetric(collector.Rt_LoggingPartUsage, prometheus.GaugeValue, metricValue7, ipaddresses[i], "test", "systemstats-host-"+string(i), ssbc.SystemData.Href, ssbc.Status.HTTPcode))
-			m = append(m, prometheus.MustNewConstMetric(collector.Rt_MemoryUsage, prometheus.GaugeValue, metricValue8, ipaddresses[i], "test", "systemstats-host-"+string(i), ssbc.SystemData.Href, ssbc.Status.HTTPcode))
-			m = append(m, prometheus.MustNewConstMetric(collector.Rt_TmpPartUsage, prometheus.GaugeValue, metricValue9, ipaddresses[i], "test", "systemstats-host-"+string(i), ssbc.SystemData.Href, ssbc.Status.HTTPcode))
+			m = append(m, prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue1, ipaddresses[i], "test", "systemstats-host-",i, ssbc.SystemData.Href, ssbc.Status.HTTPcode))
+			m = append(m, prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage1m, prometheus.GaugeValue, metricValue2, ipaddresses[i], "test", "systemstats",i, ssbc.SystemData.Href, ssbc.Status.HTTPcode))
+			m = append(m, prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage5m, prometheus.GaugeValue, metricValue3, ipaddresses[i], "test", "systemstats",i, ssbc.SystemData.Href, ssbc.Status.HTTPcode))
+			m = append(m, prometheus.MustNewConstMetric(collector.Rt_CPUUptime, prometheus.GaugeValue, metricValue4, ipaddresses[i], "test", "systemstats",i, ssbc.SystemData.Href, ssbc.Status.HTTPcode))
+			m = append(m, prometheus.MustNewConstMetric(collector.Rt_CPUUsage, prometheus.GaugeValue, metricValue5, ipaddresses[i], "test", "systemstats",i, ssbc.SystemData.Href, ssbc.Status.HTTPcode))
+			m = append(m, prometheus.MustNewConstMetric(collector.Rt_FDUsage, prometheus.GaugeValue, metricValue6, ipaddresses[i], "test", "systemstats",i, ssbc.SystemData.Href, ssbc.Status.HTTPcode))
+			m = append(m, prometheus.MustNewConstMetric(collector.Rt_LoggingPartUsage, prometheus.GaugeValue, metricValue7, ipaddresses[i], "test", "systemstats",i, ssbc.SystemData.Href, ssbc.Status.HTTPcode))
+			m = append(m, prometheus.MustNewConstMetric(collector.Rt_MemoryUsage, prometheus.GaugeValue, metricValue8, ipaddresses[i], "test", "systemstats",i, ssbc.SystemData.Href, ssbc.Status.HTTPcode))
+			m = append(m, prometheus.MustNewConstMetric(collector.Rt_TmpPartUsage, prometheus.GaugeValue, metricValue9, ipaddresses[i], "test", "systemstats",i, ssbc.SystemData.Href, ssbc.Status.HTTPcode))
 	}
 
 	return m
