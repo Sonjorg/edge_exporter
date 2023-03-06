@@ -199,13 +199,13 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 		phpsessid,err =  APISessionAuth(username, password,authStr)
 		if err != nil {
 			log.Flags()
-			log.Println("error in systemExporter auth func:", err)
+			log.Println("Error retrieving session cookie:", err,"\n")
 			continue //trying next ip address
 		}
 		data,err := getAPIData(dataStr, phpsessid)
 		if err != nil {
 			log.Flags()
-				fmt.Println("Error collecting from a host: ", err)
+				fmt.Println("Error collecting from host: ", err,"\n")
 				//return "Error fetching data", err
 			//	fmt.Println("error in systemExporter:", error)
 		}
@@ -222,7 +222,7 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 		xml.Unmarshal(b, &ssbc)
 		//fmt.Println("b: \n\n", b)
 		//fmt.Println(data)
-		fmt.Println(ssbc.SystemData)
+		fmt.Println("Successful API call data: ",ssbc.SystemData,"\n")
 
 		//fmt.Println(sbc)
 
