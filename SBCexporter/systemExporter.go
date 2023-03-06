@@ -190,48 +190,30 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 	fmt.Println(ipaddresses)
 
 	for i := 0; i < len(ipaddresses); i++ {
-		fmt.Println(ipaddresses[i])
+		fmt.Println("Api call on ip: "ipaddresses[i],"\n")
 		username = `student`
 		password = `PanneKake23`
-	//for i := range ipaddresses  {
 		authStr := "https://" +ipaddresses[i] + "/rest/login"
 		dataStr := "https://"+ipaddresses[i]+"/rest/system/historicalstatistics/1"
 		phpsessid,err =  APISessionAuth(username, password,authStr)
 		if err != nil {
 			log.Flags()
 			log.Println("Error retrieving session cookie:", err,"\n")
+			log.Fatalf("Error retrieving session cookie:", err,"\n")
 			continue //trying next ip address
 		}
 		data,err := getAPIData(dataStr, phpsessid)
 		if err != nil {
 			log.Flags()
 				fmt.Println("Error collecting from host: ", err,"\n")
-				//return "Error fetching data", err
-			//	fmt.Println("error in systemExporter:", error)
+				log.Fatalf("Error collecting from host: ", err,"\n")
+			continue
 		}
-		/*if error != nil {
-			log.Flags()
-			fmt.Println("error in systemExporter data func:", error)
-			break //trying next ip address
-		}*/
-		b := []byte(data)
+		b := []byte(data) //Converting string of data to bytestream
 		ssbc := &sSBCdata{}
-		//b, err := ioutil.ReadAll(data)
-		/*if err != nil {
-		}*/
-		xml.Unmarshal(b, &ssbc)
-		//fmt.Println("b: \n\n", b)
-		//fmt.Println(data)
+		xml.Unmarshal(b, &ssbc) //Converting XML data to variables
 		fmt.Println("Successful API call data: ",ssbc.SystemData,"\n")
 
-		//fmt.Println(sbc)
-
-		/*if s, err := strconv.ParseFloat(sbc.Status.HTTPcode, 64); err == nil {
-			HTTPcode = s
-			fmt.Println(s) // 3.1415927410125732
-		}*/
-
-		//HTTPcode = float64(sbc.Status.HTTPcode)
 		metricValue1 = float64(ssbc.SystemData.Rt_CPULoadAverage15m)
 		metricValue2 = float64(ssbc.SystemData.Rt_CPULoadAverage1m)
 		metricValue3 = float64(ssbc.SystemData.Rt_CPULoadAverage5m)
@@ -242,6 +224,7 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 		metricValue8 = float64(ssbc.SystemData.Rt_MemoryUsage)
 		metricValue9 = float64(ssbc.SystemData.Rt_TmpPartUsage)
 
+		//Registering the metrics and adds labels
 			m = append(m, prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue1, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode))
 			m = append(m, prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage1m, prometheus.GaugeValue, metricValue2, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode))
 			m = append(m, prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage5m, prometheus.GaugeValue, metricValue3, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode))
@@ -251,12 +234,10 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 			m = append(m, prometheus.MustNewConstMetric(collector.Rt_LoggingPartUsage, prometheus.GaugeValue, metricValue7, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode))
 			m = append(m, prometheus.MustNewConstMetric(collector.Rt_MemoryUsage, prometheus.GaugeValue, metricValue8, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode))
 			m = append(m, prometheus.MustNewConstMetric(collector.Rt_TmpPartUsage, prometheus.GaugeValue, metricValue9, ipaddresses[i], "test", "systemstats", ssbc.SystemData.Href, ssbc.Status.HTTPcode))
-
 	}
 
 	return m
 }
-
 // Initializing the exporter
 func systemExporter() {
 		sc := systemCollector()
