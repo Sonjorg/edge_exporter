@@ -199,14 +199,12 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 		if err != nil {
 			log.Flags()
 			log.Println("Error retrieving session cookie:", err,"\n")
-			log.Fatalf("Error retrieving session cookie:", err,"\n")
 			continue //trying next ip address
 		}
 		data,err := getAPIData(dataStr, phpsessid)
 		if err != nil {
 			log.Flags()
 				fmt.Println("Error collecting from host: ", err,"\n")
-				log.Fatalf("Error collecting from host: ", err,"\n")
 			continue
 		}
 		b := []byte(data) //Converting string of data to bytestream
