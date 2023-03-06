@@ -190,7 +190,7 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 	fmt.Println(ipaddresses)
 
 	for i := 0; i < len(ipaddresses); i++ {
-		fmt.Println("Api call on ip: "ipaddresses[i],"\n")
+		fmt.Println("Api call on ip: ",ipaddresses[i],"\n")
 		username = `student`
 		password = `PanneKake23`
 		authStr := "https://" +ipaddresses[i] + "/rest/login"
