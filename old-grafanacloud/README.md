@@ -1,4 +1,4 @@
-# oops, this setup cant be used
+# Send data to grafana cloud
 ## A simple setup following this url:
 https://grafana.com/docs/grafana-cloud/quickstart/docker-compose-linux/
 ## Execute following commands from current directory
