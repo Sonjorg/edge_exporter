@@ -139,16 +139,21 @@ func (collector *sMetrics) Describe(ch chan<- *prometheus.Desc) {
 //Collect implements required collect function for all promehteus collectors
 
 func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
-	m := sysCollector(collector)
-
-	for i := range m {
-		c <- m[i]
+	metrics, err := sysCollector(collector)
+	if err != nil {
+	  c <- prometheus.NewInvalidMetric(
+			prometheus.NewDesc("systemcollector_error",
+			  err.Error(), nil, nil),
+		  err)
+	}  
+	for i := range metrics {
+		c <- metrics[i]
 	}
 }
 
 //(ch chan<- prometheus.Metric) {//
 //func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
-func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prometheus.Metric){
+func sysCollector(collector *sMetrics)  ([]prometheus.Metric, error) {//(ch chan<- prometheus.Metric){
 	//Implement logic here to determine proper metric value to return to prometheus
 	//for each descriptor or call other functions that do so.
 	var metricValue1 float64
@@ -191,13 +196,15 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 		phpsessid,err =  APISessionAuth(username, password,authStr)
 		if err != nil {
 			log.Println("Error retrieving session cookie: ",log.Flags(), err,"\n")
+			return nil, err
 			continue //trying next ip address
 		}
 		data,err := getAPIData(dataStr, phpsessid)
 		if err != nil {
 			log.Flags()
 				fmt.Println("Error collecting from host: ",log.Flags(), err,"\n")
-			continue
+				return nil, err			
+				continue
 		}
 		b := []byte(data) //Converting string of data to bytestream
 		ssbc := &sSBCdata{}
@@ -227,7 +234,7 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 			m = append(m, prometheus.MustNewConstMetric(collector.Rt_TmpPartUsage, prometheus.GaugeValue, metricValue9, ipaddresses[i], "test", "systemstats",nr, ssbc.SystemData.Href, ssbc.Status.HTTPcode))
 	}
 
-	return m
+	return m,err
 }
 // Initializing the exporter
 func systemExporter() {
