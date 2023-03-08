@@ -1,5 +1,11 @@
 package main
 
+import (
+    "gopkg.in/yaml.v2"
+    "os"
+
+    )
+
 type hostConfig struct {
 	index          int
 	ipaddress      string
@@ -8,12 +14,10 @@ type hostConfig struct {
 	Exporter2      bool
 }
 
-import (
-    "gopkg.in/yaml.v2"
-    )
+
     //Template used for struct and NewConfig(): https://dev.to/koddr/let-s-write-config-for-your-golang-web-app-on-right-way-yaml-5ggp
     //Specific config is accessed in the format: config.Server.Timeout.Read
-    type hostConfig struct {
+    type Config struct {
         //index          int
         HostIp         string `yaml:"host"`
         hostName       string `yaml:"hostname"`
@@ -46,12 +50,8 @@ import (
         }
         return config, nil
     }
-    test := NewConfig(.\config).
+   // test := NewConfig(.\config).
     type hosts []hostConfig
-
-
-
-type hosts []hostConfig
 
 func getIpAdrExp(exporterName string, hosts hostConfig) []string{
 
