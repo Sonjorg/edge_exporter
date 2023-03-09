@@ -167,7 +167,7 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 	ipaddresses = append(ipaddresses, "10.233.230.11")
 	ipaddresses = append(ipaddresses, "10.233.230.11")
 	//ipaddresses = append(ipaddresses, "46.333.534.22")
-	ipaddresses = append(ipaddresses, "46.363.557.22")
+	//ipaddresses = append(ipaddresses, "46.363.557.22")
 
 	//DO NOT DELETE: ipaddresses = getIPNotExl("systemExporter", testConfig)
 	//phpsessid := APISessionAuth("student", "PanneKake23", "https://10.233.230.11/rest/login")
@@ -190,7 +190,7 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 			//return nil, err <-this line would result in error for systemexp on all hosts
 			//returning a prometheus error metric
 			m = append(m, prometheus.NewInvalidMetric(
-				prometheus.NewDesc(collector.Rt_CPULoadAverage15m,
+				prometheus.NewDesc("error_",
 				  "Error authenticating on host "+ipaddresses[i], nil, nil),
 			  err))
 			continue //trying next ip address
