@@ -163,9 +163,10 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 	var password string
 	var phpsessid string
 	//test data, will use yaml config
-	ipaddresses = append(ipaddresses, "10.233.230.11")
-	ipaddresses = append(ipaddresses, "10.233.230.11")
 	ipaddresses = append(ipaddresses, "46.333.534.22")
+	ipaddresses = append(ipaddresses, "10.233.230.11")
+	ipaddresses = append(ipaddresses, "10.233.230.11")
+	//ipaddresses = append(ipaddresses, "46.333.534.22")
 	ipaddresses = append(ipaddresses, "46.363.557.22")
 
 	//DO NOT DELETE: ipaddresses = getIPNotExl("systemExporter", testConfig)
@@ -189,7 +190,8 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 			//return nil, err <-this line would result in error for systemexp on all hosts
 			//returning a prometheus error metric
 			m = append(m, prometheus.NewInvalidMetric(
-				prometheus.NewDesc(collector.Rt_CPULoadAverage15m),
+				prometheus.NewDesc(collector.Rt_CPULoadAverage15m,
+				  "Error authenticating on host "+ipaddresses[i], nil, nil),
 			  err))
 			continue //trying next ip address
 		}
@@ -197,7 +199,8 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 		if err != nil {
 				fmt.Println("Error collecting from host: ",log.Flags(), err,"\n")
 				m = append(m, prometheus.NewInvalidMetric(
-					prometheus.NewDesc(collector.Rt_CPULoadAverage15m),
+					prometheus.NewDesc("systemcollector_error",
+					  "Error collecting systemdata on host "+ipaddresses[i], nil, nil),
 				  err))
 				continue
 		}
