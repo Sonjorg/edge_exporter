@@ -191,7 +191,7 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 			m = append(m, prometheus.NewInvalidMetric(
 				prometheus.NewDesc("rt_CPUUsage",
 				  "Error authenticating on host "+ipaddresses[i], nil, nil),//prometheus.Labels{"Instance":ipaddresses[i]}
-			  err))
+			  string(err.Error())))
 			continue //trying next ip address
 		}
 		data,err := getAPIData(dataStr, phpsessid)
@@ -200,7 +200,7 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 				m = append(m, prometheus.NewInvalidMetric(
 					prometheus.NewDesc("systemcollector_error",
 					  "Error collecting systemdata on host "+ipaddresses[i], nil, nil),
-				  err))
+					  string(err.Error())))
 				continue
 		}
 		b := []byte(data) //Converting string of data to bytestream
