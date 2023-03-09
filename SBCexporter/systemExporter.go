@@ -204,10 +204,10 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 		data,err := getAPIData(dataStr, phpsessid)
 		if err != nil {
 				fmt.Println("Error collecting from host: ",log.Flags(), err,"\n")
-				m = append(m, prometheus.NewInvalidMetric(
+				/*m = append(m, prometheus.NewInvalidMetric(
 					prometheus.NewDesc("systemcollector_error",
 					  "Error collecting systemdata on host "+ipaddresses[i], nil, nil),
-				  err))
+				  err))*/
 				continue
 		}
 		b := []byte(data) //Converting string of data to bytestream
