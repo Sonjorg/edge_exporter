@@ -159,7 +159,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 	//ipaddresses = append(ipaddresses, "46.333.534.22")
 	ipaddresses = append(ipaddresses, "10.233.230.11")
 	ipaddresses = append(ipaddresses, "10.233.230.11")
-	//ipaddresses = append(ipaddresses, "46.333.534.22")
+	ipaddresses = append(ipaddresses, "46.333.534.22")
 	//ipaddresses = append(ipaddresses, "46.363.557.22")
 
 	//DO NOT DELETE: ipaddresses = getIPNotExl("systemExporter", testConfig)
