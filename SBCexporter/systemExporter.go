@@ -142,9 +142,9 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 	metrics := sysCollector(collector) //NB: Errors are returned as array of NewInvalidMetric()
 	//array of metrics is sent through the channel
 	for i := range metrics {
+		fmt.Println(metrics[i])
 		c <- metrics[i]
 	}
-	fmt.Println("\n",c)
 
 }
 
