@@ -189,16 +189,16 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 			//return nil, err <-this line would result in error for systemexp on all hosts
 			//returning a prometheus error metric
 			m = append(m, prometheus.NewInvalidMetric(
-				prometheus.NewDesc(collector.Rt_CPULoadAverage15m,
-			  err)))
+				prometheus.NewDesc(collector.Rt_CPULoadAverage15m),
+			  err))
 			continue //trying next ip address
 		}
 		data,err := getAPIData(dataStr, phpsessid)
 		if err != nil {
 				fmt.Println("Error collecting from host: ",log.Flags(), err,"\n")
 				m = append(m, prometheus.NewInvalidMetric(
-					prometheus.NewDesc(collector.Rt_CPULoadAverage15m,
-				  err)))
+					prometheus.NewDesc(collector.Rt_CPULoadAverage15m),
+				  err))
 				continue
 		}
 		b := []byte(data) //Converting string of data to bytestream
