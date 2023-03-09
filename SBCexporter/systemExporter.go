@@ -139,21 +139,14 @@ func (collector *sMetrics) Describe(ch chan<- *prometheus.Desc) {
 //Collect implements required collect function for all promehteus collectors
 
 func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
-	metrics, err := sysCollector(collector)
-	if err != nil {
-	  c <- prometheus.NewInvalidMetric(
-			prometheus.NewDesc("systemcollector_error",
-			  "Error running system exporter on a host. ", nil, nil),
-		  err)
-	}  
+	metrics := sysCollector(collector) //Errors are returned as array of NewInvalidMetric()
+	
 	for i := range metrics {
 		c <- metrics[i]
 	}
 }
 
-//(ch chan<- prometheus.Metric) {//
-//func (collector *sMetrics) Collect(ch chan<- prometheus.Metric) {
-func sysCollector(collector *sMetrics)  ([]prometheus.Metric, error) {//(ch chan<- prometheus.Metric){
+func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prometheus.Metric){
 	//Implement logic here to determine proper metric value to return to prometheus
 	//for each descriptor or call other functions that do so.
 	var metricValue1 float64
@@ -196,14 +189,21 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric, error) {//(ch chan
 		phpsessid,err =  APISessionAuth(username, password,authStr)
 		if err != nil {
 			log.Println("Error retrieving session cookie: ",log.Flags(), err,"\n")
-			return nil, err
+			//return nil, err <-this line would result in error for systemexp on all hosts
+			//returning a prometheus error metric
+			m = append(m, prometheus.NewInvalidMetric(
+				prometheus.NewDesc("systemcollector_error",
+				  "Error authenticating on host "+ipaddresses[i], nil, nil),
+			  err))
 			continue //trying next ip address
 		}
 		data,err := getAPIData(dataStr, phpsessid)
 		if err != nil {
-			log.Flags()
 				fmt.Println("Error collecting from host: ",log.Flags(), err,"\n")
-				return nil, err			
+				m = append(m, prometheus.NewInvalidMetric(
+					prometheus.NewDesc("systemcollector_error",
+					  "Error collecting systemdata on host "+ipaddresses[i], nil, nil),
+				  err))		
 				continue
 		}
 		b := []byte(data) //Converting string of data to bytestream
@@ -234,7 +234,7 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric, error) {//(ch chan
 			m = append(m, prometheus.MustNewConstMetric(collector.Rt_TmpPartUsage, prometheus.GaugeValue, metricValue9, ipaddresses[i], "test", "systemstats",nr, ssbc.SystemData.Href, ssbc.Status.HTTPcode))
 	}
 
-	return m,err
+	return m
 }
 // Initializing the exporter
 func systemExporter() {
