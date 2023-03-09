@@ -167,7 +167,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 	username = "student"
 	password = "PanneKake23"
 	var err error
-	m := []prometheus.Metric{}
+	//m := []prometheus.Metric{}
 	fmt.Println(ipaddresses)
 
 	for i := 0; i < len(ipaddresses); i++ {
