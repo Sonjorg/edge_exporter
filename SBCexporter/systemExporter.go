@@ -194,7 +194,6 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 			log.Println("Error retrieving session cookie: ",log.Flags(), err,"\n")
 			//return nil, err <-this line would result in error for systemexp on all hosts
 			//returning a prometheus error metric
-<<<<<<< HEAD
 			
 			  //prometheus.NewInvalidDesc(err)
 			 // c <- prometheus.MustNewConstMetric.(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue1, ipaddresses[i], "test", "systemstats-host-",nr, ssbc.SystemData.Href, ssbc.Status.HTTPcode)//prometheus.GaugeValue, metricValue9, ipaddresses[i], "test", "systemstats",nr, ssbc.SystemData.Href, ssbc.Status.HTTPcode)//prometheus.NewDes
@@ -202,12 +201,6 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 			  
 		  //metricValue9, ipaddresses[i], "test", "systemstats",nr)//, prometheus.GaugeValue, metricValue9, ipaddresses[i], "test", "systemstats",nr, ssbc.SystemData.Href, ssbc.Status.HTTPcode)
 				
-=======
-			m = append(m, prometheus.NewInvalidMetric(
-				prometheus.NewDesc("error_systemcollector",
-				  "Error authenticating on host "+ipaddresses[i], nil, prometheus.labels{"Error with: ",ipaddresses[i]}),
-			  err))
->>>>>>> 210458e0a2361443749f3a81dd70e7661f821e2e
 			continue //trying next ip address
 		}/*prometheus.NewDesc("systemcollector_error",
 		"df","df","df")*/
@@ -227,7 +220,6 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 		data,err := getAPIData(dataStr, phpsessid)
 		if err != nil {
 				fmt.Println("Error collecting from host: ",log.Flags(), err,"\n")
-<<<<<<< HEAD
 				/*m = append(m, prometheus.NewInvalidMetric(
 					prometheus.NewDesc("systemcollector_error",
 					  "Error collecting systemdata on host "+ipaddresses[i], nil, nil),
@@ -238,12 +230,6 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 					 collector.Error_ip, prometheus.GaugeValue,50,),
 				   )/*prometheus.Desc("fgdrg")*/
 
-=======
-				m = append(m, prometheus.NewInvalidMetric(
-					prometheus.NewDesc("error_systemcollector",
-					  "Error collecting systemdata on host "+ipaddresses[i], nil, prometheus.labels{"Error with: ",ipaddresses[i]}),
-				  err))
->>>>>>> 210458e0a2361443749f3a81dd70e7661f821e2e
 				continue
 		}
 		b := []byte(data) //Converting string of data to bytestream
