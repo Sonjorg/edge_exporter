@@ -179,10 +179,8 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 	username = "student"
 	password = "PanneKake23"
 	var err error
-	//m := []prometheus.Metric{}
 	fmt.Println(ipaddresses)
-	//metricValueErr := float64(0)
-	//metricValueErr2 := float64(0)
+
 
 	for i := 0; i < len(ipaddresses); i++ {
 
@@ -203,21 +201,17 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 			//return nil, err <-this line would result in error for systemexp on all hosts
 			//returning a prometheus error metric
 			c <- prometheus.MustNewConstMetric(
-					collector.Error_ip, prometheus.GaugeValue, 0, ipaddresses[i], "test", "systemstats-host-",nr, ipaddresses[i], "55")		
+					collector.Error_ip, prometheus.GaugeValue, 0, ipaddresses[i], "test", "systemstats-host-",nr, ipaddresses[i], "55")
 			continue //trying next ip address
 		}
 		data,err := getAPIData(dataStr, phpsessid)
 		if err != nil {
 				fmt.Println("Error collecting from host: ",log.Flags(), err,"\n")
-				/*m = append(m, prometheus.NewInvalidMetric(
-					prometheus.NewDesc("systemcollector_error",
-					  "Error collecting systemdata on host "+ipaddresses[i], nil, nil),
-				  err))*/
 				  c <- prometheus.NewMetricWithTimestamp(
 					timeReportedByExternalSystem,
 					prometheus.MustNewConstMetric(
 						collector.Error_ip, prometheus.GaugeValue, metricValue1, ipaddresses[i], "test", "systemstats-host-",nr, ipaddresses[i], "55"),
-				   )/*prometheus.Desc("fgdrg")*/
+				   )
 
 				continue
 		}
@@ -236,8 +230,6 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 		metricValue8 = float64(ssbc.SystemData.Rt_MemoryUsage)
 		metricValue9 = float64(ssbc.SystemData.Rt_TmpPartUsage)
 
-		//Registering the metrics and adds labels
-		//nr := strconv.Itoa(i)
 			c <- prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue1, ipaddresses[i], "test", "systemstats-host-",nr, ssbc.SystemData.Href, ssbc.Status.HTTPcode)
 			c <- prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage1m, prometheus.GaugeValue, metricValue2, ipaddresses[i], "test", "systemstats",nr, ssbc.SystemData.Href, ssbc.Status.HTTPcode)
 			c <- prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage5m, prometheus.GaugeValue, metricValue3, ipaddresses[i], "test", "systemstats",nr, ssbc.SystemData.Href, ssbc.Status.HTTPcode)
@@ -248,13 +240,6 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 			c <- prometheus.MustNewConstMetric(collector.Rt_MemoryUsage, prometheus.GaugeValue, metricValue8, ipaddresses[i], "test", "systemstats",nr, ssbc.SystemData.Href, ssbc.Status.HTTPcode)
 			c <- prometheus.MustNewConstMetric(collector.Rt_TmpPartUsage, prometheus.GaugeValue, metricValue9, ipaddresses[i], "test", "systemstats",nr, ssbc.SystemData.Href, ssbc.Status.HTTPcode)
 	}
-	//fmt.Println(m)
-	//return m
-	/*for i := range metrics {
-		fmt.Println(metrics[i])
-		c <- metrics[i]
-	}*/
-
 }
 
 /*func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prometheus.Metric){
