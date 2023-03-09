@@ -184,10 +184,14 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 			//returning a prometheus error metric
 			c <- prometheus.NewInvalidMetric(
 				prometheus.NewDesc("systemcollector_error",
-				  "Error collecting systemdata on host "+ipaddresses[i], nil, nil),
+				  "Error collecting systemdata on host "+ipaddresses[i], []string{"ip"}, prometheus.Labels{"ip": ipaddresses[i]}),
 			  err)
 			continue //trying next ip address
 		}
+		/*c <- prometheus.MultiError == append(prometheus.MultiError, prometheus.NewInvalidMetric(
+			prometheus.NewDesc("systemcollector_error",
+			  "Error collecting systemdata on host "+ipaddresses[i], nil, nil),
+		  err))*/
 		data,err := getAPIData(dataStr, phpsessid)
 		if err != nil {
 				fmt.Println("Error collecting from host: ",log.Flags(), err,"\n")
