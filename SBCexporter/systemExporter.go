@@ -14,7 +14,10 @@ import (
 	//"time"
 
 	"log"
+
 	"github.com/prometheus/client_golang/prometheus"
+	//"github.com/prometheus/client_golang/prometheus/collectors"
+
 	//"github.com/prometheus/client_golang/prometheus/promhttp"
 	//"github.com/tiket-oss/phpsessgo"
 	//"io/ioutil"
@@ -24,7 +27,9 @@ import (
 	// "net/url"
 	// "regexp"
 	"strconv"
+	"time"
 )
+
 /*
 testConfig := []Host{
 	{
@@ -67,6 +72,7 @@ type sMetrics struct {
 	Rt_CPULoadAverage15m *prometheus.Desc
 	Rt_TmpPartUsage      *prometheus.Desc
 	Rt_LoggingPartUsage  *prometheus.Desc
+	Error_ip             *prometheus.Desc
 }
 
 func systemCollector()*sMetrics{
@@ -115,6 +121,10 @@ func systemCollector()*sMetrics{
 			"NoDescriptionYet",
 			[]string{"Instance", "hostname", "job","host_nr", "Href", "HTTP_status"}, nil,
 		),
+		Error_ip: prometheus.NewDesc("error_sbc_ip",
+			"NoDescriptionYet",
+			[]string{"Instance", "hostname", "job","host_nr", "Href", "HTTP_status"}, nil,
+		),
 	 }
 
 //}
@@ -134,6 +144,7 @@ func (collector *sMetrics) Describe(ch chan<- *prometheus.Desc) {
 	ch <- collector.Rt_LoggingPartUsage
 	ch <- collector.Rt_MemoryUsage
 	ch <- collector.Rt_TmpPartUsage
+	ch <- collector.Error_ip
 
 }
 //Collect implements required collect function for all promehteus collectors
@@ -150,6 +161,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 	var metricValue7 float64
 	var metricValue8 float64
 	var metricValue9 float64
+	//var metricsValuex float64
 
 	var ipaddresses []string
 	var username string
@@ -169,7 +181,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 	var err error
 	//m := []prometheus.Metric{}
 	fmt.Println(ipaddresses)
-
+	metricValue9 = float64(0)
 	for i := 0; i < len(ipaddresses); i++ {
 
 		fmt.Println("Api call on ip: ",ipaddresses[i],"\n")
@@ -182,16 +194,29 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 			log.Println("Error retrieving session cookie: ",log.Flags(), err,"\n")
 			//return nil, err <-this line would result in error for systemexp on all hosts
 			//returning a prometheus error metric
-			c <- prometheus.NewInvalidMetric(
-				prometheus.NewDesc("systemcollector_error",
-				  "Error collecting systemdata on host "+ipaddresses[i], []string{"ipaddresses"}, prometheus.Labels{"ip": ipaddresses[i]}),
-			  err)
+			
+			  //prometheus.NewInvalidDesc(err)
+			 // c <- prometheus.MustNewConstMetric.(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue1, ipaddresses[i], "test", "systemstats-host-",nr, ssbc.SystemData.Href, ssbc.Status.HTTPcode)//prometheus.GaugeValue, metricValue9, ipaddresses[i], "test", "systemstats",nr, ssbc.SystemData.Href, ssbc.Status.HTTPcode)//prometheus.NewDes
+			
+			  
+		  //metricValue9, ipaddresses[i], "test", "systemstats",nr)//, prometheus.GaugeValue, metricValue9, ipaddresses[i], "test", "systemstats",nr, ssbc.SystemData.Href, ssbc.Status.HTTPcode)
+				
 			continue //trying next ip address
-		}
+		}/*prometheus.NewDesc("systemcollector_error",
+		"df","df","df")*/
+		//collector.Error_ip := 
+		//nr := 1
+		//type Labels map[string]string
+		m := make(map[string]string)
+
+		m["route"] = "egegrreg"
+		//Labels.("error":"error")
 		/*c <- prometheus.MultiError == append(prometheus.MultiError, prometheus.NewInvalidMetric(
 			prometheus.NewDesc("systemcollector_error",
 			  "Error collecting systemdata on host "+ipaddresses[i], nil, nil),
 		  err))*/
+		  timeReportedByExternalSystem := time.Now()//time.Parse(timelayout, mytimevalue)
+
 		data,err := getAPIData(dataStr, phpsessid)
 		if err != nil {
 				fmt.Println("Error collecting from host: ",log.Flags(), err,"\n")
@@ -199,6 +224,12 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 					prometheus.NewDesc("systemcollector_error",
 					  "Error collecting systemdata on host "+ipaddresses[i], nil, nil),
 				  err))*/
+				  c <- prometheus.NewMetricWithTimestamp(
+					timeReportedByExternalSystem,
+					prometheus.MustNewConstMetric(
+					 collector.Error_ip, prometheus.GaugeValue,50,),
+				   )/*prometheus.Desc("fgdrg")*/
+
 				continue
 		}
 		b := []byte(data) //Converting string of data to bytestream
