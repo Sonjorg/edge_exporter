@@ -164,6 +164,7 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 	var metricValue7 float64
 	var metricValue8 float64
 	var metricValue9 float64
+	var metricValueerr float64
 
 	var ipaddresses []string
 	var username string
@@ -196,8 +197,9 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 			log.Println("Error retrieving session cookie: ",log.Flags(), err,"\n")
 			//return nil, err <-this line would result in error for systemexp on all hosts
 			//returning a prometheus error metric
+			metricValueerr = float64(0)
 			m = append(m, prometheus.NewInvalidMetric(
-				prometheus.MustNewConstMetric(collector.Error, prometheus.GaugeValue),
+				prometheus.MustNewConstMetric(collector.Error, prometheus.GaugeValue,metricValueerr),
 			  err))
 			continue //trying next ip address
 		}
