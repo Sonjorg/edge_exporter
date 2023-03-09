@@ -156,7 +156,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 	var password string
 	var phpsessid string
 	//test data, will use yaml config
-	ipaddresses = append(ipaddresses, "46.333.534.22")
+	//ipaddresses = append(ipaddresses, "46.333.534.22")
 	ipaddresses = append(ipaddresses, "10.233.230.11")
 	ipaddresses = append(ipaddresses, "10.233.230.11")
 	//ipaddresses = append(ipaddresses, "46.333.534.22")
@@ -224,7 +224,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 			c <- prometheus.MustNewConstMetric(collector.Rt_MemoryUsage, prometheus.GaugeValue, metricValue8, ipaddresses[i], "test", "systemstats",nr, ssbc.SystemData.Href, ssbc.Status.HTTPcode)
 			c <- prometheus.MustNewConstMetric(collector.Rt_TmpPartUsage, prometheus.GaugeValue, metricValue9, ipaddresses[i], "test", "systemstats",nr, ssbc.SystemData.Href, ssbc.Status.HTTPcode)
 	}
-	fmt.Println(m)
+	//fmt.Println(m)
 	//return m
 	/*for i := range metrics {
 		fmt.Println(metrics[i])
