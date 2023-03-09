@@ -67,7 +67,6 @@ type sMetrics struct {
 	Rt_CPULoadAverage15m *prometheus.Desc
 	Rt_TmpPartUsage      *prometheus.Desc
 	Rt_LoggingPartUsage  *prometheus.Desc
-	Error                *prometheus.Desc
 }
 
 func systemCollector()*sMetrics{
@@ -116,10 +115,6 @@ func systemCollector()*sMetrics{
 			"NoDescriptionYet",
 			[]string{"Instance", "hostname", "job","host_nr", "Href", "HTTP_status"}, nil,
 		),
-		Error: prometheus.NewDesc("error",
-		"NoDescriptionYet",
-		nil, nil,
-		),
 	 }
 
 //}
@@ -146,6 +141,7 @@ func (collector *sMetrics) Describe(ch chan<- *prometheus.Desc) {
 func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 	metrics := sysCollector(collector) //NB: Errors are returned as array of NewInvalidMetric()
 	//array of metrics is sent through the channel
+
 	for i := range metrics {
 		fmt.Println(metrics[i])
 		c <- metrics[i]
@@ -164,7 +160,6 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 	var metricValue7 float64
 	var metricValue8 float64
 	var metricValue9 float64
-	var metricValueerr float64
 
 	var ipaddresses []string
 	var username string
@@ -197,9 +192,9 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 			log.Println("Error retrieving session cookie: ",log.Flags(), err,"\n")
 			//return nil, err <-this line would result in error for systemexp on all hosts
 			//returning a prometheus error metric
-			metricValueerr = float64(0)
 			m = append(m, prometheus.NewInvalidMetric(
-				prometheus.MustNewConstMetric(collector.Error, prometheus.GaugeValue,metricValueerr),
+				prometheus.NewDesc("systemcollector_error",
+				  "Error collecting systemdata on host "+ipaddresses[i], nil, nil),
 			  err))
 			continue //trying next ip address
 		}
