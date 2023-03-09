@@ -143,7 +143,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 	if err != nil {
 	  c <- prometheus.NewInvalidMetric(
 			prometheus.NewDesc("systemcollector_error",
-			  err.Error(), nil, nil),
+			  "Error running system exporter on a host. ", nil, nil),
 		  err)
 	}  
 	for i := range metrics {
