@@ -190,32 +190,24 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 		authStr := "https://" +ipaddresses[i] + "/rest/login"
 		dataStr := "https://"+ipaddresses[i]+"/rest/system/historicalstatistics/1"
 		phpsessid,err =  APISessionAuth(username, password,authStr)
+		m := make(map[string]string)
+
+		m["route"] = "egegrreg"
+
+		  timeReportedByExternalSystem := time.Now()//time.Parse(timelayout, mytimevalue)
 		if err != nil {
 			log.Println("Error retrieving session cookie: ",log.Flags(), err,"\n")
 			//return nil, err <-this line would result in error for systemexp on all hosts
 			//returning a prometheus error metric
-			
-			  //prometheus.NewInvalidDesc(err)
-			 // c <- prometheus.MustNewConstMetric.(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue1, ipaddresses[i], "test", "systemstats-host-",nr, ssbc.SystemData.Href, ssbc.Status.HTTPcode)//prometheus.GaugeValue, metricValue9, ipaddresses[i], "test", "systemstats",nr, ssbc.SystemData.Href, ssbc.Status.HTTPcode)//prometheus.NewDes
-			
-			  
-		  //metricValue9, ipaddresses[i], "test", "systemstats",nr)//, prometheus.GaugeValue, metricValue9, ipaddresses[i], "test", "systemstats",nr, ssbc.SystemData.Href, ssbc.Status.HTTPcode)
-				
+			c <- prometheus.NewMetricWithTimestamp(
+				timeReportedByExternalSystem,
+				prometheus.MustNewConstMetric(
+				 collector.Error_ip, prometheus.GaugeValue,50,),
+			   )/*prometheus.Desc("fgdrg")*/
+		
 			continue //trying next ip address
-		}/*prometheus.NewDesc("systemcollector_error",
-		"df","df","df")*/
-		//collector.Error_ip := 
-		//nr := 1
-		//type Labels map[string]string
-		m := make(map[string]string)
-
-		m["route"] = "egegrreg"
-		//Labels.("error":"error")
-		/*c <- prometheus.MultiError == append(prometheus.MultiError, prometheus.NewInvalidMetric(
-			prometheus.NewDesc("systemcollector_error",
-			  "Error collecting systemdata on host "+ipaddresses[i], nil, nil),
-		  err))*/
-		  timeReportedByExternalSystem := time.Now()//time.Parse(timelayout, mytimevalue)
+		}
+		
 
 		data,err := getAPIData(dataStr, phpsessid)
 		if err != nil {
