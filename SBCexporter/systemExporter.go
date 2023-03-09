@@ -144,6 +144,8 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 	for i := range metrics {
 		c <- metrics[i]
 	}
+	fmt.Println(c)
+
 }
 
 func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prometheus.Metric){
@@ -190,8 +192,8 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 			//return nil, err <-this line would result in error for systemexp on all hosts
 			//returning a prometheus error metric
 			m = append(m, prometheus.NewInvalidMetric(
-				prometheus.NewDesc(collector.Rt_CPULoadAverage15m,
-				  "Error authenticating on host "+ipaddresses[i], nil, nil),
+				prometheus.NewDesc("systemcollector_error",
+				  "Error auth on host "+ipaddresses[i], nil, nil),
 			  err))
 			continue //trying next ip address
 		}
@@ -231,6 +233,7 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 			m = append(m, prometheus.MustNewConstMetric(collector.Rt_MemoryUsage, prometheus.GaugeValue, metricValue8, ipaddresses[i], "test", "systemstats",nr, ssbc.SystemData.Href, ssbc.Status.HTTPcode))
 			m = append(m, prometheus.MustNewConstMetric(collector.Rt_TmpPartUsage, prometheus.GaugeValue, metricValue9, ipaddresses[i], "test", "systemstats",nr, ssbc.SystemData.Href, ssbc.Status.HTTPcode))
 	}
+	fmt.Println(m)
 	return m
 }
 // Initializing the exporter
