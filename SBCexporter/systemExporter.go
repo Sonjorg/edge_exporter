@@ -139,16 +139,15 @@ func (collector *sMetrics) Describe(ch chan<- *prometheus.Desc) {
 //Collect implements required collect function for all promehteus collectors
 
 func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
-	metrics := sysCollector(collector) //Errors are returned as array of NewInvalidMetric()
-	
+	metrics := sysCollector(collector) //NB: Errors are returned as array of NewInvalidMetric()
+	//array of metrics is sent through the channel
 	for i := range metrics {
 		c <- metrics[i]
 	}
 }
 
 func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prometheus.Metric){
-	//Implement logic here to determine proper metric value to return to prometheus
-	//for each descriptor or call other functions that do so.
+	
 	var metricValue1 float64
 	var metricValue2 float64
 	var metricValue3 float64
@@ -163,16 +162,14 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 	var username string
 	var password string
 	var phpsessid string
-
+	//test data, will use yaml config
 	ipaddresses = append(ipaddresses, "10.233.230.11")
 	ipaddresses = append(ipaddresses, "10.233.230.11")
 	ipaddresses = append(ipaddresses, "46.333.534.22")
 	ipaddresses = append(ipaddresses, "46.363.557.22")
 
 	//DO NOT DELETE: ipaddresses = getIPNotExl("systemExporter", testConfig)
-
 	//phpsessid := APISessionAuth("student", "PanneKake23", "https://10.233.230.11/rest/login")
-
 	username = "student"
 	password = "PanneKake23"
 	var err error
@@ -233,7 +230,6 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 			m = append(m, prometheus.MustNewConstMetric(collector.Rt_MemoryUsage, prometheus.GaugeValue, metricValue8, ipaddresses[i], "test", "systemstats",nr, ssbc.SystemData.Href, ssbc.Status.HTTPcode))
 			m = append(m, prometheus.MustNewConstMetric(collector.Rt_TmpPartUsage, prometheus.GaugeValue, metricValue9, ipaddresses[i], "test", "systemstats",nr, ssbc.SystemData.Href, ssbc.Status.HTTPcode))
 	}
-
 	return m
 }
 // Initializing the exporter
