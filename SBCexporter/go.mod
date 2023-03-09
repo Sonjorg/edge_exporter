@@ -5,7 +5,10 @@ go 1.19
 //github.com/hpcloud/tail v1.0.0
 require github.com/prometheus/client_golang v1.14.0
 
-require github.com/hpcloud/tail v1.0.0
+require (
+	github.com/hpcloud/tail v1.0.0
+	gopkg.in/yaml.v2 v2.4.0
+)
 
 require (
 	github.com/beorn7/perks v1.0.1 // indirect
@@ -20,5 +23,4 @@ require (
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/fsnotify.v1 v1.4.7 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
 )

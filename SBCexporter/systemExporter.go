@@ -199,7 +199,7 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 				fmt.Println("Error collecting from host: ",log.Flags(), err,"\n")
 				m = append(m, prometheus.NewInvalidMetric(
 					prometheus.NewDesc("systemcollector_error",
-					  "Error collecting systemdata on host "+ipaddresses[i], nil, nil),
+					  "Error collecting systemdata on host "+ipaddresses[i], prometheus.Labels{"Instance":ipaddresses[i]}, nil),
 				  err))
 				continue
 		}
