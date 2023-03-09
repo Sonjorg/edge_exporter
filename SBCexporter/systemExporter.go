@@ -144,7 +144,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 	for i := range metrics {
 		c <- metrics[i]
 	}
-	fmt.Println(c)
+	fmt.Println("\n",c)
 
 }
 
@@ -169,7 +169,7 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 	ipaddresses = append(ipaddresses, "10.233.230.11")
 	ipaddresses = append(ipaddresses, "10.233.230.11")
 	//ipaddresses = append(ipaddresses, "46.333.534.22")
-	ipaddresses = append(ipaddresses, "46.363.557.22")
+	//ipaddresses = append(ipaddresses, "46.363.557.22")
 
 	//DO NOT DELETE: ipaddresses = getIPNotExl("systemExporter", testConfig)
 	//phpsessid := APISessionAuth("student", "PanneKake23", "https://10.233.230.11/rest/login")
