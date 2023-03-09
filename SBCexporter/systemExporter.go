@@ -67,6 +67,7 @@ type sMetrics struct {
 	Rt_CPULoadAverage15m *prometheus.Desc
 	Rt_TmpPartUsage      *prometheus.Desc
 	Rt_LoggingPartUsage  *prometheus.Desc
+	Error                *prometheus.Desc
 }
 
 func systemCollector()*sMetrics{
@@ -114,6 +115,10 @@ func systemCollector()*sMetrics{
 		Rt_LoggingPartUsage: prometheus.NewDesc("Rt_LoggingPartUsage",
 			"NoDescriptionYet",
 			[]string{"Instance", "hostname", "job","host_nr", "Href", "HTTP_status"}, nil,
+		),
+		Error: prometheus.NewDesc("error",
+		"NoDescriptionYet",
+		nil, nil,
 		),
 	 }
 
@@ -192,9 +197,8 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 			//return nil, err <-this line would result in error for systemexp on all hosts
 			//returning a prometheus error metric
 			m = append(m, prometheus.NewInvalidMetric(
-				prometheus.NewDesc("systemcollector_error",
-				  "Error auth on host "+ipaddresses[i], nil, nil),
-			  err))
+				prometheus.NewDesc(prometheus.MustNewConstMetric(collector.Error, "prometheus.GaugeValue",
+			  err))))
 			continue //trying next ip address
 		}
 		data,err := getAPIData(dataStr, phpsessid)
