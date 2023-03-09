@@ -202,12 +202,8 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 			log.Println("Error retrieving session cookie: ",log.Flags(), err,"\n")
 			//return nil, err <-this line would result in error for systemexp on all hosts
 			//returning a prometheus error metric
-			c <- prometheus.NewMetricWithTimestamp(
-				timeReportedByExternalSystem,
-				prometheus.MustNewConstMetric(
-					collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, 0, ipaddresses[i], "test", "systemstats-host-",nr, ipaddresses[i], "55"),
-			   )/*prometheus.Desc("fgdrg")*/
-		
+			c <- prometheus.MustNewConstMetric(
+					collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, 0, ipaddresses[i], "test", "systemstats-host-",nr, ipaddresses[i], "55")		
 			continue //trying next ip address
 		}
 		data,err := getAPIData(dataStr, phpsessid)
