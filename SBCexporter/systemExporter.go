@@ -197,7 +197,7 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 			//return nil, err <-this line would result in error for systemexp on all hosts
 			//returning a prometheus error metric
 			m = append(m, prometheus.NewInvalidMetric(
-				prometheus.MustNewConstMetric(collector.Error, "prometheus.GaugeValue",
+				prometheus.MustNewConstMetric(collector.Error, prometheus.GaugeValue,
 			  err)))
 			continue //trying next ip address
 		}
