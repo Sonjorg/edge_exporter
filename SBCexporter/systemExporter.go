@@ -147,7 +147,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 }
 
 func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prometheus.Metric){
-	
+
 	var metricValue1 float64
 	var metricValue2 float64
 	var metricValue3 float64
@@ -190,7 +190,7 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 			//returning a prometheus error metric
 			m = append(m, prometheus.NewInvalidMetric(
 				prometheus.NewDesc("systemcollector_error",
-				  "Error authenticating on host "+ipaddresses[i], nil, nil),
+				  "Error authenticating on host "+ipaddresses[i], prometheus.Labels{"Instance":ipaddresses[i]}, nil),
 			  err))
 			continue //trying next ip address
 		}
@@ -200,7 +200,7 @@ func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prom
 				m = append(m, prometheus.NewInvalidMetric(
 					prometheus.NewDesc("systemcollector_error",
 					  "Error collecting systemdata on host "+ipaddresses[i], nil, nil),
-				  err))		
+				  err))
 				continue
 		}
 		b := []byte(data) //Converting string of data to bytestream
