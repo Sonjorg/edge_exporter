@@ -203,7 +203,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 			//return nil, err <-this line would result in error for systemexp on all hosts
 			//returning a prometheus error metric
 			c <- prometheus.MustNewConstMetric(
-					collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, 0, ipaddresses[i], "test", "systemstats-host-",nr, ipaddresses[i], "55")		
+					collector.Error_ip, prometheus.GaugeValue, 0, ipaddresses[i], "test", "systemstats-host-",nr, ipaddresses[i], "55")		
 			continue //trying next ip address
 		}
 		data,err := getAPIData(dataStr, phpsessid)
@@ -216,7 +216,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 				  c <- prometheus.NewMetricWithTimestamp(
 					timeReportedByExternalSystem,
 					prometheus.MustNewConstMetric(
-						collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue1, ipaddresses[i], "test", "systemstats-host-",nr, ipaddresses[i], "55"),
+						collector.Error_ip, prometheus.GaugeValue, metricValue1, ipaddresses[i], "test", "systemstats-host-",nr, ipaddresses[i], "55"),
 				   )/*prometheus.Desc("fgdrg")*/
 
 				continue
