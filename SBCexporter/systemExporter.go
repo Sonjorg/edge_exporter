@@ -170,7 +170,6 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 	//test data, will use yaml config
 	//ipaddresses = append(ipaddresses, "46.333.534.22")
 	ipaddresses = append(ipaddresses, "10.233.230.11")
-	ipaddresses = append(ipaddresses, "10.233.230.11")
 	//ipaddresses = append(ipaddresses, "46.333.534.22")
 	ipaddresses = append(ipaddresses, "10.233.234.11")
 	ipaddresses = append(ipaddresses, "10.233.234.10")
@@ -191,8 +190,8 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 		password = `PanneKake23`
 		authStr := "https://" +ipaddresses[i] + "/rest/login"
 		dataStr := "https://"+ipaddresses[i]+"/rest/system/historicalstatistics/1"
-		m := make(map[string]string)
-		m["route"] = "egegrreg"
+		//m := make(map[string]string)
+		//m["route"] = "egegrreg"
 		fmt.Println("Api call on ip: ",ipaddresses[i],"\n")
 
 		  timeReportedByExternalSystem := time.Now()//time.Parse(timelayout, mytimevalue)
