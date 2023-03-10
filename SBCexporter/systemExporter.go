@@ -172,6 +172,9 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 	ipaddresses = append(ipaddresses, "10.233.230.11")
 	ipaddresses = append(ipaddresses, "10.233.230.11")
 	ipaddresses = append(ipaddresses, "46.333.534.22")
+	ipaddresses = append(ipaddresses, "10.233.234.11")
+	ipaddresses = append(ipaddresses, "10.233.234.10")
+
 	//ipaddresses = append(ipaddresses, "46.363.557.22")
 
 	//DO NOT DELETE: ipaddresses = getIPNotExl("systemExporter", testConfig)
@@ -204,7 +207,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 					timeReportedByExternalSystem,
 					prometheus.MustNewConstMetric(
 						collector.Error_ip, prometheus.GaugeValue, 0, ipaddresses[i], "test", "systemstats-host-"+ipaddresses[i],nr, ipaddresses[i], "500"),
-				   )			
+				   )
 				   continue //trying next ip address
 		}
 		data,err := getAPIData(dataStr, phpsessid)
