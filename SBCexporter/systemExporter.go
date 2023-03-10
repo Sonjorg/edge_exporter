@@ -171,7 +171,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 	//ipaddresses = append(ipaddresses, "46.333.534.22")
 	ipaddresses = append(ipaddresses, "10.233.230.11")
 	ipaddresses = append(ipaddresses, "10.233.230.11")
-	ipaddresses = append(ipaddresses, "46.333.534.22")
+	//ipaddresses = append(ipaddresses, "46.333.534.22")
 	ipaddresses = append(ipaddresses, "10.233.234.11")
 	ipaddresses = append(ipaddresses, "10.233.234.10")
 
@@ -198,7 +198,6 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 		  timeReportedByExternalSystem := time.Now()//time.Parse(timelayout, mytimevalue)
 		phpsessid,err =  APISessionAuth(username, password,authStr)
 		nr := strconv.Itoa(i)
-
 		if err != nil {
 			log.Println("Error retrieving session cookie: ",log.Flags(), err,"\n")
 			//return nil, err <-this line would result in error for systemexp on all hosts
@@ -218,7 +217,6 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 					prometheus.MustNewConstMetric(
 						collector.Error_ip, prometheus.GaugeValue, 0, ipaddresses[i], "test", "systemstats-host-"+ipaddresses[i],nr, ipaddresses[i], "55"),
 				   )
-
 				continue
 		}
 		b := []byte(data) //Converting string of data to bytestream
