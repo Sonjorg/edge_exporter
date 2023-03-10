@@ -169,7 +169,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 	var phpsessid string
 	//test data, will use yaml config
 	//ipaddresses = append(ipaddresses, "46.333.534.22")
-	ipaddresses = append(ipaddresses, "10.233.230.11")
+	//ipaddresses = append(ipaddresses, "10.233.230.11")
 	//ipaddresses = append(ipaddresses, "46.333.534.22")
 	ipaddresses = append(ipaddresses, "10.233.234.11")
 	ipaddresses = append(ipaddresses, "10.233.234.10")
@@ -185,7 +185,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 
 
 	for i := 0; i < len(ipaddresses); i++ {
-
+		nr := strconv.Itoa(i)
 		username = `student`
 		password = `PanneKake23`
 		authStr := "https://" +ipaddresses[i] + "/rest/login"
@@ -196,7 +196,6 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 
 		  timeReportedByExternalSystem := time.Now()//time.Parse(timelayout, mytimevalue)
 		phpsessid,err =  APISessionAuth(username, password,authStr)
-		nr := strconv.Itoa(i)
 		if err != nil {
 			log.Println("Error retrieving session cookie: ",log.Flags(), err,"\n")
 			//return nil, err <-this line would result in error for systemexp on all hosts
