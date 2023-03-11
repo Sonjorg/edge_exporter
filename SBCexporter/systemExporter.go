@@ -168,9 +168,9 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 	var password string
 	var phpsessid string
 	//test data, will use yaml config
-	//ipaddresses = append(ipaddresses, "46.333.534.22")
-	//ipaddresses = append(ipaddresses, "10.233.230.11")
-	//ipaddresses = append(ipaddresses, "46.333.534.22")
+	ipaddresses = append(ipaddresses, "46.333.534.22")
+	ipaddresses = append(ipaddresses, "10.233.230.11")
+	ipaddresses = append(ipaddresses, "46.333.534.22")
 	ipaddresses = append(ipaddresses, "10.233.234.11")
 	ipaddresses = append(ipaddresses, "10.233.234.10")
 
