@@ -19,7 +19,9 @@ type hostConfig struct {
 */
 //Template used for struct and NewConfig(): https://dev.to/koddr/let-s-write-config-for-your-golang-web-app-on-right-way-yaml-5ggp
     type Config struct {
-        Hosts[] struct {
+        Hosts []Host
+        }
+        type Host struct {
             hostName       string `yaml:"hostname"`
             ipaddress      string `yaml:"ipaddress"`
             //exclude        string `yaml:"exclude"`
@@ -29,8 +31,7 @@ type hostConfig struct {
                     systemExporter bool `yaml:"systemstats"`
                     callStats      bool `yaml:"callstats"`
                 }`yaml:"exclude"`
-            }`yaml:"hosts"`
-        }
+            }
     // NewConfig returns a new decoded Config struct
     func NewConfig(configPath string) (*Config, error) {
         // Create config structure
@@ -101,7 +102,7 @@ func getIpAdrExp(exporterName string) []string{
                 if (cfg.Hosts[i].Exclude.systemExporter == false) {
                     list = append(list, cfg.Hosts[i].ipaddress)
                 }
-            fmt.Println(cfg.Hosts[i].ipaddress)
+           // fmt.Println(cfg.Hosts[i].ipaddress)
             }
         /*case "callStats":
             for i:= range cfg.Hosts {
