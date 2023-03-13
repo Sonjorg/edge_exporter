@@ -19,17 +19,18 @@ type hostConfig struct {
 */
 //Template used for struct and NewConfig(): https://dev.to/koddr/let-s-write-config-for-your-golang-web-app-on-right-way-yaml-5ggp
     type Config struct {
+      //  Name string `yaml:"name"`
         Hosts []Host
     }
         type Host struct {
-            hostName       string `yaml:"hostname"`
-            ipaddress      string `yaml:"ipaddress"`
+            HostName       string `yaml:"hostname"`
+            Ipaddress      string `yaml:"ipaddress"`
             //exclude        string `yaml:"exclude"`
                 Exclude struct {
                     // Server is the general server timeout to use
                     // for graceful shutdowns
-                    systemExporter bool `yaml:"systemstats"`
-                    callStats      bool `yaml:"callstats"`
+                    SystemExporter bool `yaml:"systemstats"`
+                    CallStats      bool `yaml:"callstats"`
                 }`yaml:"exclude"`
             }
     // NewConfig returns a new decoded Config struct
@@ -99,8 +100,8 @@ func getIpAdrExp(exporterName string) []string{
         case "systemStats":
            for i := range cfg.Hosts {
             //for i := 0; i < len(cfg.Hosts); i++ {
-                if (cfg.Hosts[i].Exclude.systemExporter == false) {
-                    list = append(list, cfg.Hosts[i].ipaddress)
+                if (cfg.Hosts[i].Exclude.SystemExporter == false) {
+                    list = append(list, cfg.Hosts[i].Ipaddress)
                 }
            // fmt.Println(cfg.Hosts[i].ipaddress)
             }
