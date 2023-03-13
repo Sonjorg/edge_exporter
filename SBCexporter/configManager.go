@@ -24,7 +24,7 @@ type hostConfig struct {
         //index          int
         type Hosts struct {
             hostName       string `yaml:"hostname"`
-            ipaddress         string `yaml:"host"`
+            ipaddress      string `yaml:"host"`
             port           string `yaml:"port"`
             //exclude        string `yaml:"exclude"`
                 Exclude struct {
