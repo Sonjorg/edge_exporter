@@ -4,17 +4,17 @@ hosts:
 - hostname: host1
   ipaddress: 10.233.234.10
   username: student
-  password: Pannekake
+  password: Pannekake23
 - hostname: host2
   ipaddress: 10.233.230.11
   username: student
-  password: Pannekake
+  password: Pannekake23
 - hostname: host3
   ipaddress: 46.333.534.22
 - hostname: host4
   ipaddress: 10.233.234.11
   username: student
-  password: Pannekake
+  password: Pannekake23
   exclude:
     systemstats: true #Systemstats won't be collected for this host
     #callstats: t/f
