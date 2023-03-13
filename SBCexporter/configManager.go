@@ -24,8 +24,7 @@ type hostConfig struct {
         //index          int
         type Hosts struct {
             hostName       string `yaml:"hostname"`
-            ipaddress      string `yaml:"host"`
-            port           string `yaml:"port"`
+            ipaddress      string `yaml:"ipaddress"`
             //exclude        string `yaml:"exclude"`
                 Exclude struct {
                     // Server is the general server timeout to use
