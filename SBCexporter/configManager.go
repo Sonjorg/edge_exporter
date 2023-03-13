@@ -90,9 +90,13 @@ cfgPath, err := ParseFlags()
     return cfg, err
 }
 func getIpAdrExp(exporterName string) []string{
-    cfg, err := getConfig()
+    cfgPath, err := ParseFlags()
     if err != nil {
         fmt.Println(err)
+    }
+    cfg, err := NewConfig(cfgPath)
+    if err != nil {
+       fmt.Println(err)
     }
 
 	var list []string
@@ -117,9 +121,13 @@ return list
 
 func getAuth(ipadr string) (username string, password string) {
     var u, p string
-    cfg, err := getConfig()
+    cfgPath, err := ParseFlags()
     if err != nil {
         fmt.Println(err)
+    }
+    cfg, err := NewConfig(cfgPath)
+    if err != nil {
+       fmt.Println(err)
     }
     for i:= range cfg.Hosts {
         if (cfg.Hosts[i].Ipaddress == ipadr) {
@@ -135,25 +143,3 @@ func test() {
     ip := getIpAdrExp("systemStats")
     fmt.Println(ip)
 }
-/*func getIPNotExl(exporterName string, hosts *Config) []string {
-	var list []string
-
-	switch exporterName {
-	case "systemStatsExporter":
-			list = getIpAdrExp(exporterName, hosts)
-	//var i = hosts.index.size
-	case "teleStatsExporter":
-			list = getIpAdrExp(exporterName, hosts)
-		//INFO: have a switch case on all exporters made, NB!: must remember exact exporternames inside each exporter
-	}
-	return list
-}*/
-
-/*
-if hosts[i].Exporter3Excl == true {
-	//Exporter2()
-	return ipaddr == hosts[i].ipaddress
-}
-if hosts[i].systemExcl == true {
-	return ipaddr == hosts[i].ipaddress
-}*/
