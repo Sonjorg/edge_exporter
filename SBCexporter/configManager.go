@@ -76,7 +76,7 @@ func ParseFlags() (string, error) {
 
     // Set up a CLI flag called "-config" to allow users
     // to supply the configuration file
-    flag.StringVar(&configPath, "config", "./config.yml", "path to config file")
+    flag.StringVar(&configPath, "config", "./config.yml", "./config.yml")
 
     // Actually parse the flags
     flag.Parse()
@@ -92,11 +92,11 @@ func ParseFlags() (string, error) {
 func getIpAdrExp(exporterName string) []string{
     cfgPath, err := ParseFlags()
     if err != nil {
-        //log.Fatal(err)
+        fmt.Println(err)
     }
     cfg, err := NewConfig(cfgPath)
     if err != nil {
-       // log.Fatal(err)
+       fmt.Println(err)
     }
 	var list []string
     switch exporterName {
