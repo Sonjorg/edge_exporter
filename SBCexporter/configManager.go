@@ -96,14 +96,14 @@ func getIpAdrExp(exporterName string) []string{
 	var list []string
     switch exporterName {
         case "systemStats":
-           // for i:= range cfg.Hosts {
-            for i := 0; i < len(cfg.Hosts); i++ {
+           for i:= range cfg.Hosts {
+            //for i := 0; i < len(cfg.Hosts); i++ {
                 if (cfg.Hosts[i].Exclude.systemExporter == false) {
                     list = append(list, cfg.Hosts[i].ipaddress)
                 }
             }
         case "callStats":
-            for i := 0; i < len(cfg.Hosts); i++ {
+            for i:= range cfg.Hosts {
                 if (cfg.Hosts[i].Exclude.systemExporter == false) {
                     list = append(list, cfg.Hosts[i].ipaddress)
                 }
