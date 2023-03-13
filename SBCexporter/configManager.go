@@ -20,7 +20,7 @@ type hostConfig struct {
 //Template used for struct and NewConfig(): https://dev.to/koddr/let-s-write-config-for-your-golang-web-app-on-right-way-yaml-5ggp
     type Config struct {
         Hosts[] struct {
-           hostName        string `yaml:"hostname"`
+          // hostName        string `yaml:"hostname"`
             ipaddress      string `yaml:"ipaddress"`
             //exclude        string `yaml:"exclude"`
                 Exclude struct {
