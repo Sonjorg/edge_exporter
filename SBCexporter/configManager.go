@@ -28,17 +28,17 @@ import (
             }
 
 
-            func (c *Config) getConf() (*Config) {
+            func getConf(c *Config) *Config {
 
                 yamlFile, err := ioutil.ReadFile("config.yml")
                 if err != nil {
                     //log.Printf("yamlFile.Get err   #%v ", err)
-                    fmt.Println("yamlFile.Get err   #%v ", err)
+                    fmt.Println("yamlFile.Get err   # ", err)
                 }
                 err = yaml.Unmarshal(yamlFile, c)
                 if err != nil {
                    // log.Fatalf("Unmarshal: %v", err)
-                    fmt.Println("yamlFile.Get err   #%v ", err)
+                    fmt.Println("yamlFile.Get err   # ", err)
                 }
                 return c
             }
@@ -157,10 +157,10 @@ return list
 
 func getAuth(ipadr string) (username string, password string) {
     var u, p string
-    cfg, err := getConf()
-    if err != nil {
+    cfg := getConf(&Config{})
+    /*if err != nil {
        fmt.Println(err)
-    }
+    }*/
 
    // map[adr]cfg.Hosts[i].Username
    // map[adr]cfg.Hosts[i].Username
