@@ -1,11 +1,12 @@
 package main
 
 import (
-    "gopkg.in/yaml.v2"
-    "os"
+	"fmt"
+	"os"
+	"gopkg.in/yaml.v2"
+)
 
-    )
-
+/*
 type hostConfig struct {
 	index          int
 	ipaddress      string
@@ -14,23 +15,25 @@ type hostConfig struct {
 	Exporter2      bool
 }
 
-
-    //Template used for struct and NewConfig(): https://dev.to/koddr/let-s-write-config-for-your-golang-web-app-on-right-way-yaml-5ggp
-    //Specific config is accessed in the format: config.Server.Timeout.Read
+*/
+//Template used for struct and NewConfig(): https://dev.to/koddr/let-s-write-config-for-your-golang-web-app-on-right-way-yaml-5ggp
     type Config struct {
-        //index          int
-        HostIp         string `yaml:"host"`
-        hostName       string `yaml:"hostname"`
-        port           string `yaml:"port"`
-        ipaddress      string `yaml:"ip"`
-        //exclude        string `yaml:"exclude"`
-        Exclude struct {
-            // Server is the general server timeout to use
-            // for graceful shutdowns
-            systemExporter bool `"yaml:systemstats"`
-            callStats      bool `"yaml:callstats"`
-        }`yaml:"exclude:'true'/'false'"`
+        Hosts []Hosts `yaml:"hosts"`
     }
+        //index          int
+        type Hosts struct {
+            hostName       string `yaml:"hostname"`
+            ipaddress         string `yaml:"host"`
+            port           string `yaml:"port"`
+            //exclude        string `yaml:"exclude"`
+                Exclude struct {
+                    // Server is the general server timeout to use
+                    // for graceful shutdowns
+                    systemExporter bool `"yaml:systemstats"`
+                    callStats      bool `"yaml:callstats"`
+                }`yaml:"exclude:'true'/'false'"`
+            }
+
 
     // NewConfig returns a new decoded Config struct
     func NewConfig(configPath string) (*Config, error) {
@@ -51,20 +54,38 @@ type hostConfig struct {
         return config, nil
     }
    // test := NewConfig(.\config).
-    type hosts []hostConfig
+   // type hosts []hostConfig
 
-func getIpAdrExp(exporterName string, hosts hostConfig) []string{
-
+func getIpAdrExp(exporterName string) []string{
+    cfg, err := NewConfig(config.yml)
+    if err != nil {
+       // log.Fatal(err)
+    }
 	var list []string
+    switch exporterName {
+        case "systemStats":
+            for i := 0; i < len(cfg.Hosts); i++ {
+                if (cfg.Hosts[i].Exclude.systemExporter == false) {
+                    list = append(list, cfg.Hosts[i].ipaddress)
+                }
+            }
+        case "callStats":
+            for i := 0; i < len(cfg.Hosts); i++ {
+                if (cfg.Hosts[i].Exclude.systemExporter == false) {
+                    list = append(list, cfg.Hosts[i].ipaddress)
+                }
+            }
+            //INFO: have a switch case on all exporters made, NB!: must remember exact exporternames inside each exporter
+        }
 
-	for i := 0; i < hosts.index; i++ {
-		if (hosts.systemExporter == true) {
-			list = append(list, hosts.ipaddress)
-			}
-	}
+
 return list
 }
-func getIPNotExl(exporterName string, hosts hostConfig) []string {
+func main() {
+    ip := getIpAdrExp("systemStats")
+    fmt.Println(ip)
+}
+/*func getIPNotExl(exporterName string, hosts *Config) []string {
 	var list []string
 
 	switch exporterName {
@@ -76,7 +97,7 @@ func getIPNotExl(exporterName string, hosts hostConfig) []string {
 		//INFO: have a switch case on all exporters made, NB!: must remember exact exporternames inside each exporter
 	}
 	return list
-}
+}*/
 
 /*
 if hosts[i].Exporter3Excl == true {
