@@ -130,26 +130,22 @@ return list
 }
 
 func getAuth(ipadr string) (username string, password string) {
-    //var u, p string
-    /*cfgPath, err := ParseFlags()
-    if err != nil {
-        fmt.Println(err)
-    }
-    cfg, err := NewConfig(cfgPath)
+    var u, p string
+    cfg, err := getConfig()
     if err != nil {
        fmt.Println(err)
-    }*/
+    }
 
    // map[adr]cfg.Hosts[i].Username
    // map[adr]cfg.Hosts[i].Username
     //yaml.Unmarshal(file_content, &map)
-    /*for i:= range cfg.Hosts {
+    for i:= range cfg.Hosts {
         if (cfg.Hosts[i].Ipaddress == ipadr) {
             u, p = cfg.Hosts[i].Username, cfg.Hosts[i].Password
         }
-    }*/
-    return "test", "test"
-   // return u,p
+    }
+   // return "test", "test"
+    return u,p
 }
 
 
