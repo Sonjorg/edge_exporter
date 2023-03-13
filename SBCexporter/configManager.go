@@ -89,7 +89,7 @@ func getIpAdrExp(exporterName string) []string{
     if err != nil {
         fmt.Println(err)
     }*/
-    cfg, err := NewConfig(./config.yml)
+    cfg, err := NewConfig("./config.yml")
     if err != nil {
        fmt.Println(err)
     }
