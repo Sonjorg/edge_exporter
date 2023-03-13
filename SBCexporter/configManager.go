@@ -40,7 +40,7 @@ import (
                    // log.Fatalf("Unmarshal: %v", err)
                     fmt.Println("yamlFile.Get err   #%v ", err)
                 }
-              //  return c ,err
+                return c
             }
     // NewConfig returns a new decoded Config struct
  /*func getConfig() (*Config, error) {
