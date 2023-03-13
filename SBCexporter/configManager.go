@@ -85,22 +85,23 @@ func ParseFlags() (string, error) {
     return configPath, nil
 }
 func getIpAdrExp(exporterName string) []string{
-    /*cfgPath, err := ParseFlags()
+    cfgPath, err := ParseFlags()
     if err != nil {
         fmt.Println(err)
-    }*/
-    cfg, err := NewConfig("./config.yml")
+    }
+    cfg, err := NewConfig(cfgPath)
     if err != nil {
        fmt.Println(err)
     }
 	var list []string
     switch exporterName {
         case "systemStats":
-           for i:= range cfg.Hosts {
+           for i := range cfg.Hosts {
             //for i := 0; i < len(cfg.Hosts); i++ {
                 if (cfg.Hosts[i].Exclude.systemExporter == false) {
                     list = append(list, cfg.Hosts[i].ipaddress)
                 }
+            fmt.Println(cfg.Hosts[i].ipaddress)
             }
         /*case "callStats":
             for i:= range cfg.Hosts {
