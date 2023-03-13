@@ -1,11 +1,12 @@
 ---
+
 hosts:
-  host: host1
+  hostname: host1
   ipaddress: 10.233.234.10
   exclude:
     systemExporter: false
     callStats: true
-  host: host2
+  hostname: host2
   ipaddress: 10.233.234.10
   exclude:
     systemExporter: false
