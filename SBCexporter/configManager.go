@@ -29,7 +29,7 @@ import (
         // Create config structure
         config := &Config{}
         // Open config file
-        file, err := os.Open("./config.yaml")
+        file, err := os.Open("./config.yml")
         if err != nil {
             return nil, err
         }
