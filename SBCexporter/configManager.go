@@ -6,7 +6,7 @@ import (
 	"gopkg.in/yaml.v2"
     //"flag"
    // "log"
-    "ioutil"
+   "io/ioutil"
 )
 // Template used for struct and the functions NewConfig(), ValidateConfigPath() and ParseFlags() are copied from:
 // https://dev.to/koddr/let-s-write-config-for-your-golang-web-app-on-right-way-yaml-5ggp
