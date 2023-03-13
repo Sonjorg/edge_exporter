@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
-	"os"
+	//"os"
 	"gopkg.in/yaml.v2"
     //"flag"
+   // "log"
+    "ioutil"
 )
 // Template used for struct and the functions NewConfig(), ValidateConfigPath() and ParseFlags() are copied from:
 // https://dev.to/koddr/let-s-write-config-for-your-golang-web-app-on-right-way-yaml-5ggp
@@ -24,8 +26,24 @@ import (
                     CallStats      bool `yaml:"callstats"`
                 }`yaml:"exclude"`
             }
+
+
+            func (c *Config) getConf() (*Config) {
+
+                yamlFile, err := ioutil.ReadFile("config.yml")
+                if err != nil {
+                    //log.Printf("yamlFile.Get err   #%v ", err)
+                    fmt.Println("yamlFile.Get err   #%v ", err)
+                }
+                err = yaml.Unmarshal(yamlFile, c)
+                if err != nil {
+                   // log.Fatalf("Unmarshal: %v", err)
+                    fmt.Println("yamlFile.Get err   #%v ", err)
+                }
+              //  return c ,err
+            }
     // NewConfig returns a new decoded Config struct
- func getConfig() (*Config, error) {
+ /*func getConfig() (*Config, error) {
         // Create config structure
         config := &Config{}
         // Open config file
@@ -41,10 +59,19 @@ import (
             return nil, err
         }
         return config, nil
-    }
+    }*/
+
    // test := NewConfig(.\config).
    // type hosts []hostConfig
-
+   /*func readConfig() (*Config, error) {
+    config := &Config{}
+    cfgFile, err := ioutil.ReadFile("./config.yaml")
+    if err != nil {
+        return nil, err
+    }
+    err = yaml.Unmarshal(cfgFile, config)
+    return &config.Config, err
+}
    func ValidateConfigPath(path string) error {
     s, err := os.Stat(path)
     if err != nil {
@@ -54,7 +81,7 @@ import (
         return fmt.Errorf("'%s' is a directory, not a normal file", path)
     }
     return nil
-}
+}*/
 /*
 // ParseFlags will create and parse the CLI flags
 // and return the path to be used elsewhere
@@ -104,10 +131,9 @@ func getIpAdrExp(exporterName string) []string{
     if err != nil {
         fmt.Println(err)
     }*/
-    cfg, err := getConfig()
-    if err != nil {
-       fmt.Println(err)
-    }
+    //var c conf
+    //c.getConf()
+    cfg := getConfig()
 
 	var list []string
     switch exporterName {
