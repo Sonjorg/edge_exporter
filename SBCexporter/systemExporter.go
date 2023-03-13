@@ -4,42 +4,13 @@ package main
 //rest/system/historicalstatistics/1
 
 import (
-	//"crypto/tls"
-	//"strings"
-	//"bufio"
 	"encoding/xml"
 	"fmt"
-
-	//"io/ioutil"
-	//"time"
-
 	"log"
-
 	"github.com/prometheus/client_golang/prometheus"
-	//"github.com/prometheus/client_golang/prometheus/collectors"
-
-	//"github.com/prometheus/client_golang/prometheus/promhttp"
-	//"github.com/tiket-oss/phpsessgo"
-	//"io/ioutil"
-	//"net/http"
-	// "net/http/cookiejar"
-	// "net/http/cookiejar"
-	// "net/url"
-	// "regexp"
 	"strconv"
 	"time"
 )
-
-/*
-testConfig := []Host{
-	{
-		index:          1,
-		ipaddress:      "10.233.230.11",
-		systemExporter: true,
-		Exporter1:      false,
-		Exporter2:     false,
-	},
-}*/
 
 type sSBCdata struct {
 	XMLname    xml.Name   `xml:"root"`
@@ -77,13 +48,6 @@ type sMetrics struct {
 
 func systemCollector()*sMetrics{
 
-	var ipaddresses []string
-
-	//ipaddresses[0] = "10.233.230.11"
-	ipaddresses = append(ipaddresses, "10.233.230.11")
-	ipaddresses = append(ipaddresses, "45")
-
-//for range ipaddresses {
 	 return &sMetrics{
 		Rt_CPUUsage: prometheus.NewDesc("rt_CPUUsage",
 			"NoDescriptionYet",
@@ -163,18 +127,10 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 	var metricValue9 float64
 	//var metricsValuex float64
 
-	var ipaddresses []string
 	var username string
 	var password string
 	var phpsessid string
-	//test data, will use yaml config
-	ipaddresses = append(ipaddresses, "46.333.534.22")
-	ipaddresses = append(ipaddresses, "10.233.230.11")
-	ipaddresses = append(ipaddresses, "46.333.534.22")
-	ipaddresses = append(ipaddresses, "10.233.234.11")
-	ipaddresses = append(ipaddresses, "10.233.234.10")
-
-	//ipaddresses = append(ipaddresses, "46.363.557.22")
+	ipaddresses := getIpAdrExp("systemStats") //retrieving sources for this exporter
 
 	//DO NOT DELETE: ipaddresses = getIPNotExl("systemExporter", testConfig)
 	//phpsessid := APISessionAuth("student", "PanneKake23", "https://10.233.230.11/rest/login")

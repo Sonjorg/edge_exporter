@@ -104,7 +104,7 @@ func getIpAdrExp(exporterName string) []string{
 
 return list
 }
-func main() {
+func test() {
     ip := getIpAdrExp("systemStats")
     fmt.Println(ip)
 }
