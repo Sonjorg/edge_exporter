@@ -31,7 +31,7 @@ type hostConfig struct {
                     // for graceful shutdowns
                     systemExporter bool `yaml:"systemstats"`
                     callStats      bool `yaml:"callstats"`
-                }`yaml:"exclude:bool"`
+                }`yaml:"exclude"`
             }
 
 
