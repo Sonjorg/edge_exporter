@@ -85,11 +85,11 @@ func ParseFlags() (string, error) {
     return configPath, nil
 }
 func getIpAdrExp(exporterName string) []string{
-    cfgPath, err := ParseFlags()
+    /*cfgPath, err := ParseFlags()
     if err != nil {
         fmt.Println(err)
-    }
-    cfg, err := NewConfig(cfgPath)
+    }*/
+    cfg, err := NewConfig(./config.yml)
     if err != nil {
        fmt.Println(err)
     }
@@ -102,12 +102,12 @@ func getIpAdrExp(exporterName string) []string{
                     list = append(list, cfg.Hosts[i].ipaddress)
                 }
             }
-        case "callStats":
+        /*case "callStats":
             for i:= range cfg.Hosts {
                 if (cfg.Hosts[i].Exclude.systemExporter == false) {
                     list = append(list, cfg.Hosts[i].ipaddress)
                 }
-            }
+            }*/
             //INFO: have a switch case on all exporters made, NB!: must remember exact exporternames inside each exporter
         }
 
