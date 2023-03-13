@@ -133,7 +133,7 @@ func getIpAdrExp(exporterName string) []string{
     }*/
     //var c conf
     //c.getConf()
-    cfg := getConfig()
+    cfg := getConf(&Config{})
 
 	var list []string
     switch exporterName {
@@ -157,7 +157,7 @@ return list
 
 func getAuth(ipadr string) (username string, password string) {
     var u, p string
-    cfg, err := getConfig()
+    cfg, err := getConf()
     if err != nil {
        fmt.Println(err)
     }
