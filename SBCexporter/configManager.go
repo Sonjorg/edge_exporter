@@ -30,9 +30,9 @@ type hostConfig struct {
                 Exclude struct {
                     // Server is the general server timeout to use
                     // for graceful shutdowns
-                    systemExporter bool `"yaml:systemstats"`
-                    callStats      bool `"yaml:callstats"`
-                }`yaml:"exclude:'true'/'false'"`
+                    systemExporter bool `yaml:"systemstats"`
+                    callStats      bool `yaml:"callstats"`
+                }`yaml:"exclude:bool"`
             }
 
 
