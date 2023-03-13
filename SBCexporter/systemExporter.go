@@ -134,16 +134,16 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 
 	//DO NOT DELETE: ipaddresses = getIPNotExl("systemExporter", testConfig)
 	//phpsessid := APISessionAuth("student", "PanneKake23", "https://10.233.230.11/rest/login")
-	username = "student"
-	password = "PanneKake23"
+	//username = "student"
+	//password = "PanneKake23"
 	var err error
 	fmt.Println(ipaddresses)
 
 
 	for i := 0; i < len(ipaddresses); i++ {
 		nr := strconv.Itoa(i)
-		username = `student`
-		password = `PanneKake23`
+		//username = `student`
+		//password = `PanneKake23`
 		authStr := "https://" +ipaddresses[i] + "/rest/login"
 		dataStr := "https://"+ipaddresses[i]+"/rest/system/historicalstatistics/1"
 		username, password := getAuth(ipaddresses[i])
