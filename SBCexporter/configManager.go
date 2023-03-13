@@ -7,19 +7,8 @@ import (
     "flag"
 )
 
-/*
-type hostConfig struct {
-	index          int
-	ipaddress      string
-	systemExporter bool
-	Exporter1      bool
-	Exporter2      bool
-}
-
-*/
 //Template used for struct and NewConfig(): https://dev.to/koddr/let-s-write-config-for-your-golang-web-app-on-right-way-yaml-5ggp
     type Config struct {
-      //  Name string `yaml:"name"`
         Hosts []Host
     }
         type Host struct {
@@ -105,12 +94,12 @@ func getIpAdrExp(exporterName string) []string{
                 }
            // fmt.Println(cfg.Hosts[i].ipaddress)
             }
-        /*case "callStats":
+        case "callStats":
             for i:= range cfg.Hosts {
-                if (cfg.Hosts[i].Exclude.systemExporter == false) {
-                    list = append(list, cfg.Hosts[i].ipaddress)
+                if (cfg.Hosts[i].Exclude.SystemExporter == false) {
+                    list = append(list, cfg.Hosts[i].Ipaddress)
                 }
-            }*/
+            }
             //INFO: have a switch case on all exporters made, NB!: must remember exact exporternames inside each exporter
         }
 
