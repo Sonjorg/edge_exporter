@@ -20,7 +20,7 @@ type hostConfig struct {
 //Template used for struct and NewConfig(): https://dev.to/koddr/let-s-write-config-for-your-golang-web-app-on-right-way-yaml-5ggp
     type Config struct {
         Hosts []Host
-        }
+    }
         type Host struct {
             hostName       string `yaml:"hostname"`
             ipaddress      string `yaml:"ipaddress"`
