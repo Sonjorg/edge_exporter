@@ -127,8 +127,8 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 	var metricValue9 float64
 	//var metricsValuex float64
 
-	var username string
-	var password string
+	//var username string
+	//var password string
 	var phpsessid string
 	ipaddresses := getIpAdrExp("systemStats") //retrieving sources for this exporter
 
@@ -146,7 +146,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 		password = `PanneKake23`
 		authStr := "https://" +ipaddresses[i] + "/rest/login"
 		dataStr := "https://"+ipaddresses[i]+"/rest/system/historicalstatistics/1"
-		username, password := getAuth(ipaddresses)
+		username, password := getAuth(ipaddresses[i])
 		timeReportedByExternalSystem := time.Now()//time.Parse(timelayout, mytimevalue)
 		phpsessid,err =  APISessionAuth(username, password,authStr)
 		if err != nil {
