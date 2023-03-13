@@ -92,11 +92,10 @@ func getIpAdrExp(exporterName string) []string{
                 if (cfg.Hosts[i].Exclude.SystemExporter == false) {
                     list = append(list, cfg.Hosts[i].Ipaddress)
                 }
-           // fmt.Println(cfg.Hosts[i].ipaddress)
             }
         case "callStats":
             for i:= range cfg.Hosts {
-                if (cfg.Hosts[i].Exclude.SystemExporter == false) {
+                if (cfg.Hosts[i].Exclude.CallStats == false) {
                     list = append(list, cfg.Hosts[i].Ipaddress)
                 }
             }
