@@ -4,8 +4,8 @@ hosts:
 - hostname: host1
   ipaddress: 10.233.234.10
   exclude:
-    systemExporter: true
+    systemstats: true
 - hostname: host2
-  ipaddress: 10.233.234.10
+  ipaddress: 10.233.230.10
   exclude:
-    systemExporter: true
+    systemstats: false
