@@ -6,14 +6,16 @@ import (
 	"gopkg.in/yaml.v2"
     "flag"
 )
-
-//Template used for struct and NewConfig(): https://dev.to/koddr/let-s-write-config-for-your-golang-web-app-on-right-way-yaml-5ggp
+// Template used for struct and the functions NewConfig(), ValidateConfigPath() and ParseFlags() are copied from:
+// https://dev.to/koddr/let-s-write-config-for-your-golang-web-app-on-right-way-yaml-5ggp
     type Config struct {
         Hosts []Host
     }
         type Host struct {
             HostName       string `yaml:"hostname"`
             Ipaddress      string `yaml:"ipaddress"`
+            Username       string `yaml:"username"`
+            Password       string `yaml:"password"`
             //exclude        string `yaml:"exclude"`
                 Exclude struct {
                     // Server is the general server timeout to use
@@ -75,15 +77,24 @@ func ParseFlags() (string, error) {
     // Return the configuration path
     return configPath, nil
 }
-func getIpAdrExp(exporterName string) []string{
-    cfgPath, err := ParseFlags()
+//implement return pointer
+func getConfig() (*Config, error){
+cfgPath, err := ParseFlags()
     if err != nil {
         fmt.Println(err)
     }
     cfg, err := NewConfig(cfgPath)
     if err != nil {
-       fmt.Println(err)
+    fmt.Println(err)
     }
+    return cfg, err
+}
+func getIpAdrExp(exporterName string) []string{
+    cfg, err := getConfig()
+    if err != nil {
+        fmt.Println(err)
+    }
+
 	var list []string
     switch exporterName {
         case "systemStats":
@@ -101,9 +112,25 @@ func getIpAdrExp(exporterName string) []string{
             }
             //INFO: have a switch case on all exporters made, NB!: must remember exact exporternames inside each exporter
         }
-
 return list
 }
+
+func getAuth(ipadr string) (username string, password string) {
+    var u, p string
+    cfg, err := getConfig()
+    if err != nil {
+        fmt.Println(err)
+    }
+    for i:= range cfg.Hosts {
+        if (cfg.Hosts[i].Ipaddress == ipadr) {
+            u, p = cfg.Hosts[i].Username, cfg.Hosts[i].Password
+        }
+    }
+    return u,p
+}
+
+
+
 func test() {
     ip := getIpAdrExp("systemStats")
     fmt.Println(ip)

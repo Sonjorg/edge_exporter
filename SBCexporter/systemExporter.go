@@ -146,11 +146,8 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 		password = `PanneKake23`
 		authStr := "https://" +ipaddresses[i] + "/rest/login"
 		dataStr := "https://"+ipaddresses[i]+"/rest/system/historicalstatistics/1"
-		//m := make(map[string]string)
-		//m["route"] = "egegrreg"
-		fmt.Println("Api call on ip: ",ipaddresses[i],"\n")
-
-		  timeReportedByExternalSystem := time.Now()//time.Parse(timelayout, mytimevalue)
+		username, password := getAuth(ipaddresses)
+		timeReportedByExternalSystem := time.Now()//time.Parse(timelayout, mytimevalue)
 		phpsessid,err =  APISessionAuth(username, password,authStr)
 		if err != nil {
 			log.Println("Error retrieving session cookie: ",log.Flags(), err,"\n")
@@ -205,7 +202,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 
 }*/
 // Initializing the exporter
-func systemExporter() {
+func systemDataExporter() {
 		sc := systemCollector()
 		prometheus.MustRegister(sc)
 }
