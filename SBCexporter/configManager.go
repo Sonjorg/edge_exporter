@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 	"gopkg.in/yaml.v2"
-    "flag"
+    //"flag"
 )
 // Template used for struct and the functions NewConfig(), ValidateConfigPath() and ParseFlags() are copied from:
 // https://dev.to/koddr/let-s-write-config-for-your-golang-web-app-on-right-way-yaml-5ggp
@@ -25,11 +25,11 @@ import (
                 }`yaml:"exclude"`
             }
     // NewConfig returns a new decoded Config struct
-    func NewConfig(configPath string) (*Config, error) {
+ func getConfig() (*Config, error) {
         // Create config structure
         config := &Config{}
         // Open config file
-        file, err := os.Open(configPath)
+        file, err := os.Open("./config.yaml")
         if err != nil {
             return nil, err
         }
@@ -55,7 +55,7 @@ import (
     }
     return nil
 }
-
+/*
 // ParseFlags will create and parse the CLI flags
 // and return the path to be used elsewhere
 func ParseFlags() (string, error) {
@@ -76,9 +76,9 @@ func ParseFlags() (string, error) {
 
     // Return the configuration path
     return configPath, nil
-}
+}*/
 //implement return pointer
-func getConfig() (*Config, error){
+/*func getConfig() (*Config, error){
 cfgPath, err := ParseFlags()
     if err != nil {
         fmt.Println(err)
@@ -88,13 +88,23 @@ cfgPath, err := ParseFlags()
     fmt.Println(err)
     }
     return cfg, err
-}
+}*//*
+func readConfig() (*Config, error) {
+    config := &Config{}
+    cfgFile, err := ioutil.ReadFile("./config.yaml")
+    if err != nil {
+        return nil, err
+    }
+    err = yaml.Unmarshal(cfgFile, config)
+    return config, err
+
+}*/
 func getIpAdrExp(exporterName string) []string{
-    cfgPath, err := ParseFlags()
+    /*cfgPath, err := ParseFlags()
     if err != nil {
         fmt.Println(err)
-    }
-    cfg, err := NewConfig(cfgPath)
+    }*/
+    cfg, err := getConfig()
     if err != nil {
        fmt.Println(err)
     }
