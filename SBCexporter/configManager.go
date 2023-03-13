@@ -42,90 +42,7 @@ import (
                 }
                 return c
             }
-    // NewConfig returns a new decoded Config struct
- /*func getConfig() (*Config, error) {
-        // Create config structure
-        config := &Config{}
-        // Open config file
-        file, err := os.Open("./config.yml")
-        if err != nil {
-            return nil, err
-        }
-        defer file.Close()
-        // Init new YAML decode
-        d := yaml.NewDecoder(file)
-        // Start YAML decoding from file
-        if err := d.Decode(&config); err != nil {
-            return nil, err
-        }
-        return config, nil
-    }*/
 
-   // test := NewConfig(.\config).
-   // type hosts []hostConfig
-   /*func readConfig() (*Config, error) {
-    config := &Config{}
-    cfgFile, err := ioutil.ReadFile("./config.yaml")
-    if err != nil {
-        return nil, err
-    }
-    err = yaml.Unmarshal(cfgFile, config)
-    return &config.Config, err
-}
-   func ValidateConfigPath(path string) error {
-    s, err := os.Stat(path)
-    if err != nil {
-        return err
-    }
-    if s.IsDir() {
-        return fmt.Errorf("'%s' is a directory, not a normal file", path)
-    }
-    return nil
-}*/
-/*
-// ParseFlags will create and parse the CLI flags
-// and return the path to be used elsewhere
-func ParseFlags() (string, error) {
-    // String that contains the configured configuration path
-    var configPath string
-
-    // Set up a CLI flag called "-config" to allow users
-    // to supply the configuration file
-    flag.StringVar(&configPath, "config", "./config.yml", "./config.yml")
-
-    // Actually parse the flags
-    flag.Parse()
-
-    // Validate the path first
-    if err := ValidateConfigPath(configPath); err != nil {
-        return "", err
-    }
-
-    // Return the configuration path
-    return configPath, nil
-}*/
-//implement return pointer
-/*func getConfig() (*Config, error){
-cfgPath, err := ParseFlags()
-    if err != nil {
-        fmt.Println(err)
-    }
-    cfg, err := NewConfig(cfgPath)
-    if err != nil {
-    fmt.Println(err)
-    }
-    return cfg, err
-}*//*
-func readConfig() (*Config, error) {
-    config := &Config{}
-    cfgFile, err := ioutil.ReadFile("./config.yaml")
-    if err != nil {
-        return nil, err
-    }
-    err = yaml.Unmarshal(cfgFile, config)
-    return config, err
-
-}*/
 func getIpAdrExp(exporterName string) []string{
     /*cfgPath, err := ParseFlags()
     if err != nil {
@@ -158,13 +75,7 @@ return list
 func getAuth(ipadr string) (username string, password string) {
     var u, p string
     cfg := getConf(&Config{})
-    /*if err != nil {
-       fmt.Println(err)
-    }*/
 
-   // map[adr]cfg.Hosts[i].Username
-   // map[adr]cfg.Hosts[i].Username
-    //yaml.Unmarshal(file_content, &map)
     for i:= range cfg.Hosts {
         if (cfg.Hosts[i].Ipaddress == ipadr) {
             u, p = cfg.Hosts[i].Username, cfg.Hosts[i].Password
