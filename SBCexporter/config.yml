@@ -3,7 +3,8 @@
 hosts:
 - hostname: host1
   ipaddress: 10.233.234.10
-  exclude:
 - hostname: host2
   ipaddress: 10.233.230.10
   exclude:
+    systemstats: true #Systemstats won't be collected for this host
+    #callstats: t/f
