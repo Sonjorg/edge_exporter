@@ -16,8 +16,8 @@ import (
 	"log"
 )
 type rt struct {
-    //Value  float32 `xml:",chardata"`
-	XMLName xml.Name `xml:"root"`
+    Value  float32 `xml:",chardata"`
+	//XMLName xml.Name `xml:"root"`
 	//Rt2     rt2      `xml:"_pk"`
 	Attr    []xml.Attr `xml:"id,attr"`
 
