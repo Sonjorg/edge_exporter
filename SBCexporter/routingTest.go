@@ -18,10 +18,10 @@ import (
 type rt struct {
    // Value  float32 `xml:",chardata"`
 	XMLName xml.Name `xml:"root"`
-	Rt2     rt2 `xml:"_list"`
+	Rt2     rt2 `xml:"routingtable_list"`
 }
 type rt2 struct {
-	Rt3    []rt3 `xml:"_pk"`
+	Rt3    []rt3 `xml:"routingtable_pk"`
 	//Value  float32 `xml:",chardata"`
 	//Id         []int `xml:"id,attr"`//`xml:"_pk,attr id="2" href="https://10.233.230.11/rest/routingtable//2"/>
 	//<_pk id="4" href="https://10.233.230.11/rest/routingtable//4"/>
