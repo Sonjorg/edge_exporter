@@ -35,13 +35,13 @@ func test(){
 }
 
 func APISessionAuth(username string, password string, loginURL string) (string,error) {
-	cfg := getConf(&Config{})
-	timeout := cfg.Authtimeout
+	//cfg := getConf(&Config{})
+	//timeout := cfg.Authtimeout
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
 
-	client := &http.Client{Transport: tr,Timeout: time.Duration(timeout) * time.Second}
+	client := &http.Client{Transport: tr,Timeout: 3 * time.Second}
 
 	params := url.Values{}
 	params.Add("Username", username)
