@@ -85,7 +85,7 @@ func systemCollector()*sMetrics{
 			"NoDescriptionYet",
 			[]string{"Instance", "hostname", "job","host_nr", "Href", "HTTP_status"}, nil,
 		),
-		Error_ip: prometheus.NewDesc("error_sbc_ip",
+		Error_ip: prometheus.NewDesc("error_edge_system",
 			"NoDescriptionYet",
 			[]string{"Instance", "hostname", "job","host_nr", "Href", "HTTP_status"}, nil,
 		),

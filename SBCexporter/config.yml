@@ -1,6 +1,6 @@
 ---
 
-authtimeout: 10 #all hosts will have 5 sec timout
+authtimeout: 5  #all hosts will have 5 sec timout, for hosts that are completely unreachable, the timout will be faster
 hosts:
 - hostname: host1
   ipaddress: 10.233.234.11
@@ -18,11 +18,5 @@ hosts:
   ipaddress: 10.233.230.10
   username: student
   password: PanneKake23
-#- hostname: host4
-#  ipaddress: 10.233.234.11
-#  username: student
-#  password: PanneKake23
-#  exclude:
-#    systemstats: true #Excluding systemstats for this host
-    #callstats: true
-
+  exclude:
+    systemstats: true #Excluding systemstats for this host
