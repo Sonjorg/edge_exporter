@@ -21,13 +21,13 @@ type rt struct {
 	Rt2     rt2 `xml:"routingtable_list"`
 }
 type rt2 struct {
-	Rt3    []rt3 `xml:"routingtable_pk"`
+	Rt3    rt3 `xml:"routingtable_pk"`
 	//Value  float32 `xml:",chardata"`
 	//Id         []int `xml:"id,attr"`//`xml:"_pk,attr id="2" href="https://10.233.230.11/rest/routingtable//2"/>
 	//<_pk id="4" href="https://10.233.230.11/rest/routingtable//4"/>
 }
 type rt3 struct {
-	Attr    string `xml:"id,attr"`
+	Attr    []string `xml:"id,attr"`
 	Value   string `xml:",chardata"`
 
 }
@@ -42,7 +42,7 @@ func main(){
 	b := []byte(data) //Converting string of data to bytestream
 	ssbc := &rt{}
 	xml.Unmarshal(b, &ssbc) //Converting XML data to variables
-	fmt.Println("Successful API call data: ",ssbc.Rt2.Rt3)
+	fmt.Println("Successful API call data: ",ssbc.Rt2.Rt3.Attr)
 }
 
 func APISessionAuth(username string, password string, loginURL string) (string,error) {
