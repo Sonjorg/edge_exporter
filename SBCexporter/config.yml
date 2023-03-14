@@ -2,7 +2,7 @@
 
 hosts:
 - hostname: host1
-  ipaddress: 10.233.234.10
+  ipaddress: 10.233.234.11
   username: student
   password: PanneKake23
 - hostname: host2
