@@ -18,7 +18,7 @@ import (
 type rt struct {
    // Value  float32 `xml:",chardata"`
 	XMLName xml.Name `xml:"root"`
-	Rt2    rt2 `xml:"_list"`
+	Rt2     rt2 `xml:"_list"`
 }
 type rt2 struct {
 	Rt3    []rt3 `xml:"_pk"`
@@ -40,7 +40,7 @@ func main(){
 	b := []byte(data) //Converting string of data to bytestream
 	ssbc := &rt{}
 	xml.Unmarshal(b, &ssbc) //Converting XML data to variables
-	fmt.Println("Successful API call data: ",ssbc.Rt2.Rt3)
+	fmt.Println("Successful API call data: ",ssbc)
 }
 
 func APISessionAuth(username string, password string, loginURL string) (string,error) {
