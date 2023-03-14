@@ -9,13 +9,13 @@ hosts:
   ipaddress: 10.233.230.11
   username: student
   password: PanneKake23
-- hostname: host3
-  ipaddress: 46.333.534.22
-- hostname: host4
-  ipaddress: 10.233.234.11
-  username: student
-  password: PanneKake23
-  exclude:
-    systemstats: true #Systemstats won't be collected for this host
+#- hostname: host3
+# ipaddress: 46.333.534.22
+#- hostname: host4
+#  ipaddress: 10.233.234.11
+#  username: student
+#  password: PanneKake23
+#  exclude:
+#    systemstats: true #Systemstats won't be collected for this host
     #callstats: t/f
 

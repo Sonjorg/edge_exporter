@@ -90,8 +90,6 @@ func systemCollector()*sMetrics{
 			[]string{"Instance", "hostname", "job","host_nr", "Href", "HTTP_status"}, nil,
 		),
 	 }
-
-//}
 }
 
 // Each and every collector must implement the Describe function.
@@ -114,7 +112,6 @@ func (collector *sMetrics) Describe(ch chan<- *prometheus.Desc) {
 //Collect implements required collect function for all promehteus collectors
 
 func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
-	//metrics := sysCollector(collector) //NB: Errors are returned as array of NewInvalidMetric()
 	//array of metrics is sent through the channel
 	var metricValue1 float64
 	var metricValue2 float64
@@ -125,15 +122,9 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 	var metricValue7 float64
 	var metricValue8 float64
 	var metricValue9 float64
-	//var metricsValuex float64
-
-	//var username string
-	//var password string
 	var phpsessid string
 	ipaddresses := getIpAdrExp("systemStats") //retrieving sources for this exporter
 
-	//DO NOT DELETE: ipaddresses = getIPNotExl("systemExporter", testConfig)
-	//phpsessid := APISessionAuth("student", "PanneKake23", "https://10.233.230.11/rest/login")
 	//username = "student"
 	//password = "PanneKake23"
 	var err error
@@ -142,10 +133,9 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 
 	for i := 0; i < len(ipaddresses); i++ {
 		nr := strconv.Itoa(i)
-		//username = `student`
-		//password = `PanneKake23`
 		authStr := "https://" +ipaddresses[i] + "/rest/login"
 		dataStr := "https://"+ipaddresses[i]+"/rest/system/historicalstatistics/1"
+
 		username, password := getAuth(ipaddresses[i])
 		timeReportedByExternalSystem := time.Now()//time.Parse(timelayout, mytimevalue)
 		phpsessid,err =  APISessionAuth(username, password,authStr)
