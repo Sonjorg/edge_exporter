@@ -44,12 +44,6 @@ import (
             }
 
 func getIpAdrExp(exporterName string) []string{
-    /*cfgPath, err := ParseFlags()
-    if err != nil {
-        fmt.Println(err)
-    }*/
-    //var c conf
-    //c.getConf()
     cfg := getConf(&Config{})
 
 	var list []string
@@ -84,8 +78,6 @@ func getAuth(ipadr string) (username string, password string) {
    // return "test", "test"
     return u,p
 }
-
-
 
 func test() {
     ip := getIpAdrExp("systemStats")
