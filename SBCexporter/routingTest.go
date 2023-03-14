@@ -27,8 +27,9 @@ type rt2 struct {
 	//<_pk id="4" href="https://10.233.230.11/rest/routingtable//4"/>
 }
 type rt3 struct {
-    Value string `xml:",chardata"`
 	Attr    string `xml:"id,attr"`
+	Value string `xml:",chardata"`
+
 }
 
 func main(){
@@ -41,7 +42,7 @@ func main(){
 	b := []byte(data) //Converting string of data to bytestream
 	ssbc := &rt{}
 	xml.Unmarshal(b, &ssbc) //Converting XML data to variables
-	fmt.Println("Successful API call data: ",ssbc.Rt2)
+	fmt.Println("Successful API call data: ",ssbc.Rt2.Rt3)
 }
 
 func APISessionAuth(username string, password string, loginURL string) (string,error) {
