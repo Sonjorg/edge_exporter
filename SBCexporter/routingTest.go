@@ -21,7 +21,7 @@ type rt struct {
 	//<_pk id="4" href="https://10.233.230.11/rest/routingtable//4"/>
 }
 
-func test(){
+func main(){
 	phpsessid, err := APISessionAuth("student", "PanneKake23","https://10.233.230.11/rest/login")
 	if err != nil {
 	}
