@@ -12,6 +12,7 @@ import (
 // https://dev.to/koddr/let-s-write-config-for-your-golang-web-app-on-right-way-yaml-5ggp
     type Config struct {
         Hosts []Host
+        Authtimeout int `yaml:"authtimeout"`
     }
         type Host struct {
             HostName       string `yaml:"hostname"`

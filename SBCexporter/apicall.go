@@ -17,11 +17,13 @@ import (
 
 // TODO: This is insecure; use only in dev environments.
 func APISessionAuth(username string, password string, loginURL string) (string,error) {
-
+	cfg := getConf(&Config{})
+	timeout := cfg.Authtimeout
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
-	client := &http.Client{Transport: tr,Timeout: 5 * time.Second}
+
+	client := &http.Client{Transport: tr,Timeout: timeout * time.Second}
 
 	params := url.Values{}
 	params.Add("Username", username)
