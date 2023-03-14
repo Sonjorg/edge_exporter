@@ -16,18 +16,19 @@ import (
 	"log"
 )
 type rt struct {
-    Value  float32 `xml:",chardata"`
-	//XMLName xml.Name `xml:"root"`
-	//Rt2     rt2      `xml:"_pk"`
-	Attr    []xml.Attr `xml:"id,attr"`
-
+   // Value  float32 `xml:",chardata"`
+	XMLName xml.Name `xml:"root"`
 }
 type rt2 struct {
+	Rt3    rt3 `xml:"_list"`
 	//XMLname    xml.Name `xml:"_list"`  <_list count="2">
 
 	//Value  float32 `xml:",chardata"`
 	//Id         []int `xml:"id,attr"`//`xml:"_pk,attr id="2" href="https://10.233.230.11/rest/routingtable//2"/>
 	//<_pk id="4" href="https://10.233.230.11/rest/routingtable//4"/>
+}
+type rt3 struct {
+	Attr    []string `xml:"id,attr"`
 }
 
 func main(){
@@ -40,7 +41,7 @@ func main(){
 	b := []byte(data) //Converting string of data to bytestream
 	ssbc := &rt{}
 	xml.Unmarshal(b, &ssbc) //Converting XML data to variables
-	fmt.Println("Successful API call data: ",ssbc.Attr)
+	fmt.Println("Successful API call data: ",ssbc.rt2.rt3.Attr)
 }
 
 func APISessionAuth(username string, password string, loginURL string) (string,error) {
