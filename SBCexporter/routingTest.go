@@ -2,11 +2,18 @@
 package main
 import (
 	"encoding/xml"
-	"fmt"
 	//"log"
 	//"github.com/prometheus/client_golang/prometheus"
 	//"strconv"
 	//"time"
+	"crypto/tls"
+	"fmt"
+	"strings"
+	"io/ioutil"
+	"net/http"
+	"net/url"
+	"time"
+	"log"
 )
 type rt struct {
 	//XMLname    xml.Name `xml:"_list"`
