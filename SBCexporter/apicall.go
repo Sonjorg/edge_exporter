@@ -23,7 +23,7 @@ func APISessionAuth(username string, password string, loginURL string) (string,e
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
 
-	client := &http.Client{Transport: tr,Timeout: timeout * time.Second}
+	client := &http.Client{Transport: tr,Timeout: time.Duration(timeout) * time.Second}
 
 	params := url.Values{}
 	params.Add("Username", username)
