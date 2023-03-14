@@ -40,7 +40,7 @@ func main(){
 	b := []byte(data) //Converting string of data to bytestream
 	ssbc := &rt{}
 	xml.Unmarshal(b, &ssbc) //Converting XML data to variables
-	fmt.Println("Successful API call data: ",ssbc.Rt2.Attr)
+	fmt.Println("Successful API call data: ",ssbc.Attr)
 }
 
 func APISessionAuth(username string, password string, loginURL string) (string,error) {
