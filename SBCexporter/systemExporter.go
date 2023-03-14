@@ -122,12 +122,12 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 	var metricValue7 float64
 	var metricValue8 float64
 	var metricValue9 float64
-	var phpsessid string
+	//var phpsessid string
 	ipaddresses := getIpAdrExp("systemStats") //retrieving sources for this exporter
 
 	//username = "student"
 	//password = "PanneKake23"
-	var err error
+	//var err error
 	fmt.Println(ipaddresses)
 
 
@@ -138,7 +138,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 
 		username, password := getAuth(ipaddresses[i])
 		timeReportedByExternalSystem := time.Now()//time.Parse(timelayout, mytimevalue)
-		phpsessid,err =  APISessionAuth(username, password,authStr)
+		phpsessid,err :=  APISessionAuth(username, password,authStr)
 		if err != nil {
 			log.Println("Error retrieving session cookie: ",log.Flags(), err,"\n")
 			//return nil, err <-this line would result in error for systemexp on all hosts
