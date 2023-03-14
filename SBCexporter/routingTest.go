@@ -27,8 +27,8 @@ type rt2 struct {
 	//<_pk id="4" href="https://10.233.230.11/rest/routingtable//4"/>
 }
 type rt3 struct {
-	Value  float32 `xml:",chardata"`
-	Attr    []string `xml:"id,attr"`
+    Value string `xml:",chardata"`
+	Attr    string `xml:"id,attr"`
 }
 
 func main(){
