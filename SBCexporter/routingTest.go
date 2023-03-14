@@ -17,7 +17,8 @@ import (
 )
 type rt struct {
 	//XMLname    xml.Name `xml:"_list"`
-	Id         []string `xml:"_list>id,attr"`//`xml:"_pk,attr id="2" href="https://10.233.230.11/rest/routingtable//2"/>
+	//Value  float32 `xml:",chardata"`
+	Id         []string `xml:"id,attr"`//`xml:"_pk,attr id="2" href="https://10.233.230.11/rest/routingtable//2"/>
 	//<_pk id="4" href="https://10.233.230.11/rest/routingtable//4"/>
 }
 
