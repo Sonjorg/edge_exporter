@@ -79,8 +79,8 @@ func getAuth(ipadr string) (username string, password string) {
    // return "test", "test"
     return u,p
 }
-
+/*
 func test() {
     ip := getIpAdrExp("systemStats")
     fmt.Println(ip)
-}
+}*/
