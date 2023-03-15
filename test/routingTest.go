@@ -18,10 +18,10 @@ import (
 type rt struct {
    // Value  float32 `xml:",chardata"`
 	XMLName xml.Name `xml:"root"`
-	Rt2     rt2 `xml:"routingtable_list"`
+	Rt2     rt2      `xml:"routingtable_list"`
 }
 type rt2 struct {
-	Rt3    rt3 `xml:"routingtable_pk"`
+	Rt3    rt3       `xml:"routingtable_pk"`
 	//Value  float32 `xml:",chardata"`
 	//Id         []int `xml:"id,attr"`//`xml:"_pk,attr id="2" href="https://10.233.230.11/rest/routingtable//2"/>
 	//<_pk id="4" href="https://10.233.230.11/rest/routingtable//4"/>
@@ -59,12 +59,13 @@ func main(){
 	rTables := ssbc.Rt2.Rt3.Attr
 	//var data2 string
 	for j := range rTables {
-	  data2, err := getAPIData("https://10.233.230.11/rest/routingtable/" + rTables[j], phpsessid)
+	  url := "https://10.233.230.11/rest/routingtable/" + rTables[j]
+	  data2, err := getAPIData(url, phpsessid)
 	  if err != nil {
-		}
-		b2 := []byte(data2) //Converting string of data to bytestream
-		ssbc2 := &call2xml1{}
-		xml.Unmarshal(b2, &ssbc2) //Converting XML data to variables
+	  }
+	  b2 := []byte(data2) //Converting string of data to bytestream
+	  ssbc2 := &call2xml1{}
+	  xml.Unmarshal(b2, &ssbc2) //Converting XML data to variables
 
 	fmt.Println("Successful API call data: ",ssbc2.Call2xml2.Call2xml3.Attr)
 	}
