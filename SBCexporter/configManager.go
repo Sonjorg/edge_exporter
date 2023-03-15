@@ -24,11 +24,11 @@ import (
                     // Server is the general server timeout to use
                     // for graceful shutdowns
                     SystemExporter bool `yaml:"systemstats"`
-                    CallStats      bool `yaml:"callstats"`
+                    routingEntry   bool `yaml:"routingentry"`
                 }`yaml:"exclude"`
             }
 
-
+            //From stackoverflow
             func getConf(c *Config) *Config {
 
                 yamlFile, err := ioutil.ReadFile("../config.yml")
@@ -58,7 +58,7 @@ func getIpAdrExp(exporterName string) []string{
             }
         case "callStats":
             for i:= range cfg.Hosts {
-                if (cfg.Hosts[i].Exclude.CallStats == false) {
+                if (cfg.Hosts[i].Exclude.routingEntry == false) {
                     list = append(list, cfg.Hosts[i].Ipaddress)
                 }
             }
