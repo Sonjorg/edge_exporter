@@ -59,7 +59,7 @@ func main(){
 	rTables := ssbc.Rt2.Rt3.Attr
 	//var data2 string
 	for j := range rTables {
-	  url := "https://10.233.230.11/rest/routingtable/" + rTables[j]
+	  url := "https://10.233.230.11/rest/routingtable/" + rTables[j] + "/"
 	  data2, err := getAPIData(url, phpsessid)
 	  if err != nil {
 	  }
