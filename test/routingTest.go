@@ -28,9 +28,21 @@ type rt2 struct {
 }
 type rt3 struct {
 	Attr    []string `xml:"id,attr"`
-	Value   string `xml:",chardata"`
-
+	Value     string `xml:",chardata"`
 }
+ //Second request
+ type call2xml1 struct {
+	XMLName    xml.Name  `xml:"root"`
+	Call2xml2  call2xml2 `xml:"routingentry_list"`
+ }
+ type call2xml2 struct {
+	Call2xml3  call2xml3 `xml:"routingentry_pk"`
+ }
+ type call2xml3 struct {
+	Attr    []string `xml:"id,attr"`
+	Value     string `xml:",chardata"`
+ }
+
 
 func main(){
 	phpsessid, err := APISessionAuth("student", "PanneKake23","https://10.233.230.11/rest/login")
@@ -43,7 +55,22 @@ func main(){
 	ssbc := &rt{}
 	xml.Unmarshal(b, &ssbc) //Converting XML data to variables
 	fmt.Println("Successful API call data: ",ssbc.Rt2.Rt3.Attr)
+
+	rTables := ssbc.Rt2.Rt3.Attr
+	//var data2 string
+	for j := range rTables {
+	  data2, err := getAPIData("https://10.233.230.11/rest/routingtable/" + rTables[j], phpsessid)
+	  if err != nil {
+		}
+		b2 := []byte(data2) //Converting string of data to bytestream
+		ssbc2 := &call2xml1{}
+		xml.Unmarshal(b2, &ssbc2) //Converting XML data to variables
+
+	fmt.Println("Successful API call data: ",ssbc2.Call2xml2.Call2xml3.Attr)
+	}
 }
+
+
 
 func APISessionAuth(username string, password string, loginURL string) (string,error) {
 	//cfg := getConf(&Config{})
