@@ -68,10 +68,12 @@ func main(){
 		b2 := []byte(data2) //Converting string of data to bytestream
 		ssbc2 := &call2xml1{}
 		xml.Unmarshal(b2, &ssbc2) //Converting XML data to variables
-    	variables := regexp.MustCompile(`?!.*\d`)
-		matchType := variables.FindStringSubmatch(ssbc2.Call2xml2.Call2xml3.Attr[j])
-
-	fmt.Println("Successful API call data: ",matchType)
+		routingEntries := ssbc2.Call2xml2.Call2xml3.Attr
+		for k := range routingEntries {
+			variables := regexp.MustCompile(`(\d+)(?!.*\d)`)//(`.+(\\.+)$`)//(?!.*\d)
+			matchType := variables.FindStringSubmatch(routingEntries[k])
+			fmt.Println("Successful API call data: ",matchType)
+		}
 	}
 }
 
