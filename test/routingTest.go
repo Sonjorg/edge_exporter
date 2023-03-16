@@ -70,7 +70,7 @@ func main(){
 		xml.Unmarshal(b2, &ssbc2) //Converting XML data to variables
 		routingEntries := ssbc2.Call2xml2.Call2xml3.Attr
 		for k := range routingEntries {
-			variables := regexp.MustCompile(`(\d+)(?!.*\d)`)//(`.+(\\.+)$`)//(?!.*\d)
+			variables := regexp.MustCompile(`.+(::.+)$`)//(`.+(\\.+)$`)//(?!.*\d)
 			matchType := variables.FindStringSubmatch(routingEntries[k])
 			fmt.Println("Successful API call data: ",matchType)
 		}
