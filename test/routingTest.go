@@ -14,6 +14,8 @@ import (
 	"net/url"
 	"time"
 	"log"
+	"regexp"
+
 )
 type rt struct {
    // Value  float32 `xml:",chardata"`
@@ -59,15 +61,17 @@ func main(){
 	rTables := ssbc.Rt2.Rt3.Attr
 	//var data2 string
 	for j := range rTables {
-	  url := "https://10.233.230.11/rest/routingtable/" + rTables[j] + "/routingentry"
-	  data2, err := getAPIData(url, phpsessid)
-	  if err != nil {
-	  }
-	  b2 := []byte(data2) //Converting string of data to bytestream
-	  ssbc2 := &call2xml1{}
-	  xml.Unmarshal(b2, &ssbc2) //Converting XML data to variables
+    	url := "https://10.233.230.11/rest/routingtable/" + rTables[j] + "/routingentry"
+		data2, err := getAPIData(url, phpsessid)
+		if err != nil {
+		}
+		b2 := []byte(data2) //Converting string of data to bytestream
+		ssbc2 := &call2xml1{}
+		xml.Unmarshal(b2, &ssbc2) //Converting XML data to variables
+    	variables := regexp.MustCompile(`?!.*\d`)
+		matchType := variables.FindStringSubmatch(ssbc2.Call2xml2.Call2xml3.Attr[j])
 
-	fmt.Println("Successful API call data: ",ssbc2.Call2xml2.Call2xml3.Attr)
+	fmt.Println("Successful API call data: ",matchType)
 	}
 }
 
