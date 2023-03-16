@@ -1,9 +1,6 @@
 //routingentry
 package main
 
-//system status exporter
-//rest/system/historicalstatistics/1
-
 import (
 	"encoding/xml"
 	"fmt"
@@ -15,28 +12,28 @@ import (
 
 //rest/routingtable/2/routingentry
 //first request
-type call1xml1 struct {
+type routingTables struct {
 	// Value  float32 `xml:",chardata"`
-	 XMLName    xml.Name  `xml:"root"`
-	 Call1xml2  call1xml2 `xml:"routingtable_list"`
+	 XMLName         xml.Name       `xml:"root"`
+	 RoutingTables2  routingTables2 `xml:"routingtable_list"`
  }
- type call1xml2 struct {
-	 Call1xml2  call1xml3 `xml:"routingtable_pk"`
+ type routingTables2 struct {
+	 RoutingTables3  routingTables3 `xml:"routingtable_pk"`
  }
- type call1xml3 struct {
+ type routingTables3 struct {
 	 Attr    []string `xml:"id,attr"`
-	 Value   string `xml:",chardata"`
+	 Value     string `xml:",chardata"`
 
  }
  //Second request
- type call2xml1 struct {
-	XMLName    xml.Name  `xml:"root"`
-	Call2xml2  call2xml2 `xml:"routingentry_list"`
+ type routingEntries struct {
+	XMLName    xml.Name          `xml:"root"`
+	routingEntry2  routingEntry2 `xml:"routingentry_list"`
  }
- type call2xml2 struct {
-	Call2xml3  call2xml3 `xml:"routingentry_pk"`
+ type routingEntry2 struct {
+	RoutingEntry3  routingEntry3 `xml:"routingentry_pk"`
  }
- type call2xml3 struct {
+ type routingEntry3 struct {
 	Attr    []string `xml:"id,attr"`
 	Value     string `xml:",chardata"`
  }

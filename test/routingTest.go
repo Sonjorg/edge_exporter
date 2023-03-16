@@ -47,7 +47,7 @@ type rt3 struct {
  }
 
 
-func main(){
+func getRoutingEntries(ip string)(){
 	phpsessid, err := APISessionAuth("student", "PanneKake23","https://10.233.230.11/rest/login")
 	if err != nil {
 	}
@@ -59,10 +59,11 @@ func main(){
 	xml.Unmarshal(b, &ssbc) //Converting XML data to variables
 	fmt.Println("Successful API call data: ",ssbc.Rt2.Rt3.Attr)
 
-	rTables := ssbc.Rt2.Rt3.Attr
+	routingTables := ssbc.Rt2.Rt3.Attr
 	//var data2 string
-	for j := range rTables {
-    	url := "https://10.233.230.11/rest/routingtable/" + rTables[j] + "/routingentry"
+
+	for j := range routingTables {
+    	url := "https://10.233.230.11/rest/routingtable/" + routingTables[j] + "/routingentry"
 		data2, err := getAPIData(url, phpsessid)
 		if err != nil {
 		}
@@ -70,16 +71,17 @@ func main(){
 		ssbc2 := &call2xml1{}
 		xml.Unmarshal(b2, &ssbc2) //Converting XML data to variables
 		routingEntries := ssbc2.Call2xml2.Call2xml3.Attr
-		reg1 := regexp.MustCompile(`:\d+`)//(`.+(\\.+)$`)//(?!.*\d)
-		reg2 := regexp.MustCompile(`\d+`)
+		reg1 := regexp.MustCompile(`$(\d+)`)
+		//reg2 := regexp.MustCompile(`\d+`)
 		fmt.Println("Table:", j)
+
 		for k := range routingEntries {
 			match := reg1.FindStringSubmatch(routingEntries[k])
-			for k := range match {
+			fmt.Println(match)
+			/*for k := range match {
 				match2 := reg2.FindStringSubmatch(match[k])
 				fmt.Println(match2)
-
-		}
+		}*/
 		}
 
 
