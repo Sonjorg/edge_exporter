@@ -77,10 +77,12 @@ func main(){
 			match = variables.FindStringSubmatch(routingEntries[k])
 			fmt.Println("Match: ",match)
 		}
+		var m []string
 		for k := range match {
-			strings.ReplaceAll(match[k],":","")
-			fmt.Println("Trim: ",strings.ReplaceAll(match[k],":",""),"\n",match[k])
+			m[k] = strings.ReplaceAll(match[k],":","")
 		}
+		fmt.Println("Trim: ","\n",m)
+
 	}
 }
 
