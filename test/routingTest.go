@@ -73,8 +73,8 @@ func main(){
 		variables := regexp.MustCompile(`:\d+`)//(`.+(\\.+)$`)//(?!.*\d)
 		for k := range routingEntries {
 			match := variables.FindStringSubmatch(routingEntries[k])
-			//trim := strings.Replace(match[k],":","",1)
-			fmt.Println("Successful API call data: ",match)
+			trim := strings.Replace(match[k],":","",1)
+			fmt.Println("Successful API call data: ",trim)
 		}
 	}
 }
