@@ -75,10 +75,12 @@ func main(){
 		var match []string
 		for k := range routingEntries {
 			match = variables.FindStringSubmatch(routingEntries[k])
+			fmt.Println("Match: ",match)
+
 		}
 		for k := range match {
 			trim := strings.Replace(match[k],":","",1)
-			fmt.Println("Successful API call data: ",trim)
+			fmt.Println("Trim: ",trim)
 		}
 	}
 }
