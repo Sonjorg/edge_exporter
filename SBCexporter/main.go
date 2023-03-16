@@ -120,11 +120,11 @@ func (collector *metrics) Collect(ch chan<- prometheus.Metric) {
 func main() {
 
 	if (len(getIpAdrExp("systemstats")) > 0) {
+		systemDataExporter()
 	}
-	/*if (len(getIpAdrExp("callstats")) > 0) {
-		callDataExporter()
-	}*/
-	systemDataExporter()
+	if (len(getIpAdrExp("callstats")) > 0) {
+		routingCollector()
+	}
 	foo := newFooCollector()
 	prometheus.MustRegister(foo)
 
