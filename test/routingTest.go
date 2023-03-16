@@ -74,7 +74,7 @@ func main(){
 		reg2 := regexp.MustCompile(`\d+`)
 		fmt.Println("Table:", j)
 		//var match []string
-		var match2 []string
+		//var match2 []string
 		//filters := make([]*regexp.Regexp, len(routingEntries))
 		for k := range routingEntries {
 			match := reg1.FindStringSubmatch(routingEntries[k])
@@ -83,11 +83,12 @@ func main(){
 		//	var m []string
 			for k := range match {
 				//m[k] = strings.ReplaceAll(match[k],":","")
-				match2 = reg2.FindStringSubmatch(match[k])
+				match2 := reg2.FindStringSubmatch(match[k])
+				fmt.Println(match2)
+
 		}
 		}
 
-		fmt.Println(match2)
 
 	}
 }
