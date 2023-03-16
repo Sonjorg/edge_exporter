@@ -16,6 +16,7 @@ import (
 	"log"
 	"regexp"
 
+
 )
 type rt struct {
    // Value  float32 `xml:",chardata"`
@@ -71,8 +72,9 @@ func main(){
 		routingEntries := ssbc2.Call2xml2.Call2xml3.Attr
 		for k := range routingEntries {
 			variables := regexp.MustCompile(`.+(::.+)$`)//(`.+(\\.+)$`)//(?!.*\d)
-			matchType := variables.FindStringSubmatch(routingEntries[k])
-			fmt.Println("Successful API call data: ",matchType)
+			match := variables.FindStringSubmatch(routingEntries[k])
+			trim := strings.Replace(match[k],":","",1)
+			fmt.Println("Successful API call data: ",trim)
 		}
 	}
 }
