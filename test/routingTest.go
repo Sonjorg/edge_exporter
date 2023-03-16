@@ -79,7 +79,7 @@ func main(){
 
 		}
 		for k := range match {
-			trim := strings.Replace(match[k],":","",-1)
+			trim := strings.ReplaceAll(match[k],":","")
 			fmt.Println("Trim: ",trim)
 		}
 	}
