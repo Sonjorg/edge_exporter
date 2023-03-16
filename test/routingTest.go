@@ -70,18 +70,18 @@ func main(){
 		ssbc2 := &call2xml1{}
 		xml.Unmarshal(b2, &ssbc2) //Converting XML data to variables
 		routingEntries := ssbc2.Call2xml2.Call2xml3.Attr
-		variables := regexp.MustCompile(`:\d+`)//(`.+(\\.+)$`)//(?!.*\d)
+		variables := regexp.MustCompile(`?!.*\d+`)//(`.+(\\.+)$`)//(?!.*\d)
 		fmt.Println("Table:", j)
 		var match []string
 		for k := range routingEntries {
 			match = variables.FindStringSubmatch(routingEntries[k])
 			fmt.Println("Match: ",match)
 
-		}
+		}/*
 		for k := range match {
-			trim := strings.ReplaceAll(match[k],":","")
+			trim := strings.ReplaceAll(match,":","")
 			fmt.Println("Trim: ",trim)
-		}
+		}*/
 	}
 }
 
