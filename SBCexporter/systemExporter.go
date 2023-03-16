@@ -112,7 +112,10 @@ func (collector *sMetrics) Describe(ch chan<- *prometheus.Desc) {
 //Collect implements required collect function for all promehteus collectors
 
 func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
-	//array of metrics is sent through the channel
+	ipaddresses := getIpAdrExp("systemStats") //retrieving sources for this exporter
+	if (len(ipaddresses) <=0) {
+		return
+	}
 	var metricValue1 float64
 	var metricValue2 float64
 	var metricValue3 float64
@@ -123,8 +126,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 	var metricValue8 float64
 	var metricValue9 float64
 	//var phpsessid string
-	ipaddresses := getIpAdrExp("systemStats") //retrieving sources for this exporter
-
+	
 	//username = "student"
 	//password = "PanneKake23"
 	//var err error

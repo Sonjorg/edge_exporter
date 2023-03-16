@@ -47,21 +47,24 @@ type rt3 struct {
  }
 
 
-func getRoutingEntries(ip string)(){
+func routingExporter(ip string)([]prometheus.Metric, string){
 	phpsessid, err := APISessionAuth("student", "PanneKake23","https://10.233.230.11/rest/login")
 	if err != nil {
+		return err.Error()
 	}
 	data,err := getAPIData("https://10.233.230.11/rest/routingtable", phpsessid)
 	if err != nil {
+		return err.Error()
 	}
 	b := []byte(data) //Converting string of data to bytestream
 	ssbc := &rt{}
 	xml.Unmarshal(b, &ssbc) //Converting XML data to variables
-	fmt.Println("Successful API call data: ",ssbc.Rt2.Rt3.Attr)
-
+	//fmt.Println("Successful API call data: ",ssbc.Rt2.Rt3.Attr)
 	routingTables := ssbc.Rt2.Rt3.Attr
-	//var data2 string
 
+	if (len(routingTables) <= 0) {
+		return nil, "Routingtables empty"
+	}
 	for j := range routingTables {
     	url := "https://10.233.230.11/rest/routingtable/" + routingTables[j] + "/routingentry"
 		data2, err := getAPIData(url, phpsessid)
@@ -71,21 +74,20 @@ func getRoutingEntries(ip string)(){
 		ssbc2 := &call2xml1{}
 		xml.Unmarshal(b2, &ssbc2) //Converting XML data to variables
 		routingEntries := ssbc2.Call2xml2.Call2xml3.Attr
-		reg1 := regexp.MustCompile(`$(\d+)`)
-		//reg2 := regexp.MustCompile(`\d+`)
-		fmt.Println("Table:", j)
+		if (len(routingEntries)<=0) {
+			continue
+		}
+		entries := regexp.MustCompile(`$(\d+)`)
+		fmt.Println("Table:", routingEntries[j])
 
 		for k := range routingEntries {
-			match := reg1.FindStringSubmatch(routingEntries[k])
+			match := entries.FindStringSubmatch(routingEntries[k])
 			fmt.Println(match)
-			/*for k := range match {
-				match2 := reg2.FindStringSubmatch(match[k])
-				fmt.Println(match2)
-		}*/
 		}
 
 
 	}
+	
 }
 
 
