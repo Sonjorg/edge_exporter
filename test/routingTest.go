@@ -79,14 +79,15 @@ func main(){
 		for k := range routingEntries {
 			match = reg1.FindStringSubmatch(routingEntries[k])
 			//filters = reg1.FindStringSubmatch(routingEntries[k])
-			fmt.Println(match)
+			//fmt.Println(match)
 		//	var m []string
-			for k := range match {
-				//m[k] = strings.ReplaceAll(match[k],":","")
-				match2 = reg2.FindStringSubmatch(match[k])
-				//fmt.Println("Match: ",match2)
+
 		}
-		}
+		for k := range match {
+			//m[k] = strings.ReplaceAll(match[k],":","")
+			match2 = reg2.FindStringSubmatch(match[k])
+			//fmt.Println("Match: ",match2)
+			}
 
 		fmt.Println(match2)
 
