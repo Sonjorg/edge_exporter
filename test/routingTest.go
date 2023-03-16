@@ -76,15 +76,16 @@ func main(){
 		var match []string
 		for k := range routingEntries {
 			match = reg1.FindStringSubmatch(routingEntries[k])
+
+		}
+		var m []string
+		for k := range match {
+			m[k] = strings.ReplaceAll(match[k],":","")
 			match2 := reg2.FindStringSubmatch(match[k])
 			fmt.Println("Match: ",match2)
 		}
-/*		var m []string
-		for k := range match {
-			m[k] = strings.ReplaceAll(match[k],":","")
-		}
-		fmt.Println("Trim: ","\n",m)
-*/
+		//fmt.Println("Trim: ","\n",m)
+
 	}
 }
 
