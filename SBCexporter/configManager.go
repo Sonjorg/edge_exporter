@@ -90,5 +90,5 @@ func main() {
     //fmt.Println(ip)
    // conf := getConf(&Config{})
     //conf.Hosts.Exclude
-    getIpAdrExp("systemsstats")
+    fmt.Println(getIpAdrExp("systemsStats"))
 }
