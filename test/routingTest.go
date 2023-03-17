@@ -78,7 +78,7 @@ type rt3 struct {
 		xml.Unmarshal(b2, &ssbc2) //Converting XML data to variables
 		routingEntries := ssbc2.Call2xml2.Call2xml3.Attr
 
-		if (len(routingEntries)<=0) {
+		if (len(routingEntries) <= 0) {
 			continue
 		}
 

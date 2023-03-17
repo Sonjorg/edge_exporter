@@ -10,6 +10,7 @@ import (
 )
 // Template used for struct and the functions NewConfig(), ValidateConfigPath() and ParseFlags() are copied from:
 // https://dev.to/koddr/let-s-write-config-for-your-golang-web-app-on-right-way-yaml-5ggp
+
     type Config struct {
         Hosts []Host
         Authtimeout int `yaml:"authtimeout"`
@@ -20,12 +21,11 @@ import (
             Username       string `yaml:"username"`
             Password       string `yaml:"password"`
             //exclude        string `yaml:"exclude"`
-                Exclude struct {
+                Collectors struct {
                     // Server is the general server timeout to use
                     // for graceful shutdowns
-                    SystemExporter bool `yaml:"systemstats"`
-                    routingEntry   bool `yaml:"routingentry"`
-                }`yaml:"exclude"`
+                    Exclude        []string `yaml:"exclude"`
+                }`yaml:"collectors"`
             }
 
             //From stackoverflow
@@ -45,24 +45,29 @@ import (
 
 func getIpAdrExp(exporterName string) []string{
     cfg := getConf(&Config{})
-
+   // cfg.Hosts.HostName
 	var list []string
     switch exporterName {
         case "systemStats":
            for i := range cfg.Hosts {
             //for i := 0; i < len(cfg.Hosts); i++ {
-                if (cfg.Hosts[i].Exclude.SystemExporter == false) {
-                    list = append(list, cfg.Hosts[i].Ipaddress)
-                }
+                for v := range cfg.Hosts[i].Collectors.Exclude {
+                    if (cfg.Hosts[i].Collectors.Exclude[v] != "systemstats") {
+                        list = append(list, cfg.Hosts[i].Ipaddress)
+                    }
             }
+        }
         case "callStats":
-            for i:= range cfg.Hosts {
-                if (cfg.Hosts[i].Exclude.routingEntry == false) {
-                    list = append(list, cfg.Hosts[i].Ipaddress)
+            for i := range cfg.Hosts {
+                //for i := 0; i < len(cfg.Hosts); i++ {
+                    for v := range cfg.Hosts[i].Collectors.Exclude {
+                        if (cfg.Hosts[i].Collectors.Exclude[v] != "systemstats") {
+                            list = append(list, cfg.Hosts[i].Ipaddress)
+                        }
                 }
-            }
             //INFO: have a switch case on all exporters made, NB!: must remember exact exporternames inside each exporter
         }
+    }
 return list
 }
 
@@ -78,8 +83,12 @@ func getAuth(ipadr string) (username string, password string) {
    // return "test", "test"
     return u,p
 }
-/*
+//func IndexFunc[E any](s []E, f func(E) bool) int
+
 func test() {
-    ip := getIpAdrExp("systemStats")
-    fmt.Println(ip)
-}*/
+   // ip := getIpAdrExp("systemStats")
+    //fmt.Println(ip)
+   // conf := getConf(&Config{})
+    //conf.Hosts.Exclude
+    getIpAdrExp("systemsstats")
+}
