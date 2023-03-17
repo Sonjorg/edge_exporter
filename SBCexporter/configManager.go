@@ -23,8 +23,10 @@ import (
             //exclude        string `yaml:"exclude"`
                     // Server is the general server timeout to use
                     // for graceful shutdowns
-            Exclude       []string `yaml:"exclude"`
-            }
+             Exclude struct {
+                   collectors []string
+             }`yaml:"exclude"`
+        }
 
             //From stackoverflow
     func getConf(c *Config) *Config {
@@ -49,8 +51,8 @@ func getIpAdrExp(exporterName string) []string{
         case "systemStats":
            for i := range cfg.Hosts {
             //for i := 0; i < len(cfg.Hosts); i++ {
-                for v := range cfg.Hosts[i].Exclude {
-                    if (cfg.Hosts[i].Exclude[v] != "systemstats" || len(cfg.Hosts[i].Exclude) == 0) {
+                for v := range cfg.Hosts[i].Exclude.collectors {
+                    if (cfg.Hosts[i].Exclude.collectors[v] != "systemstats" || len(cfg.Hosts[i].Exclude.collectors) == 0) {
                         list = append(list, cfg.Hosts[i].Ipaddress)
                     }
             }
@@ -58,8 +60,8 @@ func getIpAdrExp(exporterName string) []string{
         case "callStats":
             for i := range cfg.Hosts {
                 //for i := 0; i < len(cfg.Hosts); i++ {
-                    for v := range cfg.Hosts[i].Exclude {
-                        if (cfg.Hosts[i].Exclude[v] != "systemstats" || len(cfg.Hosts[i].Exclude) == 0)  {
+                    for v := range cfg.Hosts[i].Exclude.collectors {
+                        if (cfg.Hosts[i].Exclude.collectors[v] != "systemstats" || len(cfg.Hosts[i].Exclude.collectors[v]) == 0)  {
                             list = append(list, cfg.Hosts[i].Ipaddress)
                         }
                 }
