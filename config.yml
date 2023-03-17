@@ -18,6 +18,6 @@ hosts:
   ipaddress: 10.233.230.10
   username: student
   password: PanneKake23
-  exclude:
-    systemstats: true #Excluding systemstats for this host
+    exclude:
+      - systemstats #Excluding systemstats for this host
    #routingentry: true
