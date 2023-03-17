@@ -85,7 +85,7 @@ func getAuth(ipadr string) (username string, password string) {
 }
 //func IndexFunc[E any](s []E, f func(E) bool) int
 
-func test() {
+func main() {
    // ip := getIpAdrExp("systemStats")
     //fmt.Println(ip)
    // conf := getConf(&Config{})
