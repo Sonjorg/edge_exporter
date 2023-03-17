@@ -125,14 +125,9 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 	var metricValue7 float64
 	var metricValue8 float64
 	var metricValue9 float64
-	//var phpsessid string
 
-	//username = "student"
-	//password = "PanneKake23"
-	//var err error
 	fmt.Println(ipaddresses)
-
-
+	
 	for i := 0; i < len(ipaddresses); i++ {
 		nr := strconv.Itoa(i)
 		authStr := "https://" +ipaddresses[i] + "/rest/login"
