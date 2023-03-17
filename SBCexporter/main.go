@@ -119,7 +119,7 @@ func (collector *metrics) Collect(ch chan<- prometheus.Metric) {
 
 func main() {
 
-		systemResourceExporter()
+		systemResourceCollector()
 
 	//	routingCollector()
 
