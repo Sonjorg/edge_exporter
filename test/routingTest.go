@@ -47,14 +47,15 @@ type rt3 struct {
  }
 
 
-func routingExporter(ip string)([]prometheus.Metric, string){
+//func routingCollector(ip string)([]prometheus.Metric, string){
+	func main() {
 	phpsessid, err := APISessionAuth("student", "PanneKake23","https://10.233.230.11/rest/login")
 	if err != nil {
-		return err.Error()
+		//return nil, err.Error()
 	}
 	data,err := getAPIData("https://10.233.230.11/rest/routingtable", phpsessid)
 	if err != nil {
-		return err.Error()
+		//return nil, err.Error()
 	}
 	b := []byte(data) //Converting string of data to bytestream
 	ssbc := &rt{}
@@ -63,7 +64,9 @@ func routingExporter(ip string)([]prometheus.Metric, string){
 	routingTables := ssbc.Rt2.Rt3.Attr
 
 	if (len(routingTables) <= 0) {
-		return nil, "Routingtables empty"
+		//return nil, "Routingtables empty"
+		fmt.Println("Routingtables empty")
+
 	}
 	for j := range routingTables {
     	url := "https://10.233.230.11/rest/routingtable/" + routingTables[j] + "/routingentry"
@@ -87,7 +90,7 @@ func routingExporter(ip string)([]prometheus.Metric, string){
 
 
 	}
-	
+
 }
 
 

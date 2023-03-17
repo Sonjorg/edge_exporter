@@ -29,20 +29,19 @@ import (
             }
 
             //From stackoverflow
-            func getConf(c *Config) *Config {
-
-                yamlFile, err := ioutil.ReadFile("../config.yml")
-                if err != nil {
-                    //log.Printf("yamlFile.Get err   #%v ", err)
-                    fmt.Println("yamlFile.Get err   # ", err)
-                }
-                err = yaml.Unmarshal(yamlFile, c)
-                if err != nil {
-                   // log.Fatalf("Unmarshal: %v", err)
-                    fmt.Println("yamlFile.Get err   # ", err)
-                }
-                return c
+    func getConf(c *Config) *Config {
+        yamlFile, err := ioutil.ReadFile("../config.yml")
+            if err != nil {
+                  //log.Printf("yamlFile.Get err   #%v ", err)
+                     fmt.Println("yamlFile.Get err   # ", err)
             }
+        err = yaml.Unmarshal(yamlFile, c)
+        if err != nil {
+             // log.Fatalf("Unmarshal: %v", err)
+              fmt.Println("yamlFile.Get err   # ", err)
+         }
+      return c
+     }
 
 func getIpAdrExp(exporterName string) []string{
     cfg := getConf(&Config{})
