@@ -50,7 +50,7 @@ func getIpAdrExp(exporterName string) []string{
            for i := range cfg.Hosts {
             //for i := 0; i < len(cfg.Hosts); i++ {
                 for v := range cfg.Hosts[i].Exclude {
-                    if (cfg.Hosts[i].Exclude[v] != "systemstats") {
+                    if (cfg.Hosts[i].Exclude[v] == "systemstats") {
                         list = append(list, cfg.Hosts[i].Ipaddress)
                     }
             }
@@ -59,7 +59,7 @@ func getIpAdrExp(exporterName string) []string{
             for i := range cfg.Hosts {
                 //for i := 0; i < len(cfg.Hosts); i++ {
                     for v := range cfg.Hosts[i].Exclude {
-                        if (cfg.Hosts[i].Exclude[v] != "systemstats") {
+                        if (cfg.Hosts[i].Exclude[v] == "systemstats") {
                             list = append(list, cfg.Hosts[i].Ipaddress)
                         }
                 }
@@ -88,5 +88,6 @@ func main() {
     //fmt.Println(ip)
    // conf := getConf(&Config{})
     //conf.Hosts.Exclude
-    fmt.Println(getIpAdrExp("systemStats"))
+    v:= getIpAdrExp("systemStats")
+    fmt.Println(v)
 }
