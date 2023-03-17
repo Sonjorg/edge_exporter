@@ -6,20 +6,14 @@ hosts:
   ipaddress: 10.233.234.11
   username: student
   password: PanneKake23
-  exclude:
-    systemstats: true
 - hostname: host2
   ipaddress: 10.233.230.11
   username: student
   password: PanneKake23
-  exclude:
-    systemstats: true
 - hostname: host3
   ipaddress: 46.333.534.22
   username: student
   password: PanneKake23
-  exclude:
-    systemstats: true
 - hostname: host4
   ipaddress: 10.233.230.10
   username: student
