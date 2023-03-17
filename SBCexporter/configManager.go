@@ -21,11 +21,9 @@ import (
             Username       string `yaml:"username"`
             Password       string `yaml:"password"`
             //exclude        string `yaml:"exclude"`
-                Collectors struct {
                     // Server is the general server timeout to use
                     // for graceful shutdowns
-                    Exclude        []string `yaml:"exclude"`
-                }`yaml:"collectors"`
+            Exclude       []string `yaml:"exclude"`
             }
 
             //From stackoverflow
@@ -51,8 +49,8 @@ func getIpAdrExp(exporterName string) []string{
         case "systemStats":
            for i := range cfg.Hosts {
             //for i := 0; i < len(cfg.Hosts); i++ {
-                for v := range cfg.Hosts[i].Collectors.Exclude {
-                    if (cfg.Hosts[i].Collectors.Exclude[v] != "systemstats") {
+                for v := range cfg.Hosts[i].Exclude {
+                    if (cfg.Hosts[i].Exclude[v] != "systemstats") {
                         list = append(list, cfg.Hosts[i].Ipaddress)
                     }
             }
@@ -60,8 +58,8 @@ func getIpAdrExp(exporterName string) []string{
         case "callStats":
             for i := range cfg.Hosts {
                 //for i := 0; i < len(cfg.Hosts); i++ {
-                    for v := range cfg.Hosts[i].Collectors.Exclude {
-                        if (cfg.Hosts[i].Collectors.Exclude[v] != "systemstats") {
+                    for v := range cfg.Hosts[i].Exclude {
+                        if (cfg.Hosts[i].Exclude[v] != "systemstats") {
                             list = append(list, cfg.Hosts[i].Ipaddress)
                         }
                 }
