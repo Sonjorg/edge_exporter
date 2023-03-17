@@ -82,7 +82,7 @@ type rt3 struct {
 			continue
 		}
 
-		entries := regexp.MustCompile(`($)(\d+)`)
+		entries := regexp.MustCompile(`?!.*\d+`)
 
 		fmt.Println("Table:", routingEntries[j])
 
