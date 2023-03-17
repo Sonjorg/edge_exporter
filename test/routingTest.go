@@ -80,7 +80,7 @@ type rt3 struct {
 		if (len(routingEntries)<=0) {
 			continue
 		}
-		entries := regexp.MustCompile(`$(\d+)`)
+		entries := regexp.MustCompile(`$\d+`)
 		fmt.Println("Table:", routingEntries[j])
 
 		for k := range routingEntries {
