@@ -23,7 +23,7 @@ import (
             //exclude        string `yaml:"exclude"`
                     // Server is the general server timeout to use
                     // for graceful shutdowns
-             Collectors struct {
+            Collectors struct {
                    Exclude []string `yaml:"exclude"`
              }
         }
