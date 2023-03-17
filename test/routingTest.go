@@ -77,10 +77,14 @@ type rt3 struct {
 		ssbc2 := &call2xml1{}
 		xml.Unmarshal(b2, &ssbc2) //Converting XML data to variables
 		routingEntries := ssbc2.Call2xml2.Call2xml3.Attr
+
 		if (len(routingEntries)<=0) {
 			continue
 		}
-		entries := regexp.MustCompile(`$\d+`)
+
+		entries := regexp.MustCompile(`($)(\d+)`)
+		routingEntries := ssbc2.Call2xml2.Call2xml3.Attr
+		
 		fmt.Println("Table:", routingEntries[j])
 
 		for k := range routingEntries {
