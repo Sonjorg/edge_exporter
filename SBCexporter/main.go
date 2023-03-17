@@ -119,14 +119,12 @@ func (collector *metrics) Collect(ch chan<- prometheus.Metric) {
 
 func main() {
 
-	if (len(getIpAdrExp("systemstats")) > 0) {
-		systemDataExporter()
-	}
-	if (len(getIpAdrExp("callstats")) > 0) {
-		routingCollector()
-	}
-	foo := newFooCollector()
-	prometheus.MustRegister(foo)
+		systemResourceExporter()
+
+	//	routingCollector()
+
+	//foo := newFooCollector()
+	//prometheus.MustRegister(foo)
 
 	http.Handle("/metrics", promhttp.Handler())
 	log.Fatal(http.ListenAndServe(":9100", nil))

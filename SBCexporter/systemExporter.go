@@ -126,7 +126,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 	var metricValue8 float64
 	var metricValue9 float64
 	//var phpsessid string
-	
+
 	//username = "student"
 	//password = "PanneKake23"
 	//var err error
@@ -194,7 +194,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 
 }*/
 // Initializing the exporter
-func systemDataExporter() {
+func systemResourceCollector() {
 		sc := systemCollector()
 		prometheus.MustRegister(sc)
 }
