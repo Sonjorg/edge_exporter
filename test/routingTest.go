@@ -83,8 +83,7 @@ type rt3 struct {
 		}
 
 		entries := regexp.MustCompile(`($)(\d+)`)
-		routingEntries := ssbc2.Call2xml2.Call2xml3.Attr
-		
+
 		fmt.Println("Table:", routingEntries[j])
 
 		for k := range routingEntries {
