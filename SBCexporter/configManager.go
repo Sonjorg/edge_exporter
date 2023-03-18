@@ -23,9 +23,13 @@ import (
             //exclude        string `yaml:"exclude"`
                     // Server is the general server timeout to use
                     // for graceful shutdowns
-            Collectors struct {
-                   Exclude []string `yaml:"exclude"`
-             }
+                Exclude struct {
+                        // Server is the general server timeout to use
+                        // for graceful shutdowns
+                      SystemExporter bool `yaml:"systemstats"`
+                     routingEntry   bool `yaml:"routingentry"`
+                }`yaml:"exclude"`
+
         }
 
             //From stackoverflow
@@ -43,35 +47,28 @@ import (
       return c
      }
 
-func getIpAdrExp(exporterName string) []string{
-    cfg := getConf(&Config{})
-   // cfg.Hosts.HostName
-	var list []string
-    switch exporterName {
-        case "systemStats":
-           for i := range cfg.Hosts {
-            //for i := 0; i < len(cfg.Hosts); i++ {
-                for v := range cfg.Hosts[i].Collectors.Exclude {
-                    if (cfg.Hosts[i].Collectors.Exclude[v] != "systemstats") {
+     func getIpAdrExp(exporterName string) []string{
+        cfg := getConf(&Config{})
+
+        var list []string
+        switch exporterName {
+            case "systemStats":
+               for i := range cfg.Hosts {
+                //for i := 0; i < len(cfg.Hosts); i++ {
+                    if (cfg.Hosts[i].Exclude.SystemExporter == false) {
                         list = append(list, cfg.Hosts[i].Ipaddress)
                     }
-                    continue
-            }
-        }
-        /*
-        case "callStats":
-            for i := range cfg.Hosts {
-                //for i := 0; i < len(cfg.Hosts); i++ {
-                    for v := range cfg.Hosts[i].Exclude. {
-                        if (cfg.Hosts[i].Exclude.collectors[v] != "systemstats" || len(cfg.Hosts[i].Exclude.collectors[v]) == 0)  {
-                            list = append(list, cfg.Hosts[i].Ipaddress)
-                        }
                 }
-            //INFO: have a switch case on all exporters made, NB!: must remember exact exporternames inside each exporter
-        }*/
+            case "callStats":
+                for i:= range cfg.Hosts {
+                    if (cfg.Hosts[i].Exclude.routingEntry == false) {
+                        list = append(list, cfg.Hosts[i].Ipaddress)
+                    }
+                }
+                //INFO: have a switch case on all exporters made, must remember exact exporternames inside each exporter
+            }
+    return list
     }
-return list
-}
 
 func getAuth(ipadr string) (username string, password string) {
     var u, p string
@@ -86,12 +83,22 @@ func getAuth(ipadr string) (username string, password string) {
     return u,p
 }
 //func IndexFunc[E any](s []E, f func(E) bool) int
+func getHostName(ipaddress string) string{
+    cfg := getConf(&Config{})
+    var host string
+    for i := range cfg.Hosts {
+        if (cfg.Hosts[i].Ipaddress == ipaddress) {
+            host = cfg.Hosts[i].HostName
+        }
+    }
+    return host
+}
 
 func main() {
    // ip := getIpAdrExp("systemStats")
     //fmt.Println(ip)
    // conf := getConf(&Config{})
     //conf.Hosts.Exclude
-    v:= getIpAdrExp("systemStats")
+    v:= getHostName("46.333.534.22")
     fmt.Println(v)
 }
