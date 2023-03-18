@@ -47,22 +47,29 @@ import (
       return c
      }
 
-     func getIpAdrExp(exporterName string) []string{
+     type includedHosts struct {
+        ip         string
+        hostname   string
+        Username   string
+        Password   string
+    }
+
+     func getIncludedHosts(exporterName string) []includedHosts{
         cfg := getConf(&Config{})
 
-        var list []string
+        //var list []includedHosts
+        list := make([]includedHosts,0,8)
         switch exporterName {
             case "systemStats":
                for i := range cfg.Hosts {
-                //for i := 0; i < len(cfg.Hosts); i++ {
                     if (cfg.Hosts[i].Exclude.SystemExporter == false) {
-                        list = append(list, cfg.Hosts[i].Ipaddress)
+                        list = append(list, includedHosts{cfg.Hosts[i].Ipaddress, cfg.Hosts[i].HostName,cfg.Hosts[i].Username, cfg.Hosts[i].Password})
                     }
                 }
             case "callStats":
                 for i:= range cfg.Hosts {
                     if (cfg.Hosts[i].Exclude.routingEntry == false) {
-                        list = append(list, cfg.Hosts[i].Ipaddress)
+                        list = append(list, includedHosts{cfg.Hosts[i].Ipaddress, cfg.Hosts[i].HostName,cfg.Hosts[i].Username, cfg.Hosts[i].Password})
                     }
                 }
                 //INFO: have a switch case on all exporters made, must remember exact exporternames inside each exporter
@@ -99,6 +106,9 @@ func main() {
     //fmt.Println(ip)
    // conf := getConf(&Config{})
     //conf.Hosts.Exclude
-    v:= getHostName("46.333.534.22")
-    fmt.Println(v)
+    //v:= getHostName("46.333.534.22")
+    g:= getIncludedHosts("systemStats")
+    for i:= range g {
+    fmt.Println(g[i].hostname,g[i].Username)
+    }
 }
