@@ -14,10 +14,12 @@ hosts:
   ipaddress: 46.333.534.22
   username: student
   password: PanneKake23
+  exclude:
+    - systemstats
 - hostname: host4
   ipaddress: 10.233.230.10
   username: student
   password: PanneKake23
   exclude:
-    systemstats: true #Excluding systemstats for this host
+    - systemstats #Excluding systemstats for this host
    #routingentry: true

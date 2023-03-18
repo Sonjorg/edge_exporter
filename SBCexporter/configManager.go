@@ -15,6 +15,9 @@ import (
         Hosts []Host
         Authtimeout int `yaml:"authtimeout"`
     }
+            //exclude        string `yaml:"exclude"`
+                    // Server is the general server timeout to use
+                    // for graceful shutdowns
         type Host struct {
             HostName       string `yaml:"hostname"`
             Ipaddress      string `yaml:"ipaddress"`
@@ -23,13 +26,8 @@ import (
             //exclude        string `yaml:"exclude"`
                     // Server is the general server timeout to use
                     // for graceful shutdowns
-                Exclude struct {
-                        // Server is the general server timeout to use
-                        // for graceful shutdowns
-                      SystemExporter bool `yaml:"systemstats"`
-                     routingEntry   bool `yaml:"routingentry"`
-                }`yaml:"exclude"`
-
+            Exclude      []string `yaml:"exclude"`
+             
         }
 
             //From stackoverflow
@@ -59,19 +57,33 @@ import (
 
         //var list []includedHosts
         list := make([]includedHosts,0,8)
+        var excluded bool
         switch exporterName {
-            case "systemStats":
-               for i := range cfg.Hosts {
-                    if (cfg.Hosts[i].Exclude.SystemExporter == false) {
-                        list = append(list, includedHosts{cfg.Hosts[i].Ipaddress, cfg.Hosts[i].HostName,cfg.Hosts[i].Username, cfg.Hosts[i].Password})
-                    }
-                }
+                case "systemStats":
+                   for i := range cfg.Hosts {
+                    //for i := 0; i < len(cfg.Hosts); i++ {
+                        for v := range cfg.Hosts[i].Exclude {
+                            if (cfg.Hosts[i].Exclude[v] == "systemstats") {
+                                excluded = true
+                            }
+                         }
+                         if !excluded {
+                            list = append(list, includedHosts{cfg.Hosts[i].Ipaddress, cfg.Hosts[i].HostName,cfg.Hosts[i].Username, cfg.Hosts[i].Password})
+                         }
+                        }
+                
             case "callStats":
-                for i:= range cfg.Hosts {
-                    if (cfg.Hosts[i].Exclude.routingEntry == false) {
-                        list = append(list, includedHosts{cfg.Hosts[i].Ipaddress, cfg.Hosts[i].HostName,cfg.Hosts[i].Username, cfg.Hosts[i].Password})
-                    }
-                }
+                for i := range cfg.Hosts {
+                    //for i := 0; i < len(cfg.Hosts); i++ {
+                        for v := range cfg.Hosts[i].Exclude {
+                            if (cfg.Hosts[i].Exclude[v] == "systemstats") {
+                                excluded = true
+                            }
+                         }
+                         if !excluded {
+                            list = append(list, includedHosts{cfg.Hosts[i].Ipaddress, cfg.Hosts[i].HostName,cfg.Hosts[i].Username, cfg.Hosts[i].Password})
+                         }
+                        }
                 //INFO: have a switch case on all exporters made, must remember exact exporternames inside each exporter
             }
     return list
@@ -100,7 +112,7 @@ func getHostName(ipaddress string) string{
     }
     return host
 }
-/*
+
 func main() {
    // ip := getIpAdrExp("systemStats")
     //fmt.Println(ip)
@@ -111,4 +123,4 @@ func main() {
     for i:= range g {
     fmt.Println(g[i].hostname,g[i].username)
     }
-}*/
+}
