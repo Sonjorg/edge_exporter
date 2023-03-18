@@ -55,6 +55,7 @@ func getIpAdrExp(exporterName string) []string{
                     if (cfg.Hosts[i].Collectors.Exclude[v] != "systemstats") {
                         list = append(list, cfg.Hosts[i].Ipaddress)
                     }
+                    continue
             }
         }
         /*
