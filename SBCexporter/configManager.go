@@ -100,7 +100,7 @@ func getHostName(ipaddress string) string{
     }
     return host
 }
-
+/*
 func main() {
    // ip := getIpAdrExp("systemStats")
     //fmt.Println(ip)
@@ -111,4 +111,4 @@ func main() {
     for i:= range g {
     fmt.Println(g[i].hostname,g[i].username)
     }
-}
+}*/
