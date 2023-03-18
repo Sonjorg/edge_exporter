@@ -52,9 +52,8 @@ func getIpAdrExp(exporterName string) []string{
            for i := range cfg.Hosts {
             //for i := 0; i < len(cfg.Hosts); i++ {
                 for v := range cfg.Hosts[i].Collectors.Exclude {
-                    if (cfg.Hosts[i].Collectors.Exclude[v] == "systemstats" || len(cfg.Hosts[i].Collectors.Exclude) == 0) {
-                        list = append(list, cfg.Hosts[i].Ipaddress)
-                    }
+                    if (cfg.Hosts[i].Collectors.Exclude[v] == "systemstats") {
+                    } else {list = append(list, cfg.Hosts[i].Ipaddress)}
             }
         }
         /*
