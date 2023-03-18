@@ -51,7 +51,7 @@ import (
         ip         string
         hostname   string
         username   string
-        uassword   string
+        password   string
     }
 
      func getIncludedHosts(exporterName string) []includedHosts{
@@ -109,6 +109,6 @@ func main() {
     //v:= getHostName("46.333.534.22")
     g:= getIncludedHosts("systemStats")
     for i:= range g {
-    fmt.Println(g[i].hostname,g[i].Username)
+    fmt.Println(g[i].hostname,g[i].username)
     }
 }
