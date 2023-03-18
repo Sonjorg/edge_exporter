@@ -50,8 +50,8 @@ import (
      type includedHosts struct {
         ip         string
         hostname   string
-        Username   string
-        Password   string
+        username   string
+        uassword   string
     }
 
      func getIncludedHosts(exporterName string) []includedHosts{
