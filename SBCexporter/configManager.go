@@ -65,7 +65,7 @@ import (
     return list
     }
 
-
+/*
 
 func main() {
 
@@ -74,3 +74,4 @@ func main() {
     fmt.Println(g[i].hostname,g[i].username)
     }
 }
+*/
