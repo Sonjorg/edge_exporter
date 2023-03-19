@@ -112,7 +112,7 @@ func (collector *sMetrics) Describe(ch chan<- *prometheus.Desc) {
 //Collect implements required collect function for all promehteus collectors
 
 func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
-	hosts := getIncludedHosts("systemStats")//getIpAdrExp("systemStats") //retrieving sources for this exporter
+	hosts := getIncludedHosts("system")//getIpAdrExp("systemStats") //retrieving sources for this exporter
 	if (len(hosts) <=0) {
 		return
 	}

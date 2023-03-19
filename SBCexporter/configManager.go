@@ -27,7 +27,7 @@ import (
                     // Server is the general server timeout to use
                     // for graceful shutdowns
             Exclude      []string `yaml:"exclude"`
-             
+
         }
 
             //From stackoverflow
@@ -51,44 +51,24 @@ import (
         username   string
         password   string
     }
-
-     func getIncludedHosts(exporterName string) []includedHosts{
+     func getIncludedHosts(exporterName string) []includedHosts {
         cfg := getConf(&Config{})
-
-        //var list []includedHosts
         list := make([]includedHosts,0,8)
         var excluded bool
-        switch exporterName {
-                case "systemStats":
-                   for i := range cfg.Hosts {
-                    //for i := 0; i < len(cfg.Hosts); i++ {
-                        for v := range cfg.Hosts[i].Exclude {
-                            if (cfg.Hosts[i].Exclude[v] == "systemstats") {
-                                excluded = true
-                            }
-                         }
-                         if !excluded {
-                            list = append(list, includedHosts{cfg.Hosts[i].Ipaddress, cfg.Hosts[i].HostName,cfg.Hosts[i].Username, cfg.Hosts[i].Password})
-                         }
-                        }
-                
-            case "callStats":
-                for i := range cfg.Hosts {
-                    //for i := 0; i < len(cfg.Hosts); i++ {
-                        for v := range cfg.Hosts[i].Exclude {
-                            if (cfg.Hosts[i].Exclude[v] == "systemstats") {
-                                excluded = true
-                            }
-                         }
-                         if !excluded {
-                            list = append(list, includedHosts{cfg.Hosts[i].Ipaddress, cfg.Hosts[i].HostName,cfg.Hosts[i].Username, cfg.Hosts[i].Password})
-                         }
-                        }
-                //INFO: have a switch case on all exporters made, must remember exact exporternames inside each exporter
-            }
+
+        for i := range cfg.Hosts {
+          for v := range cfg.Hosts[i].Exclude {
+               if (cfg.Hosts[i].Exclude[v] == exporterName) {
+                    excluded = true
+               }
+          }
+        if !excluded {
+             list = append(list, includedHosts{cfg.Hosts[i].Ipaddress, cfg.Hosts[i].HostName,cfg.Hosts[i].Username, cfg.Hosts[i].Password})
+        }
+        }
     return list
     }
-
+/*
 func getAuth(ipadr string) (username string, password string) {
     var u, p string
     cfg := getConf(&Config{})
@@ -111,7 +91,7 @@ func getHostName(ipaddress string) string{
         }
     }
     return host
-}
+}*/
 
 func main() {
    // ip := getIpAdrExp("systemStats")
@@ -119,7 +99,7 @@ func main() {
    // conf := getConf(&Config{})
     //conf.Hosts.Exclude
     //v:= getHostName("46.333.534.22")
-    g:= getIncludedHosts("systemStats")
+    g:= getIncludedHosts("system")
     for i:= range g {
     fmt.Println(g[i].hostname,g[i].username)
     }
