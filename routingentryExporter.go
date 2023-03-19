@@ -133,7 +133,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 	var username string
 	var password string
 	//var phpsessid string
-	ipaddresses := getIpAdrExp("systemStats") //retrieving sources for this exporter
+	//ipaddresses := getIpAdrExp("systemStats") //retrieving sources for this exporter
 
 	//DO NOT DELETE: ipaddresses = getIPNotExl("systemExporter", testConfig)
 	//phpsessid := APISessionAuth("student", "PanneKake23", "https://10.233.230.11/rest/login")

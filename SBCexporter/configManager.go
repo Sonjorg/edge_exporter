@@ -15,19 +15,12 @@ import (
         Hosts []Host
         Authtimeout int `yaml:"authtimeout"`
     }
-            //exclude        string `yaml:"exclude"`
-                    // Server is the general server timeout to use
-                    // for graceful shutdowns
-        type Host struct {
-            HostName       string `yaml:"hostname"`
-            Ipaddress      string `yaml:"ipaddress"`
-            Username       string `yaml:"username"`
-            Password       string `yaml:"password"`
-            //exclude        string `yaml:"exclude"`
-                    // Server is the general server timeout to use
-                    // for graceful shutdowns
-            Exclude      []string `yaml:"exclude"`
-
+    type Host struct {
+        HostName       string `yaml:"hostname"`
+        Ipaddress      string `yaml:"ipaddress"`
+        Username       string `yaml:"username"`
+        Password       string `yaml:"password"`
+        Exclude      []string `yaml:"exclude"`
         }
 
             //From stackoverflow
@@ -51,54 +44,31 @@ import (
         username   string
         password   string
     }
-     func getIncludedHosts(exporterName string) []includedHosts {
+    // This functions iterates through all hosts in the saved config and
+    // returns a list of hosts that doesn't have the specified collector excluded in the config file
+    // exporterName must be equal to "system", "routingentry" ..
+     func getIncludedHosts(collectorName string) []includedHosts {
         cfg := getConf(&Config{})
         list := make([]includedHosts,0,8)
         var excluded bool
 
         for i := range cfg.Hosts {
           for v := range cfg.Hosts[i].Exclude {
-               if (cfg.Hosts[i].Exclude[v] == exporterName) {
+               if (cfg.Hosts[i].Exclude[v] == collectorName) {
                     excluded = true
                }
           }
-        if !excluded {
-             list = append(list, includedHosts{cfg.Hosts[i].Ipaddress, cfg.Hosts[i].HostName,cfg.Hosts[i].Username, cfg.Hosts[i].Password})
-        }
+            if !excluded {
+                list = append(list, includedHosts{cfg.Hosts[i].Ipaddress, cfg.Hosts[i].HostName,cfg.Hosts[i].Username, cfg.Hosts[i].Password})
+            }
         }
     return list
     }
-/*
-func getAuth(ipadr string) (username string, password string) {
-    var u, p string
-    cfg := getConf(&Config{})
 
-    for i:= range cfg.Hosts {
-        if (cfg.Hosts[i].Ipaddress == ipadr) {
-            u, p = cfg.Hosts[i].Username, cfg.Hosts[i].Password
-        }
-    }
-   // return "test", "test"
-    return u,p
-}
-//func IndexFunc[E any](s []E, f func(E) bool) int
-func getHostName(ipaddress string) string{
-    cfg := getConf(&Config{})
-    var host string
-    for i := range cfg.Hosts {
-        if (cfg.Hosts[i].Ipaddress == ipaddress) {
-            host = cfg.Hosts[i].HostName
-        }
-    }
-    return host
-}*/
+
 
 func main() {
-   // ip := getIpAdrExp("systemStats")
-    //fmt.Println(ip)
-   // conf := getConf(&Config{})
-    //conf.Hosts.Exclude
-    //v:= getHostName("46.333.534.22")
+
     g:= getIncludedHosts("system")
     for i:= range g {
     fmt.Println(g[i].hostname,g[i].username)
