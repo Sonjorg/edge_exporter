@@ -139,9 +139,9 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			fmt.Println("Error auth", hosts[i].ip)
 			continue
 		}
-		data,err := getAPIData("https://"+hosts[i].ip+"/rest/routingtable", phpsessid)
+		data,err := getAPIData("https://"+hosts[i].ip+"/rest/routingtable/", phpsessid)
 		if err != nil {
-			fmt.Println("Error data routingtable", hosts[i].ip)
+			fmt.Println("Error routingtable data", hosts[i].ip)
 			continue
 		}
 		b := []byte(data) //Converting string of data to bytestream
@@ -149,7 +149,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 		xml.Unmarshal(b, &rt) //Converting XML data to variables
 		//fmt.Println("Successful API call data: ",ssbc.Rt2.Rt3.Attr)
 		routingtables := rt.RoutingTables2.RoutingTables3.Attr//ssbc.Rt2.Rt3.Attr
-		fmt.Println(routingtables)
+		fmt.Println("Routingtables" ,routingtables)
 
 		if (len(routingtables) <= 0) {
 			//return nil, "Routingtables empty"
@@ -157,10 +157,15 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 
 		}
 			for j := range routingtables {
+				phpsessid, err := APISessionAuth("student", "PanneKake23","https://"+hosts[i].ip+"/rest/login")
+					if err != nil {
+						fmt.Println("Error auth", hosts[i].ip)
+						continue
+					}
 				url := "https://"+hosts[i].ip+"/rest/routingtable/" + routingtables[j] + "/routingentry"
 				data2, err := getAPIData(url, phpsessid)
-				if err != nil {
-				}
+					if err != nil {
+					}
 				b2 := []byte(data2) //Converting string of data to bytestream
 				re := &routingEntries{}
 				xml.Unmarshal(b2, &re) //Converting XML data to variables
@@ -185,6 +190,11 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				}
 
 				for k := range match {
+					phpsessid, err := APISessionAuth("student", "PanneKake23","https://"+hosts[i].ip+"/rest/login")
+						if err != nil {
+							fmt.Println("Error auth", hosts[i].ip)
+							continue
+						}
 					url := "https://"+hosts[i].ip+"/rest/routingtable/"+routingtables[j]+"/routingentry/"+match[k]+"/historicalstatistics/1"
 					data3, err := getAPIData(url, phpsessid)
 						if err != nil {
