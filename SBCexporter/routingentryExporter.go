@@ -130,7 +130,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 	var metricValue5 float64
 	var metricValue6 float64
 
-
+go func() {
 	for i := range hosts {
 		//nr := strconv.Itoa(i)
 
@@ -227,6 +227,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 
 		}
 	}
+}()
 }
 
 
