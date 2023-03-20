@@ -117,7 +117,10 @@ Rt_QualityFailed    int    `xml:"rt_QualityFailed"`
 			var match []string
 			for k := range routingEntries {
 				//fmt.Println("Routingtables: ",routingTables,"routingEntries: ",routingEntries)
-				match = entries.FindStringSubmatch(routingEntries[k])
+				m := entries.FindStringSubmatch(routingEntries[k])
+				for s:= range m {
+					match = append(match, m[s])
+				}
 
 			}
 			fmt.Println("match: ", match)
