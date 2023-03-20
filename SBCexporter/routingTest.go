@@ -14,6 +14,14 @@ import (
 	//"net/url"
 	//"time"
 	//"log"
+	"gopkg.in/yaml.v2"
+	"crypto/tls"
+	"strings"
+	"io/ioutil"
+	"net/http"
+	"net/url"
+	"time"
+	"log"
 	"regexp"
 
 
@@ -175,3 +183,81 @@ func getConf(c *Config) *Config {
 return list
 }
 
+
+func APISessionAuth(username string, password string, loginURL string) (string,error) {
+	cfg := getConf(&Config{})
+	timeout := cfg.Authtimeout
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+
+	client := &http.Client{Transport: tr,Timeout: time.Duration(timeout) * time.Second}
+
+	params := url.Values{}
+	params.Add("Username", username)
+	params.Add("Password", password)
+	body := strings.NewReader(params.Encode())
+
+	req, err := http.NewRequest("POST", loginURL, body)
+	if err != nil {
+		log.Flags()
+			fmt.Println("error in auth:", err)
+			return "Error fetching data", err
+		//	fmt.Println("error in systemExporter:", error)
+	}
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Flags()
+		fmt.Println("error in auth:", err)
+		return "Error fetching data", err
+		//fmt.Println("error in systemExporter:", err)
+	}
+
+	  m := make(map[string]string)
+	  for _, c := range resp.Cookies() {
+		 m[c.Name] = c.Value
+	  }
+	  fmt.Println(m["PHPSESSID"])
+	  phpsessid := m["PHPSESSID"]
+
+	defer resp.Body.Close()
+	return phpsessid,err
+
+}
+
+func getAPIData(url string, phpsessid string) (string,error){
+
+tr2 := &http.Transport{
+	TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+}
+client2 := &http.Client{Transport: tr2}
+cookie1 := &http.Cookie{
+	Name:   "PHPSESSID",
+	Value:  phpsessid,
+	//Path:     "/",
+	MaxAge:   3600,
+	HttpOnly: false,
+	Secure:   true,
+}
+req2, err := http.NewRequest("GET", url, nil)
+if err != nil {
+	log.Flags()
+		fmt.Println("error in getapidata():", err)
+		return "Error fetching data", err
+	//	fmt.Println("error in systemExporter:", error)
+}
+req2.AddCookie(cookie1)
+	resp2, err := client2.Do(req2)
+	if err != nil {
+		log.Flags()
+			fmt.Println("error in getapidata():", err)
+			return "Error fetching data", err
+	}
+
+	b, err := ioutil.ReadAll(resp2.Body)
+	defer resp2.Body.Close()
+
+	return string(b), err
+}
