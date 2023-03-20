@@ -53,11 +53,11 @@ import (
         var excluded bool
 
         for i := range cfg.Hosts {
-          for v := range cfg.Hosts[i].Exclude {
-               if (cfg.Hosts[i].Exclude[v] == collectorName) {
+            for v := range cfg.Hosts[i].Exclude {
+                if (cfg.Hosts[i].Exclude[v] == collectorName) {
                     excluded = true
-               }
-          }
+                }
+            }
             if !excluded {
                 list = append(list, includedHosts{cfg.Hosts[i].Ipaddress, cfg.Hosts[i].HostName,cfg.Hosts[i].Username, cfg.Hosts[i].Password})
             }

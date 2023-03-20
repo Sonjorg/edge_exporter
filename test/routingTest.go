@@ -46,14 +46,37 @@ type rt3 struct {
 	Value     string `xml:",chardata"`
  }
 
+ type rSBCdata struct {
+	XMLname    xml.Name   `xml:"root"`
+	Status     rStatus    `xml:"status"`
+	routingData routingData `xml:"historicalstatistics"`
+}
+type rStatus struct {
+	HTTPcode string `xml:"http_code"`
+}
+type routingData struct {
+Href                string `xml:"href,attr"`
+Rt_RuleUsage		int    `xml:"rt_RuleUsage"`
+Rt_ASR				int    `xml:"rt_ASR"`
+Rt_RoundTripDelay	int    `xml:"rt_RoundTripDelay"`
+Rt_Jitter           int    `xml:"rt_Jitter"`
+Rt_MOS              int    `xml:"rt_MOS"`
+Rt_QualityFailed    int    `xml:"rt_QualityFailed"`
+}
 
 //func routingCollector(ip string)([]prometheus.Metric, string){
 	func main() {
-	phpsessid, err := APISessionAuth("student", "PanneKake23","https://10.233.230.11/rest/login")
+	hosts := getIncludedHosts("routingentry")//retrieving targets for this exporter
+	if (len(hosts) <= 0) {
+		return
+	}
+	for i := range hosts {
+
+	phpsessid, err := APISessionAuth("student", "PanneKake23","https://"+hosts[i].ip+"/rest/login")
 	if err != nil {
 		//return nil, err.Error()
 	}
-	data,err := getAPIData("https://10.233.230.11/rest/routingtable", phpsessid)
+	data,err := getAPIData("https://"+hosts[i].ip+"/rest/routingtable", phpsessid)
 	if err != nil {
 		//return nil, err.Error()
 	}
@@ -68,32 +91,34 @@ type rt3 struct {
 		fmt.Println("Routingtables empty")
 
 	}
-	for j := range routingTables {
-    	url := "https://10.233.230.11/rest/routingtable/" + routingTables[j] + "/routingentry"
-		data2, err := getAPIData(url, phpsessid)
-		if err != nil {
+		for j := range routingTables {
+			url := "https://"+hosts[i].ip+"/rest/routingtable/" + routingTables[j] + "/routingentry"
+			data2, err := getAPIData(url, phpsessid)
+			if err != nil {
+			}
+			b2 := []byte(data2) //Converting string of data to bytestream
+			ssbc2 := &call2xml1{}
+			xml.Unmarshal(b2, &ssbc2) //Converting XML data to variables
+			routingEntries := ssbc2.Call2xml2.Call2xml3.Attr
+
+			if (len(routingEntries) <= 0) {
+				continue
+			}
+			entries := regexp.MustCompile(`\d+$`)
+			fmt.Println("Table:", routingEntries[j])
+
+			for k := range routingEntries {
+				match := entries.FindStringSubmatch(routingEntries[k])
+				fmt.Println(match)
+				url := "https://"+hosts[i].ip+"/rest/routingtable/"+routingTables[j]+"/routingentry/"+routingEntries[k]+"/historicalstatistics/1"
+				data3, err := getAPIData(url, phpsessid)
+					if err != nil {
+					}
+				fmt.Println(data3)
+			}
 		}
-		b2 := []byte(data2) //Converting string of data to bytestream
-		ssbc2 := &call2xml1{}
-		xml.Unmarshal(b2, &ssbc2) //Converting XML data to variables
-		routingEntries := ssbc2.Call2xml2.Call2xml3.Attr
-
-		if (len(routingEntries) <= 0) {
-			continue
-		}
-
-		entries := regexp.MustCompile(`\d+$`)
-
-		fmt.Println("Table:", routingEntries[j])
-
-		for k := range routingEntries {
-			match := entries.FindStringSubmatch(routingEntries[k])
-			fmt.Println(match)
-		}
-
 
 	}
-
 }
 
 
