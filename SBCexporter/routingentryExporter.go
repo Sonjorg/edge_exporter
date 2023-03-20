@@ -189,7 +189,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					url := "https://"+hosts[i].ip+"/rest/routingtable/"+routingTables[j]+"/routingentry/"+match[k]+"/historicalstatistics/1"
 					data3, err := getAPIData(url, phpsessid)
 						if err != nil {
-							fmt.Println(err.error())
+							fmt.Println(err)
 
 							continue
 						}
