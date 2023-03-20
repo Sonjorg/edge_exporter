@@ -2,7 +2,7 @@
 package test
 import (
 	"encoding/xml"
-	"../SBCexporter"
+	"SBCexporter/main"
 	//"log"
 	//"github.com/prometheus/client_golang/prometheus"
 	//"strconv"
