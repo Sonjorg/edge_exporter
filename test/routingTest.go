@@ -114,23 +114,26 @@ Rt_QualityFailed    int    `xml:"rt_QualityFailed"`
 			}
 			entries := regexp.MustCompile(`\d+$`)
 			fmt.Println("Table:", routingEntries[j])
-			var match []string
+			//var match []string
 			for k := range routingEntries {
 				//fmt.Println("Routingtables: ",routingTables,"routingEntries: ",routingEntries)
 				m := entries.FindStringSubmatch(routingEntries[k])
-				for s:= range m {
+				fmt.Println(m)
+				/*for s:= range m {
 					match = append(match, m[s])
-				}
+				}*/
+				//match = append(match, m)
+
 
 			}
-			fmt.Println("match: ", match)
+			/*fmt.Println("match: ", match)
 			for k := range match {
 				url := "https://"+hosts[i].ip+"/rest/routingtable/"+routingTables[j]+"/routingentry/"+match[k]+"/historicalstatistics/1"
 				data3, err := getAPIData(url, phpsessid)
 					if err != nil {
 					}
 				fmt.Println(data3)
-			}
+			}*/
 		}
 
 	}
