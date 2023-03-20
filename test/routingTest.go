@@ -108,7 +108,7 @@ Rt_QualityFailed    int    `xml:"rt_QualityFailed"`
 			ssbc2 := &call2xml1{}
 			xml.Unmarshal(b2, &ssbc2) //Converting XML data to variables
 			routingEntries := ssbc2.Call2xml2.Call2xml3.Attr
-			fmt.Println("Routingtables: ",routingTables,"routingEntries: ",routingEntries)
+			fmt.Println(j," Routingtables: ",routingTables,"routingEntries: ",routingEntries)
 			if (len(routingEntries) <= 0) {
 				continue
 			}
