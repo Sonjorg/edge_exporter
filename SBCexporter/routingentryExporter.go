@@ -203,7 +203,6 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 
 							continue
 						}
-						go func() {
 
 					//fmt.Println(data3)
 					b := []byte(data3) //Converting string of data to bytestream
@@ -224,7 +223,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 						c <- prometheus.MustNewConstMetric(collector.Rt_Jitter, prometheus.GaugeValue, metricValue4, hosts[i].ip, hosts[i].hostname, "routingentry",routingtables[j], match[k], "test")
 						c <- prometheus.MustNewConstMetric(collector.Rt_MOS, prometheus.GaugeValue, metricValue5, hosts[i].ip, hosts[i].hostname, "routingentry",routingtables[j], match[k], "test")
 						c <- prometheus.MustNewConstMetric(collector.Rt_QualityFailed, prometheus.GaugeValue, metricValue6, hosts[i].ip, hosts[i].hostname, "routingentry",routingtables[j], match[k], "test")
-			}()
+
 		}
 		}
 	}
