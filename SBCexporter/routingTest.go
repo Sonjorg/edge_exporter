@@ -1,5 +1,5 @@
 //first request
-package main
+package test
 import (
 	"encoding/xml"
 	//"log"
