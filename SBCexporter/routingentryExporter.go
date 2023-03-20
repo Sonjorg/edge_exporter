@@ -39,9 +39,6 @@ type routingTables struct {
 	Value     string `xml:",chardata"`
  }
 
-
-//
-
 //second request
 type rSBCdata struct {
 	XMLname    xml.Name     `xml:"root"`
@@ -100,7 +97,7 @@ func routingCollector()*rMetrics{
 		),
 		Error_ip: prometheus.NewDesc("error_edge_routing",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job","routing_table","routing_entry", "HTTP_status"}, nil,
+			[]string{"Instance", "hostname"}, nil,
 		),
 	 }
 
@@ -151,15 +148,16 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 		rt := &routingTables{}
 		xml.Unmarshal(b, &rt) //Converting XML data to variables
 		//fmt.Println("Successful API call data: ",ssbc.Rt2.Rt3.Attr)
-		routingTables := rt.RoutingTables2.RoutingTables3.Attr//ssbc.Rt2.Rt3.Attr
+		routingtables := rt.RoutingTables2.RoutingTables3.Attr//ssbc.Rt2.Rt3.Attr
+		fmt.Println(routingtables)
 
-		if (len(routingTables) <= 0) {
+		if (len(routingtables) <= 0) {
 			//return nil, "Routingtables empty"
 			fmt.Println("Routingtables empty")
 
 		}
-			for j := range routingTables {
-				url := "https://"+hosts[i].ip+"/rest/routingtable/" + routingTables[j] + "/routingentry"
+			for j := range routingtables {
+				url := "https://"+hosts[i].ip+"/rest/routingtable/" + routingtables[j] + "/routingentry"
 				data2, err := getAPIData(url, phpsessid)
 				if err != nil {
 				}
@@ -173,7 +171,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				entries := regexp.MustCompile(`\d+$`)
 				//fmt.Println("Table:", routingEntries[j])
 				var match []string
-				fmt.Println("Routingtables: ",j," ", routingTables[j])
+				fmt.Println("Routingtables: ",j," ", routingtables[j])
 
 				for k := range routingEntries {
 				//fmt.Println("routingEntries: ",k," ",routingEntries[k])
@@ -187,7 +185,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				}
 
 				for k := range match {
-					url := "https://"+hosts[i].ip+"/rest/routingtable/"+routingTables[j]+"/routingentry/"+match[k]+"/historicalstatistics/1"
+					url := "https://"+hosts[i].ip+"/rest/routingtable/"+routingtables[j]+"/routingentry/"+match[k]+"/historicalstatistics/1"
 					data3, err := getAPIData(url, phpsessid)
 						if err != nil {
 							fmt.Println(err)
@@ -207,12 +205,12 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					metricValue5 = float64(rData.RoutingData.Rt_MOS)
 					metricValue6 = float64(rData.RoutingData.Rt_QualityFailed)
 
-						c <- prometheus.MustNewConstMetric(collector.Rt_RuleUsage, prometheus.GaugeValue, metricValue1, hosts[i].ip, hosts[i].hostname, "routingentry",routingTables[j], match[k], rData.Status.HTTPcode)
-						c <- prometheus.MustNewConstMetric(collector.Rt_ASR, prometheus.GaugeValue, metricValue2, hosts[i].ip, hosts[i].hostname, "routingentry",routingTables[j], match[k], rData.Status.HTTPcode)
-						c <- prometheus.MustNewConstMetric(collector.Rt_RoundTripDelay, prometheus.GaugeValue, metricValue3, hosts[i].ip, hosts[i].hostname, "routingentry",routingTables[j], match[k], rData.Status.HTTPcode)
-						c <- prometheus.MustNewConstMetric(collector.Rt_Jitter, prometheus.GaugeValue, metricValue4, hosts[i].ip, hosts[i].hostname, "routingentry",routingTables[j], match[k], rData.Status.HTTPcode)
-						c <- prometheus.MustNewConstMetric(collector.Rt_MOS, prometheus.GaugeValue, metricValue5, hosts[i].ip, hosts[i].hostname, "routingentry",routingTables[j], match[k], rData.Status.HTTPcode)
-						c <- prometheus.MustNewConstMetric(collector.Rt_QualityFailed, prometheus.GaugeValue, metricValue6, hosts[i].ip, hosts[i].hostname, "routingentry",routingTables[j], match[k], rData.Status.HTTPcode)
+						c <- prometheus.MustNewConstMetric(collector.Rt_RuleUsage, prometheus.GaugeValue, metricValue1, hosts[i].ip, hosts[i].hostname, "routingentry",routingtables[j], match[k], "test")
+						c <- prometheus.MustNewConstMetric(collector.Rt_ASR, prometheus.GaugeValue, metricValue2, hosts[i].ip, hosts[i].hostname, "routingentry",routingtables[j], match[k], "test")
+						c <- prometheus.MustNewConstMetric(collector.Rt_RoundTripDelay, prometheus.GaugeValue, metricValue3, hosts[i].ip, hosts[i].hostname, "routingentry",routingtables[j], match[k], "test")
+						c <- prometheus.MustNewConstMetric(collector.Rt_Jitter, prometheus.GaugeValue, metricValue4, hosts[i].ip, hosts[i].hostname, "routingentry",routingtables[j], match[k], "test")
+						c <- prometheus.MustNewConstMetric(collector.Rt_MOS, prometheus.GaugeValue, metricValue5, hosts[i].ip, hosts[i].hostname, "routingentry",routingtables[j], match[k], "test")
+						c <- prometheus.MustNewConstMetric(collector.Rt_QualityFailed, prometheus.GaugeValue, metricValue6, hosts[i].ip, hosts[i].hostname, "routingentry",routingtables[j], match[k], "test")
 			}
 
 		}
