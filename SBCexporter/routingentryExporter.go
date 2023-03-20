@@ -129,8 +129,6 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 	var metricValue4 float64
 	var metricValue5 float64
 	var metricValue6 float64
-
-go func() {
 	for i := range hosts {
 		//nr := strconv.Itoa(i)
 
@@ -158,6 +156,7 @@ go func() {
 
 		}
 			for j := range routingtables {
+
 				phpsessid, err := APISessionAuth("student", "PanneKake23","https://"+hosts[i].ip+"/rest/login")
 					if err != nil {
 						fmt.Println("Error auth", hosts[i].ip)
@@ -204,6 +203,8 @@ go func() {
 
 							continue
 						}
+						go func() {
+
 					//fmt.Println(data3)
 					b := []byte(data3) //Converting string of data to bytestream
 					rData := &rSBCdata{}
@@ -223,12 +224,12 @@ go func() {
 						c <- prometheus.MustNewConstMetric(collector.Rt_Jitter, prometheus.GaugeValue, metricValue4, hosts[i].ip, hosts[i].hostname, "routingentry",routingtables[j], match[k], "test")
 						c <- prometheus.MustNewConstMetric(collector.Rt_MOS, prometheus.GaugeValue, metricValue5, hosts[i].ip, hosts[i].hostname, "routingentry",routingtables[j], match[k], "test")
 						c <- prometheus.MustNewConstMetric(collector.Rt_QualityFailed, prometheus.GaugeValue, metricValue6, hosts[i].ip, hosts[i].hostname, "routingentry",routingtables[j], match[k], "test")
-			}
-
+			}()
+		}
 		}
 	}
-}()
 }
+
 
 
 
