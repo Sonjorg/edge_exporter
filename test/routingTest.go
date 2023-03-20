@@ -95,7 +95,7 @@ Rt_QualityFailed    int    `xml:"rt_QualityFailed"`
 		xml.Unmarshal(b, &ssbc) //Converting XML data to variables
 		//fmt.Println("Successful API call data: ",ssbc.Rt2.Rt3.Attr)
 		routingTables := ssbc.Rt2.Rt3.Attr
-
+		fmt.Println(ssbc)
 		if (len(routingTables) <= 0) {
 			//return nil, "Routingtables empty"
 			fmt.Println("Routingtables empty")
