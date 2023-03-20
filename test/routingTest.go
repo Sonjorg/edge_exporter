@@ -1,7 +1,8 @@
 //first request
-package main
+package test
 import (
 	"encoding/xml"
+	"../SBCexporter"
 	//"log"
 	//"github.com/prometheus/client_golang/prometheus"
 	//"strconv"
@@ -65,7 +66,7 @@ Rt_QualityFailed    int    `xml:"rt_QualityFailed"`
 }
 
 //func routingCollector(ip string)([]prometheus.Metric, string){
-	func main() {
+	func test() {
 	hosts := getIncludedHosts("routingentry")//retrieving targets for this exporter
 	if (len(hosts) <= 0) {
 		return
