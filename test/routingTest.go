@@ -1,5 +1,5 @@
 //first request
-package test
+package main
 import (
 	"encoding/xml"
 	"SBCexporter/main"
