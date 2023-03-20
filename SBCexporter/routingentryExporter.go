@@ -193,7 +193,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 							continue
 						}
 					fmt.Println(data3)
-					b := []byte(data) //Converting string of data to bytestream
+					b := []byte(data3) //Converting string of data to bytestream
 					rData := &rSBCdata{}
 					xml.Unmarshal(b, &rData) //Converting XML data to variables
 					fmt.Println("Successful API call data: ",rData.RoutingData,"\n")
