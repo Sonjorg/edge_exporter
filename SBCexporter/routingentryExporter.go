@@ -154,6 +154,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 		if (len(routingtables) <= 0) {
 			//return nil, "Routingtables empty"
 			fmt.Println("Routingtables empty")
+			continue
 
 		}
 			for j := range routingtables {
