@@ -29,7 +29,7 @@ type routingTables struct {
  //Second request
  type routingEntries struct {
 	XMLName    xml.Name          `xml:"root"`
-	routingEntry2  routingEntry2 `xml:"routingentry_list"`
+	RoutingEntry2  routingEntry2 `xml:"routingentry_list"`
  }
  type routingEntry2 struct {
 	RoutingEntry3  routingEntry3 `xml:"routingentry_pk"`
@@ -170,7 +170,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				b2 := []byte(data2) //Converting string of data to bytestream
 				re := &routingEntries{}
 				xml.Unmarshal(b2, &re) //Converting XML data to variables
-				routingEntries := re.routingEntry2.RoutingEntry3.Attr//ssbc2.Call2xml2.Call2xml3.Attr
+				routingEntries := re.RoutingEntry2.RoutingEntry3.Attr//ssbc2.Call2xml2.Call2xml3.Attr
 				if (len(routingEntries) <= 0) {
 					continue
 				}
