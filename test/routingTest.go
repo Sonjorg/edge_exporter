@@ -112,11 +112,12 @@ Rt_QualityFailed    int    `xml:"rt_QualityFailed"`
 				continue
 			}
 			entries := regexp.MustCompile(`\d+$`)
-			fmt.Println("Table:", routingEntries[j])
+			//fmt.Println("Table:", routingEntries[j])
 			//var match []string
-			for k := range routingEntries {
-				fmt.Println("Routingtables: ",j," ", routingTables[j],"routingEntries: ",k," ",routingEntries[k])
+			fmt.Println("Routingtables: ",j," ", routingTables[j])
 
+			for k := range routingEntries {
+			fmt.Println("routingEntries: ",k," ",routingEntries[k])
 				//fmt.Println("Routingtables: ",routingTables,"routingEntries: ",routingEntries)
 				m := entries.FindStringSubmatch(routingEntries[k])
 				fmt.Println(m)
