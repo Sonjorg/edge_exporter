@@ -57,7 +57,7 @@ type rt3 struct {
  type rSBCdata struct {
 	XMLname    xml.Name   `xml:"root"`
 	Status     rStatus    `xml:"status"`
-	routingData routingData `xml:"historicalstatistics"`
+	RoutingData routingData `xml:"historicalstatistics"`
 }
 type rStatus struct {
 	HTTPcode string `xml:"http_code"`
@@ -113,29 +113,27 @@ Rt_QualityFailed    int    `xml:"rt_QualityFailed"`
 			}
 			entries := regexp.MustCompile(`\d+$`)
 			//fmt.Println("Table:", routingEntries[j])
-			//var match []string
+			var match []string
 			fmt.Println("Routingtables: ",j," ", routingTables[j])
 
 			for k := range routingEntries {
-			fmt.Println("routingEntries: ",k," ",routingEntries[k])
+			//fmt.Println("routingEntries: ",k," ",routingEntries[k])
 				//fmt.Println("Routingtables: ",routingTables,"routingEntries: ",routingEntries)
-				m := entries.FindStringSubmatch(routingEntries[k])
-				fmt.Println(m)
+				match = entries.FindStringSubmatch(routingEntries[k])
+				fmt.Println("Match", k, match)
 				/*for s:= range m {
 					match = append(match, m[s])
 				}*/
 				//match = append(match, m)
-
-
 			}
-			/*fmt.Println("match: ", match)
+
 			for k := range match {
 				url := "https://"+hosts[i].ip+"/rest/routingtable/"+routingTables[j]+"/routingentry/"+match[k]+"/historicalstatistics/1"
 				data3, err := getAPIData(url, phpsessid)
 					if err != nil {
 					}
 				fmt.Println(data3)
-			}*/
+			}
 		}
 
 	}
