@@ -41,9 +41,9 @@ type routingTables struct {
 
 //second request
 type rSBCdata struct {
-	XMLname    xml.Name     `xml:"root"`
-	Status     rStatus      `xml:"status"`
-	RoutingData routingData `xml:"historicalstatistics"`
+	XMLname      xml.Name     `xml:"root"`
+	Status       rStatus      `xml:"status"`
+	RoutingData  routingData `xml:"historicalstatistics"`
 }
 type rStatus struct {
 	HTTPcode string `xml:"http_code"`
@@ -139,7 +139,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			fmt.Println("Error auth", hosts[i].ip)
 			continue
 		}
-		data,err := getAPIData("https://"+hosts[i].ip+"/rest/routingtable/", phpsessid)
+		data,err := getAPIData("https://"+hosts[i].ip+"/rest/routingtable", phpsessid)
 		if err != nil {
 			fmt.Println("Error routingtable data", hosts[i].ip)
 			continue
@@ -150,7 +150,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 		//fmt.Println("Successful API call data: ",ssbc.Rt2.Rt3.Attr)
 		routingtables := rt.RoutingTables2.RoutingTables3.Attr//ssbc.Rt2.Rt3.Attr
 		fmt.Println("Routingtables " ,routingtables)
-
+		fmt.Println(b,rt)
 		if (len(routingtables) <= 0) {
 			//return nil, "Routingtables empty"
 			fmt.Println("Routingtables empty")
