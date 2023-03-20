@@ -231,7 +231,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 
 }*/
 // Initializing the exporter
-func test() {
+func routingEntryCollector() {
 		sc := routingCollector()
 		prometheus.MustRegister(sc)
 }
