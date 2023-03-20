@@ -116,9 +116,10 @@ Rt_QualityFailed    int    `xml:"rt_QualityFailed"`
 			fmt.Println("Table:", routingEntries[j])
 
 			for k := range routingEntries {
+				fmt.Println("Routingtables: ",routingTables,"routingEntries: ",routingEntries)
 				match := entries.FindStringSubmatch(routingEntries[k])
 				fmt.Println(match)
-				url := "https://"+hosts[i].ip+"/rest/routingtable/"+routingTables[j]+"/routingentry/"+routingEntries[k]+"/historicalstatistics/1"
+				url := "https://"+hosts[i].ip+"/rest/routingtable/"+routingTables[j]+"/routingentry/"+match[k]+"/historicalstatistics/1"
 				data3, err := getAPIData(url, phpsessid)
 					if err != nil {
 					}
