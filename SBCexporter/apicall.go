@@ -54,7 +54,7 @@ func APISessionAuth(username string, password string, loginURL string) (string,e
 	  for _, c := range resp.Cookies() {
 		 m[c.Name] = c.Value
 	  }
-	  fmt.Println(m["PHPSESSID"])
+	 // fmt.Println(m["PHPSESSID"])
 	  phpsessid := m["PHPSESSID"]
 
 	defer resp.Body.Close()
