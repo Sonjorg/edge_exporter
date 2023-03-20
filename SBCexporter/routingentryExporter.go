@@ -44,9 +44,9 @@ type routingTables struct {
 
 //second request
 type rSBCdata struct {
-	XMLname    xml.Name   `xml:"root"`
-	Status     rStatus    `xml:"status"`
-	routingData routingData `xml:"historicalstatistics"`
+	XMLname    xml.Name     `xml:"root"`
+	Status     rStatus      `xml:"status"`
+	RoutingData routingData `xml:"historicalstatistics"`
 }
 type rStatus struct {
 	HTTPcode string `xml:"http_code"`
@@ -123,6 +123,7 @@ func (collector *rMetrics) Describe(ch chan<- *prometheus.Desc) {
 func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 	hosts := getIncludedHosts("routingentry")//retrieving targets for this exporter
 	if (len(hosts) <= 0) {
+		fmt.Println("no hosts")
 		return
 	}
 	var metricValue1 float64
@@ -195,28 +196,28 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 						}
 					fmt.Println(data3)
 					b := []byte(data) //Converting string of data to bytestream
-					ssbc := &rSBCdata{}
-					xml.Unmarshal(b, &ssbc) //Converting XML data to variables
-					fmt.Println("Successful API call data: ",ssbc.routingData,"\n")
+					rData := &rSBCdata{}
+					xml.Unmarshal(b, &rData) //Converting XML data to variables
+					fmt.Println("Successful API call data: ",rData.RoutingData,"\n")
 
-					metricValue1 = float64(ssbc.routingData.Rt_RuleUsage)
-					metricValue2 = float64(ssbc.routingData.Rt_ASR)
-					metricValue3 = float64(ssbc.routingData.Rt_RoundTripDelay)
-					metricValue4 = float64(ssbc.routingData.Rt_Jitter)
-					metricValue5 = float64(ssbc.routingData.Rt_MOS)
-					metricValue6 = float64(ssbc.routingData.Rt_QualityFailed)
+					metricValue1 = float64(rData.RoutingData.Rt_RuleUsage)
+					metricValue2 = float64(rData.RoutingData.Rt_ASR)
+					metricValue3 = float64(rData.RoutingData.Rt_RoundTripDelay)
+					metricValue4 = float64(rData.RoutingData.Rt_Jitter)
+					metricValue5 = float64(rData.RoutingData.Rt_MOS)
+					metricValue6 = float64(rData.RoutingData.Rt_QualityFailed)
 
-						c <- prometheus.MustNewConstMetric(collector.Rt_RuleUsage, prometheus.GaugeValue, metricValue1, hosts[i].ip, hosts[i].hostname, "routingentry",routingTables[j], match[k], ssbc.Status.HTTPcode)
-						c <- prometheus.MustNewConstMetric(collector.Rt_ASR, prometheus.GaugeValue, metricValue2, hosts[i].ip, hosts[i].hostname, "routingentry",routingTables[j], match[k], ssbc.Status.HTTPcode)
-						c <- prometheus.MustNewConstMetric(collector.Rt_RoundTripDelay, prometheus.GaugeValue, metricValue3, hosts[i].ip, hosts[i].hostname, "routingentry",routingTables[j], match[k], ssbc.Status.HTTPcode)
-						c <- prometheus.MustNewConstMetric(collector.Rt_Jitter, prometheus.GaugeValue, metricValue4, hosts[i].ip, hosts[i].hostname, "routingentry",routingTables[j], match[k], ssbc.Status.HTTPcode)
-						c <- prometheus.MustNewConstMetric(collector.Rt_MOS, prometheus.GaugeValue, metricValue5, hosts[i].ip, hosts[i].hostname, "routingentry",routingTables[j], match[k], ssbc.Status.HTTPcode)
-						c <- prometheus.MustNewConstMetric(collector.Rt_QualityFailed, prometheus.GaugeValue, metricValue6, hosts[i].ip, hosts[i].hostname, "routingentry",routingTables[j], match[k], ssbc.Status.HTTPcode)
-				}
-
+						c <- prometheus.MustNewConstMetric(collector.Rt_RuleUsage, prometheus.GaugeValue, metricValue1, hosts[i].ip, hosts[i].hostname, "routingentry",routingTables[j], match[k], rData.Status.HTTPcode)
+						c <- prometheus.MustNewConstMetric(collector.Rt_ASR, prometheus.GaugeValue, metricValue2, hosts[i].ip, hosts[i].hostname, "routingentry",routingTables[j], match[k], rData.Status.HTTPcode)
+						c <- prometheus.MustNewConstMetric(collector.Rt_RoundTripDelay, prometheus.GaugeValue, metricValue3, hosts[i].ip, hosts[i].hostname, "routingentry",routingTables[j], match[k], rData.Status.HTTPcode)
+						c <- prometheus.MustNewConstMetric(collector.Rt_Jitter, prometheus.GaugeValue, metricValue4, hosts[i].ip, hosts[i].hostname, "routingentry",routingTables[j], match[k], rData.Status.HTTPcode)
+						c <- prometheus.MustNewConstMetric(collector.Rt_MOS, prometheus.GaugeValue, metricValue5, hosts[i].ip, hosts[i].hostname, "routingentry",routingTables[j], match[k], rData.Status.HTTPcode)
+						c <- prometheus.MustNewConstMetric(collector.Rt_QualityFailed, prometheus.GaugeValue, metricValue6, hosts[i].ip, hosts[i].hostname, "routingentry",routingTables[j], match[k], rData.Status.HTTPcode)
 			}
+
 		}
 	}
+}
 
 
 
