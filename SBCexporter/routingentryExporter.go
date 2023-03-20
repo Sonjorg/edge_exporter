@@ -149,8 +149,8 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 		xml.Unmarshal(b, &rt) //Converting XML data to variables
 		//fmt.Println("Successful API call data: ",ssbc.Rt2.Rt3.Attr)
 		routingtables := rt.RoutingTables2.RoutingTables3.Attr//ssbc.Rt2.Rt3.Attr
-		fmt.Println("Routingtables " ,routingtables)
-		fmt.Println(b,rt)
+		//fmt.Println("Routingtables " ,routingtables)
+		//fmt.Println(b,rt)
 		if (len(routingtables) <= 0) {
 			//return nil, "Routingtables empty"
 			fmt.Println("Routingtables empty")
@@ -178,13 +178,13 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				entries := regexp.MustCompile(`\d+$`)
 				//fmt.Println("Table:", routingEntries[j])
 				var match []string
-				fmt.Println("Routingtables: ",j," ", routingtables[j])
+				//fmt.Println("Routingtables: ",j," ", routingtables[j])
 
 				for k := range routingEntries {
 				//fmt.Println("routingEntries: ",k," ",routingEntries[k])
 					//fmt.Println("Routingtables: ",routingTables,"routingEntries: ",routingEntries)
 					match = entries.FindStringSubmatch(routingEntries[k])
-					fmt.Println("Match", k, match)
+					//fmt.Println("Match", k, match)
 					/*for s:= range m {
 						match = append(match, m[s])
 					}*/
@@ -204,11 +204,11 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 
 							continue
 						}
-					fmt.Println(data3)
+					//fmt.Println(data3)
 					b := []byte(data3) //Converting string of data to bytestream
 					rData := &rSBCdata{}
 					xml.Unmarshal(b, &rData) //Converting XML data to variables
-					fmt.Println("Successful API call data: ",rData.RoutingData,"\n")
+					//fmt.Println("Successful API call data: ",rData.RoutingData,"\n")
 
 					metricValue1 = float64(rData.RoutingData.Rt_RuleUsage)
 					metricValue2 = float64(rData.RoutingData.Rt_ASR)
