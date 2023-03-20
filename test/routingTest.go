@@ -108,7 +108,6 @@ Rt_QualityFailed    int    `xml:"rt_QualityFailed"`
 			ssbc2 := &call2xml1{}
 			xml.Unmarshal(b2, &ssbc2) //Converting XML data to variables
 			routingEntries := ssbc2.Call2xml2.Call2xml3.Attr
-			fmt.Println(j," Routingtables: ",routingTables,"routingEntries: ",routingEntries)
 			if (len(routingEntries) <= 0) {
 				continue
 			}
@@ -116,6 +115,8 @@ Rt_QualityFailed    int    `xml:"rt_QualityFailed"`
 			fmt.Println("Table:", routingEntries[j])
 			//var match []string
 			for k := range routingEntries {
+				fmt.Println("Routingtables: ",j," ", routingTables[j],"routingEntries: ",k," ",routingEntries[k])
+
 				//fmt.Println("Routingtables: ",routingTables,"routingEntries: ",routingEntries)
 				m := entries.FindStringSubmatch(routingEntries[k])
 				fmt.Println(m)
