@@ -1,5 +1,5 @@
 //first request
-package test
+package main
 import (
 	"encoding/xml"
 	//"log"
@@ -73,7 +73,7 @@ Rt_QualityFailed    int    `xml:"rt_QualityFailed"`
 }
 
 //func routingCollector(ip string)([]prometheus.Metric, string){
-	func test() {
+	func main() {
 	hosts := getIncludedHosts("routingentry")//retrieving targets for this exporter
 	if (len(hosts) <= 0) {
 		return
