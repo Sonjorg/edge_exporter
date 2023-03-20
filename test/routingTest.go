@@ -108,17 +108,20 @@ Rt_QualityFailed    int    `xml:"rt_QualityFailed"`
 			ssbc2 := &call2xml1{}
 			xml.Unmarshal(b2, &ssbc2) //Converting XML data to variables
 			routingEntries := ssbc2.Call2xml2.Call2xml3.Attr
-
+			fmt.Println("Routingtables: ",routingTables,"routingEntries: ",routingEntries)
 			if (len(routingEntries) <= 0) {
 				continue
 			}
 			entries := regexp.MustCompile(`\d+$`)
 			fmt.Println("Table:", routingEntries[j])
-
+			var match []string
 			for k := range routingEntries {
-				fmt.Println("Routingtables: ",routingTables,"routingEntries: ",routingEntries)
-				match := entries.FindStringSubmatch(routingEntries[k])
-				fmt.Println(match)
+				//fmt.Println("Routingtables: ",routingTables,"routingEntries: ",routingEntries)
+				match = entries.FindStringSubmatch(routingEntries[k])
+
+			}
+			fmt.Println("match: ", match)
+			for k := range match {
 				url := "https://"+hosts[i].ip+"/rest/routingtable/"+routingTables[j]+"/routingentry/"+match[k]+"/historicalstatistics/1"
 				data3, err := getAPIData(url, phpsessid)
 					if err != nil {
