@@ -80,61 +80,63 @@ Rt_QualityFailed    int    `xml:"rt_QualityFailed"`
 	}
 	for i := range hosts {
 
-	phpsessid, err := APISessionAuth("student", "PanneKake23","https://"+hosts[i].ip+"/rest/login")
-	if err != nil {
-		//return nil, err.Error()
-	}
-	data,err := getAPIData("https://"+hosts[i].ip+"/rest/routingtable", phpsessid)
-	if err != nil {
-		//return nil, err.Error()
-	}
-	b := []byte(data) //Converting string of data to bytestream
-	ssbc := &rt{}
-	xml.Unmarshal(b, &ssbc) //Converting XML data to variables
-	//fmt.Println("Successful API call data: ",ssbc.Rt2.Rt3.Attr)
-	routingTables := ssbc.Rt2.Rt3.Attr
-
-	if (len(routingTables) <= 0) {
-		//return nil, "Routingtables empty"
-		fmt.Println("Routingtables empty")
-
-	}
-		for j := range routingTables {
-			url := "https://"+hosts[i].ip+"/rest/routingtable/" + routingTables[j] + "/routingentry"
-			data2, err := getAPIData(url, phpsessid)
-			if err != nil {
-			}
-			b2 := []byte(data2) //Converting string of data to bytestream
-			ssbc2 := &call2xml1{}
-			xml.Unmarshal(b2, &ssbc2) //Converting XML data to variables
-			routingEntries := ssbc2.Call2xml2.Call2xml3.Attr
-			if (len(routingEntries) <= 0) {
-				continue
-			}
-			entries := regexp.MustCompile(`\d+$`)
-			//fmt.Println("Table:", routingEntries[j])
-			var match []string
-			fmt.Println("Routingtables: ",j," ", routingTables[j])
-
-			for k := range routingEntries {
-			//fmt.Println("routingEntries: ",k," ",routingEntries[k])
-				//fmt.Println("Routingtables: ",routingTables,"routingEntries: ",routingEntries)
-				match = entries.FindStringSubmatch(routingEntries[k])
-				fmt.Println("Match", k, match)
-				/*for s:= range m {
-					match = append(match, m[s])
-				}*/
-				//match = append(match, m)
-			}
-
-			for k := range match {
-				url := "https://"+hosts[i].ip+"/rest/routingtable/"+routingTables[j]+"/routingentry/"+match[k]+"/historicalstatistics/1"
-				data3, err := getAPIData(url, phpsessid)
-					if err != nil {
-					}
-				fmt.Println(data3)
-			}
+		phpsessid, err := APISessionAuth("student", "PanneKake23","https://"+hosts[i].ip+"/rest/login")
+		if err != nil {
+			fmt.Println("Error auth", hosts[i].ip)
+			continue
 		}
+		data,err := getAPIData("https://"+hosts[i].ip+"/rest/routingtable", phpsessid)
+		if err != nil {
+			fmt.Println("Error data routingtable", hosts[i].ip)
+			continue
+		}
+		b := []byte(data) //Converting string of data to bytestream
+		ssbc := &rt{}
+		xml.Unmarshal(b, &ssbc) //Converting XML data to variables
+		//fmt.Println("Successful API call data: ",ssbc.Rt2.Rt3.Attr)
+		routingTables := ssbc.Rt2.Rt3.Attr
+
+		if (len(routingTables) <= 0) {
+			//return nil, "Routingtables empty"
+			fmt.Println("Routingtables empty")
+
+		}
+			for j := range routingTables {
+				url := "https://"+hosts[i].ip+"/rest/routingtable/" + routingTables[j] + "/routingentry"
+				data2, err := getAPIData(url, phpsessid)
+				if err != nil {
+				}
+				b2 := []byte(data2) //Converting string of data to bytestream
+				ssbc2 := &call2xml1{}
+				xml.Unmarshal(b2, &ssbc2) //Converting XML data to variables
+				routingEntries := ssbc2.Call2xml2.Call2xml3.Attr
+				if (len(routingEntries) <= 0) {
+					continue
+				}
+				entries := regexp.MustCompile(`\d+$`)
+				//fmt.Println("Table:", routingEntries[j])
+				var match []string
+				fmt.Println("Routingtables: ",j," ", routingTables[j])
+
+				for k := range routingEntries {
+				//fmt.Println("routingEntries: ",k," ",routingEntries[k])
+					//fmt.Println("Routingtables: ",routingTables,"routingEntries: ",routingEntries)
+					match = entries.FindStringSubmatch(routingEntries[k])
+					fmt.Println("Match", k, match)
+					/*for s:= range m {
+						match = append(match, m[s])
+					}*/
+					//match = append(match, m)
+				}
+
+				for k := range match {
+					url := "https://"+hosts[i].ip+"/rest/routingtable/"+routingTables[j]+"/routingentry/"+match[k]+"/historicalstatistics/1"
+					data3, err := getAPIData(url, phpsessid)
+						if err != nil {
+						}
+					fmt.Println(data3)
+				}
+			}
 
 	}
 }
