@@ -149,7 +149,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 		xml.Unmarshal(b, &rt) //Converting XML data to variables
 		//fmt.Println("Successful API call data: ",ssbc.Rt2.Rt3.Attr)
 		routingtables := rt.RoutingTables2.RoutingTables3.Attr//ssbc.Rt2.Rt3.Attr
-		fmt.Println("Routingtables" ,routingtables)
+		fmt.Println("Routingtables " ,routingtables)
 
 		if (len(routingtables) <= 0) {
 			//return nil, "Routingtables empty"
@@ -172,6 +172,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				xml.Unmarshal(b2, &re) //Converting XML data to variables
 				routingEntries := re.RoutingEntry2.RoutingEntry3.Attr//ssbc2.Call2xml2.Call2xml3.Attr
 				if (len(routingEntries) <= 0) {
+					fmt.Println("No routingEntry for this routingtable")
 					continue
 				}
 				entries := regexp.MustCompile(`\d+$`)
