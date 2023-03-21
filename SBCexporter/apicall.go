@@ -1,4 +1,4 @@
-package test
+package main
 
 import (
 	"crypto/tls"
@@ -130,7 +130,7 @@ req2.AddCookie(cookie1)
 	return string(b), err
 }
 
-func test() {
+func main() {
 	php, err  := APISessionAuth("student", "PanneKake23", "10.233.234.11")
 
 	fmt.Println(php,err)
