@@ -13,10 +13,10 @@ import (
 	"os"
 	//"io"
 )
-type sessionCookie struct {
-	Ipaddress string `json:"ipaddress"`
-	Phpsessid string `json:"phpsessid"`
-	Time      time.Time `json:"time"`
+type sessionCookie []struct {
+	Ipaddress string
+	Phpsessid string
+	Time      time.Time
 }
 /*
 type h struct {
@@ -44,18 +44,18 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
     if err := json.Unmarshal([]byte(data), &m); err != nil {
         panic(err)
     }
-    for _, val := range m {
+    for i, val := range m {
         fmt.Println(val)
 
-        fmt.Printf("%+v\n", val.Ipaddress)
-		if (val.Ipaddress == ipaddress) {
-			fmt.Println(val.Ipaddress)
-		if (time.Now().Before(val.Time.Add(2 * time.Minute))){ //Hosts.Time.After(time.Now().Add(1 * time.Minute))) {
+        fmt.Printf("%+v\n", val[i].Ipaddress)
+		if (val[i].Ipaddress == ipaddress) {
+			fmt.Println(val[i].Ipaddress)
+		if (time.Now().Before(val[i].Time.Add(2 * time.Minute))){ //Hosts.Time.After(time.Now().Add(1 * time.Minute))) {
 
 				fmt.Println("retrieved from file")
-				phpsessid = val.Phpsessid
-				fmt.Println(time.Now(), val.Time)
-				fmt.Println(time.Now().Before(val.Time.Add(2 * time.Minute)))
+				phpsessid = val[i].Phpsessid
+				//fmt.Println(time.Now(), val.Time)
+				//fmt.Println(time.Now().Before(val.Time.Add(2 * time.Minute)))
 				return phpsessid,nil
 
 		}	else { e := os.Remove("data.json")
@@ -105,7 +105,8 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	 // fmt.Println(m["PHPSESSID"])
 	phpsessid = m["PHPSESSID"]
 	fmt.Println(phpsessid)
-	data2 := sessionCookie{ipaddress, phpsessid, time.Now()}
+	data2 := map[string]string{"ipaddress": ipaddress, "phpsessid": phpsessid, "Time": time.Now().String()}
+	//data2 := sessionCookie{ipaddress, phpsessid, time.Now()}
 	jsonByte, _ := json.Marshal(data2)
 	if _, err := os.Stat("data.json"); err != nil {
 		file, err := os.Create("./data.json")
