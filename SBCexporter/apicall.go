@@ -14,9 +14,9 @@ import (
 	//"io"
 )
 type sessionCookie struct {
-	Ipaddress string
-	Phpsessid string
-	Time      time.Time
+	Ipaddress string `json:"ipaddress"`
+	Phpsessid string `json:"phpsessid"`
+	Time      time.Time `json:"time"`
 }
 /*
 type h struct {
@@ -63,7 +63,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 					//log.Fatal(e)
 				}
 		}
-		} else {break}
+		}
 	}
 	}
 
