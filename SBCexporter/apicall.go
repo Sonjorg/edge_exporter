@@ -11,7 +11,7 @@ import (
 	"log"
 	"encoding/json"
 	"os"
-	"io"
+	//"io"
 )
 type sessionCookie struct {
 	Ipaddress string
@@ -31,36 +31,25 @@ type h struct {
 func APISessionAuth(username string, password string, ipaddress string) (string,error) {
 	//var read []byte
 	var phpsessid string
-	read,err := ioutil.ReadFile("data.json")
-	if err != nil {
+	//read,err := ioutil.ReadFile("data.json")
+	/*if err != nil {
 		fmt.Println("No file yet")
-	}
-	s:=string(read)
-	//fmt.Println(read)
-	//struct := &Host{}
-	//var str Name
-	//doc := make(map[string]Host{})
-	dec := json.NewDecoder(strings.NewReader(s))
-    for {
-        var doc sessionCookie
+	}*/
+	var data []byte
+	data, _ = ioutil.ReadFile("data.json")
 
-        err := dec.Decode(&doc)
-        if err == io.EOF {
-            // all done
-            break
-        }
-        if err != nil {
-            log.Fatal(err)
-        }
+	d := &sessionCookie{}
+	_ = json.Unmarshal(data, &d)
 
-        fmt.Printf("%+v\n", doc)
 
-		if (time.Now().Before(doc.Time.Add(2 * time.Minute))){ //Hosts.Time.After(time.Now().Add(1 * time.Minute))) {
-			if (doc.Ipaddress == ipaddress) {
+        fmt.Printf("%+v\n", d)
+		if (d.Ipaddress == ipaddress) {
+		if (time.Now().Before(d.Time.Add(2 * time.Minute))){ //Hosts.Time.After(time.Now().Add(1 * time.Minute))) {
+
 				fmt.Println("retrieved from file")
-				phpsessid = doc.Phpsessid
-				fmt.Println(time.Now(), doc.Time)
-				fmt.Println(time.Now().Local().Before(doc.Time.Add(2 * time.Minute)))
+				phpsessid = d.Phpsessid
+				fmt.Println(time.Now(), d.Time)
+				fmt.Println(time.Now().Before(d.Time.Add(2 * time.Minute)))
 				return phpsessid,nil
 
 		}
@@ -69,7 +58,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 					log.Fatal(e)
 				}
 		}
-	}
+
 
 	cfg := getConf(&Config{})
 	timeout := cfg.Authtimeout
@@ -108,8 +97,8 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	 // fmt.Println(m["PHPSESSID"])
 	phpsessid = m["PHPSESSID"]
 
-	data := sessionCookie{ipaddress, phpsessid, time.Now()}
-	jsonByte, _ := json.Marshal(data)
+	data2 := sessionCookie{ipaddress, phpsessid, time.Now()}
+	jsonByte, _ := json.Marshal(data2)
 
 	f, err := os.OpenFile("./data.json", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 	if err != nil {
