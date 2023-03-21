@@ -88,15 +88,27 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	 // fmt.Println(m["PHPSESSID"])
 	phpsessid = m["PHPSESSID"]
 //d := Cookies{}
-	data := Cookie{ipaddress, phpsessid, time.Now()}
-
-	jsonByte, _ := json.Marshal(data)
-	jsonByte, _ = json.MarshalIndent(data, "", "  ")
-	err = ioutil.WriteFile("data.json", jsonByte, 0644)
+	//data := Cookie{ipaddress, phpsessid, time.Now()}
+    data := []Cookie{}
+	c := &Cookie{
+        Ipaddress: ipaddress,
+		Phpsessid: phpsessid,
+		Time: time.Now(),
+    }
+	data = append(data, *c)
+	dataBytes, err := json.Marshal(data)
     if err != nil {
         fmt.Println(err)
     }
-	/*f, err := os.OpenFile("./data.json", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+
+    err = ioutil.WriteFile("data.json", dataBytes, 0644)
+    if err != nil {
+        fmt.Println(err)
+    }
+	//jsonByte, _ := json.Marshal(data)
+	//jsonByte, _ = json.MarshalIndent(data, "", "  ")
+	/*
+	err := os.OpenFile("./data.json", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 	if err != nil {
 		fmt.Println(err)
 
@@ -176,19 +188,24 @@ func main() {
 		//var str Name
 		//doc := make(map[string]Host{})
 		//var Hosts = &Cookie{}
-		Hosts := Cookies{}
+
+    data := []Cookie{}
+
+    // Here the magic happens!
+    json.Unmarshal(file, &data)
+		Hosts := []Cookie{}
 		err := json.Unmarshal(file, &Hosts)
 		if err != nil {
 			fmt.Println("No data retrieved unmarhalling json phpsessid",err)
 		}
 		fmt.Println(Hosts)
-		for i := range Hosts.Cookies {
-			if (Hosts.Cookies[i].Ipaddress == "10.233.234.11") {
-				if (Hosts.Cookies[i].Time.Add(2 * time.Minute).Before(time.Now())) {
+		for i := range Hosts {
+			if (Hosts[i].Ipaddress == "10.233.234.11") {
+				if (Hosts[i].Time.Add(2 * time.Minute).Before(time.Now())) {
 
 					//Hosts[i].Phpsessid
 					//phpsessid = Hosts[i].Phpsessid
-						fmt.Println(Hosts.Cookies[i].Ipaddress)
+						fmt.Println(Hosts[i].Ipaddress)
 				}
 			}
 		}
