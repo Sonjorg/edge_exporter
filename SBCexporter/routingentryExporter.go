@@ -132,7 +132,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 	for i := range hosts {
 		//nr := strconv.Itoa(i)
 
-		phpsessid, err := APISessionAuth("student", "PanneKake23","https://"+hosts[i].ip+"/rest/login")
+		phpsessid, err := APISessionAuth(hosts[i].username, hosts[i.password], hosts[i].ip)
 		if err != nil {
 			fmt.Println("Error auth", hosts[i].ip)
 			continue

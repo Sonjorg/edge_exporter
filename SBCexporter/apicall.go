@@ -39,8 +39,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 //If so, use the sessioncookie stored in the json file
 	if (time.Now().After(Hosts.Time.Add(1 * time.Minute))){ //Hosts.Time.After(time.Now().Add(1 * time.Minute))) {
 		if (Hosts.Ipaddress == ipaddress) {
-			fmt.Println("retrieved from file")
-
+			//fmt.Println("retrieved from file")
 			return Hosts.Phpsessid, err
 		}
 	}
@@ -131,9 +130,10 @@ req2.AddCookie(cookie1)
 
 	return string(b), err
 }
-
+/*
 func main() {
 	php, err  := APISessionAuth("student", "PanneKake23", "10.233.234.11")
 
 	fmt.Println(php,err)
 }
+*/
