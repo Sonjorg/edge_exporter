@@ -2,15 +2,18 @@ package main
 
 import (
 	"crypto/tls"
+	"database/sql"
+	"encoding/json"
 	"fmt"
-	"strings"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
-	"time"
-	"log"
-	"encoding/json"
 	"os"
+	"strings"
+	"time"
+
+	"github.com/mattn/go-sqlite3" // Import go-sqlite3 library
 )
 type Cookie struct {
 	Ipaddress string    `json:"ipaddress"`
@@ -30,59 +33,7 @@ type Cookies struct {
 func APISessionAuth(username string, password string, ipaddress string) (string,error) {
 	//var read []byte
 	var phpsessid string
-	 /*
-	read, err := ioutil.ReadFile("tmp.json")
-	if err != nil {
-		//struct := &Host{}
-		//var str Name
-		//doc := make(map[string]Host{})
-		Hosts := []Cookie{}
-		err := json.Unmarshal(read, &Hosts)
-		if err != nil {
-			fmt.Println("No data retrieved unmarhalling json phpsessid")
-		}
-		for i := range Hosts {
-			if (Hosts[i].Ipaddress == ipaddress) {
-				if (Hosts[i].Time.Add(8 * time.Minute).Before(time.Now())) {
 
-					return Hosts[i].Phpsessid,nil
-					//phpsessid = Hosts[i].Phpsessid
-						fmt.Println("retrieved from file")
-				}
-			}
-		}
-	}*/
-	var file []byte
-	//var phpsessid string
-	file, err := ioutil.ReadFile("data.json")
-	if err == nil {
-		//struct := &Host{}
-		//var str Name
-		//doc := make(map[string]Host{})
-		//var Hosts = &Cookie{}
-
-   // data := []Cookie{}
-
-    // Here the magic happens!
-    //json.Unmarshal(file, &data)
-		Hosts := []Cookie{}
-		err := json.Unmarshal(file, &Hosts)
-		if err != nil {
-			fmt.Println("No data retrieved unmarhalling json phpsessid",err)
-		}
-		fmt.Println(Hosts)
-		for i := range Hosts {
-			if (Hosts[i].Ipaddress == "10.233.234.11") {
-				//if (Hosts[i].Time.Add(2 * time.Minute).Before(time.Now())) {
-
-					//Hosts[i].Phpsessid
-					//phpsessid = Hosts[i].Phpsessid
-						fmt.Println(Hosts[i].Ipaddress)
-						return Hosts[i].Ipaddress, nil
-			//	}
-			}
-		}
-	} else {fmt.Println("cant open")}
 	cfg := getConf(&Config{})
 	timeout := cfg.Authtimeout
 	tr := &http.Transport{
@@ -117,78 +68,33 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	  for _, c := range resp.Cookies() {
 		 m[c.Name] = c.Value
 	  }
-	 // fmt.Println(m["PHPSESSID"])
 	phpsessid = m["PHPSESSID"]
-//d := Cookies{}
-	//data := Cookie{ipaddress, phpsessid, time.Now()}
-    //data := Cookies{}
-	//var Cookie []Cookie
-	data := Cookie{
-        Ipaddress: ipaddress,
-		Phpsessid: phpsessid,
-		Time: time.Now(),
-		}
-		var Cookie []Cookie
-		Cookie = append(Cookie, data)
 
-	//data = append(data, *c)
-	dataBytes, err := json.Marshal(Cookie)
-    if err != nil {
-        fmt.Println(err)
-    }
-	dataBytes, _ = json.MarshalIndent(data, "", "  ")
-/*
-    err = ioutil.WriteFile("data.json", dataBytes, 0644)
-    if err != nil {
-        fmt.Println(err)
-    }*/
-	f, err := os.OpenFile("./data.json", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
-	if err != nil {
-		fmt.Println(err)
-	}
-	defer f.Close()
 
-	n, err := f.Write(dataBytes)
-	if err != nil {
-		fmt.Println(n, err)
-	}
-
-	if n, err = f.WriteString(",\n"); err != nil {
-		fmt.Println(n, err)
-	}
-	//jsonByte, _ := json.Marshal(data)
-	//jsonByte, _ = json.MarshalIndent(data, "", "  ")
-	/*
-	err := os.OpenFile("./data.json", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
-	if err != nil {
-		fmt.Println(err)
-
-	}
-	defer f.Close()
-	n, err := f.Write(jsonByte)
-		if err != nil {
-			fmt.Println(n, err)
-		}
-
-		if n, err = f.WriteString("\n"); err != nil {
-			fmt.Println(n, err)
-		}*/
-	/*if n, err = f.WriteString("\n"); err != nil {
-		fmt.Println(n, err)
-	}*/
-/*
-
-	err = ioutil.WriteFile("data.json", jsonByte, 0644)
-	if err != nil {
-	  fmt.Println(err)
- 	 }
-*/
 	defer resp.Body.Close()
-	return phpsessid,err
 
+	os.Remove("sqlite-database.db") // I delete the file to avoid duplicated records.
+	// SQLite is a file based database.
+
+	//log.Println("Creating sqlite-database.db...")
+	file, err := os.Create("sqlite-database.db") // Create SQLite file
+	if err != nil {
+		log.Fatal(err.Error())
 	}
+	file.Close()
+	fmt.Println("sqlite-database.db created")
+//sql.Open()
+	sqliteDatabase, _ := sql.Open("sqlite3", "./sqlite-database.db") // Open the created SQLite File
+	defer sqliteDatabase.Close() // Defer Closing the database
+	createTable(sqliteDatabase) // Create Database Tables
+	// INSERT RECORDS
+	insertAuth(sqliteDatabase, ipaddress, phpsessid, time.Now())
 
-
+	// DISPLAY INSERTED RECORDS
+	ip, sess, time := displayAuth(sqliteDatabase)
+	fmt.Println(ip, sess, time)
+	return phpsessid,err
+	}
 
 
 func getAPIData(url string, phpsessid string) (string,error){
