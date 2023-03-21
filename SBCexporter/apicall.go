@@ -138,7 +138,7 @@ func main() {
 
 	php, err  := APISessionAuth("student", "PanneKake23", "10.233.234.11")
 	//php2, err  := APISessionAuth("student", "PanneKake23", "10.233.230.11")
-	sqliteDatabase, _ = sql.Open("sqlite3", "./sqlite-database.db")
+	sqliteDatabase, _ := sql.Open("sqlite3", "./sqlite-database.db")
 	defer sqliteDatabase.Close()
 
 	displayAuth(sqliteDatabase)
