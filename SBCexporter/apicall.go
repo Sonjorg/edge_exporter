@@ -28,7 +28,7 @@ type Cookies struct {
 // curl -k --data "Username=student&Password=PanneKake23" -i -v https://10.233.230.11/rest/login
 
 // TODO: This is insecure; use only in dev environments.
-func APISessionAuth(username string, password string, ipaddress string) (string,error) {
+func APISessionAuth(username string, password string, ipaddress string) (string,error,string,string) {
 	//var read []byte
 	var phpsessid string
 
@@ -49,7 +49,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	if err != nil {
 		log.Flags()
 			fmt.Println("error in auth:", err)
-			return "Error fetching data", err
+			//return "Error fetching data", err
 		//	fmt.Println("error in systemExporter:", error)
 	}
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
@@ -58,7 +58,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	if err != nil {
 		log.Flags()
 		fmt.Println("error in auth:", err)
-		return "Error fetching data", err
+		//return "Error fetching data", err
 		//fmt.Println("error in systemExporter:", err)
 	}
 
@@ -93,7 +93,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	sqliteDatabase.Close()
 	file.Close()
 
-	return phpsessid,err
+	return phpsessid,err,ip, time
 	}
 
 
@@ -134,10 +134,10 @@ req2.AddCookie(cookie1)
 
 
 func main() {
-	php, err  := APISessionAuth("student", "PanneKake23", "10.233.234.11")
+	php, err,q,e  := APISessionAuth("student", "PanneKake23", "10.233.234.11")
 	//php2, err  := APISessionAuth("student", "PanneKake23", "10.233.230.11")
 
-	fmt.Println(php,err)
+	fmt.Println(php,err,q,e)
 
 
 	//fmt.Println(php,err)
