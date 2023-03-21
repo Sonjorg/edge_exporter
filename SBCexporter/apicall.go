@@ -12,9 +12,9 @@ import (
 	"encoding/json"
 )
 type Cookie struct {
-	Ipaddress string
-	Phpsessid string
-	Time time.Time
+	Ipaddress string    `json:"ipaddress"`
+	Phpsessid string    `json:"phpsessid"`
+	Time      time.Time `json:"time"`
 }
 
 // The functions APISessionAuth(...) and getAPIData(...) utilizes curl-to-go translator but is modified for cookie management.
@@ -40,12 +40,12 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 			if (Hosts[i].Ipaddress == ipaddress) {
 			if (Hosts[i].Time.Before(time.Now().Add(1 * time.Minute))) {
 
-					phpsessid = Hosts[i].Phpsessid
+				return Hosts[i].Phpsessid,nil
+				//phpsessid = Hosts[i].Phpsessid
 					fmt.Println("retrieved from file")
 				}
 			}
 		}
-		return phpsessid,nil
 	}
 	cfg := getConf(&Config{})
 	timeout := cfg.Authtimeout
@@ -87,7 +87,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	data := Cookie{ipaddress, phpsessid, time.Now()}
 	jsonByte, _ := json.Marshal(data)
 
-	err = ioutil.WriteFile("tmp.json", jsonByte, 0644)
+	err = ioutil.WriteFile("data.json", jsonByte, 0644)
 	if err != nil {
 	  fmt.Println(err)
  	 }
