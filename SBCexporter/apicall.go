@@ -104,6 +104,9 @@ req2.AddCookie(cookie1)
 	return string(b), err
 }
 
+func getSqliteData(){
+
+}
 
 func main() {
 
@@ -118,23 +121,36 @@ func main() {
 		log.Fatal(err.Error())
 	}
 	fmt.Println("sqlite-database.db created")
-//sql.Open()
 	var sqliteDatabase *sql.DB
 
 	sqliteDatabase, _ = sql.Open("sqlite3", "./sqlite-database.db") // Open the created SQLite File
 	 // Defer Closing the database
 	createTable(sqliteDatabase) // Create Database Tables
 	// INSERT RECORDS
-	insertAuth(sqliteDatabase, "ipaddress", "phpsessid", time.Now().String())
+	insertAuth(sqliteDatabase, "10.233.234.11", "phpsessid", time.Now().String())
 	insertAuth(sqliteDatabase, "blabla", "dsfsdf", time.Now().String())
 
 	// DISPLAY INSERTED RECORDS
 	//fmt.Println(ip, sess, time)
-	c := displayAuth(sqliteDatabase)
+	Hosts := displayAuth(sqliteDatabase)
 	defer sqliteDatabase.Close()
 	defer file.Close()
-	for i:= range c {
-		fmt.Println(c[i].Ipaddress, c[i].Time)
+	ipaddress := "10.233.234.11"
+	time := time.Now()
+	for i:= range Hosts {
+		fmt.Println(Hosts[i].Ipaddress, Hosts[i].Time)
+		if (Hosts[i].Ipaddress == ipaddress) {
+			//time, err := time.Parse(time.Now().String(), Hosts[i].Time)
+			if err != nil {
+				fmt.Println(err)
+			}
+			if (Hosts[i].Time.Add(2 * time.Minute()).Before(time.Now())) {
+				//return Hosts[i].Phpsessid,nil
+				fmt.Println(Hosts[i].Phpsessid)
+				//phpsessid = Hosts[i].Phpsessid
+					fmt.Println("retrieved from file", Hosts[i].Time.Add(2 * time.Minute()).Before(time.Now()))
+			}
+		}
 	}
 
 	//fmt.Println(php,err)
