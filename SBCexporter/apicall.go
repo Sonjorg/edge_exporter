@@ -91,7 +91,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 
 	// DISPLAY INSERTED RECORDS
 	ip, sess, time := displayAuth(sqliteDatabase)
-	fmt.Println(ip, sess, time)
+	//fmt.Println(ip, sess, time)
 	defer sqliteDatabase.Close()
 	defer file.Close()
 
