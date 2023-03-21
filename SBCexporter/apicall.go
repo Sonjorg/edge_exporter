@@ -48,10 +48,13 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 			if (time.Now().Before(Hosts[i].Time.Add(2 * time.Minute))){ //Hosts.Time.After(time.Now().Add(1 * time.Minute))) {
 				if (Hosts[i].Ipaddress == ipaddress) {
 					fmt.Println("retrieved from file")
-					return Hosts[i].Phpsessid, nil
+					phpsessid = Hosts[i].Phpsessid
 			}
 		}
-	}}
+	}
+	return phpsessid,nil
+}
+
 
 	cfg := getConf(&Config{})
 	timeout := cfg.Authtimeout
