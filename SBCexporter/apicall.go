@@ -10,6 +10,7 @@ import (
 	"time"
 	"log"
 	"encoding/json"
+	"os"
 )
 type Cookie struct {
 	Ipaddress string    `json:"ipaddress"`
@@ -38,11 +39,11 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 		}
 		for i := range Hosts {
 			if (Hosts[i].Ipaddress == ipaddress) {
-			if (Hosts[i].Time.Before(time.Now().Add(1 * time.Minute))) {
+				if (Hosts[i].Time.Add(8 * time.Minute).Before(time.Now())) {
 
-				return Hosts[i].Phpsessid,nil
-				//phpsessid = Hosts[i].Phpsessid
-					fmt.Println("retrieved from file")
+					return Hosts[i].Phpsessid,nil
+					//phpsessid = Hosts[i].Phpsessid
+						fmt.Println("retrieved from file")
 				}
 			}
 		}
@@ -86,12 +87,27 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 
 	data := Cookie{ipaddress, phpsessid, time.Now()}
 	jsonByte, _ := json.Marshal(data)
+	f, err := os.OpenFile("./data.json", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	if err != nil {
+		fmt.Println(err)
+
+	}
+	defer f.Close()
+	n, err := f.Write(jsonByte)
+		if err != nil {
+			fmt.Println(n, err)
+		}
+
+	if n, err = f.WriteString("\n"); err != nil {
+		fmt.Println(n, err)
+	}
+/*
 
 	err = ioutil.WriteFile("data.json", jsonByte, 0644)
 	if err != nil {
 	  fmt.Println(err)
  	 }
-
+*/
 	defer resp.Body.Close()
 	return phpsessid,err
 
