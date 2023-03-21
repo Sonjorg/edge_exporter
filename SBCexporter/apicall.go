@@ -10,7 +10,7 @@ import (
 	"time"
 	"log"
 	"encoding/json"
-	"os"
+	//"os"
 )
 type Cookie struct {
 	Ipaddress string    `json:"ipaddress"`
@@ -92,8 +92,11 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 
 	jsonByte, _ := json.Marshal(data)
 	jsonByte, _ = json.MarshalIndent(data, "", "  ")
-
-	f, err := os.OpenFile("./data.json", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	err = ioutil.WriteFile("data.json", jsonByte, 0644)
+    if err != nil {
+        fmt.Println(err)
+    }
+	/*f, err := os.OpenFile("./data.json", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 	if err != nil {
 		fmt.Println(err)
 
@@ -106,7 +109,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 
 		if n, err = f.WriteString("\n"); err != nil {
 			fmt.Println(n, err)
-		}
+		}*/
 	/*if n, err = f.WriteString("\n"); err != nil {
 		fmt.Println(n, err)
 	}*/
