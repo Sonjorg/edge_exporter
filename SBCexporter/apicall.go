@@ -71,28 +71,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 
 	defer resp.Body.Close()
 
-	os.Remove("sqlite-database.db") // I delete the file to avoid duplicated records.
-	// SQLite is a file based database.
 
-	//log.Println("Creating sqlite-database.db...")
-	file, err := os.Create("sqlite-database.db") // Create SQLite file
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-	fmt.Println("sqlite-database.db created")
-//sql.Open()
-	var sqliteDatabase *sql.DB
-
-	sqliteDatabase, _ = sql.Open("sqlite3", "./sqlite-database.db") // Open the created SQLite File
-	 // Defer Closing the database
-	createTable(sqliteDatabase) // Create Database Tables
-	// INSERT RECORDS
-	insertAuth(sqliteDatabase, ipaddress, phpsessid, time.Now().String())
-
-	// DISPLAY INSERTED RECORDS
-	//fmt.Println(ip, sess, time)
-	defer sqliteDatabase.Close()
-	defer file.Close()
 
 	return phpsessid,err
 	}
@@ -138,10 +117,28 @@ func main() {
 
 	php, err  := APISessionAuth("student", "PanneKake23", "10.233.234.11")
 	//php2, err  := APISessionAuth("student", "PanneKake23", "10.233.230.11")
-	sqliteDatabase, _ := sql.Open("sqlite3", "./sqlite-database.db")
-	defer sqliteDatabase.Close()
+	os.Remove("sqlite-database.db") // I delete the file to avoid duplicated records.
+	// SQLite is a file based database.
 
-	displayAuth(sqliteDatabase)
+	//log.Println("Creating sqlite-database.db...")
+	file, err := os.Create("sqlite-database.db") // Create SQLite file
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	fmt.Println("sqlite-database.db created")
+//sql.Open()
+	var sqliteDatabase *sql.DB
+
+	sqliteDatabase, _ = sql.Open("sqlite3", "./sqlite-database.db") // Open the created SQLite File
+	 // Defer Closing the database
+	createTable(sqliteDatabase) // Create Database Tables
+	// INSERT RECORDS
+	insertAuth(sqliteDatabase, ipaddress, phpsessid, time.Now().String())
+
+	// DISPLAY INSERTED RECORDS
+	//fmt.Println(ip, sess, time)
+	defer sqliteDatabase.Close()
+	defer file.Close()
 	fmt.Println(php,err)
 
 
