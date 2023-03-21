@@ -99,9 +99,9 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 			fmt.Println(n, err)
 		}
 
-	if n, err = f.WriteString("\n"); err != nil {
+	/*if n, err = f.WriteString("\n"); err != nil {
 		fmt.Println(n, err)
-	}
+	}*/
 /*
 
 	err = ioutil.WriteFile("data.json", jsonByte, 0644)
@@ -113,6 +113,8 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	return phpsessid,err
 
 	}
+
+
 
 
 func getAPIData(url string, phpsessid string) (string,error){
@@ -156,7 +158,7 @@ func main() {
 
 	var read []byte
 	//var phpsessid string
-	read, err = ioutil.ReadFile("tmp.json")
+	read, err = ioutil.ReadFile("data.json")
 	if err != nil {
 		//struct := &Host{}
 		//var str Name
@@ -166,6 +168,7 @@ func main() {
 		if err != nil {
 			fmt.Println("No data retrieved unmarhalling json phpsessid")
 		}
+		fmt.Println(Hosts)
 		for i := range Hosts {
 			if (Hosts[i].Ipaddress == "10.233.234.11") {
 				if (Hosts[i].Time.Add(8 * time.Minute).Before(time.Now())) {
