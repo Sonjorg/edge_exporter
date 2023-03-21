@@ -4,11 +4,11 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io/ioutil"
-	"net/http"
+	//"net/http"
 	"time"
 
 	//"strconv"
-	"log"
+	//"log"
 	//"bytes"
 	//"flag"
 	//"io"
