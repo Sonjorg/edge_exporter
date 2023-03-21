@@ -71,7 +71,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 
 	defer resp.Body.Close()
 
-	//os.Remove("sqlite-database.db") // I delete the file to avoid duplicated records.
+	os.Remove("sqlite-database.db") // I delete the file to avoid duplicated records.
 	// SQLite is a file based database.
 
 	//log.Println("Creating sqlite-database.db...")
@@ -134,9 +134,9 @@ req2.AddCookie(cookie1)
 
 func main() {
 	php, err  := APISessionAuth("student", "PanneKake23", "10.233.234.11")
-	php2, err  := APISessionAuth("student", "PanneKake23", "10.233.230.11")
+	//php2, err  := APISessionAuth("student", "PanneKake23", "10.233.230.11")
 
-	fmt.Println(php,php2,err)
+	fmt.Println(php,err)
 
 
 	//fmt.Println(php,err)
