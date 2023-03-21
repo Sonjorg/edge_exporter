@@ -131,10 +131,9 @@ req2.AddCookie(cookie1)
 
 	return string(b), err
 }
-/*
+
 func main() {
 	php, err  := APISessionAuth("student", "PanneKake23", "10.233.234.11")
 
 	fmt.Println(php,err)
 }
-*/
