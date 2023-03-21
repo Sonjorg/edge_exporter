@@ -54,11 +54,11 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 				fmt.Println(time.Now().Before(d.Time.Add(2 * time.Minute)))
 				return phpsessid,nil
 
-		}
-		} else { e := os.Remove("data.json")
+		}	else { e := os.Remove("data.json")
 				if e != nil {
-					log.Fatal(e)
+					//log.Fatal(e)
 				}
+		}
 		}
 	}
 
