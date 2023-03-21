@@ -144,10 +144,11 @@ func main() {
 			timeLast,_ := time.Parse(time.Now().String(), Hosts[i].Time)
 			if (timeLast.Add(mins).Before(time.Now())) {
 				//return Hosts[i].Phpsessid,nil
-				fmt.Println(Hosts[i].Phpsessid, timeLast.Add(mins).Before(time.Now()))
 				//phpsessid = Hosts[i].Phpsessid
-					//fmt.Println("retrieved from file", Hosts[i].Time.Add(2 * time.Minute()).Before(time))
+				fmt.Println("true")
 			}
+			fmt.Println(time.Now(), Hosts[i].Phpsessid, timeLast.Add(mins).Before(time.Now()))
+
 		}
 	}
 	//fmt.Println(php,err)
