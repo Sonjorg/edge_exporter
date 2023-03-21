@@ -8,7 +8,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
-	"os"
+	//"os"
 	"strings"
 	"time"
 	_ "github.com/mattn/go-sqlite3"
@@ -112,15 +112,15 @@ func main() {
 
 	//php, err  := APISessionAuth("student", "PanneKake23", "10.233.234.11")
 	//php2, err  := APISessionAuth("student", "PanneKake23", "10.233.230.11")
-	os.Remove("sqlite-database.db") // I delete the file to avoid duplicated records.
+	//os.Remove("sqlite-database.db") // I delete the file to avoid duplicated records.
 	// SQLite is a file based database.
 
 	//log.Println("Creating sqlite-database.db...")
-	file, err := os.Create("sqlite-database.db") // Create SQLite file
+	/*file, err := os.Create("sqlite-database.db") // Create SQLite file
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	fmt.Println("sqlite-database.db created")
+	fmt.Println("sqlite-database.db created")*/
 	var sqliteDatabase *sql.DB
 
 	sqliteDatabase, _ = sql.Open("sqlite3", "./sqlite-database.db") // Open the created SQLite File
@@ -134,16 +134,13 @@ func main() {
 	//fmt.Println(ip, sess, time)
 	Hosts := displayAuth(sqliteDatabase)
 	defer sqliteDatabase.Close()
-	defer file.Close()
+	//defer file.Close()
 	ipaddress := "10.233.234.11"
 	//t := time.Now()
 	mins := time.Minute * 2
 	for i:= range Hosts {
 		fmt.Println(Hosts[i].Ipaddress, Hosts[i].Time)
 		if (Hosts[i].Ipaddress == ipaddress) {
-			if err != nil {
-				fmt.Println(err)
-			}
 			timeLast,_ := time.Parse(time.Now().String(), Hosts[i].Time)
 			if (timeLast.Add(mins).Before(time.Now())) {
 				//return Hosts[i].Phpsessid,nil
