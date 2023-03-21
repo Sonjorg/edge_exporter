@@ -27,14 +27,17 @@ type h struct {
 
 // TODO: This is insecure; use only in dev environments.
 func APISessionAuth(username string, password string, ipaddress string) (string,error) {
-	var read []byte
+	//var read []byte
 	var phpsessid string
-	read, _ = ioutil.ReadFile("data.json")
+	read,err := ioutil.ReadFile("data.json")
+	if err != nil {
+		fmt.Println("No file yet")
+	}
 	//struct := &Host{}
 	//var str Name
 	//doc := make(map[string]Host{})
 	Hosts := &h{}
-	err := json.Unmarshal(read, &Hosts)
+	err = json.Unmarshal(read, &Hosts)
 	if err != nil {
 		fmt.Println("No data retrieved unmarhalling json phpsessid")
 	} else {
@@ -43,7 +46,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 		for i :=range Hosts.H {
 			if (time.Now().Before(Hosts.H[i].Time.Add(2 * time.Minute))){ //Hosts.Time.After(time.Now().Add(1 * time.Minute))) {
 				if (Hosts.H[i].Ipaddress == ipaddress) {
-					//fmt.Println("retrieved from file")
+					fmt.Println("retrieved from file")
 					return Hosts.H[i].Phpsessid, nil
 				}
 			} else { break }
