@@ -11,7 +11,7 @@ import (
 	"os"
 	"strings"
 	"time"
-	//"github.com/mattn/go-sqlite3"
+	_ "github.com/mattn/go-sqlite3"
 )
 type Cookie struct {
 	Ipaddress string    `json:"ipaddress"`
