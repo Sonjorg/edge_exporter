@@ -26,7 +26,8 @@ type Cookie struct {
 // TODO: This is insecure; use only in dev environments.
 func APISessionAuth(username string, password string, ipaddress string) (string,error) {
 	//var read []byte
-	var phpsessid string /*
+	var phpsessid string
+	 /*
 	read, err := ioutil.ReadFile("tmp.json")
 	if err != nil {
 		//struct := &Host{}
