@@ -40,19 +40,22 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 
 	data,_ = ioutil.ReadFile("data.json")
 
-	d := &sessionCookie{}
-	_ = json.Unmarshal(data, &d)
+    var m []sessionCookie
+    if err := json.Unmarshal([]byte(data), &m); err != nil {
+        panic(err)
+    }
+    for _, val := range m {
+        fmt.Println(val)
 
-
-        fmt.Printf("%+v\n", d)
-		if (d.Ipaddress == ipaddress) {
-			fmt.Println(d.Ipaddress)
-		if (time.Now().After(d.Time.Add(2 * time.Minute))){ //Hosts.Time.After(time.Now().Add(1 * time.Minute))) {
+        fmt.Printf("%+v\n", val.Ipaddress)
+		if (val.Ipaddress == ipaddress) {
+			fmt.Println(val.Ipaddress)
+		if (time.Now().Before(val.Time.Add(2 * time.Minute))){ //Hosts.Time.After(time.Now().Add(1 * time.Minute))) {
 
 				fmt.Println("retrieved from file")
-				phpsessid = d.Phpsessid
-				fmt.Println(time.Now(), d.Time)
-				fmt.Println(time.Now().Before(d.Time.Add(2 * time.Minute)))
+				phpsessid = val.Phpsessid
+				fmt.Println(time.Now(), val.Time)
+				fmt.Println(time.Now().Before(val.Time.Add(2 * time.Minute)))
 				return phpsessid,nil
 
 		}	else { e := os.Remove("data.json")
@@ -61,6 +64,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 				}
 		}
 		}
+	}
 	}
 
 
