@@ -131,6 +131,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
     if err != nil {
         fmt.Println(err)
     }
+	dataBytes, _ = json.MarshalIndent(data, "", "  ")
 /*
     err = ioutil.WriteFile("data.json", dataBytes, 0644)
     if err != nil {
@@ -147,7 +148,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 		fmt.Println(n, err)
 	}
 
-	if n, err = f.WriteString("\n"); err != nil {
+	if n, err = f.WriteString(",\n"); err != nil {
 		fmt.Println(n, err)
 	}
 	//jsonByte, _ := json.Marshal(data)
