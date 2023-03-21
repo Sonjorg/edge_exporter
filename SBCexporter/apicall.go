@@ -26,24 +26,27 @@ type Host struct {
 func APISessionAuth(username string, password string, ipaddress string) (string,error) {
 	var read []byte
 	var phpsessid string
-	read, _ = ioutil.ReadFile("tmp.json")
-	//struct := &Host{}
-	//var str Name
-	//doc := make(map[string]Host{})
-	Hosts := []Host{}
-	err := json.Unmarshal(read, &Hosts)
+	read, err := ioutil.ReadFile("tmp.json")
 	if err != nil {
-		fmt.Println("No data retrieved unmarhalling json phpsessid")
-	}
-for i := range Hosts {
-	if (Hosts[i].Time.After(time.Now().Add(1 * time.Minute))) {
-		if (Hosts[i].Ipaddress == ipaddress) {
-			return Hosts[i].Phpsessid, err
-			fmt.Println("retrieved from file")
+		//struct := &Host{}
+		//var str Name
+		//doc := make(map[string]Host{})
+		Hosts := []Host{}
+		err := json.Unmarshal(read, &Hosts)
+		if err != nil {
+			fmt.Println("No data retrieved unmarhalling json phpsessid")
 		}
-	}
-}
+		for i := range Hosts {
+			if (Hosts[i].Ipaddress == ipaddress) {
+			if (Hosts[i].Time.Before(time.Now().Add(1 * time.Minute))) {
 
+					phpsessid = Hosts[i].Phpsessid
+					fmt.Println("retrieved from file")
+				}
+			}
+		}
+		return phpsessid,nil
+	}
 	cfg := getConf(&Config{})
 	timeout := cfg.Authtimeout
 	tr := &http.Transport{
