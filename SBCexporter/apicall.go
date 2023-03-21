@@ -159,16 +159,16 @@ func main() {
 	php, err  := APISessionAuth("student", "PanneKake23", "10.233.234.11")
 	fmt.Println(php)
 
-	var read []byte
+	var file []byte
 	//var phpsessid string
-	read, err = ioutil.ReadFile("data.json")
+	file, err = ioutil.ReadFile("data.json")
 	if err == nil {
 		//struct := &Host{}
 		//var str Name
 		//doc := make(map[string]Host{})
 		//var Hosts = &Cookie{}
-		var Hosts Cookies
-		err := json.Unmarshal(read, Hosts)
+		Hosts := Cookies{}
+		err := json.Unmarshal(file, &Hosts)
 		if err != nil {
 			fmt.Println("No data retrieved unmarhalling json phpsessid",err)
 		}
