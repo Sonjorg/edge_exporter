@@ -90,7 +90,6 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	insertAuth(sqliteDatabase, ipaddress, phpsessid, time.Now().String())
 
 	// DISPLAY INSERTED RECORDS
-	ip, sess, time := displayAuth(sqliteDatabase)
 	//fmt.Println(ip, sess, time)
 	defer sqliteDatabase.Close()
 	defer file.Close()
@@ -136,9 +135,13 @@ req2.AddCookie(cookie1)
 
 
 func main() {
+
 	php, err  := APISessionAuth("student", "PanneKake23", "10.233.234.11")
 	//php2, err  := APISessionAuth("student", "PanneKake23", "10.233.230.11")
+	sqliteDatabase, _ = sql.Open("sqlite3", "./sqlite-database.db")
+	defer sqliteDatabase.Close()
 
+	displayAuth(sqliteDatabase)
 	fmt.Println(php,err)
 
 
