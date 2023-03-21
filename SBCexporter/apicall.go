@@ -144,11 +144,11 @@ func main() {
 			if err != nil {
 				fmt.Println(err)
 			}
-			if (Hosts[i].Time.Add(2 * time.Minute()).Before(time.Now())) {
+			if (Hosts[i].Time.Add(2 * time.Minute()).Before(time)) {
 				//return Hosts[i].Phpsessid,nil
 				fmt.Println(Hosts[i].Phpsessid)
 				//phpsessid = Hosts[i].Phpsessid
-					fmt.Println("retrieved from file", Hosts[i].Time.Add(2 * time.Minute()).Before(time.Now()))
+					fmt.Println("retrieved from file", Hosts[i].Time.Add(2 * time.Minute()).Before(time))
 			}
 		}
 	}
