@@ -51,6 +51,36 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 			}
 		}
 	}*/
+	var file []byte
+	//var phpsessid string
+	file, err := ioutil.ReadFile("data.json")
+	if err == nil {
+		//struct := &Host{}
+		//var str Name
+		//doc := make(map[string]Host{})
+		//var Hosts = &Cookie{}
+
+    data := []Cookie{}
+
+    // Here the magic happens!
+    json.Unmarshal(file, &data)
+		Hosts := []Cookie{}
+		err := json.Unmarshal(file, &Hosts)
+		if err != nil {
+			fmt.Println("No data retrieved unmarhalling json phpsessid",err)
+		}
+		fmt.Println(Hosts)
+		for i := range Hosts {
+			if (Hosts[i].Ipaddress == "10.233.234.11") {
+				//if (Hosts[i].Time.Add(2 * time.Minute).Before(time.Now())) {
+
+					//Hosts[i].Phpsessid
+					//phpsessid = Hosts[i].Phpsessid
+						fmt.Println(Hosts[i].Ipaddress)
+				//}
+			}
+		}
+	} else {fmt.Println("cant open")}
 	cfg := getConf(&Config{})
 	timeout := cfg.Authtimeout
 	tr := &http.Transport{
@@ -178,37 +208,8 @@ req2.AddCookie(cookie1)
 
 func main() {
 	php, err  := APISessionAuth("student", "PanneKake23", "10.233.234.11")
-	fmt.Println(php)
+	fmt.Println(php,err)
 
-	var file []byte
-	//var phpsessid string
-	file, err = ioutil.ReadFile("data.json")
-	if err == nil {
-		//struct := &Host{}
-		//var str Name
-		//doc := make(map[string]Host{})
-		//var Hosts = &Cookie{}
 
-    data := []Cookie{}
-
-    // Here the magic happens!
-    json.Unmarshal(file, &data)
-		Hosts := []Cookie{}
-		err := json.Unmarshal(file, &Hosts)
-		if err != nil {
-			fmt.Println("No data retrieved unmarhalling json phpsessid",err)
-		}
-		fmt.Println(Hosts)
-		for i := range Hosts {
-			if (Hosts[i].Ipaddress == "10.233.234.11") {
-				if (Hosts[i].Time.Add(2 * time.Minute).Before(time.Now())) {
-
-					//Hosts[i].Phpsessid
-					//phpsessid = Hosts[i].Phpsessid
-						fmt.Println(Hosts[i].Ipaddress)
-				}
-			}
-		}
-	} else {fmt.Println("cant open")}
 	//fmt.Println(php,err)
 }
