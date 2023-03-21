@@ -79,7 +79,6 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	file.Close()
 	fmt.Println("sqlite-database.db created")
 //sql.Open()
 	sqliteDatabase, _ := sql.Open("sqlite3", "./sqlite-database.db") // Open the created SQLite File
@@ -92,6 +91,8 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	ip, sess, time := displayAuth(sqliteDatabase)
 	fmt.Println(ip, sess, time)
 	sqliteDatabase.Close()
+	file.Close()
+
 	return phpsessid,err
 	}
 
