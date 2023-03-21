@@ -102,7 +102,9 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 
 	data2 := sessionCookie{ipaddress, phpsessid, time.Now()}
 	jsonByte, _ := json.Marshal(data2)
-
+	file, err := os.Create("./data.json")
+	log.Println("file cereated", file.Name())
+    //check(err)
 	f, err := os.OpenFile("./data.json", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 	if err != nil {
 		fmt.Println(err)
