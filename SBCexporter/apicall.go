@@ -34,10 +34,11 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	if err != nil {
 		fmt.Println("No file yet")
 	}
+	fmt.Println(read)
 	//struct := &Host{}
 	//var str Name
 	//doc := make(map[string]Host{})
-	Hosts := []sessionCookie{}
+	/*Hosts := []sessionCookie{}
 	err = json.Unmarshal(read, &Hosts)
 	if err != nil {
 		fmt.Println("No data retrieved unmarhalling json phpsessid")
@@ -53,7 +54,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 		}
 	}
 	return phpsessid,nil
-}
+}*/
 
 
 	cfg := getConf(&Config{})
