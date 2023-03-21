@@ -35,8 +35,9 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	if err != nil {
 		fmt.Println("No data retrieved unmarhalling json phpsessid")
 	}
-
-	if (Hosts.Time.After(time.Now().Add(1 * time.Minute))) {
+//Checks if current time is 10 min after logged time in json file
+//If so, use the sessioncookie stored in the json file
+	if (time.Now().After(Hosts.Time.Add(1 * time.Minute))){ //Hosts.Time.After(time.Now().Add(1 * time.Minute))) {
 		if (Hosts.Ipaddress == ipaddress) {
 			return Hosts.Phpsessid, err
 			fmt.Println("retrieved from file")
