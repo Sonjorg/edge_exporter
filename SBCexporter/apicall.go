@@ -152,6 +152,7 @@ req2.AddCookie(cookie1)
 	return string(b), err
 }
 
+
 func main() {
 	php, err  := APISessionAuth("student", "PanneKake23", "10.233.234.11")
 	fmt.Println(php)
@@ -159,7 +160,7 @@ func main() {
 	var read []byte
 	//var phpsessid string
 	read, err = ioutil.ReadFile("data.json")
-	if err != nil {
+	if err == nil {
 		//struct := &Host{}
 		//var str Name
 		//doc := make(map[string]Host{})
@@ -179,6 +180,6 @@ func main() {
 				}
 			}
 		}
-	}
+	} else {fmt.Println("cant open")}
 	//fmt.Println(php,err)
 }
