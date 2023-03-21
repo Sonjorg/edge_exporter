@@ -126,14 +126,16 @@ func main() {
 	createTable(sqliteDatabase) // Create Database Tables
 	// INSERT RECORDS
 	insertAuth(sqliteDatabase, "ipaddress", "phpsessid", time.Now().String())
+	insertAuth(sqliteDatabase, "blabla", "dsfsdf", time.Now().String())
 
 	// DISPLAY INSERTED RECORDS
 	//fmt.Println(ip, sess, time)
 	c := displayAuth(sqliteDatabase)
 	defer sqliteDatabase.Close()
 	defer file.Close()
-	fmt.Println(c)
-
+	for range c {
+	fmt.Println(c.Ipaddress, c.Time)
+	}
 
 	//fmt.Println(php,err)
 }
