@@ -11,7 +11,7 @@ import (
 	"log"
 	"encoding/json"
 )
-type Host struct {
+type sessionCookie struct {
 	Ipaddress string
 	Phpsessid string
 	Time time.Time
@@ -30,7 +30,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	//struct := &Host{}
 	//var str Name
 	//doc := make(map[string]Host{})
-	Hosts := &Host{}
+	Hosts := &sessionCookie{}
 	err := json.Unmarshal(read, &Hosts)
 	if err != nil {
 		fmt.Println("No data retrieved unmarhalling json phpsessid")
@@ -81,7 +81,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	 // fmt.Println(m["PHPSESSID"])
 	phpsessid = m["PHPSESSID"]
 
-	data := Host{ipaddress, phpsessid, time.Now()}
+	data := sessionCookie{ipaddress, phpsessid, time.Now()}
 	jsonByte, _ := json.Marshal(data)
 
 	err = ioutil.WriteFile("tmp.json", jsonByte, 0644)
