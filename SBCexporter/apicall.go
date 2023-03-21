@@ -136,22 +136,22 @@ func main() {
 	defer sqliteDatabase.Close()
 	defer file.Close()
 	ipaddress := "10.233.234.11"
-	time := time.Now()
+	//t := time.Now()
+	mins := time.Minute * 2
 	for i:= range Hosts {
 		fmt.Println(Hosts[i].Ipaddress, Hosts[i].Time)
 		if (Hosts[i].Ipaddress == ipaddress) {
-			//time, err := time.Parse(time.Now().String(), Hosts[i].Time)
 			if err != nil {
 				fmt.Println(err)
 			}
-			if (Hosts[i].Time.Add(2 * time.Minute()).Before(time)) {
+			timeLast,_ := time.Parse(time.Now().String(), Hosts[i].Time)
+			if (timeLast.Add(mins).Before(time.Now())) {
 				//return Hosts[i].Phpsessid,nil
-				fmt.Println(Hosts[i].Phpsessid)
+				fmt.Println(Hosts[i].Phpsessid, timeLast.Add(mins).Before(time.Now()))
 				//phpsessid = Hosts[i].Phpsessid
-					fmt.Println("retrieved from file", Hosts[i].Time.Add(2 * time.Minute()).Before(time))
+					//fmt.Println("retrieved from file", Hosts[i].Time.Add(2 * time.Minute()).Before(time))
 			}
 		}
 	}
-
 	//fmt.Println(php,err)
 }
