@@ -64,7 +64,7 @@ func displayAuth(db *sql.DB) []*Cookie{
 	for row.Next() {
 			p := &Cookie{}
 			if err := row.Scan(p.Ipaddress, p.Phpsessid, p.Time); err != nil{
-				 // handle error
+				 fmt.Println(err)
 			}
 			c = append(c, p)
 
