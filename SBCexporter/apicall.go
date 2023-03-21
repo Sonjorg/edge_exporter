@@ -46,7 +46,8 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 
         fmt.Printf("%+v\n", d)
 		if (d.Ipaddress == ipaddress) {
-		if (time.Now().Before(d.Time.Add(2 * time.Minute))){ //Hosts.Time.After(time.Now().Add(1 * time.Minute))) {
+			fmt.Println(d.Ipaddress)
+		if (time.Now().After(d.Time.Add(2 * time.Minute))){ //Hosts.Time.After(time.Now().Add(1 * time.Minute))) {
 
 				fmt.Println("retrieved from file")
 				phpsessid = d.Phpsessid
