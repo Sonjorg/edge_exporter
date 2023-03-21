@@ -131,11 +131,25 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
     if err != nil {
         fmt.Println(err)
     }
-
+/*
     err = ioutil.WriteFile("data.json", dataBytes, 0644)
     if err != nil {
         fmt.Println(err)
-    }
+    }*/
+	f, err := os.OpenFile("./data.json", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer f.Close()
+
+	n, err := f.Write(dataBytes)
+	if err != nil {
+		fmt.Println(n, err)
+	}
+
+	if n, err = f.WriteString("\n"); err != nil {
+		fmt.Println(n, err)
+	}
 	//jsonByte, _ := json.Marshal(data)
 	//jsonByte, _ = json.MarshalIndent(data, "", "  ")
 	/*
