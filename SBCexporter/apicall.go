@@ -133,7 +133,7 @@ func main() {
 	 // Defer Closing the database
 	createTable(sqliteDatabase) // Create Database Tables
 	// INSERT RECORDS
-	insertAuth(sqliteDatabase, ipaddress, phpsessid, time.Now().String())
+	insertAuth(sqliteDatabase, "ipaddress", "phpsessid", time.Now().String())
 
 	// DISPLAY INSERTED RECORDS
 	//fmt.Println(ip, sess, time)
