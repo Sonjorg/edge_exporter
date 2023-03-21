@@ -142,12 +142,12 @@ func main() {
 		fmt.Println(Hosts[i].Ipaddress, Hosts[i].Time)
 		if (Hosts[i].Ipaddress == ipaddress) {
 			timeLast,_ := time.Parse(time.Now().String(), Hosts[i].Time)
-			if (timeLast.Add(mins).Before(time.Now())) {
+			if (timeLast.Add(mins).After(time.Now())) {
 				//return Hosts[i].Phpsessid,nil
 				//phpsessid = Hosts[i].Phpsessid
-				fmt.Println("true")
+				fmt.Println("...")
 			}
-			fmt.Println(time.Now(), Hosts[i].Phpsessid, timeLast.Add(mins).Before(time.Now()))
+			fmt.Println(time.Now(), Hosts[i].Phpsessid, timeLast.Add(mins).After(time.Now()))
 
 		}
 	}
