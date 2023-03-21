@@ -85,7 +85,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	defer sqliteDatabase.Close() // Defer Closing the database
 	createTable(sqliteDatabase) // Create Database Tables
 	// INSERT RECORDS
-	insertAuth(sqliteDatabase, ipaddress, phpsessid, time.Now())
+	insertAuth(sqliteDatabase, ipaddress, phpsessid, time.Now().String())
 
 	// DISPLAY INSERTED RECORDS
 	ip, sess, time := displayAuth(sqliteDatabase)
