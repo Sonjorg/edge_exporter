@@ -35,16 +35,16 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	if err != nil {
 		fmt.Println("No data retrieved unmarhalling json phpsessid")
 	}
-//Checks if current time is 10 min after logged time in json file
+//Checks if current time is 8 min after logged time in json file
 //If so, use the sessioncookie stored in the json file
-/*
-	if (time.Now().After(Hosts.Time.Add(1 * time.Minute))){ //Hosts.Time.After(time.Now().Add(1 * time.Minute))) {
+
+	if (time.Now().After(Hosts.Time.Add(2 * time.Minute))){ //Hosts.Time.After(time.Now().Add(1 * time.Minute))) {
 		if (Hosts.Ipaddress == ipaddress) {
 			//fmt.Println("retrieved from file")
 			return Hosts.Phpsessid, err
 		}
 	}
-*/
+
 
 	cfg := getConf(&Config{})
 	timeout := cfg.Authtimeout
@@ -131,9 +131,10 @@ req2.AddCookie(cookie1)
 
 	return string(b), err
 }
-
-func main() {
+/*
+func () {
 	php, err  := APISessionAuth("student", "PanneKake23", "10.233.234.11")
 
 	fmt.Println(php,err)
 }
+*/

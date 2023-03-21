@@ -116,7 +116,7 @@ func (collector *metrics) Collect(ch chan<- prometheus.Metric) {
 	ch <- m1
 	ch <- m2
 }
-/*
+
 func main() {
 
 		//systemResourceCollector()
@@ -131,4 +131,3 @@ func main() {
 	log.Fatal(http.ListenAndServe(":9100", nil))
 
 }
-*/
