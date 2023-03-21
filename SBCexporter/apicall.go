@@ -41,7 +41,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	data,_ = ioutil.ReadFile("data.json")
 
     var m []sessionCookie
-    if err := json.Unmarshal([]byte(data), &m); err != nil {
+    if err := json.Unmarshal(data, &m); err != nil {
         panic(err)
     }
     for i, val := range m {
