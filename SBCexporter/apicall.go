@@ -115,7 +115,7 @@ req2.AddCookie(cookie1)
 
 func main() {
 
-	php, err  := APISessionAuth("student", "PanneKake23", "10.233.234.11")
+	//php, err  := APISessionAuth("student", "PanneKake23", "10.233.234.11")
 	//php2, err  := APISessionAuth("student", "PanneKake23", "10.233.230.11")
 	os.Remove("sqlite-database.db") // I delete the file to avoid duplicated records.
 	// SQLite is a file based database.
@@ -137,9 +137,10 @@ func main() {
 
 	// DISPLAY INSERTED RECORDS
 	//fmt.Println(ip, sess, time)
+	c := displayAuth(sqliteDatabase)
 	defer sqliteDatabase.Close()
 	defer file.Close()
-	fmt.Println(php,err)
+	fmt.Println(c)
 
 
 	//fmt.Println(php,err)

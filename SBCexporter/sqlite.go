@@ -7,6 +7,12 @@ import (
 	"fmt"
 )
 
+type Cookie struct {
+	Ipaddress string
+	Phpsessid string
+	Time      string
+}
+
 func createTable(db *sql.DB) {
 	createAuthTableSQL := `CREATE TABLE authentication (
 		"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -39,7 +45,7 @@ func insertAuth(db *sql.DB, ipaddress string, phpsessid string, time string) {
 	}
 }
 
-func displayAuth(db *sql.DB) (ipaddress string, phpsessid string, time string){
+func displayAuth(db *sql.DB) (cookie []*Cookie){
 	row, err := db.Query("SELECT * FROM authentication ORDER BY time")
 	if err != nil {
 		log.Fatal(err)
@@ -53,6 +59,15 @@ func displayAuth(db *sql.DB) (ipaddress string, phpsessid string, time string){
 		row.Scan(&id, &ipaddress, &phpsessid, &time)
 		//log.Println("Student: ", code, " ", name, " ", program)
 	}
-	return ipaddress, phpsessid, time
+	//return row.Columns()ipaddress, phpsessid, time
+	var c []*Cookie
+	for row.Next() {
+			p := &Cookie{}
+			if err := row.Scan(p.Ipaddress, p.Phpsessid, p.Time); err != nil{
+				 // handle error
+			}
+			c = append(c, p)
 
+	}
+	return c
 }
