@@ -71,18 +71,6 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 		}
 	}
 
-
-
-
-	//Hosts := []sessionCookie{}
-	//err = json.Unmarshal(read, &Hosts)
-
-//Checks if current time is 8 min after logged time in json file
-//If so, use the sessioncookie stored in the json file
-
-
-
-
 	cfg := getConf(&Config{})
 	timeout := cfg.Authtimeout
 	tr := &http.Transport{
@@ -180,9 +168,10 @@ req2.AddCookie(cookie1)
 
 	return string(b), err
 }
-
+/*
 func main() {
 
 	php, err  := APISessionAuth("student", "PanneKake23", "10.233.234.11")
 	fmt.Println(php,err)
 }
+*/
