@@ -36,7 +36,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 		fmt.Println("No file yet")
 	}*/
 	var data []byte
-	if _, err := os.Stat("data.json"); err == nil {
+	if _, err := os.Stat("data.json"); err != nil {
 
 	data,_ = ioutil.ReadFile("data.json")
 
