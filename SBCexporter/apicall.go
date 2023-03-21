@@ -48,11 +48,9 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 				if (Hosts.H[i].Ipaddress == ipaddress) {
 					fmt.Println("retrieved from file")
 					return Hosts.H[i].Phpsessid, nil
-				}
-			} else { break }
+			}
 		}
 	}
-
 
 	cfg := getConf(&Config{})
 	timeout := cfg.Authtimeout
