@@ -45,20 +45,20 @@ func insertAuth(db *sql.DB, ipaddress string, phpsessid string, time string) {
 	}
 }
 
-func displayAuth(db *sql.DB) (cookie []*Cookie){
-	row, err := db.Query("SELECT * FROM authentication ORDER BY time")
+func displayAuth(db *sql.DB) []*Cookie{
+	row, err := db.Query("SELECT * FROM authentication")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer row.Close()
-	for row.Next() { // Iterate and fetch the records from result cursor
+	/*for row.Next() { // Iterate and fetch the records from result cursor
 		var id int
 		var ipaddress string
 		var phpsessid string
 		var time string
 		row.Scan(&id, &ipaddress, &phpsessid, &time)
 		//log.Println("Student: ", code, " ", name, " ", program)
-	}
+	}*/
 	//return row.Columns()ipaddress, phpsessid, time
 	var c []*Cookie
 	for row.Next() {
