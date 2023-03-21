@@ -164,10 +164,10 @@ func main() {
 		//struct := &Host{}
 		//var str Name
 		//doc := make(map[string]Host{})
-		var Hosts = []Cookie{}
+		Hosts := []Cookie{}
 		err := json.Unmarshal(read, Hosts)
 		if err != nil {
-			fmt.Println("No data retrieved unmarhalling json phpsessid")
+			fmt.Println("No data retrieved unmarhalling json phpsessid",err)
 		}
 		fmt.Println(Hosts)
 		for i := range Hosts {
