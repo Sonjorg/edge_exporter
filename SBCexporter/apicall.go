@@ -34,7 +34,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	if err != nil {
 		fmt.Println("No file yet")
 	}
-	fmt.Println(read)
+	//fmt.Println(read)
 	//struct := &Host{}
 	//var str Name
 	//doc := make(map[string]Host{})
@@ -159,10 +159,9 @@ req2.AddCookie(cookie1)
 
 	return string(b), err
 }
-/*
-func () {
-	php, err  := APISessionAuth("student", "PanneKake23", "10.233.234.11")
 
+func main() {
+
+	php, err  := APISessionAuth("student", "PanneKake23", "10.233.234.11")
 	fmt.Println(php,err)
 }
-*/
