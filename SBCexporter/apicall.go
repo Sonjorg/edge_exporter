@@ -77,6 +77,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 					//Hosts[i].Phpsessid
 					//phpsessid = Hosts[i].Phpsessid
 						fmt.Println(Hosts[i].Ipaddress)
+						return Hosts[i].Ipaddress, nil
 				//}
 			}
 		}
