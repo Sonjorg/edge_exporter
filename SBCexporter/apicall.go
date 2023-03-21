@@ -63,7 +63,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 					//log.Fatal(e)
 				}
 		}
-		}
+		} else {break}
 	}
 	}
 
