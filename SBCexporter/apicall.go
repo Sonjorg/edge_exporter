@@ -81,7 +81,9 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	}
 	fmt.Println("sqlite-database.db created")
 //sql.Open()
-	sqliteDatabase, _ := sql.Open("sqlite3", "./sqlite-database.db") // Open the created SQLite File
+	var sqliteDatabase *sql.DB
+
+	sqliteDatabase, _ = sql.Open("sqlite3", "./sqlite-database.db") // Open the created SQLite File
 	 // Defer Closing the database
 	createTable(sqliteDatabase) // Create Database Tables
 	// INSERT RECORDS
