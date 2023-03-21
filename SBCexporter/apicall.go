@@ -3,7 +3,6 @@ package main
 import (
 	"crypto/tls"
 	"database/sql"
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -12,8 +11,6 @@ import (
 	"os"
 	"strings"
 	"time"
-
-	"github.com/mattn/go-sqlite3" // Import go-sqlite3 library
 )
 type Cookie struct {
 	Ipaddress string    `json:"ipaddress"`
