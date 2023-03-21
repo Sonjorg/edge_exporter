@@ -36,7 +36,9 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 		fmt.Println("No file yet")
 	}*/
 	var data []byte
-	data, _ = ioutil.ReadFile("data.json")
+	if _, err := os.Stat("data.json"); err == nil {
+
+	data,_ = ioutil.ReadFile("data.json")
 
 	d := &sessionCookie{}
 	_ = json.Unmarshal(data, &d)
@@ -58,6 +60,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 					log.Fatal(e)
 				}
 		}
+	}
 
 
 	cfg := getConf(&Config{})
