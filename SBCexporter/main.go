@@ -12,15 +12,16 @@ import (
 	//"bytes"
 	//"flag"
 	//"io"
-	//"log"
-	//"net/http"
+
 	//"regexp"
 	//"strconv"
 	//"time"
 	//"github.com/hpcloud/tail"
 	//exporter "https://github.com/Sonjorg/HDOmonitoring"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
+	//"github.com/prometheus/client_golang/prometheus/promhttp"
+	//"log"
+	//"net/http"
 )
 
 type status struct {
