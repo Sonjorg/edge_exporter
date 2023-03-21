@@ -151,6 +151,30 @@ req2.AddCookie(cookie1)
 
 func main() {
 	php, err  := APISessionAuth("student", "PanneKake23", "10.233.234.11")
+	fmt.Println(php)
 
+	var read []byte
+	//var phpsessid string
+	read, err = ioutil.ReadFile("tmp.json")
+	if err != nil {
+		//struct := &Host{}
+		//var str Name
+		//doc := make(map[string]Host{})
+		Hosts := []Cookie{}
+		err := json.Unmarshal(read, &Hosts)
+		if err != nil {
+			fmt.Println("No data retrieved unmarhalling json phpsessid")
+		}
+		for i := range Hosts {
+			if (Hosts[i].Ipaddress == "10.233.234.11") {
+				if (Hosts[i].Time.Add(8 * time.Minute).Before(time.Now())) {
+
+					//Hosts[i].Phpsessid
+					//phpsessid = Hosts[i].Phpsessid
+						fmt.Println(Hosts[i].Phpsessid)
+				}
+			}
+		}
+	}
 	fmt.Println(php,err)
 }
