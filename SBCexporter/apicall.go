@@ -125,7 +125,7 @@ func main() {
 
 	sqliteDatabase, _ = sql.Open("sqlite3", "./sqlite-database.db") // Open the created SQLite File
 	 // Defer Closing the database
-	createTable(sqliteDatabase) // Create Database Tables
+	//createTable(sqliteDatabase) // Create Database Tables
 	// INSERT RECORDS
 	insertAuth(sqliteDatabase, "10.233.234.11", "phpsessid", time.Now().String())
 	insertAuth(sqliteDatabase, "blabla", "dsfsdf", time.Now().String())
