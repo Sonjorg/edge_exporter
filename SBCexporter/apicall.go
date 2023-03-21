@@ -18,6 +18,7 @@ type Cookie struct {
 	Time      time.Time `json:"time"`
 }
 type Cookies struct {
+	Name string `json:"Name"`
 	Cookies []Cookie `json:"cookies"`
 }
 // The functions APISessionAuth(...) and getAPIData(...) utilizes curl-to-go translator but is modified for cookie management.
@@ -60,25 +61,25 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 		//doc := make(map[string]Host{})
 		//var Hosts = &Cookie{}
 
-    data := []Cookie{}
+   // data := []Cookie{}
 
     // Here the magic happens!
-    json.Unmarshal(file, &data)
-		Hosts := []Cookie{}
+    //json.Unmarshal(file, &data)
+		Hosts := Cookies{}
 		err := json.Unmarshal(file, &Hosts)
 		if err != nil {
 			fmt.Println("No data retrieved unmarhalling json phpsessid",err)
 		}
 		fmt.Println(Hosts)
-		for i := range Hosts {
-			if (Hosts[i].Ipaddress == "10.233.234.11") {
-				if (Hosts[i].Time.Add(2 * time.Minute).Before(time.Now())) {
+		for i := range Hosts.Cookies {
+			if (Hosts.Cookies[i].Ipaddress == "10.233.234.11") {
+				//if (Hosts[i].Time.Add(2 * time.Minute).Before(time.Now())) {
 
 					//Hosts[i].Phpsessid
 					//phpsessid = Hosts[i].Phpsessid
-						fmt.Println(Hosts[i].Ipaddress)
-						return Hosts[i].Ipaddress, nil
-				}
+						fmt.Println(Hosts.Cookies[i].Ipaddress)
+						return Hosts.Cookies[i].Ipaddress, nil
+			//	}
 			}
 		}
 	} else {fmt.Println("cant open")}
@@ -120,14 +121,14 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	phpsessid = m["PHPSESSID"]
 //d := Cookies{}
 	//data := Cookie{ipaddress, phpsessid, time.Now()}
-    data := []Cookie{}
+    data := Cookie{}
 	c := &Cookie{
         Ipaddress: ipaddress,
 		Phpsessid: phpsessid,
 		Time: time.Now(),
     }
-	data = append(data, *c)
-	dataBytes, err := json.Marshal(data)
+	//data = append(data, *c)
+	dataBytes, err := json.Marshal(c)
     if err != nil {
         fmt.Println(err)
     }
