@@ -127,8 +127,8 @@ func main() {
 	 // Defer Closing the database
 	//createTable(sqliteDatabase) // Create Database Tables
 	// INSERT RECORDS
-	insertAuth(sqliteDatabase, "10.233.234.11", "phpsessid", time.Now().String())
-	insertAuth(sqliteDatabase, "blabla", "dsfsdf", time.Now().String())
+	//insertAuth(sqliteDatabase, "10.233.234.11", "phpsessid", time.Now().String())
+	//insertAuth(sqliteDatabase, "blabla", "dsfsdf", time.Now().String())
 
 	// DISPLAY INSERTED RECORDS
 	//fmt.Println(ip, sess, time)
