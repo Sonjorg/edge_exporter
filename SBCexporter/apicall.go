@@ -71,7 +71,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 
 	defer resp.Body.Close()
 
-	os.Remove("sqlite-database.db") // I delete the file to avoid duplicated records.
+	//os.Remove("sqlite-database.db") // I delete the file to avoid duplicated records.
 	// SQLite is a file based database.
 
 	//log.Println("Creating sqlite-database.db...")
