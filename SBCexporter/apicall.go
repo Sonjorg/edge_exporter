@@ -99,11 +99,17 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	  }
 	 // fmt.Println(m["PHPSESSID"])
 	phpsessid = m["PHPSESSID"]
-
+	fmt.Println(phpsessid)
 	data2 := sessionCookie{ipaddress, phpsessid, time.Now()}
 	jsonByte, _ := json.Marshal(data2)
-	file, err := os.Create("./data.json")
-	log.Println("file cereated", file.Name())
+	if _, err := os.Stat("data.json"); err != nil {
+		file, err := os.Create("./data.json")
+		if err != nil {
+			fmt.Println(err)
+		}
+		log.Println("file cereated", file.Name())
+
+	}
     //check(err)
 	f, err := os.OpenFile("./data.json", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 	if err != nil {
