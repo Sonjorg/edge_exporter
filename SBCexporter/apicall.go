@@ -46,7 +46,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 //Checks if current time is 8 min after logged time in json file
 //If so, use the sessioncookie stored in the json file
 		for i :=range Hosts {
-			if (time.Now().Local().Before(Hosts[i].Time.Add(2 * time.Minute))){ //Hosts.Time.After(time.Now().Add(1 * time.Minute))) {
+			if (time.Now().Before(Hosts[i].Time.Add(2 * time.Minute))){ //Hosts.Time.After(time.Now().Add(1 * time.Minute))) {
 				if (Hosts[i].Ipaddress == ipaddress) {
 					fmt.Println("retrieved from file")
 					phpsessid = Hosts[i].Phpsessid
@@ -61,6 +61,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 		}
 	return phpsessid,nil
 }
+fmt.Println(Hosts)
 
 
 	cfg := getConf(&Config{})
