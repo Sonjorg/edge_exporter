@@ -39,6 +39,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	if (Hosts.Time.After(time.Now().Add(1 * time.Minute))) {
 		if (Hosts.Ipaddress == ipaddress) {
 			return Hosts.Phpsessid, err
+			fmt.Println("retrieved from file")
 		}
 	}
 
