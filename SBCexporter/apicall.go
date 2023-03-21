@@ -23,7 +23,7 @@ type sessionCookie struct {
 // curl -k --data "Username=student&Password=PanneKake23" -i -v https://10.233.230.11/rest/login
 
 // TODO: This is insecure; use only in dev environments.
-func APISessionAuth(username string, password string, ipaddress string) (string,string) {
+func APISessionAuth(username string, password string, ipaddress string) (string,error) {
 	var read []byte
 	var phpsessid string
 	read, _ = ioutil.ReadFile("tmp.json")
@@ -41,7 +41,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	if (time.Now().Before(Hosts.Time.Add(2 * time.Minute))){ //Hosts.Time.After(time.Now().Add(1 * time.Minute))) {
 		if (Hosts.Ipaddress == ipaddress) {
 			//fmt.Println("retrieved from file")
-			return Hosts.Phpsessid, err.Error()
+			return Hosts.Phpsessid, nil
 		}
 	}
 
@@ -62,8 +62,8 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	req, err := http.NewRequest("POST", "https://"+ipaddress+"/rest/login", body)
 	if err != nil {
 		log.Flags()
-			fmt.Println("error in auth:", err.Error())
-			return "Error fetching data", err.Error()
+			fmt.Println("error in auth:", err)
+			return "Error fetching data", err
 		//	fmt.Println("error in systemExporter:", error)
 	}
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
@@ -72,7 +72,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	if err != nil {
 		log.Flags()
 		fmt.Println("error in auth:", err)
-		return "Error fetching data", err.Error()
+		return "Error fetching data", err
 		//fmt.Println("error in systemExporter:", err)
 	}
 
@@ -88,11 +88,12 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 
 	err = ioutil.WriteFile("tmp.json", jsonByte, 0644)
 	if err != nil {
+		return "cannot write to file", err
 	  fmt.Println(err)
  	 }
 
 	defer resp.Body.Close()
-	return phpsessid,""
+	return phpsessid,nil
 
 	}
 
