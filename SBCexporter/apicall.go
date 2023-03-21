@@ -37,17 +37,18 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	err := json.Unmarshal(read, &Hosts)
 	if err != nil {
 		fmt.Println("No data retrieved unmarhalling json phpsessid")
-	}
+	} else {
 //Checks if current time is 8 min after logged time in json file
 //If so, use the sessioncookie stored in the json file
-for i :=range Hosts.H {
-	if (time.Now().Before(Hosts.H[i].Time.Add(2 * time.Minute))){ //Hosts.Time.After(time.Now().Add(1 * time.Minute))) {
-		if (Hosts.H[i].Ipaddress == ipaddress) {
-			//fmt.Println("retrieved from file")
-			return Hosts.H[i].Phpsessid, nil
+		for i :=range Hosts.H {
+			if (time.Now().Before(Hosts.H[i].Time.Add(2 * time.Minute))){ //Hosts.Time.After(time.Now().Add(1 * time.Minute))) {
+				if (Hosts.H[i].Ipaddress == ipaddress) {
+					//fmt.Println("retrieved from file")
+					return Hosts.H[i].Phpsessid, nil
+				}
+			} else { break }
 		}
-	} else { break }
-}
+	}
 
 
 	cfg := getConf(&Config{})
@@ -95,21 +96,21 @@ for i :=range Hosts.H {
 		fmt.Println(err)
 		return "Cannot open file",err
 	}
-defer f.Close()
+	defer f.Close()
 
-n, err := f.Write(jsonByte)
-if err != nil {
-    fmt.Println(n, err)
-}
+	n, err := f.Write(jsonByte)
+	if err != nil {
+		fmt.Println(n, err)
+	}
 
-if n, err = f.WriteString("\n"); err != nil {
-    fmt.Println(n, err)
-}
+	if n, err = f.WriteString("\n"); err != nil {
+		fmt.Println(n, err)
+	}
 
 	defer resp.Body.Close()
 	return phpsessid,nil
 
-	}
+}
 
 
 func getAPIData(url string, phpsessid string) (string,error){
