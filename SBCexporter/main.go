@@ -19,9 +19,9 @@ import (
 	//"github.com/hpcloud/tail"
 	//exporter "https://github.com/Sonjorg/HDOmonitoring"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"log"
-	"net/http"
+	//"github.com/prometheus/client_golang/prometheus/promhttp"
+	//"log"
+	//"net/http"
 )
 
 type status struct {
@@ -117,7 +117,7 @@ func (collector *metrics) Collect(ch chan<- prometheus.Metric) {
 	ch <- m1
 	ch <- m2
 }
-
+/*
 func main() {
 
 		//systemResourceCollector()
@@ -132,3 +132,4 @@ func main() {
 	log.Fatal(http.ListenAndServe(":9111", nil))
 
 }
+*/
