@@ -191,7 +191,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				}
 
 				for k := range match {
-					phpsessid,err := APISessionAuth("student", "PanneKake23","https://"+hosts[i].ip+"/rest/login")
+					phpsessid,err := APISessionAuth("student", "PanneKake23",hosts[i].ip)
 						if err != nil {
 							fmt.Println(err)
 							continue
