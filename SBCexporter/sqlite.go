@@ -8,6 +8,7 @@ import (
 )
 
 type Cookie struct {
+	Id        int
 	Ipaddress string
 	Phpsessid string
 	Time      string
@@ -63,7 +64,7 @@ func displayAuth(db *sql.DB) []*Cookie{
 	var c []*Cookie
 	for row.Next() {
 			p := &Cookie{}
-			if err := row.Scan(p.Ipaddress, p.Phpsessid, p.Time); err != nil{
+			if err := row.Scan(p.Id, p.Ipaddress, p.Phpsessid, p.Time); err != nil{
 				 fmt.Println(err)
 			}
 			c = append(c, p)
