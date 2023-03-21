@@ -15,7 +15,7 @@ import (
 type sessionCookie struct {
 	Ipaddress string
 	Phpsessid string
-	Time time.Time
+	Time      time.Time
 }
 type h struct {
 	H []sessionCookie
@@ -50,7 +50,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 					return Hosts.H[i].Phpsessid, nil
 			}
 		}
-	}
+	}}
 
 	cfg := getConf(&Config{})
 	timeout := cfg.Authtimeout
@@ -110,7 +110,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 
 	defer resp.Body.Close()
 
-}
+
 return phpsessid,nil
 }
 
