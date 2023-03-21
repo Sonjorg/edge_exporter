@@ -37,13 +37,14 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	}
 //Checks if current time is 10 min after logged time in json file
 //If so, use the sessioncookie stored in the json file
+/*
 	if (time.Now().After(Hosts.Time.Add(1 * time.Minute))){ //Hosts.Time.After(time.Now().Add(1 * time.Minute))) {
 		if (Hosts.Ipaddress == ipaddress) {
 			//fmt.Println("retrieved from file")
 			return Hosts.Phpsessid, err
 		}
 	}
-
+*/
 
 	cfg := getConf(&Config{})
 	timeout := cfg.Authtimeout
