@@ -89,7 +89,10 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	phpsessid = m["PHPSESSID"]
 //d := Cookies{}
 	data := Cookie{ipaddress, phpsessid, time.Now()}
+
 	jsonByte, _ := json.Marshal(data)
+	jsonByte, _ = json.MarshalIndent(data, "", "  ")
+
 	f, err := os.OpenFile("./data.json", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 	if err != nil {
 		fmt.Println(err)
@@ -100,6 +103,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 		if err != nil {
 			fmt.Println(n, err)
 		}
+
 		if n, err = f.WriteString("\n"); err != nil {
 			fmt.Println(n, err)
 		}
