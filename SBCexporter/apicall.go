@@ -92,7 +92,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
  	 }
 
 	defer resp.Body.Close()
-	return phpsessid,err.Error()
+	return phpsessid,""
 
 	}
 
