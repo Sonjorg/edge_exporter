@@ -34,7 +34,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	//read,err := ioutil.ReadFile("data.json")
 	/*if err != nil {
 		fmt.Println("No file yet")
-	}*/
+	}*//*
 	var data []byte
 	if _, err := os.Stat("data.json"); err != nil {
 
@@ -61,7 +61,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 		}
 		}
 	}
-
+*/
 
 	cfg := getConf(&Config{})
 	timeout := cfg.Authtimeout
