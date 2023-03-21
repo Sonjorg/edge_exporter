@@ -11,6 +11,7 @@ import (
 	"log"
 	"encoding/json"
 	"os"
+	"io"
 )
 type sessionCookie struct {
 	Ipaddress string
@@ -34,34 +35,52 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	if err != nil {
 		fmt.Println("No file yet")
 	}
+	s:=string(read)
 	//fmt.Println(read)
 	//struct := &Host{}
 	//var str Name
 	//doc := make(map[string]Host{})
-	Hosts := []sessionCookie{}
-	err = json.Unmarshal(read, &Hosts)
-	if err != nil {
-		fmt.Println("No data retrieved unmarhalling json phpsessid")
-	} else {
+	dec := json.NewDecoder(strings.NewReader(s))
+    for {
+        var doc sessionCookie
+
+        err := dec.Decode(&doc)
+        if err == io.EOF {
+            // all done
+            break
+        }
+        if err != nil {
+            log.Fatal(err)
+        }
+
+        fmt.Printf("%+v\n", doc)
+
+		if (time.Now().Before(doc.Time.Add(2 * time.Minute))){ //Hosts.Time.After(time.Now().Add(1 * time.Minute))) {
+			if (doc.Ipaddress == ipaddress) {
+				fmt.Println("retrieved from file")
+				phpsessid = doc.Phpsessid
+				fmt.Println(time.Now(), doc.Time)
+				fmt.Println(time.Now().Local().Before(doc.Time.Add(2 * time.Minute)))
+				return phpsessid,nil
+
+		}
+		} else { e := os.Remove("data.json")
+				if e != nil {
+					log.Fatal(e)
+				}
+		}
+	}
+
+
+
+
+	//Hosts := []sessionCookie{}
+	//err = json.Unmarshal(read, &Hosts)
+
 //Checks if current time is 8 min after logged time in json file
 //If so, use the sessioncookie stored in the json file
-		for i :=range Hosts {
-			if (time.Now().Before(Hosts[i].Time.Add(2 * time.Minute))){ //Hosts.Time.After(time.Now().Add(1 * time.Minute))) {
-				if (Hosts[i].Ipaddress == ipaddress) {
-					fmt.Println("retrieved from file")
-					phpsessid = Hosts[i].Phpsessid
-					fmt.Println(time.Now(), Hosts[i].Time)
-					fmt.Println(time.Now().Local().Before(Hosts[i].Time.Add(2 * time.Minute)))
-			}
-			} else { e := os.Remove("data.json")
-					if e != nil {
-						log.Fatal(e)
-					}
-			}
-		}
-	return phpsessid,nil
-}
-fmt.Println(Hosts)
+
+
 
 
 	cfg := getConf(&Config{})
