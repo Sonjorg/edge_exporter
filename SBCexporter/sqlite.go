@@ -67,7 +67,6 @@ func displayAuth(db *sql.DB) []*Cookie{
 				 fmt.Println(err)
 			}
 			c = append(c, p)
-
 	}
 	return c
 }

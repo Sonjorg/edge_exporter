@@ -133,8 +133,8 @@ func main() {
 	c := displayAuth(sqliteDatabase)
 	defer sqliteDatabase.Close()
 	defer file.Close()
-	for range c {
-	fmt.Println(c.Ipaddress, c.Time)
+	for i:= range c {
+		fmt.Println(c[i].Ipaddress, c[i].Time)
 	}
 
 	//fmt.Println(php,err)
