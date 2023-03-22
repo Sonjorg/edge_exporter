@@ -88,6 +88,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	if err != nil {
 		fmt.Println("kan ikke kaste table",err)
 	}*/
+	err = dropTable(sqliteDatabase)
 	err = createTable(sqliteDatabase)
 	if err != nil {
 		fmt.Println("kan ikke lage table")
