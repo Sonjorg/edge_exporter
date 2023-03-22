@@ -50,7 +50,7 @@ func dropTable(db *sql.DB) error{
 // We are passing db reference connection from main to our method with other parameters
 func insertAuth(db *sql.DB, ipaddress string, phpsessid string, time string) error{
 	log.Println("Inserting record ...")
-	insertAuthSQL := `INSERT OR REPLACE INTO authentication(ipaddress, phpsessid, time) VALUES (?, ?, ?)`
+	insertAuthSQL := `INSERT INTO authentication(ipaddress, phpsessid, time) VALUES (?, ?, ?)`
 	statement, err := db.Prepare(insertAuthSQL) // Prepare statement.
                                                    // This is good to avoid SQL injections
 	if err != nil {
@@ -99,17 +99,6 @@ func displayAuth(db *sql.DB) ([]*Cookie, error){
 	}
 	defer row.Close()
 
-    //checkErr(err)
-	/*for row.Next() { // Iterate and fetch the records from result cursor
-		var id int
-		var ipaddress string
-		var phpsessid string
-		var time string
-		row.Scan(&id, &ipaddress, &phpsessid, &time)
-		//log.Println("Student: ", code, " ", name, " ", program)
-	}*/
-	//return row.Columns()ipaddress, phpsessid, time
-	//rows.Scan(&id, &name)
 	var c []*Cookie
 	for row.Next() {
 			p := &Cookie{}
@@ -120,29 +109,3 @@ func displayAuth(db *sql.DB) ([]*Cookie, error){
 	}
 	return c,err
 }
-//func displayAuth(db *sql.DB, ip string) *Cookie {
-
-	/*row, err := db.Query("SELECT ipaddress AS ip FROM Students")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer row.Close()
-	/*for row.Next() { // Iterate and fetch the records from result cursor
-		var id int
-		var ipaddress string
-		var phpsessid string
-		var time string
-		row.Scan(&id, &ipaddress, &phpsessid, &time)
-		//log.Println("Student: ", code, " ", name, " ", program)
-	}
-	//return row.Columns()ipaddress, phpsessid, time
-	var c []*Cookie
-	for row.Next() {
-			p := &Cookie{}
-			if err := row.Scan(&p.Id, &p.Ipaddress, &p.Phpsessid, &p.Time); err != nil{
-				 fmt.Println(err)
-			}
-			c = append(c, p)
-	}
-	return c
-	*/

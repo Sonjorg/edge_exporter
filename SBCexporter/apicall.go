@@ -98,14 +98,16 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	if rowExists(sqliteDatabase,ipaddress) {
 		Update(sqliteDatabase, phpsessid, now, ipaddress)
 		//insertAuth(sqliteDatabase, ipaddress, phpsessid, time.Now().String())
-	} else {insertAuth(sqliteDatabase, ipaddress, phpsessid, now)}
+	} else {
+		insertAuth(sqliteDatabase, ipaddress, phpsessid, now)
+	}
 
 	return phpsessid,err
 	}
 
 
 
-
+//This function retrieves the session cookie from the sqlite database
 func getSqliteData(ipaddress string) (cookie string, err error){
 
 	var sqliteDatabase *sql.DB
@@ -155,12 +157,11 @@ func getSqliteData(ipaddress string) (cookie string, err error){
 				//phpsessid = Hosts[i].Phpsessid
 				//fmt.Println("true")
 				c = Hosts[i].Phpsessid
-				fmt.Println(c)
+				//fmt.Println(c)
 				break
 
 			} else {
 				 return "", nil}
-			//fmt.Println(time.Now(), Hosts[i].Phpsessid, timeLast.Add(mins).Before(time.Now()))
 		} else {
 			return "", nil}
 	}
