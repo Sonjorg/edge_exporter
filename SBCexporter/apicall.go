@@ -76,7 +76,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 
 
 	//fmt.Println("henta fra ruter")
-
+	os.Remove("sqlite-database.db")
 	//Checking if db already exist
 	_, err = os.Stat("sqlite-database.db")
 	if err != nil {
