@@ -9,8 +9,6 @@ import (
 	"net/http"
 	"net/url"
 	//"os"
-
-	//"os"
 	"strings"
 	"time"
 
@@ -26,6 +24,13 @@ import (
 func APISessionAuth(username string, password string, ipaddress string) (string,error) {
 	//var read []byte
 	var phpsessid string
+	var err error
+	phpsessid,err = getSqliteData(ipaddress)
+	if (phpsessid != "" || err == nil) {
+		return phpsessid, nil
+		fmt.Println("henta fra sql")
+	}
+
 
 	cfg := getConf(&Config{})
 	timeout := cfg.Authtimeout
@@ -68,62 +73,31 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	//createTable(sqliteDatabase)
 	//insertAuth(sqliteDatabase, "10.233.234.11", "phpsessid", time.Now().String())
 
+	fmt.Println("henta fra ruter")
+
 	return phpsessid,err
 	}
 
 
-func getAPIData(url string, phpsessid string) (string,error){
 
-tr2 := &http.Transport{
-	TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-}
-client2 := &http.Client{Transport: tr2}
-cookie1 := &http.Cookie{
-	Name:   "PHPSESSID",
-	Value:  phpsessid,
-	//Path:     "/",
-	MaxAge:   3600,
-	HttpOnly: false,
-	Secure:   true,
-}
-req2, err := http.NewRequest("GET", url, nil)
-if err != nil {
-	log.Flags()
-		fmt.Println("error in getapidata():", err)
-		return "Error fetching data", err
-	//	fmt.Println("error in systemExporter:", error)
-}
-req2.AddCookie(cookie1)
-	resp2, err := client2.Do(req2)
-	if err != nil {
-		log.Flags()
-			fmt.Println("error in getapidata():", err)
-			return "Error fetching data", err
-	}
 
-	b, err := ioutil.ReadAll(resp2.Body)
-	defer resp2.Body.Close()
-
-	return string(b), err
-}
-/*
 func getSqliteData(ipaddress string) (cookie string, err error){
 
 	var sqliteDatabase *sql.DB
 
 	sqliteDatabase, err = sql.Open("sqlite3", "./sqlite-database.db")
 	if err != nil {
-		file, err := os.Create("sqlite-database.db") // Create SQLite file
-		if err != nil {
-			log.Fatal(err.Error())
-	}
-		file.Close()
+
+		fmt.Println(err)
 		return "", err
 	} // Open the created SQLite File
 	 // Defer Closing the database
 
+	 // following line is atest:
+	insertAuth(sqliteDatabase, "10.233.234.11", "phpsessid", time.Now().String())
+
 	Hosts := displayAuth(sqliteDatabase)
-	/*if err != nil {
+	if err != nil {
 		return "", err
 	}
 	defer sqliteDatabase.Close()
@@ -149,15 +123,16 @@ func getSqliteData(ipaddress string) (cookie string, err error){
 	}
 	return c, nil
 }
-*/
+
 func main() {
 	var sqliteDatabase *sql.DB
 
 	sqliteDatabase, err := sql.Open("sqlite3", "./sqlite-database.db")
 	if err != nil {
-		fmt.Println("can open db")
+		fmt.Println("cant open db")
 	} // Open the created SQLite File
 	 // Defer Closing the database
+	 insertAuth(sqliteDatabase, "10.233.234.11", "test 19.00", time.Now().String())
 //insertAuth(sqliteDatabase,"test","test","test")
 	Hosts := displayAuth(sqliteDatabase)
 	/*if err != nil {
@@ -178,3 +153,40 @@ func main() {
 	//fmt.Println(c)
 
 }
+
+
+
+func getAPIData(url string, phpsessid string) (string,error){
+
+	tr2 := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	client2 := &http.Client{Transport: tr2}
+	cookie1 := &http.Cookie{
+		Name:   "PHPSESSID",
+		Value:  phpsessid,
+		//Path:     "/",
+		MaxAge:   3600,
+		HttpOnly: false,
+		Secure:   true,
+	}
+	req2, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		log.Flags()
+			fmt.Println("error in getapidata():", err)
+			return "Error fetching data", err
+		//	fmt.Println("error in systemExporter:", error)
+	}
+	req2.AddCookie(cookie1)
+		resp2, err := client2.Do(req2)
+		if err != nil {
+			log.Flags()
+				fmt.Println("error in getapidata():", err)
+				return "Error fetching data", err
+		}
+
+		b, err := ioutil.ReadAll(resp2.Body)
+		defer resp2.Body.Close()
+
+		return string(b), err
+	}
