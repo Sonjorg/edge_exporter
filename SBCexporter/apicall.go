@@ -130,6 +130,8 @@ func getSqliteData(ipaddress string) (cookie string, err error){
 		if (Hosts[i].Ipaddress == ipaddress) {
 			timeLast,_ := time.Parse(time.Now().String(), Hosts[i].Time)
 			fmt.Println(timeLast)
+			fmt.Println(Hosts[i].Time)
+
 			fmt.Println(time.Now())
 			fmt.Println(timeLast.Add(mins).Before(time.Now()))
 
