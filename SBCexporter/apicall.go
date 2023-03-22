@@ -166,7 +166,7 @@ func main() {
 	for i:= range Hosts {
 		fmt.Println(Hosts[i].Phpsessid, Hosts[i].Ipaddress,Hosts[i].Phpsessid)
 	}
-	b := rowExist(sqliteDatabase,"10.233.234.11")
+	b := rowExists(sqliteDatabase,"10.233.234.11")
 	fmt.Println(b)
 	Update(sqliteDatabase,"update","update","test")
 	Hosts = displayAuth(sqliteDatabase)
