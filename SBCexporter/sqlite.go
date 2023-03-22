@@ -33,7 +33,7 @@ func createTable(db *sql.DB) error {
 }
 
 func dropTable(db *sql.DB) error{
-	dropAuthTableSQL := `DROP TABLE [IF EXISTS] authentication`
+	dropAuthTableSQL := `DROP TABLE IF EXISTS authentication`
 	statement, err := db.Prepare(dropAuthTableSQL) // Prepare SQL Statement
 	if err != nil {
 		return err
