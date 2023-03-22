@@ -27,8 +27,8 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	var err error
 	phpsessid,err = getSqliteData(ipaddress)
 	fmt.Println(phpsessid)
-	if (phpsessid != "" && err == nil) {
-		fmt.Println("henta fra sql")
+	if (phpsessid != "") {
+		fmt.Println("henta fra sql",err)
 		return phpsessid, nil
 	}
 
@@ -81,10 +81,11 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	if err != nil {
 		fmt.Println(err)
 	}
+	/*
 	err = dropTable(sqliteDatabase)
 	if err != nil {
 		fmt.Println("kan ikke kaste table")
-	}
+	}*/
 	err = createTable(sqliteDatabase)
 	if err != nil {
 		fmt.Println("kan ikke lage table")
