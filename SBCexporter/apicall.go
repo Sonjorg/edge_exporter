@@ -10,7 +10,7 @@ import (
 	"net/url"
 	//"strconv"
 
-	//"os"
+	"os"
 	"strings"
 	"time"
 
@@ -28,8 +28,8 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	var phpsessid string
 	var err error
 	phpsessid,err = getSqliteData(ipaddress)
-	fmt.Println(phpsessid)
-	if (phpsessid != "") {
+	//fmt.Println(phpsessid)
+	if (phpsessid != "" && err == nil) {
 		fmt.Println("henta fra sql",err)
 		return phpsessid, nil
 	}
@@ -77,21 +77,26 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	//insertAuth(sqliteDatabase, "10.233.234.11", "phpsessid", time.Now().String())
 
 	fmt.Println("henta fra ruter")
+	os.Remove("sqlite-database.db") // I delete the file to avoid duplicated records.
+                                    // SQLite is a file based database.
+
+	fmt.Println("Creating sqlite-database.db...")
+	file, err := os.Create("sqlite-database.db") // Create SQLite file
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	file.Close()
 	var sqliteDatabase *sql.DB
 
 	sqliteDatabase, err = sql.Open("sqlite3", "./sqlite-database.db")
 	if err != nil {
 		fmt.Println(err)
 	}
-/*
-	err = dropTable(sqliteDatabase)
-	if err != nil {
-		fmt.Println("kan ikke kaste table",err)
-	}*/
+
 	//err = dropTable(sqliteDatabase)
 	err = createTable(sqliteDatabase)
 	if err != nil {
-		fmt.Println("kan ikke lage table")
+		fmt.Println(err)
 	}
 	now := time.Now().Format(time.RFC3339)
 
@@ -120,8 +125,6 @@ func getSqliteData(ipaddress string) (cookie string, err error){
 	} // Open the created SQLite File
 	 // Defer Closing the database
 
-	 // following line is atest:
-	//insertAuth(sqliteDatabase, "10.233.234.11", "phpsessid", time.Now().String())
 
 	Hosts,err := displayAuth(sqliteDatabase)
 	if err != nil {
@@ -129,22 +132,15 @@ func getSqliteData(ipaddress string) (cookie string, err error){
 	}
 	defer sqliteDatabase.Close()
 	//defer file.Close()
-	//ipaddress := "10.233.234.11"
-	//t := time.Now()
 	var c string
 	mins := time.Minute * time.Duration(1)
 	for i:= range Hosts {
 		fmt.Println(Hosts[i].Ipaddress)
 		if (Hosts[i].Ipaddress == ipaddress) {
 
-			//fmt.Println(Hosts[i].Time)
-
-			//p := fmt.Println
 			now := time.Now().Format(time.RFC3339)
-			//p(now)
 
 			parsed, _ := time.Parse(time.RFC3339, now)
-			//p(parsed.Format(time.RFC3339))
 			parsed2,err := time.Parse(time.RFC3339, Hosts[i].Time)
 			if err != nil {
 				fmt.Println(err)
