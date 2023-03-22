@@ -63,7 +63,7 @@ func insertAuth(db *sql.DB, ipaddress string, phpsessid string, time string) err
 	return nil
 }
 func rowExists(db * sql.DB, ip string) bool {
-    sqlStmt := `SELECT username FROM userinfo WHERE username = ?`
+    sqlStmt := `SELECT ipaddress FROM authentication WHERE ipaddress = ?`
     err := db.QueryRow(sqlStmt, ip).Scan(&ip)
     if err != nil {
         if err != sql.ErrNoRows {
