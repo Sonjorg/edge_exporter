@@ -134,12 +134,12 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 
 		phpsessid,err := APISessionAuth(hosts[i].username, hosts[i].password, hosts[i].ip)
 		if err != nil {
-			fmt.Println("Error auth", hosts[i].ip)
+			fmt.Println("Error auth", hosts[i].ip, err)
 			continue
 		}
 		data,err := getAPIData("https://"+hosts[i].ip+"/rest/routingtable", phpsessid)
 		if err != nil {
-			fmt.Println("Error routingtable data", hosts[i].ip)
+			fmt.Println("Error routingtable data", hosts[i].ip, err)
 			continue
 		}
 		b := []byte(data) //Converting string of data to bytestream

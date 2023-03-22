@@ -81,11 +81,13 @@ func rowExists(db * sql.DB, ip string) bool {
 func Update(db *sql.DB,  phpsessid string, time string, ipaddress string) {
 	stmt, err := db.Prepare("UPDATE authentication set phpsessid=?, time=? where ipaddress=?")
 	if err != nil {
-	 log.Fatal(err)
+	 //log.Fatal(err)
+	 fmt.Println("update",err)
 	}
 	res, err := stmt.Exec(phpsessid, time, ipaddress)
 	if err != nil {
-	 log.Fatal(err)
+	 //log.Fatal(err)	 fmt.Println("update",err)
+
 	}
 	affected, _ := res.RowsAffected()
 	log.Printf("Affected rows %d", affected)
@@ -96,6 +98,7 @@ func displayAuth(db *sql.DB, ipaddress string) ([]*Cookie, error){
 	//row.Scan(ip)
 	if err != nil {
 		return nil, err
+		fmt.Println(err)
 	}
 	defer row.Close()
 
@@ -105,7 +108,9 @@ func displayAuth(db *sql.DB, ipaddress string) ([]*Cookie, error){
 			if err := row.Scan(&p.Id, &p.Ipaddress, &p.Phpsessid, &p.Time); err != nil{
 				 fmt.Println(err)
 			}
-			c = append(c, p)
+			if (&p.Ipaddress == ipaddress) {
+				c = append(c, p)
+			}
 	}
 
 	return c,err
