@@ -141,7 +141,7 @@ func getSqliteData(ipaddress string) (cookie string, err error){
 			t,t2,t3 := time.Now().Clock()
 			tf := strconv.Itoa(t)+":"+strconv.Itoa(t2)+":"+strconv.Itoa(t3)
 			fmt.Println(tf)
-			tid,err := time.Parse(tf,"12:20:34")
+			tid,err := time.Parse("12:20:34",tf)
 			fmt.Println(tid, "\n\n", err)
 
 			if (tid.Add(mins).Before(time.Now()) == true) {
