@@ -62,8 +62,8 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 
 
 	defer resp.Body.Close()
-
-
+	createTable(sqliteDatabase)
+	insertAuth(sqliteDatabase, "10.233.234.11", "phpsessid", time.Now().String())
 
 	return phpsessid,err
 	}
@@ -104,39 +104,25 @@ req2.AddCookie(cookie1)
 	return string(b), err
 }
 
-func getSqliteData(){
+func getSqliteData(ipaddress string) (cookie string, err error){
 
-}
-
-func main() {
-
-	//php, err  := APISessionAuth("student", "PanneKake23", "10.233.234.11")
-	//php2, err  := APISessionAuth("student", "PanneKake23", "10.233.230.11")
-	//os.Remove("sqlite-database.db") // I delete the file to avoid duplicated records.
-	// SQLite is a file based database.
-
-	//log.Println("Creating sqlite-database.db...")
-	/*file, err := os.Create("sqlite-database.db") // Create SQLite file
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-	fmt.Println("sqlite-database.db created")*/
 	var sqliteDatabase *sql.DB
 
-	sqliteDatabase, _ = sql.Open("sqlite3", "./sqlite-database.db") // Open the created SQLite File
+	sqliteDatabase, err = sql.Open("sqlite3", "./sqlite-database.db")
+	if err != nil {
+		return "", err
+	} // Open the created SQLite File
 	 // Defer Closing the database
-	//createTable(sqliteDatabase) // Create Database Tables
-	// INSERT RECORDS
-	//insertAuth(sqliteDatabase, "10.233.234.11", "phpsessid", time.Now().String())
-	//insertAuth(sqliteDatabase, "blabla", "dsfsdf", time.Now().String())
 
-	// DISPLAY INSERTED RECORDS
-	//fmt.Println(ip, sess, time)
-	Hosts := displayAuth(sqliteDatabase)
+	Hosts, err := displayAllAuth(sqliteDatabase)
+	if err != nil {
+		return "", err
+	}
 	defer sqliteDatabase.Close()
 	//defer file.Close()
-	ipaddress := "10.233.234.11"
+	//ipaddress := "10.233.234.11"
 	//t := time.Now()
+	var c string
 	mins := time.Minute * 2
 	for i:= range Hosts {
 		fmt.Println(Hosts[i].Ipaddress, Hosts[i].Time)
@@ -146,10 +132,31 @@ func main() {
 				//return Hosts[i].Phpsessid,nil
 				//phpsessid = Hosts[i].Phpsessid
 				//fmt.Println("true")
-			}
-			fmt.Println(time.Now(), Hosts[i].Phpsessid, timeLast.Add(mins).Before(time.Now()))
-
-		}
+				c = Hosts[i].Phpsessid,nil
+			} else {
+				 return "", nil}
+			//fmt.Println(time.Now(), Hosts[i].Phpsessid, timeLast.Add(mins).Before(time.Now()))
+		} else {
+			return "", nil}
 	}
-	//fmt.Println(php,err)
+	return c, nil
+}
+
+func main() {
+	var sqliteDatabase *sql.DB
+
+	sqliteDatabase, err := sql.Open("sqlite3", "./sqlite-database.db")
+	if err != nil {
+		fmt.Println("can open db")
+	} // Open the created SQLite File
+	 // Defer Closing the database
+
+	Hosts, err := displayAllAuth(sqliteDatabase)
+	if err != nil {
+		fmt.Println("cant displayAllauth")
+	}
+	fmt.Println("\n\nONE VALUE:")
+	defer sqliteDatabase.Close()
+	c := displayOneVal(sqliteDatabase,"10.233.234.11")
+	fmt.Println(c)
 }
