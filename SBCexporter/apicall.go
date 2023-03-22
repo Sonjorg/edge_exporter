@@ -132,13 +132,17 @@ func getSqliteData(ipaddress string) (cookie string, err error){
 			//fmt.Println(timeLast)
 
 			fmt.Println(Hosts[i].Time)
-			timeLast, err := time.Parse(time.Now().Local().String(),time.Now().Local().String())
-			fmt.Println(timeLast,"\n\n",err)
+			//timeLast, err := time.Parse(time.Now().Local().String(),time.Now().Local().String())
+			//fmt.Println(timeLast,"\n\n",err)
 			fmt.Println(time.Now().Local().String())
 			//fmt.print
-			fmt.Println(timeLast.Add(mins).Before(time.Now()))
+			t,t2,t3 := time.Now().Clock()
+			tf := string(t)+":"+string(t2)+":"+string(t3)
+			fmt.Println(tf)
+			tid,err := time.Parse(tf,Hosts[i].Time)
+			fmt.Println(tid, "\n\n", err)
 
-			if (timeLast.Add(mins).Before(time.Now()) == true) {
+			if (tid.Add(mins).Before(time.Now()) == true) {
 				//return Hosts[i].Phpsessid,nil
 				//phpsessid = Hosts[i].Phpsessid
 				//fmt.Println("true")
