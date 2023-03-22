@@ -142,41 +142,22 @@ func getSqliteData(ipaddress string) (cookie string, err error){
 }
 
 func main() {
-	var sqliteDatabase *sql.DB
+	/*var sqliteDatabase *sql.DB
 
 	sqliteDatabase, err := sql.Open("sqlite3", "./sqlite-database.db")
 	if err != nil {
 		fmt.Println("cant open db")
-	} // Open the created SQLite File
+	} */// Open the created SQLite File
 	 // Defer Closing the database
-	 insertAuth(sqliteDatabase, "10.233.234.11", "test 19.00", time.Now().String())
+	// insertAuth(sqliteDatabase, "10.233.234.11", "test 19.00", time.Now().String())
 	 s,err  := APISessionAuth("student","PanneKake23", "10.233.234.11")
 	 if err != nil {
 		fmt.Println(err)
 	 }
 	 fmt.Println(s)
-	 /*
-//insertAuth(sqliteDatabase,"test","test","test")
-	Hosts := displayAuth(sqliteDatabase)
-	/*if err != nil {
-		fmt.Println("cant displayAllauth")
-	}
-	for i:= range Hosts {
-		fmt.Println(Hosts[i].Phpsessid, Hosts[i].Ipaddress,Hosts[i].Phpsessid)
-	}
-	b := rowExists(sqliteDatabase,"10.233.234.11")
-	fmt.Println(b)
-	Update(sqliteDatabase,"update","update","test")
-	Hosts = displayAuth(sqliteDatabase)
-	for i:= range Hosts {
-		fmt.Println(Hosts[i].Phpsessid, Hosts[i].Ipaddress, Hosts[i].Phpsessid)
-	}
-	//fmt.Println(Hosts)
-	defer sqliteDatabase.Close()
-	//fmt.Println(c)
-*/
-}
 
+
+}
 
 
 func getAPIData(url string, phpsessid string) (string,error){
