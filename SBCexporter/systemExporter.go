@@ -130,12 +130,12 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 
 	for i := 0; i < len(hosts); i++ {
 		nr := strconv.Itoa(i)
-		authStr := "https://" +hosts[i].ip + "/rest/login"
+		//authStr := "https://" +hosts[i].ip + "/rest/login"
 		dataStr := "https://"+hosts[i].ip+"/rest/system/historicalstatistics/1"
 
 		//username, password := getAuth(ipaddresses[i])
 		timeReportedByExternalSystem := time.Now()//time.Parse(timelayout, mytimevalue)
-		phpsessid,err :=  APISessionAuth(hosts[i].username, hosts[i].password, authStr)
+		phpsessid,err :=  APISessionAuth(hosts[i].username, hosts[i].password, hosts[i].ip)
 		if err != nil {
 			log.Println("Error retrieving session cookie: ",log.Flags(), err,"\n")
 			//return nil, err <-this line would result in error for systemexp on all hosts

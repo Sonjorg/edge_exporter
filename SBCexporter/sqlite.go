@@ -22,13 +22,13 @@ func createTable(db *sql.DB) error {
 		"time" TEXT
 	  );` // SQL Statement for Create Table
 
-	log.Println("Create table...")
+	//log.Println("Create table...")
 	statement, err := db.Prepare(createAuthTableSQL) // Prepare SQL Statement
 	if err != nil {
 		return err
 	}
 	statement.Exec() // Execute SQL Statements
-	log.Println("table created")
+	//log.Println("table created")
 	return nil
 }
 
