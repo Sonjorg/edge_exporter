@@ -62,8 +62,8 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 
 
 	defer resp.Body.Close()
-	createTable(sqliteDatabase)
-	insertAuth(sqliteDatabase, "10.233.234.11", "phpsessid", time.Now().String())
+	//createTable(sqliteDatabase)
+	//insertAuth(sqliteDatabase, "10.233.234.11", "phpsessid", time.Now().String())
 
 	return phpsessid,err
 	}
@@ -151,7 +151,7 @@ func main() {
 	} // Open the created SQLite File
 	 // Defer Closing the database
 
-	Hosts, err := displayAllAuth(sqliteDatabase)
+	Hosts, err := displayAuth(sqliteDatabase)
 	if err != nil {
 		fmt.Println("cant displayAllauth")
 	}
