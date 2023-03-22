@@ -96,7 +96,7 @@ func getSqliteData(ipaddress string) (cookie string, err error){
 	 // following line is atest:
 	insertAuth(sqliteDatabase, "10.233.234.11", "phpsessid", time.Now().String())
 
-	Hosts := displayAuth(sqliteDatabase)
+	Hosts,err := displayAuth(sqliteDatabase)
 	if err != nil {
 		return "", err
 	}
