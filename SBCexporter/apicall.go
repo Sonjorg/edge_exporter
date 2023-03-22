@@ -8,7 +8,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
-	"strconv"
+	//"strconv"
 
 	//"os"
 	"strings"
@@ -138,14 +138,20 @@ func getSqliteData(ipaddress string) (cookie string, err error){
 			//fmt.Println(timeLast,"\n\n",err)
 			//fmt.Println(time.Now().Local().String())
 			//fmt.print
-			t,t2,t3 := time.Now().Clock()
-			fmt.Println(time.Now().Date())
-			tf := strconv.Itoa(t)+":"+strconv.Itoa(t2)+":"+strconv.Itoa(t3)
-			fmt.Println(tf)
-			tid,err := time.Parse("12:20:34",tf)
-			fmt.Println(tid, "\n\n", err)
+			//t,t2,t3 := time.Now().Clock()
+			//fmt.Println(time.Now().Date())
+			//date := strconv.Itoa(time.Now().Date())
+			//tf := strconv.Itoa(t)+":"+strconv.Itoa(t2)+":"+strconv.Itoa(t3)
+			//fmt.Println(tf)
+			//tid,err := time.Parse("12:20:34",tf)
+			//fmt.Println(tid, "\n\n", err)
+			p := fmt.Println
+			now := time.Now().Format(time.RFC3339)
+			p(now)
 
-			if (tid.Add(mins).Before(time.Now()) == true) {
+			parsed, _ := time.Parse(time.RFC3339, now)
+			p(parsed.Format(time.RFC3339))
+			if (parsed.Add(mins).Before(time.Now()) == true) {
 				//return Hosts[i].Phpsessid,nil
 				//phpsessid = Hosts[i].Phpsessid
 				//fmt.Println("true")
