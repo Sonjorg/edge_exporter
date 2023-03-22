@@ -90,11 +90,11 @@ func Update(db *sql.DB,  phpsessid string, time string, ipaddress string) {
 	log.Printf("Affected rows %d", affected)
    }
 
-func displayAuth(db *sql.DB) []*Cookie{
+func displayAuth(db *sql.DB) ([]*Cookie, error){
 	row, err := db.Query("SELECT * FROM authentication")
 	//row.Scan(ip)
 	if err != nil {
-		//log.Fatal(err)
+		return nil, err
 	}
 	defer row.Close()
 
@@ -117,7 +117,7 @@ func displayAuth(db *sql.DB) []*Cookie{
 			}
 			c = append(c, p)
 	}
-	return c
+	return c,err
 }
 //func displayAuth(db *sql.DB, ip string) *Cookie {
 
