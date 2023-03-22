@@ -84,7 +84,7 @@ func displayOneVal(db *sql.DB, ip string) []*Cookie{
 return c
 
 }
-func displayAuth(db *sql.DB, ip string) []*Cookie{
+func displayAuth(db *sql.DB) []*Cookie{
 	row, err := db.Query("SELECT * FROM authentication")
 	//row.Scan(ip)
 	if err != nil {

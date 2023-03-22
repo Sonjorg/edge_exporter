@@ -114,7 +114,7 @@ func getSqliteData(ipaddress string) (cookie string, err error){
 	} // Open the created SQLite File
 	 // Defer Closing the database
 
-	Hosts, err := displayAllAuth(sqliteDatabase)
+	Hosts, err := displayAuth(sqliteDatabase)
 	if err != nil {
 		return "", err
 	}
@@ -151,10 +151,10 @@ func main() {
 	} // Open the created SQLite File
 	 // Defer Closing the database
 
-	Hosts, err := displayAuth(sqliteDatabase)
-	if err != nil {
+	Hosts := displayAuth(sqliteDatabase)
+	/*if err != nil {
 		fmt.Println("cant displayAllauth")
-	}
+	}*/
 	fmt.Println("\n\nONE VALUE:")
 	defer sqliteDatabase.Close()
 	c := displayOneVal(sqliteDatabase,"10.233.234.11")
