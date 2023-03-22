@@ -29,7 +29,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	var err error
 	phpsessid,err = getSqliteData(ipaddress)
 	//fmt.Println(phpsessid)
-	if (phpsessid != "" && err == nil) {
+	if (phpsessid != "") {
 		fmt.Println("henta fra sql",err)
 		return phpsessid, nil
 	}
@@ -76,7 +76,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 
 
 	//fmt.Println("henta fra ruter")
-	os.Remove("sqlite-database.db")
+	//os.Remove("sqlite-database.db")
 	//Checking if db already exist
 	_, err = os.Stat("sqlite-database.db")
 	if err != nil {
