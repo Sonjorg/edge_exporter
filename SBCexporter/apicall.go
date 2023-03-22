@@ -119,7 +119,6 @@ func getSqliteData(ipaddress string) (cookie string, err error){
 
 	sqliteDatabase, err = sql.Open("sqlite3", "./sqlite-database.db")
 	if err != nil {
-
 		fmt.Println(err)
 		return "", err
 	} // Open the created SQLite File
