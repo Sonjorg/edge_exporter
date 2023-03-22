@@ -83,19 +83,20 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	if err != nil {
 		fmt.Println(err)
 	}
-
+/*
 	err = dropTable(sqliteDatabase)
 	if err != nil {
 		fmt.Println("kan ikke kaste table",err)
-	}
+	}*/
 	err = createTable(sqliteDatabase)
 	if err != nil {
 		fmt.Println("kan ikke lage table")
 	}
-	now := time.Now().Format(time.RFC3339)
-	Update(sqliteDatabase, phpsessid, now, ipaddress)
-	//insertAuth(sqliteDatabase, ipaddress, phpsessid, time.Now().String())
-
+	if rowExists(sqliteDatabase,ipaddress) {
+		now := time.Now().Format(time.RFC3339)
+		Update(sqliteDatabase, phpsessid, now, ipaddress)
+		//insertAuth(sqliteDatabase, ipaddress, phpsessid, time.Now().String())
+	} else {insertAuth(sqliteDatabase, ipaddress, phpsessid, now)}
 
 	return phpsessid,err
 	}
