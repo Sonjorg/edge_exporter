@@ -31,7 +31,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	//fmt.Println(phpsessid)
 	if (phpsessid != "") {
 		fmt.Println("henta fra sql",err)
-		
+
 		return phpsessid, nil
 	}
 
@@ -126,7 +126,7 @@ func getSqliteData(ipaddress string) (cookie string, err error){
 	 // Defer Closing the database
 
 
-	Hosts,err := displayAuth(sqliteDatabase)
+	Hosts,err := displayAuth(sqliteDatabase,ipaddress)
 	if err != nil {
 		return "", err
 	}
