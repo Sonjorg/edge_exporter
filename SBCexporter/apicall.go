@@ -74,6 +74,14 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	//insertAuth(sqliteDatabase, "10.233.234.11", "phpsessid", time.Now().String())
 
 	fmt.Println("henta fra ruter")
+	var sqliteDatabase *sql.DB
+
+	sqliteDatabase, err = sql.Open("sqlite3", "./sqlite-database.db")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	insertAuth(sqliteDatabase, ipaddress, phpsessid, time.Now().String())
 
 	return phpsessid,err
 	}
