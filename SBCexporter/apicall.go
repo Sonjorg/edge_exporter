@@ -27,7 +27,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	var err error
 	phpsessid,err = getSqliteData(ipaddress)
 	fmt.Println(phpsessid)
-	if (err == nil) {
+	if (phpsessid != "" && err == nil) {
 		fmt.Println("henta fra sql")
 		return phpsessid, nil
 	}
@@ -134,10 +134,10 @@ func getSqliteData(ipaddress string) (cookie string, err error){
 				//fmt.Println("true")
 				c = Hosts[i].Phpsessid
 			} else {
-				 return "null timelast", nil}
+				 return "", nil}
 			//fmt.Println(time.Now(), Hosts[i].Phpsessid, timeLast.Add(mins).Before(time.Now()))
 		} else {
-			return "null ip lik", nil}
+			return "", nil}
 	}
 	return c, nil
 }
