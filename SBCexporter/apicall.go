@@ -133,7 +133,7 @@ func getSqliteData(ipaddress string) (cookie string, err error){
 	defer sqliteDatabase.Close()
 	//defer file.Close()
 	var c string
-	mins := time.Minute * time.Duration(1)
+	mins := time.Minute * time.Duration(8)
 	for i:= range Hosts {
 		fmt.Println(Hosts[i].Ipaddress)
 		if (Hosts[i].Ipaddress == ipaddress) {
