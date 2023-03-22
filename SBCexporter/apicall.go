@@ -156,10 +156,10 @@ func main() {
 		fmt.Println("cant displayAllauth")
 	}*/
 	for i:= range Hosts {
-		fmt.Println(Hosts[i].Phpsessid, Hosts[i].ip,Hosts[i].Phpsessid)
+		fmt.Println(Hosts[i].Phpsessid, Hosts[i].Ipaddress,Hosts[i].Phpsessid)
 	}
 	Update(sqliteDatabase,"update","update","test")
-	Hosts := displayAuth(sqliteDatabase)
+	Hosts = displayAuth(sqliteDatabase)
 	for i:= range Hosts {
 		fmt.Println(Hosts[i].Phpsessid, Hosts[i].ip,Hosts[i].Phpsessid)
 	}
