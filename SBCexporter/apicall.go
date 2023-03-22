@@ -133,7 +133,7 @@ func getSqliteData(ipaddress string) (cookie string, err error){
 
 			fmt.Println(Hosts[i].Time)
 			timeLast, err := time.Parse(time.Now().Local().String(),time.Now().Local().String())
-			fmt.Println(timeLast,"\n\n"err)
+			fmt.Println(timeLast,"\n\n",err)
 			fmt.Println(time.Now().Local().String())
 			//fmt.print
 			fmt.Println(timeLast.Add(mins).Before(time.Now()))
