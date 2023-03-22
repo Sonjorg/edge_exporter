@@ -85,10 +85,11 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 		fmt.Println("kan ikke kaste table")
 	}
 	err = createTable(sqliteDatabase)
-	if err == nil {
-		insertAuth(sqliteDatabase, ipaddress, phpsessid, time.Now().String())
-
+	if err != nil {
+		fmt.Println("kan ikke lage table")
 	}
+	insertAuth(sqliteDatabase, ipaddress, phpsessid, time.Now().String())
+
 
 	return phpsessid,err
 	}
@@ -109,7 +110,7 @@ func getSqliteData(ipaddress string) (cookie string, err error){
 	 // Defer Closing the database
 
 	 // following line is atest:
-	insertAuth(sqliteDatabase, "10.233.234.11", "phpsessid", time.Now().String())
+	//insertAuth(sqliteDatabase, "10.233.234.11", "phpsessid", time.Now().String())
 
 	Hosts,err := displayAuth(sqliteDatabase)
 	if err != nil {
@@ -122,7 +123,7 @@ func getSqliteData(ipaddress string) (cookie string, err error){
 	var c string
 	mins := time.Minute * 2
 	for i:= range Hosts {
-		fmt.Println(Hosts[i].Ipaddress, Hosts[i].Time)
+		fmt.Println(Hosts[i].Ipaddress)
 		if (Hosts[i].Ipaddress == ipaddress) {
 			timeLast,_ := time.Parse(time.Now().String(), Hosts[i].Time)
 			if (timeLast.Add(mins).Before(time.Now())) {
