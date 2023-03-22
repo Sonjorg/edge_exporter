@@ -114,7 +114,7 @@ func getSqliteData(ipaddress string) (cookie string, err error){
 	if err != nil {
 
 		fmt.Println(err)
-		return "nullopen", err
+		return "", err
 	} // Open the created SQLite File
 	 // Defer Closing the database
 
@@ -123,7 +123,7 @@ func getSqliteData(ipaddress string) (cookie string, err error){
 
 	Hosts,err := displayAuth(sqliteDatabase)
 	if err != nil {
-		return "displayauth tom", err
+		return "", err
 	}
 	defer sqliteDatabase.Close()
 	//defer file.Close()
@@ -135,22 +135,22 @@ func getSqliteData(ipaddress string) (cookie string, err error){
 		fmt.Println(Hosts[i].Ipaddress)
 		if (Hosts[i].Ipaddress == ipaddress) {
 
-			fmt.Println(Hosts[i].Time)
+			//fmt.Println(Hosts[i].Time)
 
-			p := fmt.Println
+			//p := fmt.Println
 			now := time.Now().Format(time.RFC3339)
-			p(now)
+			//p(now)
 
 			parsed, _ := time.Parse(time.RFC3339, now)
-			p(parsed.Format(time.RFC3339))
+			//p(parsed.Format(time.RFC3339))
 			parsed2,err := time.Parse(time.RFC3339, Hosts[i].Time)
 			if err != nil {
 				fmt.Println(err)
 				return "",nil
 			}
-			fmt.Println(parsed2.Add(mins).After(parsed))
+			//fmt.Println(parsed2.Add(mins).After(parsed))
 
-			if (parsed2.Add(mins).After(parsed) == true) {
+			if (parsed2.Add(mins).Add(mins).Before(parsed) == true) {
 				//return Hosts[i].Phpsessid,nil
 				//phpsessid = Hosts[i].Phpsessid
 				//fmt.Println("true")
