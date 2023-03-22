@@ -88,7 +88,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	if err != nil {
 		fmt.Println("kan ikke kaste table",err)
 	}*/
-	err = dropTable(sqliteDatabase)
+	//err = dropTable(sqliteDatabase)
 	err = createTable(sqliteDatabase)
 	if err != nil {
 		fmt.Println("kan ikke lage table")
@@ -150,7 +150,7 @@ func getSqliteData(ipaddress string) (cookie string, err error){
 			}
 			//fmt.Println(parsed2.Add(mins).After(parsed))
 
-			if (parsed2.Add(mins).Add(mins).Before(parsed) == true) {
+			if (parsed2.Add(mins).After(parsed) == true) {
 				//return Hosts[i].Phpsessid,nil
 				//phpsessid = Hosts[i].Phpsessid
 				//fmt.Println("true")
