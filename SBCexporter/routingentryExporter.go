@@ -157,11 +157,11 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 		}
 			for j := range routingtables {
 
-				phpsessid,err := APISessionAuth(hosts[i].username, hosts[i].password, hosts[i].ip)
+				/*phpsessid,err := APISessionAuth(hosts[i].username, hosts[i].password, hosts[i].ip)
 					if err != nil {
 						fmt.Println(err)
 						continue
-					}
+					}*/
 					fmt.Println(phpsessid)
 				url := "https://"+hosts[i].ip+"/rest/routingtable/" + routingtables[j] + "/routingentry"
 				data2, err := getAPIData(url, phpsessid)
@@ -192,11 +192,11 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				}
 
 				for k := range match {
-					phpsessid,err := APISessionAuth("student", "PanneKake23","https://"+hosts[i].ip)
+					/*phpsessid,err := APISessionAuth("student", "PanneKake23","https://"+hosts[i].ip)
 						if err != nil {
 							fmt.Println(err)
 							continue
-						}
+						}*/
 					url := "https://"+hosts[i].ip+"/rest/routingtable/"+routingtables[j]+"/routingentry/"+match[k]+"/historicalstatistics/1"
 					data3, err := getAPIData(url, phpsessid)
 						if err != nil {

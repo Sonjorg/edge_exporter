@@ -31,6 +31,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	//fmt.Println(phpsessid)
 	if (phpsessid != "") {
 		fmt.Println("henta fra sql",err)
+		
 		return phpsessid, nil
 	}
 
