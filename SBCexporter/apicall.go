@@ -161,7 +161,7 @@ func main() {
 	Update(sqliteDatabase,"update","update","test")
 	Hosts = displayAuth(sqliteDatabase)
 	for i:= range Hosts {
-		fmt.Println(Hosts[i].Phpsessid, Hosts[i].Ipaddress,Hosts[i].Phpsessid)
+		fmt.Println(Hosts[i].Phpsessid, Hosts[i].Ipaddress, Hosts[i].Phpsessid)
 	}
 	//fmt.Println(Hosts)
 	defer sqliteDatabase.Close()
