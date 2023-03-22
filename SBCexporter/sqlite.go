@@ -62,8 +62,33 @@ func insertAuth(db *sql.DB, ipaddress string, phpsessid string, time string) err
 	}
 	return nil
 }
+func rowExists(db * sql.DB, ip string) bool {
+    sqlStmt := `SELECT username FROM userinfo WHERE username = ?`
+    err := db.QueryRow(sqlStmt, ip).Scan(&ip)
+    if err != nil {
+        if err != sql.ErrNoRows {
+            // a real error happened! you should change your function return
+            // to "(bool, error)" and return "false, err" here
+            log.Print(err)
+        }
 
+        return false
+    }
 
+    return true
+}
+func Update(db *sql.DB, ipaddress string, phpsessid string, time string) {
+	stmt, err := db.Prepare("UPDATE authentication set phpsessid=?, time=? where ipaddress=?")
+	if err != nil {
+	 log.Fatal(err)
+	}
+	res, err := stmt.Exec(phpsessid, time, ipaddress)
+	if err != nil {
+	 log.Fatal(err)
+	}
+	affected, _ := res.RowsAffected()
+	log.Printf("Affected rows %d", affected)
+   }
 
 func displayAuth(db *sql.DB) []*Cookie{
 	row, err := db.Query("SELECT * FROM authentication")
