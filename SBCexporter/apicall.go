@@ -124,17 +124,19 @@ func getSqliteData(ipaddress string) (cookie string, err error){
 	//ipaddress := "10.233.234.11"
 	//t := time.Now()
 	var c string
-	mins := time.Minute * time.Duration(2)
+	mins := time.Minute * time.Duration(1)
 	for i:= range Hosts {
 		fmt.Println(Hosts[i].Ipaddress)
 		if (Hosts[i].Ipaddress == ipaddress) {
 			timeLast,_ := time.Parse(time.Now().String(), Hosts[i].Time)
+			fmt.Println(timeLast)
 			fmt.Println(timeLast.Add(mins).Before(time.Now()))
-			if (timeLast.Add(mins).Before(time.Now()) == true) {
+			if (timeLast.Add(mins).After(time.Now()) == true) {
 				//return Hosts[i].Phpsessid,nil
 				//phpsessid = Hosts[i].Phpsessid
 				//fmt.Println("true")
 				c = Hosts[i].Phpsessid
+				fmt.Println(c)
 				break
 
 			} else {
