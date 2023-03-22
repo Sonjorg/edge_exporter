@@ -8,6 +8,8 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"strconv"
+
 	//"os"
 	"strings"
 	"time"
@@ -137,7 +139,7 @@ func getSqliteData(ipaddress string) (cookie string, err error){
 			//fmt.Println(time.Now().Local().String())
 			//fmt.print
 			t,t2,t3 := time.Now().Clock()
-			tf := string(t)+":"+string(t2)+":"+string(t3)
+			tf := strconv.Itoa(t)+":"+strconv.Itoa(t2)+":"+strconv.Itoa(t3)
 			fmt.Println(tf)
 			tid,err := time.Parse(tf,"12:20:34")
 			fmt.Println(tid, "\n\n", err)
