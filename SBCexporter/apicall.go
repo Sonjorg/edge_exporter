@@ -147,9 +147,9 @@ func getSqliteData(ipaddress string) (cookie string, err error){
 				fmt.Println(err)
 				return "",nil
 			}
-			fmt.Println(parsed2.Add(mins).Before(parsed))
+			fmt.Println(parsed2.Add(mins).After(parsed))
 
-			if (parsed2.Add(mins).Before(parsed) == true) {
+			if (parsed2.Add(mins).After(parsed) == true) {
 				//return Hosts[i].Phpsessid,nil
 				//phpsessid = Hosts[i].Phpsessid
 				//fmt.Println("true")
