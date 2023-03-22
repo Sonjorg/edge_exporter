@@ -150,14 +150,16 @@ func main() {
 		fmt.Println("can open db")
 	} // Open the created SQLite File
 	 // Defer Closing the database
-
+insertAuth(sqliteDatabase,"test","test","test")
 	Hosts := displayAuth(sqliteDatabase)
 	/*if err != nil {
 		fmt.Println("cant displayAllauth")
 	}*/
+	for i:= range Hosts {
+		fmt.Println(Hosts[i].Phpsessid)
+	}
 	fmt.Println(Hosts)
-	fmt.Println("\n\nONE VALUE:")
 	defer sqliteDatabase.Close()
-	c := displayOneVal(sqliteDatabase,"10.233.234.11")
-	fmt.Println(c)
+	//fmt.Println(c)
+
 }

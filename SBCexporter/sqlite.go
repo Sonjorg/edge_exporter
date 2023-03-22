@@ -64,26 +64,7 @@ func insertAuth(db *sql.DB, ipaddress string, phpsessid string, time string) err
 }
 
 
-func displayOneVal(db *sql.DB, ip string) []*Cookie{
-	row, err := db.Query("SELECT * FROM authentication WHERE ipaddress = ? ") //WHERE Start = '" & $start & "'
-	//stmt, err := db.Prepare("SELECT * FROM authentication WHERE ipaddress = ?")
-	row.Scan(ip)
-	if err != nil {
-		//log.Fatal(err)
-	}
-	defer row.Close()
-	var c []*Cookie
 
-	for row.Next() {
-		p := &Cookie{}
-		if err := row.Scan(&p.Id, &p.Ipaddress, &p.Phpsessid, &p.Time); err != nil{
-			 fmt.Println(err)
-		}
-		c = append(c, p)
-}
-return c
-
-}
 func displayAuth(db *sql.DB) []*Cookie{
 	row, err := db.Query("SELECT * FROM authentication")
 	//row.Scan(ip)
