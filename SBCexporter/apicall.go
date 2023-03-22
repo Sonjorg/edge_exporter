@@ -75,7 +75,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	defer resp.Body.Close()
 
 
-	fmt.Println("henta fra ruter")
+	//fmt.Println("henta fra ruter")
 
 	//Checking if db already exist
 	_, err = os.Stat("sqlite-database.db")
@@ -110,7 +110,6 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 
 	return phpsessid,err
 	}
-
 
 
 //This function retrieves the session cookie from the sqlite database
@@ -164,14 +163,14 @@ func getSqliteData(ipaddress string) (cookie string, err error){
 	}
 	return c, nil
 }
-
+/*
 func main() {
 	/*var sqliteDatabase *sql.DB
 
 	sqliteDatabase, err := sql.Open("sqlite3", "./sqlite-database.db")
 	if err != nil {
 		fmt.Println("cant open db")
-	} */// Open the created SQLite File
+	} // Open the created SQLite File
 	 // Defer Closing the database
 	// insertAuth(sqliteDatabase, "10.233.234.11", "test 19.00", time.Now().String())
 	 s,err  := APISessionAuth("student","PanneKake23", "10.233.234.11")
@@ -182,8 +181,7 @@ func main() {
 
 
 }
-
-
+*/
 func getAPIData(url string, phpsessid string) (string,error){
 
 	tr2 := &http.Transport{
