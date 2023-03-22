@@ -73,19 +73,21 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 
 
 	defer resp.Body.Close()
-	//createTable(sqliteDatabase)
-	//insertAuth(sqliteDatabase, "10.233.234.11", "phpsessid", time.Now().String())
+
 
 	fmt.Println("henta fra ruter")
-	os.Remove("sqlite-database.db") // I delete the file to avoid duplicated records.
-                                    // SQLite is a file based database.
 
-	fmt.Println("Creating sqlite-database.db...")
-	file, err := os.Create("sqlite-database.db") // Create SQLite file
+	//Checking if db already exist
+	_, err = os.Stat("sqlite-database.db")
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println("Creating sqlite-database.db...")
+		file, err := os.Create("sqlite-database.db") // Create SQLite file
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+		file.Close()
 	}
-	file.Close()
+
 	var sqliteDatabase *sql.DB
 
 	sqliteDatabase, err = sql.Open("sqlite3", "./sqlite-database.db")
@@ -93,7 +95,6 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 		fmt.Println(err)
 	}
 
-	//err = dropTable(sqliteDatabase)
 	err = createTable(sqliteDatabase)
 	if err != nil {
 		fmt.Println(err)
