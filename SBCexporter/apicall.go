@@ -128,11 +128,12 @@ func getSqliteData(ipaddress string) (cookie string, err error){
 	for i:= range Hosts {
 		fmt.Println(Hosts[i].Ipaddress)
 		if (Hosts[i].Ipaddress == ipaddress) {
-			timeLast,_ := time.Parse("2006-01-02 15:04:05", Hosts[i].Time)
-			fmt.Println(timeLast)
-			fmt.Println(Hosts[i].Time)
+			//timeLast,_ := time.Parse("2006-01-02 15:04:05", Hosts[i].Time)
+			//fmt.Println(timeLast)
 
-			fmt.Println(time.Now())
+			fmt.Println(Hosts[i].Time)
+			timeLast, err := time.Parse(time.Now().Local(),Hosts[i].Time)
+			fmt.Println(timeLast,err)
 			fmt.Println(timeLast.Add(mins).Before(time.Now()))
 
 			if (timeLast.Add(mins).Before(time.Now()) == true) {
