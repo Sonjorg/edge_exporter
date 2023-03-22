@@ -92,7 +92,8 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	if err != nil {
 		fmt.Println("kan ikke lage table")
 	}
-	Update(sqliteDatabase, phpsessid, time.Now().String(), ipaddress)
+	now := time.Now().Format(time.RFC3339)
+	Update(sqliteDatabase, phpsessid, now, ipaddress)
 	//insertAuth(sqliteDatabase, ipaddress, phpsessid, time.Now().String())
 
 
@@ -130,28 +131,23 @@ func getSqliteData(ipaddress string) (cookie string, err error){
 	for i:= range Hosts {
 		fmt.Println(Hosts[i].Ipaddress)
 		if (Hosts[i].Ipaddress == ipaddress) {
-			//timeLast,_ := time.Parse("2006-01-02 15:04:05", Hosts[i].Time)
-			//fmt.Println(timeLast)
 
 			fmt.Println(Hosts[i].Time)
-			//timeLast, err := time.Parse(time.Now().Local().String(),time.Now().Local().String())
-			//fmt.Println(timeLast,"\n\n",err)
-			//fmt.Println(time.Now().Local().String())
-			//fmt.print
-			//t,t2,t3 := time.Now().Clock()
-			//fmt.Println(time.Now().Date())
-			//date := strconv.Itoa(time.Now().Date())
-			//tf := strconv.Itoa(t)+":"+strconv.Itoa(t2)+":"+strconv.Itoa(t3)
-			//fmt.Println(tf)
-			//tid,err := time.Parse("12:20:34",tf)
-			//fmt.Println(tid, "\n\n", err)
+
 			p := fmt.Println
 			now := time.Now().Format(time.RFC3339)
 			p(now)
 
 			parsed, _ := time.Parse(time.RFC3339, now)
 			p(parsed.Format(time.RFC3339))
-			if (parsed.Add(mins).Before(time.Now()) == true) {
+			parsed2,err := time.Parse(time.RFC3339, Hosts[i].Time)
+			if err != nil {
+				fmt.Println(err)
+				return "",nil
+			}
+			fmt.Println(parsed2.Add(mins).Before(parsed))
+
+			if (parsed2.Add(mins).Before(parsed) == true) {
 				//return Hosts[i].Phpsessid,nil
 				//phpsessid = Hosts[i].Phpsessid
 				//fmt.Println("true")
