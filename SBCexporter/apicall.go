@@ -108,7 +108,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 		insertAuth(sqliteDatabase, ipaddress, phpsessid, now)
 	}
 
-	return phpsessid,err
+	return phpsessid,nil
 	}
 
 
