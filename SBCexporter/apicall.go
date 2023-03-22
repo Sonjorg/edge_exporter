@@ -9,8 +9,11 @@ import (
 	"net/http"
 	"net/url"
 	//"os"
+
+	//"os"
 	"strings"
 	"time"
+
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -103,13 +106,18 @@ req2.AddCookie(cookie1)
 
 	return string(b), err
 }
-
+/*
 func getSqliteData(ipaddress string) (cookie string, err error){
 
 	var sqliteDatabase *sql.DB
 
 	sqliteDatabase, err = sql.Open("sqlite3", "./sqlite-database.db")
 	if err != nil {
+		file, err := os.Create("sqlite-database.db") // Create SQLite file
+		if err != nil {
+			log.Fatal(err.Error())
+	}
+		file.Close()
 		return "", err
 	} // Open the created SQLite File
 	 // Defer Closing the database
@@ -117,7 +125,7 @@ func getSqliteData(ipaddress string) (cookie string, err error){
 	Hosts := displayAuth(sqliteDatabase)
 	/*if err != nil {
 		return "", err
-	}*/
+	}
 	defer sqliteDatabase.Close()
 	//defer file.Close()
 	//ipaddress := "10.233.234.11"
@@ -141,7 +149,7 @@ func getSqliteData(ipaddress string) (cookie string, err error){
 	}
 	return c, nil
 }
-
+*/
 func main() {
 	var sqliteDatabase *sql.DB
 
@@ -158,6 +166,8 @@ func main() {
 	for i:= range Hosts {
 		fmt.Println(Hosts[i].Phpsessid, Hosts[i].Ipaddress,Hosts[i].Phpsessid)
 	}
+	b := rowExist(sqliteDatabase,"10.233.234.11")
+	fmt.Println(b)
 	Update(sqliteDatabase,"update","update","test")
 	Hosts = displayAuth(sqliteDatabase)
 	for i:= range Hosts {
