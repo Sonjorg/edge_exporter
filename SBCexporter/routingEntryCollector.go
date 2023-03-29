@@ -130,7 +130,6 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 	var metricValue5 float64
 	var metricValue6 float64
 	for i := range hosts {
-		//nr := strconv.Itoa(i)
 
 		phpsessid,err := APISessionAuth(hosts[i].username, hosts[i].password, hosts[i].ip)
 		if err != nil {
@@ -158,7 +157,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			for j := range routingtables {
 
 
-					fmt.Println(phpsessid)
+				//	fmt.Println(phpsessid)
 				url := "https://"+hosts[i].ip+"/rest/routingtable/" + routingtables[j] + "/routingentry"
 				_, data2, err := getAPIData(url, phpsessid)
 					if err != nil {

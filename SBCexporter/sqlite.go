@@ -98,7 +98,7 @@ func displayAuth(db *sql.DB, ipaddress string) ([]*Cookie, error){
 	//row.Scan(ip)
 	if err != nil {
 		return nil, err
-		fmt.Println(err)
+		//fmt.Println(err)
 	}
 	defer row.Close()
 
@@ -106,7 +106,7 @@ func displayAuth(db *sql.DB, ipaddress string) ([]*Cookie, error){
 	for row.Next() {
 			p := &Cookie{}
 			if err := row.Scan(&p.Id, &p.Ipaddress, &p.Phpsessid, &p.Time); err != nil{
-				 fmt.Println(err)
+				 //fmt.Println(err)
 			}
 			if (p.Ipaddress == ipaddress) {
 				c = append(c, p)
