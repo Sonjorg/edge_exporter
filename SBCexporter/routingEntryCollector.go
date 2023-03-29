@@ -24,7 +24,6 @@ type routingTables struct {
  type routingTables3 struct {
 	 Attr    []string `xml:"id,attr"`
 	 Value     string `xml:",chardata"`
-
  }
  //Second request
  type routingEntries struct {
@@ -58,6 +57,7 @@ Rt_MOS              int    `xml:"rt_MOS"`
 Rt_QualityFailed    int    `xml:"rt_QualityFailed"`
 }
 
+//Metrics for each routingentry
 type rMetrics struct {
 	Rt_RuleUsage		*prometheus.Desc
 	Rt_ASR				*prometheus.Desc
@@ -157,11 +157,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 		}
 			for j := range routingtables {
 
-				/*phpsessid,err := APISessionAuth(hosts[i].username, hosts[i].password, hosts[i].ip)
-					if err != nil {
-						fmt.Println(err)
-						continue
-					}*/
+
 					fmt.Println(phpsessid)
 				url := "https://"+hosts[i].ip+"/rest/routingtable/" + routingtables[j] + "/routingentry"
 				data2, err := getAPIData(url, phpsessid)
@@ -170,33 +166,20 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				b2 := []byte(data2) //Converting string of data to bytestream
 				re := &routingEntries{}
 				xml.Unmarshal(b2, &re) //Converting XML data to variables
-				routingEntries := re.RoutingEntry2.RoutingEntry3.Attr//ssbc2.Call2xml2.Call2xml3.Attr
+				routingEntries := re.RoutingEntry2.RoutingEntry3.Attr
 				if (len(routingEntries) <= 0) {
 					fmt.Println("No routingEntry for this routingtable")
 					continue
 				}
 				entries := regexp.MustCompile(`\d+$`)
-				//fmt.Println("Table:", routingEntries[j])
 				var match []string
-				//fmt.Println("Routingtables: ",j," ", routingtables[j])
 
 				for k := range routingEntries {
-				//fmt.Println("routingEntries: ",k," ",routingEntries[k])
-					//fmt.Println("Routingtables: ",routingTables,"routingEntries: ",routingEntries)
 					match = entries.FindStringSubmatch(routingEntries[k])
-					//fmt.Println("Match", k, match)
-					/*for s:= range m {
-						match = append(match, m[s])
-					}*/
-					//match = append(match, m)
 				}
 
 				for k := range match {
-					/*phpsessid,err := APISessionAuth("student", "PanneKake23","https://"+hosts[i].ip)
-						if err != nil {
-							fmt.Println(err)
-							continue
-						}*/
+
 					url := "https://"+hosts[i].ip+"/rest/routingtable/"+routingtables[j]+"/routingentry/"+match[k]+"/historicalstatistics/1"
 					data3, err := getAPIData(url, phpsessid)
 						if err != nil {
