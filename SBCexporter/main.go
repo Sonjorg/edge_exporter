@@ -10,8 +10,8 @@ import (
 
 func main() {
 
-		//systemResourceCollector()
-		//routingEntryCollector()
+		systemResourceCollector()
+		routingEntryCollector()
 		callStatsCollector()
 
 	//foo := newFooCollector()
