@@ -12,7 +12,7 @@ func main() {
 
 		//systemResourceCollector()
 		//routingEntryCollector()
-		ncallStatsCollector()
+		callStatsCollector()
 
 	//foo := newFooCollector()
 	//prometheus.MustRegister(foo)
