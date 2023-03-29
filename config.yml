@@ -16,5 +16,6 @@ hosts:
   password: PanneKake23
   exclude:
     - routingentry
-    - system #Excluding systemstats for this host
+    - system
+    - systemcallstats #Excluding systemstats for this host
    #routingentry: true

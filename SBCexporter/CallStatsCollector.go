@@ -91,7 +91,7 @@ func (collector *cMetrics) Describe(ch chan<- *prometheus.Desc) {
 //Collect implements required collect function for all promehteus collectors
 
 func (collector *cMetrics) Collect(c chan<- prometheus.Metric) {
-	hosts := getIncludedHosts("callstats") //retrieving targets for this collector
+	hosts := getIncludedHosts("systemcallstats") //retrieving targets for this collector
 	if (len(hosts) <= 0) {
 		return
 	}
