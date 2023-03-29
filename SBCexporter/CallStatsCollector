@@ -159,7 +159,7 @@ func (collector *cMetrics) Collect(c chan<- prometheus.Metric) {
 
 }*/
 // Initializing the exporter
-func callStatsCollector() {
+func ncallStatsCollector() {
 		sc := callStats()
 		prometheus.MustRegister(sc)
 }
