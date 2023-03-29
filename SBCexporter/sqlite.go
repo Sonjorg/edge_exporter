@@ -79,7 +79,7 @@ func rowExists(db * sql.DB, ip string) bool {
 }
 
 func Update(db *sql.DB,  phpsessid string, time string, ipaddress string) {
-	stmt, err := db.Prepare("UPDATE authentication set phpsessid=?, time=? where ipaddress=?")
+	stmt, err := db.Prepare("UPDATE authentication set phpsessid=?, time=? WHERE ipaddress=?")
 	if err != nil {
 	 //log.Fatal(err)
 	 fmt.Println("update",err)
