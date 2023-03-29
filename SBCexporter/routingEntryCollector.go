@@ -137,14 +137,14 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			fmt.Println("Error auth", hosts[i].ip, err)
 			continue
 		}
-		data,err := getAPIData("https://"+hosts[i].ip+"/rest/routingtable", phpsessid)
+		_, data,err := getAPIData("https://"+hosts[i].ip+"/rest/routingtable", phpsessid)
 		if err != nil {
 			fmt.Println("Error routingtable data", hosts[i].ip, err)
 			continue
 		}
-		b := []byte(data) //Converting string of data to bytestream
+		//b := []byte(data) //Converting string of data to bytestream
 		rt := &routingTables{}
-		xml.Unmarshal(b, &rt) //Converting XML data to variables
+		xml.Unmarshal(data, &rt) //Converting XML data to variables
 		//fmt.Println("Successful API call data: ",ssbc.Rt2.Rt3.Attr)
 		routingtables := rt.RoutingTables2.RoutingTables3.Attr//ssbc.Rt2.Rt3.Attr
 		//fmt.Println("Routingtables " ,routingtables)
@@ -160,12 +160,12 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 
 					fmt.Println(phpsessid)
 				url := "https://"+hosts[i].ip+"/rest/routingtable/" + routingtables[j] + "/routingentry"
-				data2, err := getAPIData(url, phpsessid)
+				_, data2, err := getAPIData(url, phpsessid)
 					if err != nil {
 					}
-				b2 := []byte(data2) //Converting string of data to bytestream
+				//b2 := []byte(data2) //Converting string of data to bytestream
 				re := &routingEntries{}
-				xml.Unmarshal(b2, &re) //Converting XML data to variables
+				xml.Unmarshal(data2, &re) //Converting XML data to variables
 				routingEntries := re.RoutingEntry2.RoutingEntry3.Attr
 				if (len(routingEntries) <= 0) {
 					fmt.Println("No routingEntry for this routingtable")
@@ -189,9 +189,9 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 						}
 
 					//fmt.Println(data3)
-					b := []byte(data3) //Converting string of data to bytestream
+					//b := []byte(data3) //Converting string of data to bytestream
 					rData := &rSBCdata{}
-					xml.Unmarshal(b, &rData) //Converting XML data to variables
+					xml.Unmarshal(data3, &rData) //Converting XML data to variables
 					//fmt.Println("Successful API call data: ",rData.RoutingData,"\n")
 
 					metricValue1 = float64(rData.RoutingData.Rt_RuleUsage)

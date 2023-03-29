@@ -163,26 +163,8 @@ func getSqliteData(ipaddress string) (cookie string, err error){
 	}
 	return c, nil
 }
-/*
-func main() {
-	/*var sqliteDatabase *sql.DB
 
-	sqliteDatabase, err := sql.Open("sqlite3", "./sqlite-database.db")
-	if err != nil {
-		fmt.Println("cant open db")
-	} // Open the created SQLite File
-	 // Defer Closing the database
-	// insertAuth(sqliteDatabase, "10.233.234.11", "test 19.00", time.Now().String())
-	 s,err  := APISessionAuth("student","PanneKake23", "10.233.234.11")
-	 if err != nil {
-		fmt.Println(err)
-	 }
-	 fmt.Println(s)
-
-
-}
-*/
-func getAPIData(url string, phpsessid string) (string,error){
+func getAPIData(url string, phpsessid string) (string, []byte,error){
 
 	tr2 := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
@@ -200,7 +182,7 @@ func getAPIData(url string, phpsessid string) (string,error){
 	if err != nil {
 		log.Flags()
 			fmt.Println("error in getapidata():", err)
-			return "Error fetching data", err
+			return "Error fetching data",nil,  err
 		//	fmt.Println("error in systemExporter:", error)
 	}
 	req2.AddCookie(cookie1)
@@ -208,11 +190,11 @@ func getAPIData(url string, phpsessid string) (string,error){
 		if err != nil {
 			log.Flags()
 				fmt.Println("error in getapidata():", err)
-				return "Error fetching data", err
+				return "Error fetching data",nil, err
 		}
 
 		b, err := ioutil.ReadAll(resp2.Body)
 		defer resp2.Body.Close()
 
-		return string(b), err
+		return "Success", b, err
 	}
