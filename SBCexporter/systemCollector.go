@@ -147,7 +147,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 				   )
 				   continue //trying next ip address
 		}
-		data,err := getAPIData(dataStr, phpsessid)
+		_, data,err := getAPIData(dataStr, phpsessid)
 		if err != nil {
 				fmt.Println("Error collecting from host: ",log.Flags(), err,"\n")
 				  c <- prometheus.NewMetricWithTimestamp(
