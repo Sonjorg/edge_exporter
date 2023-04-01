@@ -183,13 +183,13 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					match = entries.FindStringSubmatch(routingEntries[k])
 				}
 
-				r := make(map[string][]string)
 
-				r[routingtables] = append(r[routingtables], match)
 				//var c []*RoutingInfo
 
 				for k := range match {
+					r := make(map[string][]string)
 
+					r[routingtables[j]] = append(r[routingtables[j]], match[k])
 					url := "https://"+hosts[i].ip+"/rest/routingtable/"+routingtables[j]+"/routingentry/"+match[k]+"/historicalstatistics/1"
 					_, data3, err := getAPIData(url, phpsessid)
 						if err != nil {
@@ -217,22 +217,23 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 						c <- prometheus.MustNewConstMetric(collector.Rt_Jitter, prometheus.GaugeValue, metricValue4, hosts[i].ip, hosts[i].hostname, "routingentry",routingtables[j], match[k], "test")
 						c <- prometheus.MustNewConstMetric(collector.Rt_MOS, prometheus.GaugeValue, metricValue5, hosts[i].ip, hosts[i].hostname, "routingentry",routingtables[j], match[k], "test")
 						c <- prometheus.MustNewConstMetric(collector.Rt_QualityFailed, prometheus.GaugeValue, metricValue6, hosts[i].ip, hosts[i].hostname, "routingentry",routingtables[j], match[k], "test")
+						
+						var sqliteDatabase *sql.DB
+						err = createRoutingSqlite(db * sql.DB)
+						if err != nil {
+							fmt.Println(err)
+						}
 
+						storeRoutingTables(db *sql.DB, ipaddress, "test", r)
+						sqldata, err := getRoutingEntries(db *sql.DB,ipaddress)
+						if err != nil {
+							fmt.Println(err)
+						}
+						fmt.Println(sqldata)
 		}
 		}
 		//if (!routingTablesExists()) {
-			var sqliteDatabase *sql.DB
-			err = createRoutingSqlite(db * sql.DB)
-			if err != nil {
-				fmt.Println(err)
-			}
 
-			storeRoutingTables(db *sql.DB, ipaddress, "test", r)
-			sqldata, err := getRoutingEntries(db *sql.DB,ipaddress)
-			if err != nil {
-				fmt.Println(err)
-			}
-			fmt.Println(sqldata)
 
 		//}
 	}
