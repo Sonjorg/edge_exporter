@@ -44,16 +44,20 @@ func getRoutingTables() {
 	//hvis table er eldre enn 24 t, returner nil
 	//returner tables
 } */
-func storeRoutingTables(db *sql.DB, ipaddress, time string, TablesEntries map[string][]string) error{
+func storeRoutingTables(db *sql.DB, ipaddress string, time string, TablesEntries map[string][]string) error{
 	log.Println("Inserting record ...")
 	insertAuthSQL := `INSERT INTO routingtables(ipaddress, time, tablesentries) VALUES (?, ?, ?)`
 	statement, err := db.Prepare(insertAuthSQL) // Prepare statement.
                                                    // This is good to avoid SQL injections
 	if err != nil {
+		fmt.Println(err)
+
 		return err
+
 	}
 	_, err = statement.Exec(ipaddress, time, TablesEntries)
 	if err != nil {
+		fmt.Println(err)
 		return err
 	}
 	return nil
@@ -104,6 +108,22 @@ func getRoutingEntries(db *sql.DB,ipaddress string) ([]*RoutingInfo, error) {
 
 
 // Here starts functions concerning sessioncookies
+// We are passing db reference connection from main to our method with other parameters
+func insertAuth(db *sql.DB, ipaddress string, phpsessid string, time string) error{
+	log.Println("Inserting record ...")
+	insertAuthSQL := `INSERT INTO authentication(ipaddress, phpsessid, time) VALUES (?, ?, ?)`
+
+	statement, err := db.Prepare(insertAuthSQL) // Prepare statement.
+                                                   // This is good to avoid SQL injections
+	if err != nil {
+		return err
+	}
+	_, err = statement.Exec(ipaddress, phpsessid, time)
+	if err != nil {
+		return err
+	}
+	return nil
+}
 func displayAuth(db *sql.DB, ipaddress string) ([]*Cookie, error){
 	row, err := db.Query("SELECT * FROM authentication")
 	//row.Scan(ip)
@@ -160,21 +180,7 @@ func dropTable(db *sql.DB) error{
 }
 
 
-// We are passing db reference connection from main to our method with other parameters
-func insertAuth(db *sql.DB, ipaddress string, phpsessid string, time string) error{
-	log.Println("Inserting record ...")
-	insertAuthSQL := `INSERT INTO authentication(ipaddress, phpsessid, time) VALUES (?, ?, ?)`
-	statement, err := db.Prepare(insertAuthSQL) // Prepare statement.
-                                                   // This is good to avoid SQL injections
-	if err != nil {
-		return err
-	}
-	_, err = statement.Exec(ipaddress, phpsessid, time)
-	if err != nil {
-		return err
-	}
-	return nil
-}
+
 func rowExists(db * sql.DB, ip string) bool {
     sqlStmt := `SELECT ipaddress FROM authentication WHERE ipaddress = ?`
     err := db.QueryRow(sqlStmt, ip).Scan(&ip)
