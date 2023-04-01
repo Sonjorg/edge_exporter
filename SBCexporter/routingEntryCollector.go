@@ -118,7 +118,7 @@ func (collector *rMetrics) Describe(ch chan<- *prometheus.Desc) {
 }
 //Collect implements required collect function for all promehteus collectors
 func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
-	h := getIncludedHosts("routingentry")//retrieving targets for this exporter
+	hosts := getIncludedHosts("routingentry")//retrieving targets for this exporter
 	if (len(h) <= 0) {
 		fmt.Println("no hosts")
 		return
@@ -129,8 +129,8 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 	var metricValue4 float64
 	var metricValue5 float64
 	var metricValue6 float64
-	for i := range h {
-		go func(i int, hosts h) {
+	for i := range hosts {
+		go func(i int) {
 
 		phpsessid,err := APISessionAuth(hosts[i].username, hosts[i].password, hosts[i].ip)
 		if err != nil {
@@ -213,7 +213,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 
 		}
 		}
-	}(i, hosts)
+	}(i)
 }
 }
 
