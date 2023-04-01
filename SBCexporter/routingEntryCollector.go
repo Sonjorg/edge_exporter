@@ -219,6 +219,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 
 						r := make(map[string][]string)
 						r[routingtables[j]] = append(r[routingtables[j]], match[k])
+						fmt.Println(routingtables[j], match)
 						fmt.Println(r)
 						var sqliteDatabase *sql.DB
 
