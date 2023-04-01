@@ -30,7 +30,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	phpsessid,err = getSqliteData(ipaddress)
 	//fmt.Println(phpsessid)
 	if (phpsessid != "") {
-		fmt.Println("henta fra sql",err)
+		//fmt.Println("henta fra sql")
 
 		return phpsessid, nil
 	}
@@ -135,7 +135,7 @@ func getSqliteData(ipaddress string) (cookie string, err error){
 	var c string
 	mins := time.Minute * time.Duration(8)
 	for i:= range Hosts {
-		fmt.Println(Hosts[i].Ipaddress)
+		//fmt.Println(Hosts[i].Ipaddress)
 		if (Hosts[i].Ipaddress == ipaddress) {
 
 			now := time.Now().Format(time.RFC3339)
