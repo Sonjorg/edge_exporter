@@ -18,7 +18,7 @@ type RoutingInfo struct {
 	Id        int
 	Ipaddress string
 	Time      string
-	TablesEntries map[int][]int //map consisting of routingtables and their routingentries
+	TablesEntries map[string][]string //map consisting of routingtables and their routingentries
 }
 
 func createRoutingSqlite(db * sql.DB) error{
@@ -26,7 +26,7 @@ func createRoutingSqlite(db * sql.DB) error{
 		"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
 		"ipaddress" TEXT,
 		"time" TEXT
-		"tablesEntries" integer [] []
+		"tablesEntries" TEXT [] []
 		);`
 		statement, err := db.Prepare(createAuthTableSQL) // Prepare SQL Statement
 	if err != nil {
@@ -44,7 +44,7 @@ func getRoutingTables() {
 	//hvis table er eldre enn 24 t, returner nil
 	//returner tables
 } */
-func storeRoutingTables(db *sql.DB, ipaddress, time string, TablesEntries map[int][]int) error{
+func storeRoutingTables(db *sql.DB, ipaddress, time string, TablesEntries map[string][]string) error{
 	log.Println("Inserting record ...")
 	insertAuthSQL := `INSERT INTO authentication(ipaddress, time, tablesentries) VALUES (?, ?, ?)`
 	statement, err := db.Prepare(insertAuthSQL) // Prepare statement.

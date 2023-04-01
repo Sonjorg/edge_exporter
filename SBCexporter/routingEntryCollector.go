@@ -183,7 +183,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					match = entries.FindStringSubmatch(routingEntries[k])
 				}
 
-				r := make(map[int][]int)
+				r := make(map[string][]string)
 
 				r[routingtables] = append(r[routingtables], match)
 				//var c []*RoutingInfo
