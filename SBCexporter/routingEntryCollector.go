@@ -130,17 +130,19 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 	var metricValue5 float64
 	var metricValue6 float64
 	for i := range hosts {
-		go func(i int, hosts hosts) {
+		go func(i int, hosts) {
 
 		phpsessid,err := APISessionAuth(hosts[i].username, hosts[i].password, hosts[i].ip)
 		if err != nil {
 			fmt.Println("Error auth", hosts[i].ip, err)
-			continue
+			//continue
+			return
 		}
 		_, data,err := getAPIData("https://"+hosts[i].ip+"/rest/routingtable", phpsessid)
 		if err != nil {
 			fmt.Println("Error routingtable data", hosts[i].ip, err)
-			continue
+			//continue
+			return
 		}
 		//b := []byte(data) //Converting string of data to bytestream
 		rt := &routingTables{}
@@ -152,7 +154,8 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 		if (len(routingtables) <= 0) {
 			//return nil, "Routingtables empty"
 			fmt.Println("Routingtables empty")
-			continue
+			//continue
+			return
 
 		}
 			for j := range routingtables {
