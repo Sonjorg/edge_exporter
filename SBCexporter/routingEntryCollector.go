@@ -217,28 +217,29 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 						c <- prometheus.MustNewConstMetric(collector.Rt_MOS, prometheus.GaugeValue, metricValue5, hosts[i].ip, hosts[i].hostname, "routingentry",routingtables[j], match[k], "test")
 						c <- prometheus.MustNewConstMetric(collector.Rt_QualityFailed, prometheus.GaugeValue, metricValue6, hosts[i].ip, hosts[i].hostname, "routingentry",routingtables[j], match[k], "test")
 
-						r := make(map[string][]string)
+						r = make(map[string][]string)
 						r[routingtables[j]] = append(r[routingtables[j]], match[k])
-						fmt.Println(routingtables[j], match)
+						//fmt.Println(routingtables[j], match)
 						fmt.Println(r)
-						var sqliteDatabase *sql.DB
 
-						sqliteDatabase, err = sql.Open("sqlite3", "./sqlite-database.db")
-						if err != nil {
-							fmt.Println(err)
-						}
-						err = createRoutingSqlite(sqliteDatabase)
-						if err != nil {
-							fmt.Println(err)
-						}
-
-						storeRoutingTables(sqliteDatabase, hosts[i].ip, "test", r)
-						sqldata, err := getRoutingEntries(sqliteDatabase,hosts[i].ip)
-						if err != nil {
-							fmt.Println(err)
-						}
-						fmt.Println("sqlitedata \n",sqldata)
 		}
+			var sqliteDatabase *sql.DB
+
+			sqliteDatabase, err = sql.Open("sqlite3", "./sqlite-database.db")
+			if err != nil {
+				fmt.Println(err)
+			}
+			err = createRoutingSqlite(sqliteDatabase)
+			if err != nil {
+				fmt.Println(err)
+			}
+
+			storeRoutingTables(sqliteDatabase, hosts[i].ip, "test", r)
+			sqldata, err := getRoutingEntries(sqliteDatabase,hosts[i].ip)
+			if err != nil {
+				fmt.Println(err)
+			}
+			fmt.Println("sqlitedata \n",sqldata)
 		}
 		//if (!routingTablesExists()) {
 
