@@ -217,19 +217,19 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 						c <- prometheus.MustNewConstMetric(collector.Rt_Jitter, prometheus.GaugeValue, metricValue4, hosts[i].ip, hosts[i].hostname, "routingentry",routingtables[j], match[k], "test")
 						c <- prometheus.MustNewConstMetric(collector.Rt_MOS, prometheus.GaugeValue, metricValue5, hosts[i].ip, hosts[i].hostname, "routingentry",routingtables[j], match[k], "test")
 						c <- prometheus.MustNewConstMetric(collector.Rt_QualityFailed, prometheus.GaugeValue, metricValue6, hosts[i].ip, hosts[i].hostname, "routingentry",routingtables[j], match[k], "test")
-						
+
 						var sqliteDatabase *sql.DB
-						err = createRoutingSqlite(db * sql.DB)
+						err = createRoutingSqlite(sqliteDatabase)
 						if err != nil {
 							fmt.Println(err)
 						}
 
-						storeRoutingTables(db *sql.DB, ipaddress, "test", r)
-						sqldata, err := getRoutingEntries(db *sql.DB,ipaddress)
+						storeRoutingTables(sqliteDatabase, ipaddress, "test", r)
+						sqldata, err := getRoutingEntries(sqliteDatabase,ipaddress)
 						if err != nil {
 							fmt.Println(err)
 						}
-						fmt.Println(sqldata)
+						fmt.Println("sqlitedata \n"sqldata)
 		}
 		}
 		//if (!routingTablesExists()) {
