@@ -166,5 +166,5 @@ func (collector *diskMetrics) Collect(c chan<- prometheus.Metric) {
 // Initializing the exporter
 func hardwareCollector() {
 		c := diskCollector()
-		go prometheus.MustRegister(c)
+		prometheus.MustRegister(c)
 }

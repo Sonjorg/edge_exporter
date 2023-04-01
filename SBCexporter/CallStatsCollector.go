@@ -102,7 +102,7 @@ func (collector *cMetrics) Collect(c chan<- prometheus.Metric) {
 	var metricValue5 float64
 	var metricValue6 float64
 
-	fmt.Println(hosts)
+	//fmt.Println(hosts)
 
 	for i := 0; i < len(hosts); i++ {
 		nr := strconv.Itoa(i)
@@ -136,7 +136,7 @@ func (collector *cMetrics) Collect(c chan<- prometheus.Metric) {
 		b := []byte(data) //Converting string of data to bytestream
 		ssbc := &cSBCdata{}
 		xml.Unmarshal(b, &ssbc) //Converting XML data to variables
-		fmt.Println("Successful API call data: ", ssbc.CallStatsData,"\n")
+		//fmt.Println("Successful API call data: ", ssbc.CallStatsData,"\n")
 
 		metricValue1 = float64(ssbc.CallStatsData.Rt_NumCallAttempts)
 		metricValue2 = float64(ssbc.CallStatsData.Rt_NumCallSucceeded)
@@ -157,5 +157,5 @@ func (collector *cMetrics) Collect(c chan<- prometheus.Metric) {
 // Initializing the exporter
 func callStatsCollector() {
 		c := callStats()
-		go prometheus.MustRegister(c)
+		prometheus.MustRegister(c)
 }

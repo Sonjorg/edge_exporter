@@ -191,5 +191,5 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 // Initializing the exporter
 func systemResourceCollector() {
 		c := systemCollector()
-		go prometheus.MustRegister(c)
+		prometheus.MustRegister(c)
 }

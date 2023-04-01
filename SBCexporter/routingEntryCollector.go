@@ -181,6 +181,11 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					match = entries.FindStringSubmatch(routingEntries[k])
 				}
 
+				r := make(map[int][]int)
+
+				r[routingtables] = append(r[routingtables], match)
+				//var c []*RoutingInfo
+
 				for k := range match {
 
 					url := "https://"+hosts[i].ip+"/rest/routingtable/"+routingtables[j]+"/routingentry/"+match[k]+"/historicalstatistics/1"
@@ -213,6 +218,20 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 
 		}
 		}
+		//if (!routingTablesExists()) {
+			err = createRoutingSqlite(db * sql.DB) {
+			if err != nil {
+				fmt.Println(err)
+			}
+
+			storeRoutingTables(db *sql.DB, ipaddress, "test", r)
+			sqldata, err := getRoutingEntries(db *sql.DB,ipaddress string)
+			if err != nil {
+				fmt.Println(err)
+			}
+			fmt.Println(sqldata)
+
+		//}
 	}
 }
 
@@ -233,5 +252,5 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 // Initializing the exporter
 func routingEntryCollector() {
 		c := routingCollector()
-		go prometheus.MustRegister(c)
+		prometheus.MustRegister(c)
 }
