@@ -130,6 +130,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 	var metricValue5 float64
 	var metricValue6 float64
 	for i := range hosts {
+		go func(i int, hosts hosts) {
 
 		phpsessid,err := APISessionAuth(hosts[i].username, hosts[i].password, hosts[i].ip)
 		if err != nil {
@@ -210,6 +211,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 		}
 		}
 	}
+}
 }
 
 
