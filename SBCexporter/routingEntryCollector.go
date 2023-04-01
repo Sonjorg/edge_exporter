@@ -187,9 +187,8 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				//var c []*RoutingInfo
 
 				for k := range match {
-					r := make(map[string][]string)
 
-					r[routingtables[j]] = append(r[routingtables[j]], match[k])
+
 					url := "https://"+hosts[i].ip+"/rest/routingtable/"+routingtables[j]+"/routingentry/"+match[k]+"/historicalstatistics/1"
 					_, data3, err := getAPIData(url, phpsessid)
 						if err != nil {
@@ -218,7 +217,14 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 						c <- prometheus.MustNewConstMetric(collector.Rt_MOS, prometheus.GaugeValue, metricValue5, hosts[i].ip, hosts[i].hostname, "routingentry",routingtables[j], match[k], "test")
 						c <- prometheus.MustNewConstMetric(collector.Rt_QualityFailed, prometheus.GaugeValue, metricValue6, hosts[i].ip, hosts[i].hostname, "routingentry",routingtables[j], match[k], "test")
 
+						r := make(map[string][]string)
+						r[routingtables[j]] = append(r[routingtables[j]], match[k])
 						var sqliteDatabase *sql.DB
+
+						sqliteDatabase, err = sql.Open("sqlite3", "./sqlite-database.db")
+						if err != nil {
+							fmt.Println(err)
+						}
 						err = createRoutingSqlite(sqliteDatabase)
 						if err != nil {
 							fmt.Println(err)
@@ -229,7 +235,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 						if err != nil {
 							fmt.Println(err)
 						}
-						fmt.Println("sqlitedata \n",sqldata)
+						fmt.Println("sqlitedata \n",sqldata.tablesEntries)
 		}
 		}
 		//if (!routingTablesExists()) {
