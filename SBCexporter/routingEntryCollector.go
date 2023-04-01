@@ -224,8 +224,8 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 							fmt.Println(err)
 						}
 
-						storeRoutingTables(sqliteDatabase, ipaddress, "test", r)
-						sqldata, err := getRoutingEntries(sqliteDatabase,ipaddress)
+						storeRoutingTables(sqliteDatabase, ipaddress[i], "test", r)
+						sqldata, err := getRoutingEntries(sqliteDatabase,ipaddress[i])
 						if err != nil {
 							fmt.Println(err)
 						}
