@@ -131,10 +131,11 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 	var metricValue4 float64
 	var metricValue5 float64
 	var metricValue6 float64
+	r = make(map[string][]string)
+
 	for i := range hosts {
 		//go func() {
 		//making map to store ids in sqlite
-		r = make(map[string][]string)
 
 		phpsessid,err := APISessionAuth(hosts[i].username, hosts[i].password, hosts[i].ip)
 		if err != nil {
