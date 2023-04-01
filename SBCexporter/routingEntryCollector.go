@@ -9,6 +9,8 @@ import (
 	"regexp"
 	//"strconv"
 	//"time"
+	"database/sql"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 //rest/routingtable/2/routingentry
@@ -219,7 +221,8 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 		}
 		}
 		//if (!routingTablesExists()) {
-			err = createRoutingSqlite(db * sql.DB) {
+			var sqliteDatabase *sql.DB
+			err = createRoutingSqlite(db * sql.DB)
 			if err != nil {
 				fmt.Println(err)
 			}
