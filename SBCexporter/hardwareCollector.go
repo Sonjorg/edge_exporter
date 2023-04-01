@@ -119,10 +119,11 @@ func (collector *diskMetrics) Collect(c chan<- prometheus.Metric) {
 			continue
 		}
 		//b := []byte(data) //Converting string of data to bytestream
-		disk := &diskPartitionList{}
+		disk := &diskPartition{}
 		xml.Unmarshal(data, &disk) //Converting XML data to variables
-
-		disks := disk.DiskPartitionEntry.Attr
+		
+		//List of disks retrieved from routers as XML
+		disks := disk.DiskPartitionList.DiskPartitionEntry.Attr
 		if (len(disks) <= 0) {
 			//return nil, "Routingtables empty"
 			fmt.Println("disks empty")
