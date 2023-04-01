@@ -58,35 +58,6 @@ func storeRoutingTables(db *sql.DB, ipaddress, time string, TablesEntries map[st
 	}
 	return nil
 }
-
-func getRoutingEntries(db *sql.DB,ipaddress string) ([]*RoutingInfo, error) {
-
-	if (routingTablesExists(db,ipaddress)) {
-		row, err := db.Query("SELECT * FROM routingtables")
-		//row.Scan(ip)
-		if err != nil {
-			return nil, err
-			//fmt.Println(err)
-		}
-		defer row.Close()
-
-		var data []*RoutingInfo
-		for row.Next() {
-			r := &RoutingInfo{}
-				if err := row.Scan(&r.Id, &r.Ipaddress, &r.Time, &r.TablesEntries); err != nil{
-					//fmt.Println(err)
-				}
-				if (r.Ipaddress == ipaddress) {
-					data = append(data, r)
-				}
-		}
-
-		return data ,err
-	} else {
-		return nil, nil
-	}
-}
-
 func routingTablesExists(db * sql.DB, ip string) bool {
     sqlStmt := `SELECT ipaddress FROM routingtables WHERE ipaddress = ?`
     err := db.QueryRow(sqlStmt, ip).Scan(&ip)
@@ -102,8 +73,60 @@ func routingTablesExists(db * sql.DB, ip string) bool {
 
     return true
 }
+func getRoutingEntries(db *sql.DB,ipaddress string) ([]*RoutingInfo, error) {
+
+	//if (routingTablesExists(db,ipaddress)) {
+		row, err := db.Query("SELECT * FROM routingtables")
+		//row.Scan(ip)
+		if err != nil {
+			return nil, err
+			//fmt.Println(err)
+		}
+		defer row.Close()
+
+		var data []*RoutingInfo
+		for row.Next() {
+			r := &RoutingInfo{}
+				if err := row.Scan(&r.Id, &r.Ipaddress, &r.Time, &r.TablesEntries); err != nil{
+					fmt.Println(err)
+				}
+				if (r.Ipaddress == ipaddress) {
+					data = append(data, r)
+				}
+		}
+
+		return data ,err
+	//} else {
+	//	return nil, nil
+	//}
+}
+
+
 
 // Here starts functions concerning sessioncookies
+func displayAuth(db *sql.DB, ipaddress string) ([]*Cookie, error){
+	row, err := db.Query("SELECT * FROM authentication")
+	//row.Scan(ip)
+	if err != nil {
+		return nil, err
+		//fmt.Println(err)
+	}
+	defer row.Close()
+
+	var c []*Cookie
+	for row.Next() {
+			p := &Cookie{}
+			if err := row.Scan(&p.Id, &p.Ipaddress, &p.Phpsessid, &p.Time); err != nil{
+				 //fmt.Println(err)
+			}
+			if (p.Ipaddress == ipaddress) {
+				c = append(c, p)
+			}
+	}
+
+	return c,err
+}
+
 func createTable(db *sql.DB) error {
 	createAuthTableSQL := `CREATE TABLE IF NOT EXISTS authentication (
 		"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -183,26 +206,5 @@ func Update(db *sql.DB,  phpsessid string, time string, ipaddress string) {
 	log.Printf("Affected rows %d", affected)
    }
 
-func displayAuth(db *sql.DB, ipaddress string) ([]*Cookie, error){
-	row, err := db.Query("SELECT * FROM authentication")
-	//row.Scan(ip)
-	if err != nil {
-		return nil, err
-		//fmt.Println(err)
-	}
-	defer row.Close()
 
-	var c []*Cookie
-	for row.Next() {
-			p := &Cookie{}
-			if err := row.Scan(&p.Id, &p.Ipaddress, &p.Phpsessid, &p.Time); err != nil{
-				 //fmt.Println(err)
-			}
-			if (p.Ipaddress == ipaddress) {
-				c = append(c, p)
-			}
-	}
-
-	return c,err
-}
 
