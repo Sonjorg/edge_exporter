@@ -119,7 +119,7 @@ func (collector *rMetrics) Describe(ch chan<- *prometheus.Desc) {
 //Collect implements required collect function for all promehteus collectors
 func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 	hosts := getIncludedHosts("routingentry")//retrieving targets for this exporter
-	if (len(h) <= 0) {
+	if (len(hosts) <= 0) {
 		fmt.Println("no hosts")
 		return
 	}
