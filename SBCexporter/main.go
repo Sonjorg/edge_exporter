@@ -10,10 +10,10 @@ import (
 
 func main() {
 
-	systemResourceCollector()
-	routingEntryCollector()
-	callStatsCollector()
-	hardwareCollector()
+	go systemResourceCollector()
+	go routingEntryCollector()
+	go callStatsCollector()
+	go hardwareCollector()
 	//foo := newFooCollector()
 	//prometheus.MustRegister(foo)
 
