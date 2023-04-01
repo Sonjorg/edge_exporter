@@ -94,7 +94,7 @@ func (collector *diskMetrics) Describe(ch chan<- *prometheus.Desc) {
 }
 //Collect implements required collect function for all promehteus collectors
 func (collector *diskMetrics) Collect(c chan<- prometheus.Metric) {
-	hosts := getIncludedHosts("disk")//retrieving targets for this exporter
+	hosts := getIncludedHosts("diskpartition")//retrieving targets for this exporter
 	if (len(hosts) <= 0) {
 		fmt.Println("no hosts")
 		return
@@ -113,9 +113,9 @@ func (collector *diskMetrics) Collect(c chan<- prometheus.Metric) {
 			fmt.Println("Error auth", hosts[i].ip, err)
 			continue
 		}
-		_, data,err := getAPIData("https://"+hosts[i].ip+"/rest/routingtable", phpsessid)
+		_, data,err := getAPIData("https://"+hosts[i].ip+"/rest/diskpartition", phpsessid)
 		if err != nil {
-			fmt.Println("Error routingtable data", hosts[i].ip, err)
+			fmt.Println("Error disk data", hosts[i].ip, err)
 			continue
 		}
 		//b := []byte(data) //Converting string of data to bytestream
