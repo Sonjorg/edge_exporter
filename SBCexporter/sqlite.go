@@ -46,7 +46,7 @@ func getRoutingTables() {
 } */
 func storeRoutingTables(db *sql.DB, ipaddress, time string, TablesEntries map[string][]string) error{
 	log.Println("Inserting record ...")
-	insertAuthSQL := `INSERT INTO authentication(ipaddress, time, tablesentries) VALUES (?, ?, ?)`
+	insertAuthSQL := `INSERT INTO routingtables(ipaddress, time, tablesentries) VALUES (?, ?, ?)`
 	statement, err := db.Prepare(insertAuthSQL) // Prepare statement.
                                                    // This is good to avoid SQL injections
 	if err != nil {
