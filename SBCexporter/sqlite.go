@@ -25,8 +25,8 @@ func createRoutingSqlite(db * sql.DB) error{
 	createAuthTableSQL := `CREATE TABLE IF NOT EXISTS routingtables (
 		"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
 		"ipaddress" TEXT,
-		"time" TEXT
-		"tablesEntries" TEXT [] []
+		"time" TEXT,
+		"tablesentries" TEXT [] []
 		);`
 		statement, err := db.Prepare(createAuthTableSQL) // Prepare SQL Statement
 	if err != nil {
@@ -73,7 +73,7 @@ func getRoutingEntries(db *sql.DB,ipaddress string) ([]*RoutingInfo, error) {
 		var data []*RoutingInfo
 		for row.Next() {
 			r := &RoutingInfo{}
-				if err := row.Scan(&r.Id, &r.Ipaddress, &r.Time, &r.Time, &r.TablesEntries); err != nil{
+				if err := row.Scan(&r.Id, &r.Ipaddress, &r.Time, &r.TablesEntries); err != nil{
 					//fmt.Println(err)
 				}
 				if (r.Ipaddress == ipaddress) {
