@@ -28,7 +28,7 @@ func createRoutingSqlite(db * sql.DB) error{
 		"time" TEXT,
 		"tablesentries" TEXT [] []
 		);`
-		statement, err := db.Prepare(createAuthTableSQL) // Prepare SQL Statement
+	statement, err := db.Prepare(createAuthTableSQL) // Prepare SQL Statement
 	if err != nil {
 		return err
 	}
