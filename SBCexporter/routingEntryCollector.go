@@ -235,7 +235,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 						if err != nil {
 							fmt.Println(err)
 						}
-						fmt.Println("sqlitedata \n",sqldata.tablesEntries)
+						fmt.Println("sqlitedata \n",sqldata)
 		}
 		}
 		//if (!routingTablesExists()) {
