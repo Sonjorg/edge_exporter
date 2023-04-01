@@ -157,5 +157,5 @@ func (collector *cMetrics) Collect(c chan<- prometheus.Metric) {
 // Initializing the exporter
 func callStatsCollector() {
 		c := callStats()
-		prometheus.MustRegister(c)
+		go prometheus.MustRegister(c)
 }
