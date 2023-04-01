@@ -115,3 +115,5 @@ func displayAuth(db *sql.DB, ipaddress string) ([]*Cookie, error){
 
 	return c,err
 }
+
+func getRoutingTables()

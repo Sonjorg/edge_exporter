@@ -121,7 +121,7 @@ func (collector *diskMetrics) Collect(c chan<- prometheus.Metric) {
 		//b := []byte(data) //Converting string of data to bytestream
 		disk := &diskPartition{}
 		xml.Unmarshal(data, &disk) //Converting XML data to variables
-		
+
 		//List of disks retrieved from routers as XML
 		disks := disk.DiskPartitionList.DiskPartitionEntry.Attr
 		if (len(disks) <= 0) {
