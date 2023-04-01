@@ -133,6 +133,8 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 	var metricValue6 float64
 	for i := range hosts {
 		//go func() {
+		//making map to store ids in sqlite
+		r = make(map[string][]string)
 
 		phpsessid,err := APISessionAuth(hosts[i].username, hosts[i].password, hosts[i].ip)
 		if err != nil {
@@ -217,7 +219,6 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 						c <- prometheus.MustNewConstMetric(collector.Rt_MOS, prometheus.GaugeValue, metricValue5, hosts[i].ip, hosts[i].hostname, "routingentry",routingtables[j], match[k], "test")
 						c <- prometheus.MustNewConstMetric(collector.Rt_QualityFailed, prometheus.GaugeValue, metricValue6, hosts[i].ip, hosts[i].hostname, "routingentry",routingtables[j], match[k], "test")
 
-						r = make(map[string][]string)
 						r[routingtables[j]] = append(r[routingtables[j]], match[k])
 						//fmt.Println(routingtables[j], match)
 						fmt.Println(r)
