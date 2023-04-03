@@ -12,8 +12,8 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	//"strconv"
 	//"time"
-	//"database/sql"
-	//_ "github.com/mattn/go-sqlite3"
+	"database/sql"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 // rest/routingtable/2/routingentry
@@ -200,7 +200,10 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				}
 				createRoutingSqlite(sqliteDatabase)
 				storeRoutingEntries(sqliteDatabase, ipaddress, time, routingTable, match)
-				e := getRoutingEntries(sqliteDatabase,ipaddress,routingTable)
+				e,err := getRoutingEntries(sqliteDatabase,ipaddress,routingTable)
+				if err != nil {
+					fmt.Println(err)
+				}
 				fmt.Println("table: ",routingtables[j], "entries: ", e)
 				for k := range match {
 
