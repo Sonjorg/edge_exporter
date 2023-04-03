@@ -202,10 +202,10 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				}
 				createRoutingSqlite(sqliteDatabase)
 				storeRoutingEntries(sqliteDatabase, hosts[i].ip, "time", routingtables[j], match)
-				e,err := getRoutingEntries(sqliteDatabase,hosts[i].ip,routingtables[j])
+				/*e,err := getRoutingEntries(sqliteDatabase,hosts[i].ip,routingtables[j])
 				if err != nil {
 					fmt.Println(err)
-				}
+				}*/
 				//fmt.Println("table: ",routingtables[j], "entries: ", e)
 				for k := range match {
 
