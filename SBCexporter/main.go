@@ -25,8 +25,8 @@ func main() {
 		wg.Done()
 	}()
 	callStatsCollector()
-
-
+	
+	wg.Wait()
 
 
 	//wg.Wait()
