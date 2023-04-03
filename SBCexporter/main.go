@@ -17,11 +17,11 @@ func main() {
 	systemResourceCollector()
 
 	go func() {
-		hardwareCollector()
+		go hardwareCollector()
 	//	wg.Done()
 	}()//
 	go func() {
-		routingEntryCollector()
+		go routingEntryCollector()
 	//	wg.Done()
 	}()
 	callStatsCollector()
