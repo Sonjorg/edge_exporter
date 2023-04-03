@@ -4,7 +4,7 @@ package main
 import (
 	"encoding/xml"
 	"fmt"
-	"sync"
+	//"sync"
 
 	//"log"
 	"regexp"
