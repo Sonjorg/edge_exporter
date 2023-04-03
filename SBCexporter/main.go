@@ -12,19 +12,22 @@ import (
 
 func main() {
 	//var wg sync.WaitGroup
-	//wg.Add(2)
-
+	go func() {
 	systemResourceCollector()
-
-
+	}()
+	go func() {
 		go hardwareCollector()
+	//wg.Done()
+	}()
+	go func() {
+		goroutingEntryCollector()
 	//	wg.Done()
-
-		go routingEntryCollector()
-	//	wg.Done()
+	}()
+	go func() {
 
 	callStatsCollector()
-
+	}()
+	//wg.Wait()
 
 
 	//wg.Wait()

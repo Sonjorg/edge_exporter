@@ -137,12 +137,10 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 	var metricValue5 float64
 	var metricValue6 float64
 	//r := make(map[string][]string)
-	var wg sync.WaitGroup
+	//var wg sync.WaitGroup
 
 	for i := range hosts {
-		wg.Add(len(hosts))
 
-		go func() {
 			//making map to store ids in sqlite
 
 			phpsessid, err := APISessionAuth(hosts[i].username, hosts[i].password, hosts[i].ip)
@@ -252,9 +250,8 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				//if (!routingTablesExists()) {
 
 			}
-			wg.Done()
 
-		}()
+
 	}
 }
 
