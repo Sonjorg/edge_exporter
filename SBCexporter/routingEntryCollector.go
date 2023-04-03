@@ -192,8 +192,8 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					match = entries.FindStringSubmatch(routingEntries[k])
 					fmt.Println(entries.FindStringSubmatch(routingEntries[k]))
 				}
-				fmt.Println(routingEntries)
-				fmt.Println(match)
+				//fmt.Println(routingEntries)
+				//fmt.Println(match)
 				var sqliteDatabase *sql.DB
 
 				sqliteDatabase, err = sql.Open("sqlite3", "./sqlite-database.db")
