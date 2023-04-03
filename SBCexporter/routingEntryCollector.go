@@ -171,7 +171,6 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			}
 			for j := range routingtables {
 
-				//	fmt.Println(phpsessid)
 				url := "https://" + hosts[i].ip + "/rest/routingtable/" + routingtables[j] + "/routingentry"
 				_, data2, err := getAPIData(url, phpsessid)
 				if err != nil {
@@ -203,7 +202,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				//fmt.Println(match)
 				//fmt.Println(routingEntries)
 				//fmt.Println(match)
-				/*var sqliteDatabase *sql.DB
+				var sqliteDatabase *sql.DB
 
 				sqliteDatabase, err = sql.Open("sqlite3", "./sqlite-database.db")
 				if err != nil {
@@ -211,11 +210,11 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				}
 				createRoutingSqlite(sqliteDatabase)
 				storeRoutingEntries(sqliteDatabase, hosts[i].ip, "time", routingtables[j], match)
-				/*e,err := getRoutingEntries(sqliteDatabase,hosts[i].ip,routingtables[j])
+				match ,err := getRoutingEntries(sqliteDatabase,hosts[i].ip,routingtables[j])
 				if err != nil {
 					fmt.Println(err)
 				}
-				*/
+
 				//fmt.Println("table: ",routingtables[j], "entries: ", e)
 				for k := range match {
 
