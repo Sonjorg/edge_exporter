@@ -6,6 +6,8 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"log"
 	"net/http"
+	"sync"
+
 )
 
 func main() {

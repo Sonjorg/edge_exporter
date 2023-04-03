@@ -247,7 +247,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 		//if (!routingTablesExists()) {
 
 
-		//}
+		}
 	}
 }
 
