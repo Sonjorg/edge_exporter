@@ -12,7 +12,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	//"strconv"
 	//"time"
-	"./sqlite"
+	"exporter/sqlite"
 	"database/sql"
 	_ "github.com/mattn/go-sqlite3"
 )

@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	//"strconv"
-	"./sqlite"
+	"exporter/sqlite"
 	"os"
 	"strings"
 	"time"
