@@ -189,7 +189,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				var match []string
 
 				for k := range routingEntries {
-					match = entries.FindStringSubmatch(routingEntries[k])
+					match = append(match, entries.FindStringSubmatch(routingEntries[k]))
 				}
 				fmt.Println(routingEntries)
 				fmt.Println(match)
