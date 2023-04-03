@@ -12,6 +12,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	//"strconv"
 	//"time"
+	"./sqlite"
 	"database/sql"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -172,7 +173,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			}
 			for j := range routingtables {
 
-			/*	url := "https://" + hosts[i].ip + "/rest/routingtable/" + routingtables[j] + "/routingentry"
+				url := "https://" + hosts[i].ip + "/rest/routingtable/" + routingtables[j] + "/routingentry"
 				_, data2, err := getAPIData(url, phpsessid)
 				if err != nil {
 				}
@@ -199,7 +200,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					//fmt.Println(match)
 					//fmt.Println(entries.FindStringSubmatch(routingEntries[k]))
 
-				}*/
+				}
 				//fmt.Println(match)
 				//fmt.Println(routingEntries)
 				//fmt.Println(match)
