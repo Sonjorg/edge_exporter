@@ -12,8 +12,8 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	//"strconv"
 	//"time"
-	"database/sql"
-	_ "github.com/mattn/go-sqlite3"
+	//"database/sql"
+	//_ "github.com/mattn/go-sqlite3"
 )
 
 // rest/routingtable/2/routingentry
