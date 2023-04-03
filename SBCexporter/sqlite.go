@@ -18,72 +18,65 @@ type RoutingT struct {
 	Id        int
 	Ipaddress string
 	Time      string
-	RoutingTables []string
+	RoutingTable string
+	RoutingEntry string
 	 //map consisting of routingtables and their routingentries
 }
+/*
 type RoutingE struct {
+	Time      string
+	RoutingTable string
+	RoutingEntry string
+}*/
+/*
+type RoutingTmp struct {
 	Id        int
 	Ipaddress string
-	RoutingTable string
-	RoutingEntries []string
-}
+	Time      string
+	RoutingTablesnEntries map[string][]string
+	//RoutingEntries []string
+}*/
 func createRoutingSqlite(db * sql.DB) error{
 	createRoutingTables := `CREATE TABLE IF NOT EXISTS routingtables (
 		"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
 		"ipaddress" TEXT,
 		"time" TEXT,
-		"routingtables" TEXT []
+		"routingtable" TEXT,
+		"routingentry" TEXT
+
 		);`
-		createRoutingEntries := `CREATE TABLE IF NOT EXISTS routingtables (
-		"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-		"ipaddress" TEXT,
-		"routingtable" TEXT
-		"routingentries" TEXT []
-		);`
+
 	statement, err := db.Prepare(createRoutingTables) // Prepare SQL Statement
 	if err != nil {
 		return err
 	}
-	statement2, err := db.Prepare(createRoutingEntries) // Prepare SQL Statement
-	if err != nil {
-		return err
-	}
+
 	statement.Exec()
-	statement2.Exec() // Execute SQL Statements
-	//log.Println("table created")
 	return nil
 }
-/*
-func getRoutingTables() {
 
-	//hvis table exists
-	//hent table
-	//hvis table er eldre enn 24 t, returner nil
-	//returner tables
-} */
-//to tabeller
-//en som lagrer tables (har både ipadresse og tablenr)
-//en som lagrer entries (har både ip adresse og tablenr som query verdi)
-//må ha en som returnerer tables
-//en som returnerer entries TablesEntries map[string][]string
-func storeRoutingTables(db *sql.DB, ipaddress string, time string, routingTable string, routingEntries []string) error{
+func storeRoutingEntries(db *sql.DB, ipaddress string, time string, routingTable string, routingEntries []string) error{
 	log.Println("Inserting record ...")
-	insertSQL1 := `INSERT INTO routingtables(ipaddress, time, routingtables, routingentries) VALUES (?, ?, ?)`
-	statement, err := db.Prepare(insertSQL1) // Prepare statement.
-                                                   // This is good to avoid SQL injections
-	if err != nil {
-		fmt.Println(err)
+	for i := range routingEntries {
+		insertSQL1 := `INSERT INTO routingtables(ipaddress, time, routingtable, routingentries) VALUES (?, ?, ?)`
 
-		return err
+		statement, err := db.Prepare(insertSQL1) // Prepare statement.
+													// This is good to avoid SQL injections
+		if err != nil {
+			fmt.Println(err)
 
-	}
-	_, err = statement.Exec(ipaddress, time, routingTable, routingEntries)
-	if err != nil {
-		fmt.Println(err)
-		return err
-	}
+			return err
+
+		}
+		_, err = statement.Exec(ipaddress, time, routingTable, routingEntries[i])
+		if err != nil {
+			fmt.Println(err)
+			return err
+		}
+}
 	return nil
 }
+
 func routingTablesExists(db * sql.DB, ip string) bool {
     sqlStmt := `SELECT ipaddress FROM routingtables WHERE ipaddress = ?`
     err := db.QueryRow(sqlStmt, ip).Scan(&ip)
@@ -100,54 +93,35 @@ func routingTablesExists(db * sql.DB, ip string) bool {
     return true
 }
 
-func getRoutingTables(db *sql.DB,ipaddress string) ([]*RoutingT, error) {
+
+
+func getRoutingEntries(db *sql.DB,ipaddress string,routingTable string) ([]string, error) {
 
 	//if (routingTablesExists(db,ipaddress)) {
-		row, err := db.Query("SELECT * FROM routingtables")
+		//row, err := db.Query("SELECT * FROM routingtables")
+		row, err := db.Query("SELECT * FROM routingentries")
 		//row.Scan(ip)
 		if err != nil {
 			return nil, err
 			//fmt.Println(err)
 		}
 		defer row.Close()
-
-		var data []*RoutingT
+		var re []string
+		//var data []*RoutingT
 		for row.Next() {
 			r := &RoutingT{}
-				if err := row.Scan(&r.Id, &r.Ipaddress, &r.Time, &r.RoutingTables); err != nil{
+				if err := row.Scan(&r.Id, &r.Ipaddress,r.Time,&r.RoutingTable, &r.RoutingEntry); err != nil{
 					fmt.Println(err)
 				}
 				if (r.Ipaddress == ipaddress) {
-					data = append(data, r)
+					//data = append(data, r)
+					if (r.RoutingTable == routingTable) {
+						re = append(re, r.RoutingEntry)
+					}
 				}
 		}
 
-		return data ,err
-
-}
-func getRoutingEntries(db *sql.DB,ipaddress string) ([]*RoutingE, error) {
-
-	//if (routingTablesExists(db,ipaddress)) {
-		row, err := db.Query("SELECT * FROM routingtables")
-		//row.Scan(ip)
-		if err != nil {
-			return nil, err
-			//fmt.Println(err)
-		}
-		defer row.Close()
-
-		var data []*RoutingE
-		for row.Next() {
-			r := &RoutingE{}
-				if err := row.Scan(&r.Id, &r.Ipaddress, &r.RoutingEntries); err != nil{
-					fmt.Println(err)
-				}
-				if (r.Ipaddress == ipaddress) {
-					data = append(data, r)
-				}
-		}
-
-		return data ,err
+		return re ,err
 	//} else {
 	//	return nil, nil
 	//}

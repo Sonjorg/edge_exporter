@@ -184,6 +184,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					fmt.Println("No routingEntry for this routingtable")
 					continue
 				}
+				//
 				entries := regexp.MustCompile(`\d+$`)
 				var match []string
 
@@ -191,8 +192,16 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					match = entries.FindStringSubmatch(routingEntries[k])
 				}
 
-				//var c []*RoutingInfo
+				var sqliteDatabase *sql.DB
 
+				sqliteDatabase, err = sql.Open("sqlite3", "./sqlite-database.db")
+				if err != nil {
+					fmt.Println(err)
+				}
+				createRoutingSqlite(sqliteDatabase)
+				storeRoutingEntries(sqliteDatabase, ipaddress, time, routingTable, match)
+				e := getRoutingEntries(sqliteDatabase,ipaddress,routingTable)
+				fmt.Println("table: ",routingtables[j], "entries: ", e)
 				for k := range match {
 
 					url := "https://" + hosts[i].ip + "/rest/routingtable/" + routingtables[j] + "/routingentry/" + match[k] + "/historicalstatistics/1"
