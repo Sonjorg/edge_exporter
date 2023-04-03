@@ -32,10 +32,10 @@ func main() {
 	wg.Done()
 
 	}()
-	//wg.Wait()
 
 
-	//wg.Wait()
+
+	wg.Wait()
 
 	//foo := newFooCollector()
 	//prometheus.MustRegister(foo)
