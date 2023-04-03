@@ -196,14 +196,14 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					}
 					//match = entries.FindStringSubmatch(routingEntries[k])
 					//fmt.Println(tmp)
-					fmt.Println(match)
+					//fmt.Println(match)
 					//fmt.Println(entries.FindStringSubmatch(routingEntries[k]))
 
 				}
-				fmt.Println(match)
+				//fmt.Println(match)
 				//fmt.Println(routingEntries)
 				//fmt.Println(match)
-				var sqliteDatabase *sql.DB
+				/*var sqliteDatabase *sql.DB
 
 				sqliteDatabase, err = sql.Open("sqlite3", "./sqlite-database.db")
 				if err != nil {
@@ -214,7 +214,8 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				/*e,err := getRoutingEntries(sqliteDatabase,hosts[i].ip,routingtables[j])
 				if err != nil {
 					fmt.Println(err)
-				}*/
+				}
+				*/
 				//fmt.Println("table: ",routingtables[j], "entries: ", e)
 				for k := range match {
 
