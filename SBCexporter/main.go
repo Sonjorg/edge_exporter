@@ -6,21 +6,16 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"log"
 	"net/http"
-	"sync"
 
 )
 
 func main() {
-	var wg sync.WaitGroup
-	wg.Add(2)
 	systemResourceCollector()
 	go func() {
 		hardwareCollector()
-	wg.Done()
 	}()
 	go func() {
 		routingEntryCollector()
-		wg.Done()
 	}()
 
 	callStatsCollector()
@@ -29,7 +24,6 @@ func main() {
 
 
 
-	wg.Wait()
 
 	//foo := newFooCollector()
 	//prometheus.MustRegister(foo)
