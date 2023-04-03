@@ -42,7 +42,7 @@ func createRoutingSqlite(db * sql.DB) error{
 		"ipaddress" TEXT,
 		"time" TEXT,
 		"routingtable" TEXT,
-		"routingentry" TEXT
+		"routingentries" TEXT
 
 		);`
 
