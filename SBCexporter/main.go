@@ -12,19 +12,19 @@ import (
 
 func main() {
 	var wg sync.WaitGroup
-	wg.Add(4)
+	wg.Add(2)
 
 	go systemResourceCollector()
 	wg.Done()
-
-	go routingEntryCollector()
-	wg.Done()
-
-	go callStatsCollector()
-	wg.Done()
-
 	go hardwareCollector()
 	wg.Done()
+	go routingEntryCollector()
+
+	go callStatsCollector()
+
+
+
+
 	//wg.Wait()
 
 	//foo := newFooCollector()
