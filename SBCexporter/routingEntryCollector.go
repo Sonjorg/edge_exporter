@@ -206,7 +206,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				if err != nil {
 					fmt.Println(err)
 				}
-				fmt.Println("table: ",routingtables[j], "entries: ", e)
+				//fmt.Println("table: ",routingtables[j], "entries: ", e)
 				for k := range match {
 
 					url := "https://" + hosts[i].ip + "/rest/routingtable/" + routingtables[j] + "/routingentry/" + match[k] + "/historicalstatistics/1"
