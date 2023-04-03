@@ -19,11 +19,11 @@ func main() {
 	go func() {
 		hardwareCollector()
 		wg.Done()
-	}//
+	}()//
 	go func() {
 		routingEntryCollector()
 		wg.Done()
-	}
+	}()
 	callStatsCollector()
 
 

@@ -119,7 +119,7 @@ func (collector *rMetrics) Describe(ch chan<- *prometheus.Desc) {
 	ch <- collector.Error_ip
 }
 //Collect implements required collect function for all promehteus collectors
-go func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
+func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 	hosts := getIncludedHosts("routingentry")//retrieving targets for this exporter
 	if (len(hosts) <= 0) {
 		fmt.Println("no hosts")
@@ -224,7 +224,7 @@ go func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 						//fmt.Println(routingtables[j], match)
 						//fmt.Println(r)
 
-		}()
+		}
 			/*var sqliteDatabase *sql.DB
 
 			sqliteDatabase, err = sql.Open("sqlite3", "./sqlite-database.db")
