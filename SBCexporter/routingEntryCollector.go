@@ -189,10 +189,14 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				var match []string
 
 				for k := range routingEntries {
-					fmt.Println(routingEntries[k])
-					match = entries.FindStringSubmatch(routingEntries[k])
+					tmp := entries.FindStringSubmatch(routingEntries[k])
+					match = append(match, tmp)
+					//match = entries.FindStringSubmatch(routingEntries[k])
+					fmt.Println(tmp)
 					fmt.Println(entries.FindStringSubmatch(routingEntries[k]))
+
 				}
+				fmt.Println(match)
 				//fmt.Println(routingEntries)
 				//fmt.Println(match)
 				var sqliteDatabase *sql.DB
