@@ -9,8 +9,8 @@ import (
 	"regexp"
 	//"strconv"
 	//"time"
-	"database/sql"
-	_ "github.com/mattn/go-sqlite3"
+	//"database/sql"
+	//_ "github.com/mattn/go-sqlite3"
 )
 
 //rest/routingtable/2/routingentry
