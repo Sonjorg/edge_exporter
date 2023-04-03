@@ -132,7 +132,7 @@ go func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 	var metricValue5 float64
 	var metricValue6 float64
 	//r := make(map[string][]string)
-
+	go func() {
 	for i := range hosts {
 		//go func() {
 		//making map to store ids in sqlite
@@ -164,7 +164,6 @@ go func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 
 		}
 			for j := range routingtables {
-
 
 				//	fmt.Println(phpsessid)
 				url := "https://"+hosts[i].ip+"/rest/routingtable/" + routingtables[j] + "/routingentry"
@@ -250,6 +249,7 @@ go func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 		}
 	}
 }()
+}
 
 
 

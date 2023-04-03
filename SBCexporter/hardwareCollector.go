@@ -93,7 +93,7 @@ func (collector *diskMetrics) Describe(ch chan<- *prometheus.Desc) {
 	ch <- collector.Error_ip
 }
 //Collect implements required collect function for all promehteus collectors
-go func (collector *diskMetrics) Collect(c chan<- prometheus.Metric) {
+func (collector *diskMetrics) Collect(c chan<- prometheus.Metric) {
 	hosts := getIncludedHosts("diskpartition")//retrieving targets for this exporter
 	if (len(hosts) <= 0) {
 		fmt.Println("no hosts")
@@ -161,7 +161,7 @@ go func (collector *diskMetrics) Collect(c chan<- prometheus.Metric) {
 
 		}
 	}
-}()
+}
 
 // Initializing the exporter
 func hardwareCollector() {
