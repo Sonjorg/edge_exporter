@@ -143,12 +143,13 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 
 			//making map to store ids in sqlite
 
-			phpsessid, err := APISessionAuth(hosts[i].username, hosts[i].password, hosts[i].ip)
+		phpsessid, err := APISessionAuth(hosts[i].username, hosts[i].password, hosts[i].ip)
 			if err != nil {
 				fmt.Println("Error auth", hosts[i].ip, err)
 				//continue
 				return
 			}
+
 			_, data, err := getAPIData("https://"+hosts[i].ip+"/rest/routingtable", phpsessid)
 			if err != nil {
 				fmt.Println("Error routingtable data", hosts[i].ip, err)
@@ -171,7 +172,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			}
 			for j := range routingtables {
 
-				url := "https://" + hosts[i].ip + "/rest/routingtable/" + routingtables[j] + "/routingentry"
+			/*	url := "https://" + hosts[i].ip + "/rest/routingtable/" + routingtables[j] + "/routingentry"
 				_, data2, err := getAPIData(url, phpsessid)
 				if err != nil {
 				}
@@ -198,7 +199,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					//fmt.Println(match)
 					//fmt.Println(entries.FindStringSubmatch(routingEntries[k]))
 
-				}
+				}*/
 				//fmt.Println(match)
 				//fmt.Println(routingEntries)
 				//fmt.Println(match)
