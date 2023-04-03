@@ -99,7 +99,7 @@ func getRoutingEntries(db *sql.DB,ipaddress string,routingTable string) ([]strin
 
 	//if (routingTablesExists(db,ipaddress)) {
 		//row, err := db.Query("SELECT * FROM routingtables")
-		row, err := db.Query("SELECT * FROM routingentries")
+		row, err := db.Query("SELECT * FROM routingtables")
 		//row.Scan(ip)
 		if err != nil {
 			return nil, err
