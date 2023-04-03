@@ -109,7 +109,7 @@ func getRoutingEntries(db *sql.DB,ipaddress string,routingTable string) ([]strin
 		//var data []*RoutingT
 		for row.Next() {
 			r := &RoutingT{}
-				if err := row.Scan(&r.Id, &r.Ipaddress,r.Time,&r.RoutingTable, &r.RoutingEntry); err != nil{
+				if err := row.Scan(&r.Id, &r.Ipaddress,&r.Time,&r.RoutingTable, &r.RoutingEntry); err != nil{
 					fmt.Println(err)
 				}
 				if (r.Ipaddress == ipaddress) {
