@@ -131,7 +131,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 	var metricValue4 float64
 	var metricValue5 float64
 	var metricValue6 float64
-	r := make(map[string][]string)
+	//r := make(map[string][]string)
 
 	for i := range hosts {
 		//go func() {
