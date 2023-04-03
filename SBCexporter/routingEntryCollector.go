@@ -224,7 +224,7 @@ go func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 						//fmt.Println(routingtables[j], match)
 						//fmt.Println(r)
 
-		}
+		}()
 			/*var sqliteDatabase *sql.DB
 
 			sqliteDatabase, err = sql.Open("sqlite3", "./sqlite-database.db")
