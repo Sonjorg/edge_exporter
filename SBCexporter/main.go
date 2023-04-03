@@ -11,12 +11,8 @@ import (
 
 func main() {
 	systemResourceCollector()
-	go func() {
 		hardwareCollector()
-	}()
-	go func() {
 		routingEntryCollector()
-	}()
 
 	callStatsCollector()
 
