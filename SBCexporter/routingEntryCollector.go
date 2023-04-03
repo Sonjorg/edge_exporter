@@ -220,9 +220,9 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 						c <- prometheus.MustNewConstMetric(collector.Rt_MOS, prometheus.GaugeValue, metricValue5, hosts[i].ip, hosts[i].hostname, "routingentry",routingtables[j], match[k], "test")
 						c <- prometheus.MustNewConstMetric(collector.Rt_QualityFailed, prometheus.GaugeValue, metricValue6, hosts[i].ip, hosts[i].hostname, "routingentry",routingtables[j], match[k], "test")
 
-						r[routingtables[j]] = append(r[routingtables[j]], match[k])
+						//r[routingtables[j]] = append(r[routingtables[j]], match[k])
 						//fmt.Println(routingtables[j], match)
-						fmt.Println(r)
+						//fmt.Println(r)
 
 		}
 			/*var sqliteDatabase *sql.DB

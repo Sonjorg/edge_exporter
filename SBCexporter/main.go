@@ -25,7 +25,7 @@ func main() {
 
 	go hardwareCollector()
 	wg.Done()
-	wg.Wait()
+	//wg.Wait()
 
 	//foo := newFooCollector()
 	//prometheus.MustRegister(foo)
