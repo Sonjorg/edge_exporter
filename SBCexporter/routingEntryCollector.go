@@ -209,8 +209,8 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				if err != nil {
 					fmt.Println(err)
 				}
-				createRoutingSqlite(sqliteDatabase)
-				storeRoutingEntries(sqliteDatabase, hosts[i].ip, "time", routingtables[j], match)
+				//createRoutingSqlite(sqliteDatabase)
+				//storeRoutingEntries(sqliteDatabase, hosts[i].ip, "time", routingtables[j], match)
 				match, err := getRoutingEntries(sqliteDatabase,hosts[i].ip,routingtables[j])
 				if err != nil {
 					fmt.Println(err)
