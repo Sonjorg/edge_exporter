@@ -6,21 +6,25 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"log"
 	"net/http"
-	//"sync"
+	"sync"
 
 )
 
 func main() {
-	//var wg sync.WaitGroup
-	//wg.Add(2)
+	var wg sync.WaitGroup
+	wg.Add(2)
 
-	//go systemResourceCollector()
+	systemResourceCollector()
 
-	//go hardwareCollector()
-	//wg.Done()
-	go routingEntryCollector()
-
-	//go callStatsCollector()
+	go func() {
+		hardwareCollector()
+		wg.Done()
+	}//
+	go func() {
+		routingEntryCollector()
+		wg.Done()
+	}
+	callStatsCollector()
 
 
 
