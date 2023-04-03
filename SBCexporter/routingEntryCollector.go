@@ -256,7 +256,6 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 
 		}()
 	}
-	wg.Wait()
 }
 
 //https://10.233.230.11/rest/routingtable/
