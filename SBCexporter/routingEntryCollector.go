@@ -225,7 +225,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 						fmt.Println(r)
 
 		}
-			var sqliteDatabase *sql.DB
+			/*var sqliteDatabase *sql.DB
 
 			sqliteDatabase, err = sql.Open("sqlite3", "./sqlite-database.db")
 			if err != nil {
@@ -237,13 +237,13 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			}
 
 			storeRoutingTables(sqliteDatabase, hosts[i].ip, "test", r)
-			
+
 			sqldata, err := getRoutingEntries(sqliteDatabase,hosts[i].ip)
 			if err != nil {
 				fmt.Println(err)
 			}
 			fmt.Println("sqlitedata \n",sqldata)
-		}
+		}*/
 		//if (!routingTablesExists()) {
 
 

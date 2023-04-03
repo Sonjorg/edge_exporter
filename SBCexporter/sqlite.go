@@ -14,25 +14,42 @@ type Cookie struct {
 	Time      string
 }
 
-type RoutingInfo struct {
+type RoutingT struct {
 	Id        int
 	Ipaddress string
 	Time      string
-	TablesEntries map[string][]string //map consisting of routingtables and their routingentries
+	RoutingTables []string
+	 //map consisting of routingtables and their routingentries
 }
-
+type RoutingE struct {
+	Id        int
+	Ipaddress string
+	RoutingTable string
+	RoutingEntries []string
+}
 func createRoutingSqlite(db * sql.DB) error{
-	createAuthTableSQL := `CREATE TABLE IF NOT EXISTS routingtables (
+	createRoutingTables := `CREATE TABLE IF NOT EXISTS routingtables (
 		"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
 		"ipaddress" TEXT,
 		"time" TEXT,
-		"tablesentries" TEXT [] []
+		"routingtables" TEXT []
 		);`
-	statement, err := db.Prepare(createAuthTableSQL) // Prepare SQL Statement
+		createRoutingEntries := `CREATE TABLE IF NOT EXISTS routingtables (
+		"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+		"ipaddress" TEXT,
+		"routingtable" TEXT
+		"routingentries" TEXT []
+		);`
+	statement, err := db.Prepare(createRoutingTables) // Prepare SQL Statement
 	if err != nil {
 		return err
 	}
-	statement.Exec() // Execute SQL Statements
+	statement2, err := db.Prepare(createRoutingEntries) // Prepare SQL Statement
+	if err != nil {
+		return err
+	}
+	statement.Exec()
+	statement2.Exec() // Execute SQL Statements
 	//log.Println("table created")
 	return nil
 }
@@ -44,10 +61,15 @@ func getRoutingTables() {
 	//hvis table er eldre enn 24 t, returner nil
 	//returner tables
 } */
-func storeRoutingTables(db *sql.DB, ipaddress string, time string, TablesEntries map[string][]string) error{
+//to tabeller
+//en som lagrer tables (har både ipadresse og tablenr)
+//en som lagrer entries (har både ip adresse og tablenr som query verdi)
+//må ha en som returnerer tables
+//en som returnerer entries TablesEntries map[string][]string
+func storeRoutingTables(db *sql.DB, ipaddress string, time string, routingTable string, routingEntries []string) error{
 	log.Println("Inserting record ...")
-	insertAuthSQL := `INSERT INTO routingtables(ipaddress, time, tablesentries) VALUES (?, ?, ?)`
-	statement, err := db.Prepare(insertAuthSQL) // Prepare statement.
+	insertSQL1 := `INSERT INTO routingtables(ipaddress, time, routingtables, routingentries) VALUES (?, ?, ?)`
+	statement, err := db.Prepare(insertSQL1) // Prepare statement.
                                                    // This is good to avoid SQL injections
 	if err != nil {
 		fmt.Println(err)
@@ -55,7 +77,7 @@ func storeRoutingTables(db *sql.DB, ipaddress string, time string, TablesEntries
 		return err
 
 	}
-	_, err = statement.Exec(ipaddress, time, TablesEntries)
+	_, err = statement.Exec(ipaddress, time, routingTable, routingEntries)
 	if err != nil {
 		fmt.Println(err)
 		return err
@@ -77,7 +99,8 @@ func routingTablesExists(db * sql.DB, ip string) bool {
 
     return true
 }
-func getRoutingEntries(db *sql.DB,ipaddress string) ([]*RoutingInfo, error) {
+
+func getRoutingTables(db *sql.DB,ipaddress string) ([]*RoutingT, error) {
 
 	//if (routingTablesExists(db,ipaddress)) {
 		row, err := db.Query("SELECT * FROM routingtables")
@@ -88,10 +111,35 @@ func getRoutingEntries(db *sql.DB,ipaddress string) ([]*RoutingInfo, error) {
 		}
 		defer row.Close()
 
-		var data []*RoutingInfo
+		var data []*RoutingT
 		for row.Next() {
-			r := &RoutingInfo{}
-				if err := row.Scan(&r.Id, &r.Ipaddress, &r.Time, &r.TablesEntries); err != nil{
+			r := &RoutingT{}
+				if err := row.Scan(&r.Id, &r.Ipaddress, &r.Time, &r.RoutingTables); err != nil{
+					fmt.Println(err)
+				}
+				if (r.Ipaddress == ipaddress) {
+					data = append(data, r)
+				}
+		}
+
+		return data ,err
+
+}
+func getRoutingEntries(db *sql.DB,ipaddress string) ([]*RoutingE, error) {
+
+	//if (routingTablesExists(db,ipaddress)) {
+		row, err := db.Query("SELECT * FROM routingtables")
+		//row.Scan(ip)
+		if err != nil {
+			return nil, err
+			//fmt.Println(err)
+		}
+		defer row.Close()
+
+		var data []*RoutingE
+		for row.Next() {
+			r := &RoutingE{}
+				if err := row.Scan(&r.Id, &r.Ipaddress, &r.RoutingEntries); err != nil{
 					fmt.Println(err)
 				}
 				if (r.Ipaddress == ipaddress) {

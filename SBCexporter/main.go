@@ -9,11 +9,22 @@ import (
 )
 
 func main() {
+	var wg sync.WaitGroup
+	wg.Add(4)
 
-	systemResourceCollector()
-	routingEntryCollector()
-	callStatsCollector()
-	hardwareCollector()
+	go systemResourceCollector()
+	wg.Done()
+
+	go routingEntryCollector()
+	wg.Done()
+
+	go callStatsCollector()
+	wg.Done()
+
+	go hardwareCollector()
+	wg.Done()
+	wg.Wait()
+
 	//foo := newFooCollector()
 	//prometheus.MustRegister(foo)
 
