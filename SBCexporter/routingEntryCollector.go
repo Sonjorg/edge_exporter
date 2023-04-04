@@ -13,8 +13,8 @@ import (
 	//"strconv"
 	//"time"
 	//"exporter/sqlite"
-	"database/sql"
-	_ "github.com/mattn/go-sqlite3"
+	//"database/sql"
+	//_ "github.com/mattn/go-sqlite3"
 )
 
 // rest/routingtable/2/routingentry
