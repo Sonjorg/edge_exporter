@@ -1,4 +1,4 @@
-module example.com/my/thing
+module github.com/Sonjorg/HDOmonitoring/SBCexporter
 
 go 1.19
 
