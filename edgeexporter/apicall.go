@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	//"strconv"
-	"github.com/Sonjorg/hdomonitoring/edgeexporter/pkg/sqlite"
+	"github.com/Sonjorg/HDOmonitoring/edgeexporter/pkg/sqlite"
 	"os"
 	"strings"
 	"time"

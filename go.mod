@@ -1,4 +1,4 @@
-module github.com/Sonjorg/hdomonitoring/edgeexporter
+module github.com/Sonjorg/HDOmonitoring
 
 go 1.19
 
