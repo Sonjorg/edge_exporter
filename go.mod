@@ -1,13 +1,11 @@
-module github.com/Sonjorg/HDOmonitoring
+module edge_exporter
 
-go 1.19
-
-//github.com/hpcloud/tail v1.0.0
-require github.com/prometheus/client_golang v1.14.0
+go 1.20
 
 require (
 	github.com/hpcloud/tail v1.0.0
 	github.com/mattn/go-sqlite3 v1.14.16
+	github.com/prometheus/client_golang v1.14.0
 	gopkg.in/yaml.v2 v2.4.0
 )
 
