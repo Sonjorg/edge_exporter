@@ -25,7 +25,7 @@ import (
 
             //From stackoverflow
     func GetConf(c *Config) *Config {
-        yamlFile, err := ioutil.ReadFile("../../config.yml")
+        yamlFile, err := ioutil.ReadFile("config.yml")
             if err != nil {
                   //log.Printf("yamlFile.Get err   #%v ", err)
                      fmt.Println("yamlFile.Get err   # ", err)
