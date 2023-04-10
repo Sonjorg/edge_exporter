@@ -13,8 +13,8 @@ import (
 	//"strconv"
 	//"time"
 	//"exporter/sqlite"
-	//"database/sql"
-	//_ "github.com/mattn/go-sqlite3"
+	"database/sql"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 // rest/routingtable/2/routingentry
@@ -172,50 +172,59 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 
 			}
 			for j := range routingtables {
+				var match []string //variable to hold routingentries cleaned with regex
 
-				url := "https://" + hosts[i].Ip + "/rest/routingtable/" + routingtables[j] + "/routingentry"
-				_, data2, err := http.GetAPIData(url, phpsessid)
-				if err != nil {
-				}
-				//b2 := []byte(data2) //Converting string of data to bytestream
-				re := &routingEntries{}
-				xml.Unmarshal(data2, &re) //Converting XML data to variables
-				routingEntries := re.RoutingEntry2.RoutingEntry3.Attr
-				if len(routingEntries) <= 0 {
-					fmt.Println("No routingEntry for this routingtable")
-					continue
-				}
-				//
-				entries := regexp.MustCompile(`\d+$`)
-				var match []string
-
-				for k := range routingEntries {
-					tmp := entries.FindStringSubmatch(routingEntries[k])
-					for l := range tmp {
-						match = append(match, tmp[l])
-						//fmt.Println(tmp[l])
-					}
-					//match = entries.FindStringSubmatch(routingEntries[k])
-					//fmt.Println(tmp)
-					//fmt.Println(match)
-					//fmt.Println(entries.FindStringSubmatch(routingEntries[k]))
-
-				}
-				//fmt.Println(match)
-				//fmt.Println(routingEntries)
-				//fmt.Println(match)
-				/*var sqliteDatabase *sql.DB
-
+				//Trying to fetch routingentries from database, if not exist yet, fetch new ones
+				var sqliteDatabase *sql.DB
 				sqliteDatabase, err = sql.Open("sqlite3", "./sqlite-database.db")
 				if err != nil {
 					fmt.Println(err)
 				}
+				if (routingTablesExists(sqliteDatabase, hosts[i].Ip)) {
+					match, err = getRoutingEntries(sqliteDatabase,hosts[i].Ip,routingtables[j])
+					if err != nil {
+						fmt.Println(err)
+					}
+				} else {
+					url := "https://" + hosts[i].Ip + "/rest/routingtable/" + routingtables[j] + "/routingentry"
+					_, data2, err := http.GetAPIData(url, phpsessid)
+					if err != nil {
+					}
+					//b2 := []byte(data2) //Converting string of data to bytestream
+					re := &routingEntries{}
+					xml.Unmarshal(data2, &re) //Converting XML data to variables
+					routingEntries := re.RoutingEntry2.RoutingEntry3.Attr
+					if len(routingEntries) <= 0 {
+						fmt.Println("No routingEntry for this routingtable")
+						continue
+					}
+					//
+					entries := regexp.MustCompile(`\d+$`)
+
+					var sqliteDatabase *sql.DB
+
+					if (routingTablesExists(sqliteDatabase, hosts[i].Ip)) {
+						match, err := getRoutingEntries(sqliteDatabase,hosts[i].Ip,routingtables[j])
+						if err != nil {
+							fmt.Println(err)
+						}
+					}
+
+					for k := range routingEntries {
+						tmp := entries.FindStringSubmatch(routingEntries[k])
+						for l := range tmp {
+							match = append(match, tmp[l])
+							//fmt.Println(tmp[l])
+						}
+					}
+				}
+				createRoutingSqlite(sqliteDatabase)
+				storeRoutingEntries(sqliteDatabase, hosts[i].Ip, "time",routingtables[j], match)
+
+
 				//createRoutingSqlite(sqliteDatabase)
 				//storeRoutingEntries(sqliteDatabase, hosts[i].ip, "time", routingtables[j], match)
-				match, err = getRoutingEntries(sqliteDatabase,hosts[i].ip,routingtables[j])
-				if err != nil {
-					fmt.Println(err)
-				}*/
+
 
 				//fmt.Println("table: ",routingtables[j], "entries: ", e)
 				for k := range match {

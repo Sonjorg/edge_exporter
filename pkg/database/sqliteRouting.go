@@ -1,4 +1,4 @@
-package main
+package database
 
 import (
 	"database/sql"
@@ -120,7 +120,7 @@ func getRoutingEntries(db *sql.DB,ipaddress string,routingTable string) ([]strin
 		return re ,err
 }
 
-
+/*
 func main() {
 
 	var sqliteDatabase *sql.DB
@@ -146,3 +146,4 @@ func main() {
 
 	}
 }
+*/
