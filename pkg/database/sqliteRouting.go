@@ -60,7 +60,7 @@ func CreateRoutingSqlite(db * sql.DB) error{
 func StoreRoutingTables(db *sql.DB, ipaddress string, time string, routingTables []string) error{
 	log.Println("Inserting tables ...")
 	for i := range routingTables {
-		insertSQL1 := `INSERT INTO routingtables(ipaddress, time, routingtables, routingentries) VALUES (?, ?, ?, ?)`
+		insertSQL1 := `INSERT INTO routingtables(ipaddress, time, routingtable) VALUES (?, ?, ?)`
 		statement, err := db.Prepare(insertSQL1) // Prepare statement.
 													// This is good to avoid SQL injections
 		if err != nil {
