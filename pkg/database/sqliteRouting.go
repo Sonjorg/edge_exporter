@@ -102,8 +102,39 @@ func GetRoutingEntries(db *sql.DB,ipaddress string,routingTable string) ([]strin
 					}
 				}
 		}
-		return re,time, err
+		return re, time, err
 }
+/*
+func test()(db *sql.DB,ipaddress string,routingTable string) ([]string,string, error) {
+
+
+		row, err := db.Query("SELECT * FROM routingtables WHERE ipaddress = ?", ipaddress)
+		//row.Scan(ip)
+		if err != nil {
+			return nil, "", err
+			//fmt.Println(err)
+		}
+
+		defer row.Close()
+
+		var re []string
+		//var data []*RoutingT
+		var time string
+		for row.Next() {
+			r := &RoutingT{}
+				if err := row.Scan(&r.Id, &r.Ipaddress,&r.Time,&r.RoutingTable, &r.RoutingEntry); err != nil{
+					fmt.Println(err)
+				}
+				if (r.Ipaddress == ipaddress) {
+					//data = append(data, r)
+					if (r.RoutingTable == routingTable) {
+						re = append(re, r.RoutingEntry)
+						time = r.Time
+					}
+				}
+		}
+		return re,time, err
+}*/
 
 /*
 func main() {
