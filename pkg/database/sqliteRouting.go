@@ -30,7 +30,7 @@ type RoutingTmp struct {
 	RoutingTablesnEntries map[string][]string
 	//RoutingEntries []string
 }*/
-func createRoutingSqlite(db * sql.DB) error{
+func CreateRoutingSqlite(db * sql.DB) error{
 	createRoutingTables := `CREATE TABLE IF NOT EXISTS routingtables (
 		"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
 		"ipaddress" TEXT,
@@ -48,7 +48,7 @@ func createRoutingSqlite(db * sql.DB) error{
 	return nil
 }
 
-func storeRoutingEntries(db *sql.DB, ipaddress string, time string, routingTable string, routingEntries []string) error{
+func StoreRoutingEntries(db *sql.DB, ipaddress string, time string, routingTable string, routingEntries []string) error{
 	log.Println("Inserting record ...")
 	for i := range routingEntries {
 		insertSQL1 := `INSERT INTO routingtables(ipaddress, time, routingtable, routingentries) VALUES (?, ?, ?, ?)`
@@ -70,7 +70,7 @@ func storeRoutingEntries(db *sql.DB, ipaddress string, time string, routingTable
 	return nil
 }
 
-func routingTablesExists(db * sql.DB, ip string) bool {
+func RoutingTablesExists(db * sql.DB, ip string) bool {
     sqlStmt := `SELECT ipaddress FROM routingtables WHERE ipaddress = ?`
     err := db.QueryRow(sqlStmt, ip).Scan(&ip)
     if err != nil {
@@ -87,7 +87,7 @@ func routingTablesExists(db * sql.DB, ip string) bool {
 }
 
 
-func getRoutingEntries(db *sql.DB,ipaddress string,routingTable string) ([]string, error) {
+func GetRoutingEntries(db *sql.DB,ipaddress string,routingTable string) ([]string, error) {
 
 	//if (routingTablesExists(db,ipaddress)) {
 		//row, err := db.Query("SELECT * FROM routingtables")

@@ -1,6 +1,8 @@
 package http
 
 import (
+	"edge_exporter/pkg/database"
+	"edge_exporter/pkg/config"
 	"crypto/tls"
 	"database/sql"
 	"fmt"
@@ -8,8 +10,6 @@ import (
 	"log"
 	"net/http"
 	"net/url"
-	"edge_exporter/pkg/database"
-	"edge_exporter/pkg/config"
 	"os"
 	"strings"
 	"time"

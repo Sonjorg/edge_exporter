@@ -2,10 +2,11 @@
 package collector
 
 import (
+	"edge_exporter/pkg/config"
+	"edge_exporter/pkg/database"
 	"encoding/xml"
 	"fmt"
 	//"sync"
-	"edge_exporter/pkg/config"
 	//"log"
 	"regexp"
 	"edge_exporter/pkg/http"
@@ -19,6 +20,7 @@ import (
 
 // rest/routingtable/2/routingentry
 // first request
+// rest/routingtable/
 type routingTables struct {
 	// Value  float32 `xml:",chardata"`
 	XMLName        xml.Name       `xml:"root"`
@@ -33,6 +35,7 @@ type routingTables3 struct {
 }
 
 // Second request
+// rest/routingtable/4/routingentry
 type routingEntries struct {
 	XMLName       xml.Name      `xml:"root"`
 	RoutingEntry2 routingEntry2 `xml:"routingentry_list"`
@@ -45,7 +48,8 @@ type routingEntry3 struct {
 	Value string   `xml:",chardata"`
 }
 
-// second request
+// Third request
+// rest/routingtable/2/routingentry/1/historicalstatistics/1
 type rSBCdata struct {
 	XMLname     xml.Name    `xml:"root"`
 	Status      rStatus     `xml:"status"`
@@ -107,8 +111,6 @@ func routingCollector() *rMetrics {
 			[]string{"Instance", "hostname"}, nil,
 		),
 	}
-
-	//}
 }
 
 // Each and every collector must implement the Describe function.
@@ -137,12 +139,8 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 	var metricValue4 float64
 	var metricValue5 float64
 	var metricValue6 float64
-	//r := make(map[string][]string)
-	//var wg sync.WaitGroup
 
 	for i := range hosts {
-
-			//making map to store ids in sqlite
 
 		phpsessid, err := http.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
 			if err != nil {
@@ -157,7 +155,6 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				//continue
 				return
 			}
-			//b := []byte(data) //Converting string of data to bytestream
 			rt := &routingTables{}
 			xml.Unmarshal(data, &rt) //Converting XML data to variables
 			//fmt.Println("Successful API call data: ",ssbc.Rt2.Rt3.Attr)
@@ -180,11 +177,11 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				if err != nil {
 					fmt.Println(err)
 				}
-				if (routingTablesExists(sqliteDatabase, hosts[i].Ip)) {
-					match, err = getRoutingEntries(sqliteDatabase,hosts[i].Ip,routingtables[j])
-					if err != nil {
-						fmt.Println(err)
-					}
+				if (RoutingTablesExists(sqliteDatabase, hosts[i].Ip)) {
+					match, err = GetRoutingEntries(sqliteDatabase,hosts[i].Ip,routingtables[j])
+						if err != nil {
+							fmt.Println(err)
+						}
 				} else {
 					url := "https://" + hosts[i].Ip + "/rest/routingtable/" + routingtables[j] + "/routingentry"
 					_, data2, err := http.GetAPIData(url, phpsessid)
@@ -201,14 +198,6 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					//
 					entries := regexp.MustCompile(`\d+$`)
 
-					var sqliteDatabase *sql.DB
-
-					if (routingTablesExists(sqliteDatabase, hosts[i].Ip)) {
-						match, err := getRoutingEntries(sqliteDatabase,hosts[i].Ip,routingtables[j])
-						if err != nil {
-							fmt.Println(err)
-						}
-					}
 
 					for k := range routingEntries {
 						tmp := entries.FindStringSubmatch(routingEntries[k])
@@ -217,16 +206,17 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 							//fmt.Println(tmp[l])
 						}
 					}
+					//Storing fetched routingentries
+					err = CreateRoutingSqlite(sqliteDatabase)
+					if err != nil {
+						fmt.Println(err)
+					}
+					err = StoreRoutingEntries(sqliteDatabase, hosts[i].Ip, "time",routingtables[j], match)
+					if err != nil {
+						fmt.Println(err)
+					}
 				}
-				createRoutingSqlite(sqliteDatabase)
-				storeRoutingEntries(sqliteDatabase, hosts[i].Ip, "time",routingtables[j], match)
 
-
-				//createRoutingSqlite(sqliteDatabase)
-				//storeRoutingEntries(sqliteDatabase, hosts[i].ip, "time", routingtables[j], match)
-
-
-				//fmt.Println("table: ",routingtables[j], "entries: ", e)
 				for k := range match {
 
 					url := "https://" + hosts[i].Ip + "/rest/routingtable/" + routingtables[j] + "/routingentry/" + match[k] + "/historicalstatistics/1"
@@ -237,8 +227,6 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 						continue
 					}
 
-					//fmt.Println(data3)
-					//b := []byte(data3) //Converting string of data to bytestream
 					rData := &rSBCdata{}
 					xml.Unmarshal(data3, &rData) //Converting XML data to variables
 					//fmt.Println("Successful API call data: ",rData.RoutingData,"\n")
@@ -256,48 +244,10 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					c <- prometheus.MustNewConstMetric(collector.Rt_Jitter, prometheus.GaugeValue, metricValue4, hosts[i].Ip, hosts[i].Hostname, "routingentry", routingtables[j], match[k], "test")
 					c <- prometheus.MustNewConstMetric(collector.Rt_MOS, prometheus.GaugeValue, metricValue5, hosts[i].Ip, hosts[i].Hostname, "routingentry", routingtables[j], match[k], "test")
 					c <- prometheus.MustNewConstMetric(collector.Rt_QualityFailed, prometheus.GaugeValue, metricValue6, hosts[i].Ip, hosts[i].Hostname, "routingentry", routingtables[j], match[k], "test")
-
-					//r[routingtables[j]] = append(r[routingtables[j]], match[k])
-					//fmt.Println(routingtables[j], match)
-					//fmt.Println(r)
-
 				}
-				/*var sqliteDatabase *sql.DB
-
-					sqliteDatabase, err = sql.Open("sqlite3", "./sqlite-database.db")
-					if err != nil {
-						fmt.Println(err)
-					}
-					err = createRoutingSqlite(sqliteDatabase)
-					if err != nil {
-						fmt.Println(err)
-					}
-
-					storeRoutingTables(sqliteDatabase, hosts[i].ip, "test", r)
-
-					sqldata, err := getRoutingEntries(sqliteDatabase,hosts[i].ip)
-					if err != nil {
-						fmt.Println(err)
-					}
-					fmt.Println("sqlitedata \n",sqldata)
-				}*/
-				//if (!routingTablesExists()) {
-
 			}
-
-
 	}
 }
-
-//https://10.233.230.11/rest/routingtable/
-//https://10.233.230.11/rest/routingtable/4/routingentry
-//https://10.233.230.11/rest/routingtable/2/routingentry/1/historicalstatistics/1
-
-/*func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prometheus.Metric){
-
-
-}*/
-// Initializing the exporter
 
 func RoutingEntryCollector() {
 	c := routingCollector()
