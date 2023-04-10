@@ -31,17 +31,18 @@ type RoutingTmp struct {
 	//RoutingEntries []string
 }*/
 func CreateRoutingSqlite(db * sql.DB) error{
-	createRoutingEntries := `CREATE TABLE IF NOT EXISTS routingentries (
-		"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-		"ipaddress" TEXT,
-		"routingtable" TEXT,
-		"routingentries" TEXT
-		);`
 	createRoutingTables := `CREATE TABLE IF NOT EXISTS routingtables (
 		"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
 		"ipaddress" TEXT,
 		"time" TEXT,
 		"routingtable" TEXT,
+		);`
+
+	createRoutingEntries := `CREATE TABLE IF NOT EXISTS routingentries (
+		"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+		"ipaddress" TEXT,
+		"routingtable" TEXT,
+		"routingentries" TEXT,
 		);`
 
 	statement, err := db.Prepare(createRoutingTables) // Prepare SQL Statement
