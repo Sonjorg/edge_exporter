@@ -150,15 +150,15 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 		phpsessid, err := http.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
 			if err != nil {
 				fmt.Println("Error auth", hosts[i].Ip, err)
-				//continue
-				return
+				continue
+				//return
 			}
 
 			_, data, err := http.GetAPIData("https://"+hosts[i].Ip+"/rest/routingtable", phpsessid)
 			if err != nil {
 				fmt.Println("Error routingtable data", hosts[i].Ip, err)
-				//continue
-				return
+				continue
+				//return
 			}
 			rt := &routingTables{}
 			xml.Unmarshal(data, &rt) //Converting XML data to variables
@@ -169,37 +169,27 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			if len(routingtables) <= 0 {
 				//return nil, "Routingtables empty"
 				fmt.Println("Routingtables empty")
-				//continue
-				return
+				continue
+				//return
 			}
 			var m = make(map[string][]string)
 			var timeLast string
-			m,timeLast,err = database.Test(sqliteDatabase,hosts[i].Ip)
-			fmt.Println("map:", m)
+			var exists bool = database.RoutingTablesExists(sqliteDatabase,hosts[i].Ip)
+			if (exists) {
+				m,timeLast,err = database.Test(sqliteDatabase,hosts[i].Ip)
+			}
 			for j := range routingtables {
 				var match []string //variable to hold routingentries cleaned with regex
 				//Trying to fetch routingentries from database, if not exist yet, fetch new ones
-
-
-				//fmt.Println(match2)
-				if (database.RoutingTablesExists(sqliteDatabase,hosts[i].Ip)) {
-					/*match,timeLast, err = database.GetRoutingEntries(sqliteDatabase,hosts[i].Ip,routingtables[j])
-						if err != nil {
-							fmt.Println(err)
-						}*/
-						for k,v := range m {
-							if (k == routingtables[j]) {
-								for re := range v {
-									match = append(match,v[re])
-								}
+				if (exists) {
+					for k,v := range m {
+						if (k == routingtables[j]) {
+							for re := range v {
+								match = append(match,v[re])
 							}
 						}
-					//fmt.Println(routingtables[j],match)
-
-				//previous := time.
 					}
-
-				if (database.WithinTime(24, timeLast))  {
+				} else if (database.WithinTime(24, timeLast))  {
 					fmt.Println("using previous routingentries") //using previous routingentries (match)
 				} else {
 					url := "https://" + hosts[i].Ip + "/rest/routingtable/" + routingtables[j] + "/routingentry"
