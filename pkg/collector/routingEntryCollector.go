@@ -216,7 +216,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 						}
 					}
 					//Storing fetched routingentries
-
+					database.CreateRoutingSqlite(sqliteDatabase)
 					err = database.StoreRoutingEntries(sqliteDatabase, hosts[i].Ip, routingtables[j], match)
 					if err != nil {
 						fmt.Println(err)
