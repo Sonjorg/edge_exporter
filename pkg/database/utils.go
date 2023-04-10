@@ -7,13 +7,16 @@ import (
 	//"github.com/mattn/go-sqlite3" // Import go-sqlite3 library
 	//"fmt"
 )
-func WithinTime(hours int, timeLast time.Time) bool{
+func WithinTime(hours int, previousTime string) bool{
 	//mins := time.Minute * time.Duration(8)
 timeSchedule := time.Minute * time.Duration(hours)
 now := time.Now().Format(time.RFC3339)
-timeNow, _ := time.Parse(time.RFC3339, now)
-
-if (timeLast.Add(timeSchedule).After(timeNow)) {
+timeNowParsed, _ := time.Parse(time.RFC3339, now)
+pt,err := time.Parse(time.RFC3339, previousTime)
+if err != nil {
+	return false
+}
+if (pt.Add(timeSchedule).After(timeNowParsed)) {
 	return true
 } else {
 	 return false}

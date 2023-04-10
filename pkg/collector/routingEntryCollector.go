@@ -186,12 +186,9 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 						}
 				}
 				//previous := time.
-				tl,err := time.Parse(time.RFC3339, timeLast)
-				if err != nil {
-					fmt.Println(err)
-				}
-				if (database.WithinTime(1, tl))  {
 
+				if (database.WithinTime(1, timeLast))  {
+					fmt.Println("using previous routingentries") //using previous routingentries (match)
 				} else {
 					url := "https://" + hosts[i].Ip + "/rest/routingtable/" + routingtables[j] + "/routingentry"
 					_, data2, err := http.GetAPIData(url, phpsessid)
