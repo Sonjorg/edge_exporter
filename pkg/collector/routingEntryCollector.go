@@ -140,6 +140,11 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 	var metricValue5 float64
 	var metricValue6 float64
 
+	var sqliteDatabase *sql.DB
+	sqliteDatabase, err := sql.Open("sqlite3", "./sqlite-database.db")
+	if err != nil {
+		fmt.Println(err)
+	}
 	for i := range hosts {
 
 		phpsessid, err := http.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
@@ -172,11 +177,8 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				var match []string //variable to hold routingentries cleaned with regex
 
 				//Trying to fetch routingentries from database, if not exist yet, fetch new ones
-				var sqliteDatabase *sql.DB
-				sqliteDatabase, err = sql.Open("sqlite3", "./sqlite-database.db")
-				if err != nil {
-					fmt.Println(err)
-				}
+
+
 				if (RoutingTablesExists(sqliteDatabase, hosts[i].Ip)) {
 					match, err = GetRoutingEntries(sqliteDatabase,hosts[i].Ip,routingtables[j])
 						if err != nil {
@@ -247,6 +249,10 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				}
 			}
 	}
+}
+
+func RoutingTablesExists(sqliteDatabase *sql.DB, s string) {
+	panic("unimplemented")
 }
 
 func RoutingEntryCollector() {

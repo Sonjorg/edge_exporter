@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"log"
 	//"github.com/mattn/go-sqlite3" // Import go-sqlite3 library
-	_ "github.com/mattn/go-sqlite3"
+	//_ "github.com/mattn/go-sqlite3"
 	"fmt"
 )
 

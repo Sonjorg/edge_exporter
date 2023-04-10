@@ -4,7 +4,6 @@ import (
 	"edge_exporter/pkg/database"
 	"edge_exporter/pkg/config"
 	"crypto/tls"
-	"database/sql"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -13,6 +12,7 @@ import (
 	"os"
 	"strings"
 	"time"
+	"database/sql"
 	_ "github.com/mattn/go-sqlite3"
 )
 
