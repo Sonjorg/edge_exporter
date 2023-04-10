@@ -8,12 +8,18 @@ import (
 	"fmt"
 )
 
+type RoutingE struct {
+	Id        int
+	Ipaddress string
+	RoutingTable string
+	RoutingEntry string
+	 //map consisting of routingtables and their routingentries
+}
 type RoutingT struct {
 	Id        int
 	Ipaddress string
 	Time      string
-	RoutingTable string
-	RoutingEntry string
+	RoutingTables string
 	 //map consisting of routingtables and their routingentries
 }
 /*
@@ -152,13 +158,11 @@ func GetRoutingTables(db *sql.DB,ipaddress string) ([]string, error) {
 		//var data []*RoutingT
 		for row.Next() {
 			r := &RoutingT{}
-				if err := row.Scan(&r.Id, &r.Ipaddress,&r.Time,&r.RoutingTable); err != nil{
+				if err := row.Scan(&r.Id, &r.Ipaddress,&r.Time,&r.RoutingTables); err != nil{
 					fmt.Println(err)
 				}
 					//data = append(data, r)
-				rt = append(rt, r.RoutingEntry)
-
-
+				rt = append(rt, r.RoutingTables)
 		}
 		return rt ,err
 }
@@ -181,8 +185,8 @@ func GetRoutingEntries(db *sql.DB,ipaddress string,routingTable string) ([]strin
 		var re []string
 		//var data []*RoutingT
 		for row.Next() {
-			r := &RoutingT{}
-				if err := row.Scan(&r.Id, &r.Ipaddress,&r.Time,&r.RoutingTable, &r.RoutingEntry); err != nil{
+			r := &RoutingE{}
+				if err := row.Scan(&r.Id, &r.Ipaddress,&r.RoutingTable, &r.RoutingEntry); err != nil{
 					fmt.Println(err)
 				}
 				if (r.Ipaddress == ipaddress) {
