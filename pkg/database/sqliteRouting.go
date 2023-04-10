@@ -16,20 +16,7 @@ type RoutingT struct {
 	RoutingEntry string
 	 //map consisting of routingtables and their routingentries
 }
-/*
-type RoutingE struct {
-	Time      string
-	RoutingTable string
-	RoutingEntry string
-}*/
-/*
-type RoutingTmp struct {
-	Id        int
-	Ipaddress string
-	Time      string
-	RoutingTablesnEntries map[string][]string
-	//RoutingEntries []string
-}*/
+
 func CreateRoutingSqlite(db * sql.DB) error{
 	createRoutingTables := `CREATE TABLE IF NOT EXISTS routingtables (
 		"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -76,8 +63,7 @@ func RoutingTablesExists(db * sql.DB) bool {
     err := db.QueryRow(sqlStmt).Scan()
     if err != nil {
         if err != sql.ErrNoRows {
-            // a real error happened! you should change your function return
-            // to "(bool, error)" and return "false, err" here
+
             return false
         }
 
@@ -90,8 +76,7 @@ func RoutingTablesExists(db * sql.DB) bool {
 
 func GetRoutingEntries(db *sql.DB,ipaddress string,routingTable string) ([]string, error) {
 
-	//if (routingTablesExists(db,ipaddress)) {
-		//row, err := db.Query("SELECT * FROM routingtables")
+
 		row, err := db.Query("SELECT * FROM routingtables WHERE ipaddress = ?", ipaddress)
 		//row.Scan(ip)
 		if err != nil {
@@ -100,10 +85,7 @@ func GetRoutingEntries(db *sql.DB,ipaddress string,routingTable string) ([]strin
 		}
 
 		defer row.Close()
-		/*err = row.QueryRow(ipaddress).Scan(&Id, &Ipaddress, &Time, &RoutingTable, &RoutingEntry)
-		if err != nil {
-      	  log.Println(err)
-    	}*/
+
 		var re []string
 		//var data []*RoutingT
 		for row.Next() {
