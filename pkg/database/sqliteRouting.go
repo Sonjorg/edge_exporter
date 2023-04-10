@@ -114,11 +114,11 @@ type RoutingTest struct {
 	 //map consisting of routingtables and their routingentries
 }
 
-func Test(db *sql.DB,ipaddress string) (map[string][]string,string, error) {
+func Test(db *sql.DB,ipaddress string) (map[string][]string,[]string,string, error) {
 		row, err := db.Query("SELECT * FROM routingtables WHERE ipaddress = ?", ipaddress)
 		//row.Scan(ip)
 		if err != nil {
-			return nil, "", err
+			return nil, nil,"", err
 			//fmt.Println(err)
 		}
 
@@ -127,19 +127,28 @@ func Test(db *sql.DB,ipaddress string) (map[string][]string,string, error) {
 		//var re []RoutingTest
 		//var data []*RoutingT
 		var time string
-		var m = make(map[string][]string)
+		var routingEntries = make(map[string][]string)
+		var tables []string
+
 		for row.Next() {
 			r := &RoutingT{}
 				if err := row.Scan(&r.Id, &r.Ipaddress,&r.Time,&r.RoutingTable, &r.RoutingEntry); err != nil{
 					fmt.Println(err)
 				}
 				if (r.Ipaddress == ipaddress) {
-						m[r.RoutingTable] = append(m[r.RoutingTable], r.RoutingEntry)
+						routingEntries[r.RoutingTable] = append(routingEntries[r.RoutingTable], r.RoutingEntry)
 
 				}
 			time = r.Time
 		}
-		return m,time,err
+		for key, _ := range routingEntries {
+			for i := range tables {
+				if (tables[i] != key) {
+					tables = append(tables, key)
+				}
+			}
+		}
+		return routingEntries,tables,time,err
 	}
 
 /*
