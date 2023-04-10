@@ -25,7 +25,7 @@ func CreateRoutingSqlite(db * sql.DB) error{
 		"routingtable" TEXT,
 		"routingentries" TEXT
 		);`
-
+fmt.Println("creating routingtables")
 	statement, err := db.Prepare(createRoutingTables) // Prepare SQL Statement
 	if err != nil {
 		return err
@@ -36,7 +36,7 @@ func CreateRoutingSqlite(db * sql.DB) error{
 }
 
 func StoreRoutingEntries(db *sql.DB, ipaddress string, time string, routingTable string, routingEntries []string) error{
-	log.Println("Inserting record ...")
+	log.Println("Inserting entry ...")
 	for i := range routingEntries {
 		insertSQL1 := `INSERT OR REPLACE INTO routingtables(ipaddress, time, routingtable, routingentries) VALUES (?, ?, ?, ?)`
 
@@ -57,10 +57,10 @@ func StoreRoutingEntries(db *sql.DB, ipaddress string, time string, routingTable
 	return nil
 }
 
-func RoutingTablesExists(db * sql.DB) bool {
+func RoutingTablesExists(db * sql.DB,ip string) bool {
    // sqlStmt := `SELECT ipaddress FROM routingtables WHERE ipaddress = ?`
 	sqlStmt := `SELECT ipaddress FROM routingtables`
-    err := db.QueryRow(sqlStmt).Scan()
+    err := db.QueryRow(sqlStmt).Scan(&ip)
     if err != nil {
         if err != sql.ErrNoRows {
 
