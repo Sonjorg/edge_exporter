@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"log"
 	//"github.com/mattn/go-sqlite3" // Import go-sqlite3 library
+	_ "github.com/mattn/go-sqlite3"
 	"fmt"
 )
 
@@ -47,28 +48,6 @@ func createRoutingSqlite(db * sql.DB) error{
 	return nil
 }
 
-func storeRoutingTables(db *sql.DB, ipaddress string, time string, routingTable string, routingEntries []string) error{
-	log.Println("Inserting record ...")
-	for i := range routingEntries {
-		insertSQL1 := `INSERT INTO routingtables(ipaddress, time, routingtable, routingentries) VALUES (?, ?, ?, ?)`
-
-		statement, err := db.Prepare(insertSQL1) // Prepare statement.
-													// This is good to avoid SQL injections
-		if err != nil {
-			fmt.Println(err)
-
-			return err
-
-		}
-		_, err = statement.Exec(ipaddress, time, routingTable, routingEntries[i])
-		if err != nil {
-			fmt.Println(err)
-			return err
-		}
-}
-	return nil
-}
-
 func storeRoutingEntries(db *sql.DB, ipaddress string, time string, routingTable string, routingEntries []string) error{
 	log.Println("Inserting record ...")
 	for i := range routingEntries {
@@ -108,18 +87,22 @@ func routingTablesExists(db * sql.DB, ip string) bool {
 }
 
 
-
 func getRoutingEntries(db *sql.DB,ipaddress string,routingTable string) ([]string, error) {
 
 	//if (routingTablesExists(db,ipaddress)) {
 		//row, err := db.Query("SELECT * FROM routingtables")
-		row, err := db.Query("SELECT * FROM routingtables")
+		row, err := db.Query("SELECT * FROM routingtables WHERE ipaddress = ?", ipaddress)
 		//row.Scan(ip)
 		if err != nil {
 			return nil, err
 			//fmt.Println(err)
 		}
+
 		defer row.Close()
+		/*err = row.QueryRow(ipaddress).Scan(&Id, &Ipaddress, &Time, &RoutingTable, &RoutingEntry)
+		if err != nil {
+      	  log.Println(err)
+    	}*/
 		var re []string
 		//var data []*RoutingT
 		for row.Next() {
@@ -134,12 +117,32 @@ func getRoutingEntries(db *sql.DB,ipaddress string,routingTable string) ([]strin
 					}
 				}
 		}
-
 		return re ,err
-	//} else {
-	//	return nil, nil
-	//}
 }
 
 
+func main() {
 
+	var sqliteDatabase *sql.DB
+
+				sqliteDatabase, err := sql.Open("sqlite3", "./sqlite-database.db")
+				if err != nil {
+					fmt.Println(err)
+				}
+	var s []string
+	s = append(s, "1")
+	s = append(s, "2")
+	s = append(s, "3")
+
+
+	createRoutingSqlite(sqliteDatabase)
+	storeRoutingEntries(sqliteDatabase, "ipadresse", "time", s)
+	if (routingTablesExists(sqliteDatabase, "ipadresse")) {
+		g, err := getRoutingEntries(sqliteDatabase,"ipadresse","5")
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Println(g)
+
+	}
+}
