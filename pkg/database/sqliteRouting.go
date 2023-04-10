@@ -104,10 +104,17 @@ func GetRoutingEntries(db *sql.DB,ipaddress string,routingTable string) ([]strin
 		}
 		return re, time, err
 }
-/*
-func test()(db *sql.DB,ipaddress string,routingTable string) ([]string,string, error) {
 
+type RoutingTest struct {
+	Id        int
+	Ipaddress string
+	Time      string
+	RoutingTable string
+	RoutingEntry string
+	 //map consisting of routingtables and their routingentries
+}
 
+func Test(db *sql.DB,ipaddress string) (map[string][]string,string, error) {
 		row, err := db.Query("SELECT * FROM routingtables WHERE ipaddress = ?", ipaddress)
 		//row.Scan(ip)
 		if err != nil {
@@ -117,24 +124,22 @@ func test()(db *sql.DB,ipaddress string,routingTable string) ([]string,string, e
 
 		defer row.Close()
 
-		var re []string
+		//var re []RoutingTest
 		//var data []*RoutingT
 		var time string
+		var m = make(map[string][]string)
 		for row.Next() {
 			r := &RoutingT{}
 				if err := row.Scan(&r.Id, &r.Ipaddress,&r.Time,&r.RoutingTable, &r.RoutingEntry); err != nil{
 					fmt.Println(err)
 				}
 				if (r.Ipaddress == ipaddress) {
-					//data = append(data, r)
-					if (r.RoutingTable == routingTable) {
-						re = append(re, r.RoutingEntry)
+						m[r.RoutingTable] = append(m[r.RoutingTable], r.RoutingEntry)
 						time = r.Time
-					}
-				}
 		}
-		return re,time, err
-}*/
+	}
+		return m,time,err
+	}
 
 /*
 func main() {

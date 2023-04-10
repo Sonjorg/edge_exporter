@@ -171,23 +171,35 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				fmt.Println("Routingtables empty")
 				//continue
 				return
-
 			}
+			var m = make(map[string][]string)
+			//var times string
+			m,_,err = database.Test(sqliteDatabase,hosts[i].Ip)
+			fmt.Println("map:", m)
 			for j := range routingtables {
 				var match []string //variable to hold routingentries cleaned with regex
+				var match2 []string //variable to hold routingentries cleaned with regex
+
 				var timeLast string
 				//Trying to fetch routingentries from database, if not exist yet, fetch new ones
 
-
+				for k,v := range m {
+					if (k == routingtables[j]) {
+						for re := range v {
+							match2 = append(match,v[re])
+						}
+					}
+				}
+				fmt.Println(match2)
 				if (database.RoutingTablesExists(sqliteDatabase,hosts[i].Ip)) {
 					match,timeLast, err = database.GetRoutingEntries(sqliteDatabase,hosts[i].Ip,routingtables[j])
 						if err != nil {
 							fmt.Println(err)
 						}
 					fmt.Println(timeLast)
-				}
-				//previous := time.
 
+				//previous := time.
+					}
 
 				if (database.WithinTime(24, timeLast))  {
 					fmt.Println("using previous routingentries") //using previous routingentries (match)
