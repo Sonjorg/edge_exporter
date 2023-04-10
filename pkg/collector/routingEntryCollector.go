@@ -173,30 +173,28 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				return
 			}
 			var m = make(map[string][]string)
-			//var times string
-			m,_,err = database.Test(sqliteDatabase,hosts[i].Ip)
+			var timeLast string
+			m,timeLast,err = database.Test(sqliteDatabase,hosts[i].Ip)
 			fmt.Println("map:", m)
 			for j := range routingtables {
 				var match []string //variable to hold routingentries cleaned with regex
-				var match2 []string //variable to hold routingentries cleaned with regex
-
-				var timeLast string
 				//Trying to fetch routingentries from database, if not exist yet, fetch new ones
 
-				for k,v := range m {
-					if (k == routingtables[j]) {
-						for re := range v {
-							match2 = append(match,v[re])
-						}
-					}
-				}
-				fmt.Println(match2)
+
+				//fmt.Println(match2)
 				if (database.RoutingTablesExists(sqliteDatabase,hosts[i].Ip)) {
-					match,timeLast, err = database.GetRoutingEntries(sqliteDatabase,hosts[i].Ip,routingtables[j])
+					/*match,timeLast, err = database.GetRoutingEntries(sqliteDatabase,hosts[i].Ip,routingtables[j])
 						if err != nil {
 							fmt.Println(err)
+						}*/
+						for k,v := range m {
+							if (k == routingtables[j]) {
+								for re := range v {
+									match = append(match,v[re])
+								}
+							}
 						}
-					fmt.Println(routingtables[j],match)
+					//fmt.Println(routingtables[j],match)
 
 				//previous := time.
 					}
