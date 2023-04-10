@@ -63,7 +63,7 @@ func CreateRoutingSqlite(db * sql.DB) error{
 	statement2.Exec()
 	return nil
 }
-
+/*
 func StoreRoutingTables(db *sql.DB, ipaddress string, time string, routingTables []string) error{
 	log.Println("Inserting tables ...")
 	for i := range routingTables {
@@ -82,7 +82,7 @@ func StoreRoutingTables(db *sql.DB, ipaddress string, time string, routingTables
 }
 	return nil
 }
-
+*/
 func StoreRoutingEntries(db *sql.DB, ipaddress string, routingTable string, routingEntries []string) error{
 	log.Println("Inserting entries ...")
 	for i := range routingEntries {
@@ -121,6 +121,7 @@ func RoutingEntriesExists(db * sql.DB,ipaddress string) bool {
 
     return true
 }
+/*
 func RoutingTablesExists(db * sql.DB,ipaddress string) bool {
 	// sqlStmt := `SELECT ipaddress FROM routingtables WHERE ipaddress = ?`
 	 sqlStmt := `SELECT ipaddress FROM routingtables WHERE ipaddress = ?`
@@ -137,7 +138,8 @@ func RoutingTablesExists(db * sql.DB,ipaddress string) bool {
 
 	 return true
  }
-
+*/
+/*
 func GetRoutingTables(db *sql.DB,ipaddress string) ([]string, error) {
 
 	//if (routingTablesExists(db,ipaddress)) {
@@ -153,7 +155,7 @@ func GetRoutingTables(db *sql.DB,ipaddress string) ([]string, error) {
 		/*err = row.QueryRow(ipaddress).Scan(&Id, &Ipaddress, &Time, &RoutingTable, &RoutingEntry)
 		if err != nil {
       	  log.Println(err)
-    	}*/
+    	}
 		var rt []string
 		//var data []*RoutingT
 		for row.Next() {
@@ -169,6 +171,7 @@ func GetRoutingTables(db *sql.DB,ipaddress string) ([]string, error) {
 		}
 		return rt ,err
 }
+*/
 func GetRoutingEntries(db *sql.DB,ipaddress string,routingTable string) ([]string, error) {
 
 	//if (routingTablesExists(db,ipaddress)) {
@@ -203,7 +206,7 @@ func GetRoutingEntries(db *sql.DB,ipaddress string,routingTable string) ([]strin
 }
 
 /*
-func main() {
+func test() {
 
 	var sqliteDatabase *sql.DB
 
