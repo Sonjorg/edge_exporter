@@ -179,8 +179,8 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				//Trying to fetch routingentries from database, if not exist yet, fetch new ones
 
 
-				if (RoutingTablesExists(sqliteDatabase, hosts[i].Ip)) {
-					match, err = GetRoutingEntries(sqliteDatabase,hosts[i].Ip,routingtables[j])
+				if (database.RoutingTablesExists(sqliteDatabase, hosts[i].Ip)) {
+					match, err = database.GetRoutingEntries(sqliteDatabase,hosts[i].Ip,routingtables[j])
 						if err != nil {
 							fmt.Println(err)
 						}
@@ -209,11 +209,11 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 						}
 					}
 					//Storing fetched routingentries
-					err = CreateRoutingSqlite(sqliteDatabase)
+					err = database.CreateRoutingSqlite(sqliteDatabase)
 					if err != nil {
 						fmt.Println(err)
 					}
-					err = StoreRoutingEntries(sqliteDatabase, hosts[i].Ip, "time",routingtables[j], match)
+					err = database.StoreRoutingEntries(sqliteDatabase, hosts[i].Ip, "time",routingtables[j], match)
 					if err != nil {
 						fmt.Println(err)
 					}
