@@ -157,14 +157,13 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				return
 			}
 			//var match []string
-			var exists bool = database.RoutingEntriesExists(sqliteDatabase)
 
-			if (exists) {
+			if (database.RoutingTablesExists(sqliteDatabase,hosts[i].Ip)) { //fetching from database
 					routingtables, err = database.GetRoutingTables(sqliteDatabase,hosts[i].Ip)
 						if err != nil {
 							fmt.Println(err)
 						}
-			} else {
+			} else { //fetching from router
 				_, data, err := http.GetAPIData("https://"+hosts[i].Ip+"/rest/routingtable", phpsessid)
 				if err != nil {
 					fmt.Println("Error routingtable data", hosts[i].Ip, err)
@@ -187,7 +186,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			for j := range routingtables {
 
 				//Trying to fetch routingentries from database, if not exist yet, fetch new ones
-				if (exists) {
+				if (database.RoutingEntriesExists(sqliteDatabase,hosts[i].Ip)				) {
 					match, err = database.GetRoutingEntries(sqliteDatabase,hosts[i].Ip,routingtables[j])
 						if err != nil {
 							fmt.Println(err)
