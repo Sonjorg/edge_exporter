@@ -35,14 +35,14 @@ func CreateRoutingSqlite(db * sql.DB) error{
 		"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
 		"ipaddress" TEXT,
 		"time" TEXT,
-		"routingtable" TEXT,
+		"routingtable" TEXT
 		);`
 
 	createRoutingEntries := `CREATE TABLE IF NOT EXISTS routingentries (
 		"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
 		"ipaddress" TEXT,
 		"routingtable" TEXT,
-		"routingentries" TEXT,
+		"routingentries" TEXT
 		);`
 
 	statement, err := db.Prepare(createRoutingTables) // Prepare SQL Statement
