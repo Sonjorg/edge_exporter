@@ -196,7 +196,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 						if err != nil {
 							fmt.Println(err)
 						}
-					fmt.Println(timeLast)
+					fmt.Println(routingtables[j],match)
 
 				//previous := time.
 					}
