@@ -141,13 +141,20 @@ func Test(db *sql.DB,ipaddress string) (map[string][]string,[]string,string, err
 				}
 			time = r.Time
 		}
-		for key, _ := range routingEntries {
+		/*for key, _ := range routingEntries {
 			for i := range tables {
 				if (tables[i] != key) {
 					tables = append(tables, key)
 				}
 			}
-		}
+		}*/
+
+		for _, str := range tables {
+			if _, ok := routingEntries[str]; !ok {
+			   tables = append(tables, str)
+			   fmt.Println(str)
+			}
+		 }
 		return routingEntries,tables,time,err
 	}
 
