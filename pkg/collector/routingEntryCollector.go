@@ -158,31 +158,29 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			var timeLast string
 			var tables []string
 			var exists bool = database.RoutingTablesExists(sqliteDatabase,hosts[i].Ip)
-			
+
 			if (exists) {
 				routingEntryMap,routingtables,timeLast,err = database.Test(sqliteDatabase,hosts[i].Ip)
 				if err != nil {
 					fmt.Println(err)
 				}
+			} else {
+
+				_, data, err := http.GetAPIData("https://"+hosts[i].Ip+"/rest/routingtable", phpsessid)
+				if err != nil {
+					fmt.Println("Error routingtable data", hosts[i].Ip, err)
+					continue
+					//return
+				}
+				rt := &routingTables{}
+				xml.Unmarshal(data, &rt) //Converting XML data to variables
+				//fmt.Println("Successful API call data: ",ssbc.Rt2.Rt3.Attr)
+				routingtables = rt.RoutingTables2.RoutingTables3.Attr //ssbc.Rt2.Rt3.Attr
 			}
 
-			_, data, err := http.GetAPIData("https://"+hosts[i].Ip+"/rest/routingtable", phpsessid)
-			if err != nil {
-				fmt.Println("Error routingtable data", hosts[i].Ip, err)
-				continue
-				//return
-			}
-			rt := &routingTables{}
-			xml.Unmarshal(data, &rt) //Converting XML data to variables
-			//fmt.Println("Successful API call data: ",ssbc.Rt2.Rt3.Attr)
-			routingtables = rt.RoutingTables2.RoutingTables3.Attr //ssbc.Rt2.Rt3.Attr
-			//fmt.Println("Routingtables " ,routingtables)
-			//fmt.Println(b,rt)
 			if len(routingtables) <= 0 {
-				//return nil, "Routingtables empty"
 				fmt.Println("Routingtables empty")
 				continue
-				//return
 			}
 
 			fmt.Println("tables",tables)
