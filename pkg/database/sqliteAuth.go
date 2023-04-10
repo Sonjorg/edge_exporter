@@ -63,7 +63,7 @@ func GetSqliteKey(ipaddress string) (cookie string, err error) {
 // Here starts functions concerning sessioncookies
 // We are passing db reference connection from main to our method with other parameters
 func InsertAuth(db *sql.DB, ipaddress string, phpsessid string, time string) error{
-	log.Println("Inserting record ...")
+	log.Println("Inserting session cookie ...")
 	insertAuthSQL := `INSERT INTO authentication(ipaddress, phpsessid, time) VALUES (?, ?, ?)`
 
 	statement, err := db.Prepare(insertAuthSQL) // Prepare statement.

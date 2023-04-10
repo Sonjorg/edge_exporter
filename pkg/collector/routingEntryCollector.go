@@ -153,33 +153,34 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				//continue
 				return
 			}
-
-			_, data, err := http.GetAPIData("https://"+hosts[i].Ip+"/rest/routingtable", phpsessid)
-			if err != nil {
-				fmt.Println("Error routingtable data", hosts[i].Ip, err)
-				//continue
-				return
-			}
-			rt := &routingTables{}
-			xml.Unmarshal(data, &rt) //Converting XML data to variables
-			//fmt.Println("Successful API call data: ",ssbc.Rt2.Rt3.Attr)
-			routingtables := rt.RoutingTables2.RoutingTables3.Attr //ssbc.Rt2.Rt3.Attr
-			//fmt.Println("Routingtables " ,routingtables)
-			//fmt.Println(b,rt)
-			if len(routingtables) <= 0 {
-				//return nil, "Routingtables empty"
-				fmt.Println("Routingtables empty")
-				//continue
-				return
-
+			var routingtables []string
+			var exists bool = database.RoutingEntriesExists(sqliteDatabase)
+			if (exists) {
+					routingtables, err = database.GetRoutingTables(sqliteDatabase,hosts[i].Ip)
+						if err != nil {
+							fmt.Println(err)
+						}
+			} else {
+				_, data, err := http.GetAPIData("https://"+hosts[i].Ip+"/rest/routingtable", phpsessid)
+				if err != nil {
+					fmt.Println("Error routingtable data", hosts[i].Ip, err)
+					//continue
+					return
+				}
+				rt := &routingTables{}
+				xml.Unmarshal(data, &rt) //Converting XML data to variables
+				routingtables := rt.RoutingTables2.RoutingTables3.Attr //ssbc.Rt2.Rt3.Attr
+				if len(routingtables) <= 0 {
+					fmt.Println("Routingtables empty")
+					return
+				}
+				database.StoreRoutingTables(sqliteDatabase, hosts[i].Ip, "test", routingtables)
 			}
 			for j := range routingtables {
 				var match []string //variable to hold routingentries cleaned with regex
 
 				//Trying to fetch routingentries from database, if not exist yet, fetch new ones
-
-
-				if (database.RoutingTablesExists(sqliteDatabase)) {
+				if (exists) {
 					match, err = database.GetRoutingEntries(sqliteDatabase,hosts[i].Ip,routingtables[j])
 						if err != nil {
 							fmt.Println(err)
@@ -213,7 +214,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					if err != nil {
 						fmt.Println(err)
 					}
-					err = database.StoreRoutingEntries(sqliteDatabase, hosts[i].Ip, "time",routingtables[j], match)
+					err = database.StoreRoutingEntries(sqliteDatabase, hosts[i].Ip, routingtables[j], match)
 					if err != nil {
 						fmt.Println(err)
 					}

@@ -31,27 +31,55 @@ type RoutingTmp struct {
 	//RoutingEntries []string
 }*/
 func CreateRoutingSqlite(db * sql.DB) error{
+	createRoutingEntries := `CREATE TABLE IF NOT EXISTS routingentries (
+		"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+		"ipaddress" TEXT,
+		"routingtable" TEXT,
+		"routingentries" TEXT
+		);`
 	createRoutingTables := `CREATE TABLE IF NOT EXISTS routingtables (
 		"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
 		"ipaddress" TEXT,
 		"time" TEXT,
 		"routingtable" TEXT,
-		"routingentries" TEXT
 		);`
 
 	statement, err := db.Prepare(createRoutingTables) // Prepare SQL Statement
 	if err != nil {
 		return err
 	}
-
+	statement2, err := db.Prepare(createRoutingEntries) // Prepare SQL Statement
+	if err != nil {
+		return err
+	}
 	statement.Exec()
+	statement2.Exec()
 	return nil
 }
 
-func StoreRoutingEntries(db *sql.DB, ipaddress string, time string, routingTable string, routingEntries []string) error{
-	log.Println("Inserting record ...")
+func StoreRoutingTables(db *sql.DB, ipaddress string, time string, routingTables []string) error{
+	log.Println("Inserting tables ...")
+	for i := range routingTables {
+		insertSQL1 := `INSERT INTO routingtables(ipaddress, time, routingtables, routingentries) VALUES (?, ?, ?, ?)`
+		statement, err := db.Prepare(insertSQL1) // Prepare statement.
+													// This is good to avoid SQL injections
+		if err != nil {
+			fmt.Println(err)
+			return err
+		}
+		_, err = statement.Exec(ipaddress, time, routingTables[i])
+		if err != nil {
+			fmt.Println(err)
+			return err
+		}
+}
+	return nil
+}
+
+func StoreRoutingEntries(db *sql.DB, ipaddress string, routingTable string, routingEntries []string) error{
+	log.Println("Inserting entries ...")
 	for i := range routingEntries {
-		insertSQL1 := `INSERT INTO routingtables(ipaddress, time, routingtable, routingentries) VALUES (?, ?, ?, ?)`
+		insertSQL1 := `INSERT INTO routingentries(ipaddress, routingtable, routingentries) VALUES (?, ?, ?)`
 
 		statement, err := db.Prepare(insertSQL1) // Prepare statement.
 													// This is good to avoid SQL injections
@@ -61,7 +89,7 @@ func StoreRoutingEntries(db *sql.DB, ipaddress string, time string, routingTable
 			return err
 
 		}
-		_, err = statement.Exec(ipaddress, time, routingTable, routingEntries[i])
+		_, err = statement.Exec(ipaddress, routingTable, routingEntries[i])
 		if err != nil {
 			fmt.Println(err)
 			return err
@@ -70,7 +98,7 @@ func StoreRoutingEntries(db *sql.DB, ipaddress string, time string, routingTable
 	return nil
 }
 
-func RoutingTablesExists(db * sql.DB) bool {
+func RoutingEntriesExists(db * sql.DB) bool {
    // sqlStmt := `SELECT ipaddress FROM routingtables WHERE ipaddress = ?`
 	sqlStmt := `SELECT ipaddress FROM routingtables`
     err := db.QueryRow(sqlStmt).Scan()
@@ -87,12 +115,41 @@ func RoutingTablesExists(db * sql.DB) bool {
     return true
 }
 
+func GetRoutingTables(db *sql.DB,ipaddress string) ([]string, error) {
 
+	//if (routingTablesExists(db,ipaddress)) {
+		//row, err := db.Query("SELECT * FROM routingtables")
+		row, err := db.Query("SELECT * FROM routingentries WHERE ipaddress = ?", ipaddress)
+		//row.Scan(ip)
+		if err != nil {
+			return nil, err
+			//fmt.Println(err)
+		}
+
+		defer row.Close()
+		/*err = row.QueryRow(ipaddress).Scan(&Id, &Ipaddress, &Time, &RoutingTable, &RoutingEntry)
+		if err != nil {
+      	  log.Println(err)
+    	}*/
+		var rt []string
+		//var data []*RoutingT
+		for row.Next() {
+			r := &RoutingT{}
+				if err := row.Scan(&r.Id, &r.Ipaddress,&r.Time,&r.RoutingTable); err != nil{
+					fmt.Println(err)
+				}
+					//data = append(data, r)
+				rt = append(rt, r.RoutingEntry)
+
+
+		}
+		return rt ,err
+}
 func GetRoutingEntries(db *sql.DB,ipaddress string,routingTable string) ([]string, error) {
 
 	//if (routingTablesExists(db,ipaddress)) {
 		//row, err := db.Query("SELECT * FROM routingtables")
-		row, err := db.Query("SELECT * FROM routingtables WHERE ipaddress = ?", ipaddress)
+		row, err := db.Query("SELECT * FROM routingentries WHERE ipaddress = ?", ipaddress)
 		//row.Scan(ip)
 		if err != nil {
 			return nil, err
