@@ -163,6 +163,9 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				if err != nil {
 					fmt.Println(err)
 				}
+			}
+			//If the time stored in database is less than 24 hours ago, use these routingentries
+			if (database.WithinTime(24, timeLast))  {
 			} else {
 
 					_, data, err := http.GetAPIData("https://"+hosts[i].Ip+"/rest/routingtable", phpsessid)
@@ -193,8 +196,8 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 						}
 					}
 
-				}
-				if (database.WithinTime(24, timeLast))  {
+
+
 					//fmt.Println("using previous routingentries") //using previous routingentries (match)
 				} else {
 					url := "https://" + hosts[i].Ip + "/rest/routingtable/" + routingtables[j] + "/routingentry"
