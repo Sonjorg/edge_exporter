@@ -9,7 +9,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
-	"os"
+	//"os"
 	"strings"
 	"time"
 	"database/sql"
@@ -72,15 +72,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 
 	defer resp.Body.Close()
 
-	_, err = os.Stat("sqlite-database.db")
-	if err != nil {
-		fmt.Println("Creating sqlite-database.db...")
-		file, err := os.Create("sqlite-database.db") // Create SQLite file
-		if err != nil {
-			fmt.Println(err.Error())
-		}
-		file.Close()
-	}
+
 
 	var sqliteDatabase *sql.DB
 
@@ -89,10 +81,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 		fmt.Println(err)
 	}
 
-	err = database.CreateTable(sqliteDatabase)
-	if err != nil {
-		fmt.Println(err)
-	}
+
 	now := time.Now().Format(time.RFC3339)
 
 	if database.RowExists(sqliteDatabase, ipaddress) {
