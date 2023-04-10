@@ -78,7 +78,7 @@ func RoutingTablesExists(db * sql.DB) bool {
         if err != sql.ErrNoRows {
             // a real error happened! you should change your function return
             // to "(bool, error)" and return "false, err" here
-            log.Print(err)
+            return false
         }
 
         return false
