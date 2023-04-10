@@ -1,4 +1,3 @@
-
 // routingentry
 package collector
 
@@ -180,7 +179,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				//Trying to fetch routingentries from database, if not exist yet, fetch new ones
 
 
-				if (database.RoutingTablesExists(sqliteDatabase, hosts[i].Ip)) {
+				if (database.RoutingTablesExists(sqliteDatabase)) {
 					match, err = database.GetRoutingEntries(sqliteDatabase,hosts[i].Ip,routingtables[j])
 						if err != nil {
 							fmt.Println(err)
@@ -252,6 +251,9 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 	}
 }
 
+func RoutingTablesExists(sqliteDatabase *sql.DB, s string) {
+	panic("unimplemented")
+}
 
 func RoutingEntryCollector() {
 	c := routingCollector()
