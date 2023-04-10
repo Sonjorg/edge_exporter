@@ -174,6 +174,10 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					fmt.Println("Routingtables empty")
 					return
 				}
+				err = database.CreateRoutingSqlite(sqliteDatabase)
+					if err != nil {
+						fmt.Println(err)
+					}
 				database.StoreRoutingTables(sqliteDatabase, hosts[i].Ip, "test", routingtables)
 			}
 			for j := range routingtables {
@@ -210,10 +214,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 						}
 					}
 					//Storing fetched routingentries
-					err = database.CreateRoutingSqlite(sqliteDatabase)
-					if err != nil {
-						fmt.Println(err)
-					}
+
 					err = database.StoreRoutingEntries(sqliteDatabase, hosts[i].Ip, routingtables[j], match)
 					if err != nil {
 						fmt.Println(err)
