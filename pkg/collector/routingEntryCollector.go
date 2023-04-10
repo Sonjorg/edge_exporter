@@ -1,3 +1,4 @@
+
 // routingentry
 package collector
 
@@ -145,9 +146,6 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	var routingtables []string
-	var match []string //variable to hold routingentries cleaned with regex
-
 	for i := range hosts {
 
 		phpsessid, err := http.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
@@ -156,37 +154,33 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				//continue
 				return
 			}
-			//var match []string
 
-		/*	if (database.RoutingTablesExists(sqliteDatabase,hosts[i].Ip)) { //fetching from database
-					routingtables, err = database.GetRoutingTables(sqliteDatabase,hosts[i].Ip)
-						if err != nil {
-							fmt.Println(err)
-						}
-			} else { *///fetching from router
-				_, data, err := http.GetAPIData("https://"+hosts[i].Ip+"/rest/routingtable", phpsessid)
-				if err != nil {
-					fmt.Println("Error routingtable data", hosts[i].Ip, err)
-					//continue
-					return
-				}
-				rt := &routingTables{}
-				xml.Unmarshal(data, &rt) //Converting XML data to variables
-				routingtables = rt.RoutingTables2.RoutingTables3.Attr //ssbc.Rt2.Rt3.Attr
-				if len(routingtables) <= 0 {
-					fmt.Println("Routingtables empty")
-					return
-				}
-				err = database.CreateRoutingSqlite(sqliteDatabase)
-					if err != nil {
-						fmt.Println(err)
-					}
-				//database.StoreRoutingTables(sqliteDatabase, hosts[i].Ip, "test", routingtables)
-				//}
+			_, data, err := http.GetAPIData("https://"+hosts[i].Ip+"/rest/routingtable", phpsessid)
+			if err != nil {
+				fmt.Println("Error routingtable data", hosts[i].Ip, err)
+				//continue
+				return
+			}
+			rt := &routingTables{}
+			xml.Unmarshal(data, &rt) //Converting XML data to variables
+			//fmt.Println("Successful API call data: ",ssbc.Rt2.Rt3.Attr)
+			routingtables := rt.RoutingTables2.RoutingTables3.Attr //ssbc.Rt2.Rt3.Attr
+			//fmt.Println("Routingtables " ,routingtables)
+			//fmt.Println(b,rt)
+			if len(routingtables) <= 0 {
+				//return nil, "Routingtables empty"
+				fmt.Println("Routingtables empty")
+				//continue
+				return
+
+			}
 			for j := range routingtables {
+				var match []string //variable to hold routingentries cleaned with regex
 
 				//Trying to fetch routingentries from database, if not exist yet, fetch new ones
-				if (database.RoutingEntriesExists(sqliteDatabase,hosts[i].Ip)				) {
+
+
+				if (database.RoutingTablesExists(sqliteDatabase, hosts[i].Ip)) {
 					match, err = database.GetRoutingEntries(sqliteDatabase,hosts[i].Ip,routingtables[j])
 						if err != nil {
 							fmt.Println(err)
@@ -216,8 +210,11 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 						}
 					}
 					//Storing fetched routingentries
-					database.CreateRoutingSqlite(sqliteDatabase)
-					err = database.StoreRoutingEntries(sqliteDatabase, hosts[i].Ip, routingtables[j], match)
+					err = database.CreateRoutingSqlite(sqliteDatabase)
+					if err != nil {
+						fmt.Println(err)
+					}
+					err = database.StoreRoutingEntries(sqliteDatabase, hosts[i].Ip, "time",routingtables[j], match)
 					if err != nil {
 						fmt.Println(err)
 					}
@@ -255,9 +252,6 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 	}
 }
 
-func RoutingTablesExists(sqliteDatabase *sql.DB, s string) {
-	panic("unimplemented")
-}
 
 func RoutingEntryCollector() {
 	c := routingCollector()
