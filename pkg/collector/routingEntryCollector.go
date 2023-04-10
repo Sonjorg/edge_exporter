@@ -4,12 +4,12 @@ package collector
 import (
 	"edge_exporter/pkg/config"
 	"edge_exporter/pkg/database"
+	"edge_exporter/pkg/http"
 	"encoding/xml"
 	"fmt"
 	//"sync"
 	//"log"
 	"regexp"
-	"edge_exporter/pkg/http"
 	"github.com/prometheus/client_golang/prometheus"
 	//"strconv"
 	//"time"
