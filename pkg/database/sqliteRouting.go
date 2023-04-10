@@ -1,4 +1,4 @@
-package database
+package main
 
 import (
 	"database/sql"
@@ -136,7 +136,7 @@ func main() {
 
 
 	createRoutingSqlite(sqliteDatabase)
-	storeRoutingEntries(sqliteDatabase, "ipadresse", "time", s)
+	storeRoutingEntries(sqliteDatabase, "ipadresse", "time","5" s)
 	if (routingTablesExists(sqliteDatabase, "ipadresse")) {
 		g, err := getRoutingEntries(sqliteDatabase,"ipadresse","5")
 		if err != nil {
