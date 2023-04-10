@@ -74,13 +74,13 @@ func RoutingTablesExists(db * sql.DB) bool {
 }
 
 
-func GetRoutingEntries(db *sql.DB,ipaddress string,routingTable string) ([]string, error) {
+func GetRoutingEntries(db *sql.DB,ipaddress string,routingTable string) ([]string,string, error) {
 
 
 		row, err := db.Query("SELECT * FROM routingtables WHERE ipaddress = ?", ipaddress)
 		//row.Scan(ip)
 		if err != nil {
-			return nil, err
+			return nil, "", err
 			//fmt.Println(err)
 		}
 
@@ -88,6 +88,7 @@ func GetRoutingEntries(db *sql.DB,ipaddress string,routingTable string) ([]strin
 
 		var re []string
 		//var data []*RoutingT
+		var time string
 		for row.Next() {
 			r := &RoutingT{}
 				if err := row.Scan(&r.Id, &r.Ipaddress,&r.Time,&r.RoutingTable, &r.RoutingEntry); err != nil{
@@ -97,10 +98,11 @@ func GetRoutingEntries(db *sql.DB,ipaddress string,routingTable string) ([]strin
 					//data = append(data, r)
 					if (r.RoutingTable == routingTable) {
 						re = append(re, r.RoutingEntry)
+						time = r.Time
 					}
 				}
 		}
-		return re ,err
+		return re,time, err
 }
 
 /*

@@ -17,6 +17,7 @@ type Cookie struct {
 
 
 // This function retrieves the session cookie from the sqlite database
+//if 8 mins have passed since last sessioncookie was retrieved, fetch new, else return the last one.
 func GetSqliteKey(ipaddress string) (cookie string, err error) {
 
 	var sqliteDatabase *sql.DB
@@ -41,7 +42,6 @@ func GetSqliteKey(ipaddress string) (cookie string, err error) {
 		if Hosts[i].Ipaddress == ipaddress {
 
 			now := time.Now().Format(time.RFC3339)
-			//previous := time.
 			parsed, _ := time.Parse(time.RFC3339, now)
 			parsed2, err := time.Parse(time.RFC3339, Hosts[i].Time)
 			if err != nil {

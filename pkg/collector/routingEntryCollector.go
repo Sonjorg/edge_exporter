@@ -10,6 +10,7 @@ import (
 	//"sync"
 	//"log"
 	"regexp"
+	"time"
 	"github.com/prometheus/client_golang/prometheus"
 	//"strconv"
 	//"time"
@@ -18,7 +19,6 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-// rest/routingtable/2/routingentry
 // first request
 // rest/routingtable/
 type routingTables struct {
@@ -175,15 +175,23 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			}
 			for j := range routingtables {
 				var match []string //variable to hold routingentries cleaned with regex
-
+				var timeLast string
 				//Trying to fetch routingentries from database, if not exist yet, fetch new ones
 
 
 				if (database.RoutingTablesExists(sqliteDatabase)) {
-					match, err = database.GetRoutingEntries(sqliteDatabase,hosts[i].Ip,routingtables[j])
+					match,timeLast, err = database.GetRoutingEntries(sqliteDatabase,hosts[i].Ip,routingtables[j])
 						if err != nil {
 							fmt.Println(err)
 						}
+				}
+				//previous := time.
+				tl,err := time.Parse(time.RFC3339, timeLast)
+				if err != nil {
+					fmt.Println(err)
+				}
+				if (database.WithinTime(1, tl))  {
+
 				} else {
 					url := "https://" + hosts[i].Ip + "/rest/routingtable/" + routingtables[j] + "/routingentry"
 					_, data2, err := http.GetAPIData(url, phpsessid)
