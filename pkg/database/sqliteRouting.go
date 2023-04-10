@@ -72,7 +72,7 @@ func StoreRoutingEntries(db *sql.DB, ipaddress string, time string, routingTable
 
 func RoutingTablesExists(db * sql.DB) bool {
    // sqlStmt := `SELECT ipaddress FROM routingtables WHERE ipaddress = ?`
-	sqlStmt := `SELECT ipaddress FROM sqlite_master WHERE name='{table_name}`
+	sqlStmt := `SELECT ipaddress FROM sqlite_master WHERE name='{table_name}'`
     err := db.QueryRow(sqlStmt, "routingtables").Scan()
     if err != nil {
         if err != sql.ErrNoRows {
