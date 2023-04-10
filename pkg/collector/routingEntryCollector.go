@@ -153,6 +153,18 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				continue
 				//return
 			}
+			var routingtables []string
+			var routingEntryMap = make(map[string][]string)
+			var timeLast string
+			var tables []string
+			var exists bool = database.RoutingTablesExists(sqliteDatabase,hosts[i].Ip)
+			
+			if (exists) {
+				routingEntryMap,routingtables,timeLast,err = database.Test(sqliteDatabase,hosts[i].Ip)
+				if err != nil {
+					fmt.Println(err)
+				}
+			}
 
 			_, data, err := http.GetAPIData("https://"+hosts[i].Ip+"/rest/routingtable", phpsessid)
 			if err != nil {
@@ -163,7 +175,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			rt := &routingTables{}
 			xml.Unmarshal(data, &rt) //Converting XML data to variables
 			//fmt.Println("Successful API call data: ",ssbc.Rt2.Rt3.Attr)
-			routingtables := rt.RoutingTables2.RoutingTables3.Attr //ssbc.Rt2.Rt3.Attr
+			routingtables = rt.RoutingTables2.RoutingTables3.Attr //ssbc.Rt2.Rt3.Attr
 			//fmt.Println("Routingtables " ,routingtables)
 			//fmt.Println(b,rt)
 			if len(routingtables) <= 0 {
@@ -172,16 +184,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				continue
 				//return
 			}
-			var routingEntryMap = make(map[string][]string)
-			var timeLast string
-			var tables []string
-			var exists bool = database.RoutingTablesExists(sqliteDatabase,hosts[i].Ip)
-			if (exists) {
-				routingEntryMap,tables,timeLast,err = database.Test(sqliteDatabase,hosts[i].Ip)
-				if err != nil {
-					fmt.Println(err)
-				}
-			}
+
 			fmt.Println("tables",tables)
 			for j := range routingtables {
 				var match []string //variable to hold routingentries cleaned with regex
