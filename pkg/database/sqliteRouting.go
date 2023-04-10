@@ -142,7 +142,7 @@ func GetRoutingTables(db *sql.DB,ipaddress string) ([]string, error) {
 
 	//if (routingTablesExists(db,ipaddress)) {
 		//row, err := db.Query("SELECT * FROM routingtables")
-		row, err := db.Query("SELECT * FROM routingentries WHERE ipaddress = ?", ipaddress)
+		row, err := db.Query("SELECT * FROM routingtables WHERE ipaddress = ?", ipaddress)
 		//row.Scan(ip)
 		if err != nil {
 			return nil, err
@@ -198,31 +198,3 @@ func GetRoutingEntries(db *sql.DB,ipaddress string,routingTable string) ([]strin
 		}
 		return re ,err
 }
-
-/*
-func main() {
-
-	var sqliteDatabase *sql.DB
-
-				sqliteDatabase, err := sql.Open("sqlite3", "./sqlite-database.db")
-				if err != nil {
-					fmt.Println(err)
-				}
-	var s []string
-	s = append(s, "1")
-	s = append(s, "2")
-	s = append(s, "3")
-
-
-	createRoutingSqlite(sqliteDatabase)
-	storeRoutingEntries(sqliteDatabase, "ipadresse", "time","5", s)
-	if (routingTablesExists(sqliteDatabase, "ipadresse")) {
-		g, err := getRoutingEntries(sqliteDatabase,"ipadresse","5")
-		if err != nil {
-			fmt.Println(err)
-		}
-		fmt.Println(g)
-
-	}
-}
-*/
