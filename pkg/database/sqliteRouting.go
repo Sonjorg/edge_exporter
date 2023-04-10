@@ -72,8 +72,8 @@ func StoreRoutingEntries(db *sql.DB, ipaddress string, time string, routingTable
 
 func RoutingTablesExists(db * sql.DB) bool {
    // sqlStmt := `SELECT ipaddress FROM routingtables WHERE ipaddress = ?`
-	sqlStmt := `SELECT ipaddress FROM routingtables WHERE name='{table_name}'`
-    err := db.QueryRow(sqlStmt, "routingtables").Scan()
+	sqlStmt := `SELECT ipaddress FROM routingtables`
+    err := db.QueryRow(sqlStmt).Scan()
     if err != nil {
         if err != sql.ErrNoRows {
             // a real error happened! you should change your function return
