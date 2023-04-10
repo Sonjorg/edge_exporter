@@ -185,6 +185,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				var match []string //variable to hold routingentries cleaned with regex
 				//Trying to fetch routingentries from database, if not exist yet, fetch new ones
 				if (exists) {
+					fmt.Println(exists)
 					for k,v := range m {
 						if (k == routingtables[j]) {
 							for re := range v {
@@ -193,7 +194,8 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 						}
 					}
 
-				} else if (database.WithinTime(24, timeLast))  {
+				}
+				if (database.WithinTime(24, timeLast))  {
 					fmt.Println("using previous routingentries") //using previous routingentries (match)
 				} else {
 					url := "https://" + hosts[i].Ip + "/rest/routingtable/" + routingtables[j] + "/routingentry"
