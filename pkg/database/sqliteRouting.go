@@ -135,9 +135,10 @@ func Test(db *sql.DB,ipaddress string) (map[string][]string,string, error) {
 				}
 				if (r.Ipaddress == ipaddress) {
 						m[r.RoutingTable] = append(m[r.RoutingTable], r.RoutingEntry)
-						time = r.Time
+
+				}
+			time = r.Time
 		}
-	}
 		return m,time,err
 	}
 

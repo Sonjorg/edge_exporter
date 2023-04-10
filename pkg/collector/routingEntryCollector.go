@@ -177,6 +177,9 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			var exists bool = database.RoutingTablesExists(sqliteDatabase,hosts[i].Ip)
 			if (exists) {
 				m,timeLast,err = database.Test(sqliteDatabase,hosts[i].Ip)
+				if err != nil {
+					fmt.Println(err)
+				}
 			}
 			for j := range routingtables {
 				var match []string //variable to hold routingentries cleaned with regex
@@ -189,6 +192,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 							}
 						}
 					}
+
 				} else if (database.WithinTime(24, timeLast))  {
 					fmt.Println("using previous routingentries") //using previous routingentries (match)
 				} else {
