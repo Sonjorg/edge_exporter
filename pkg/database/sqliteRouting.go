@@ -144,8 +144,6 @@ func Test(db *sql.DB,ipaddress string) (map[string][]string,[]string,string, err
 		for key, _ := range routingEntries {
 			tables = append(tables, key)
 		}
-
-
 		return routingEntries,tables,time,err
 	}
 

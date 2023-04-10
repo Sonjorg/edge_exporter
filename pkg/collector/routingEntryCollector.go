@@ -156,7 +156,6 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			var routingtables []string
 			var routingEntryMap = make(map[string][]string)
 			var timeLast string
-			var tables []string
 			var exists bool = database.RoutingTablesExists(sqliteDatabase,hosts[i].Ip)
 
 			if (exists) {
@@ -166,16 +165,15 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				}
 			} else {
 
-				_, data, err := http.GetAPIData("https://"+hosts[i].Ip+"/rest/routingtable", phpsessid)
-				if err != nil {
-					fmt.Println("Error routingtable data", hosts[i].Ip, err)
-					continue
-					//return
-				}
-				rt := &routingTables{}
-				xml.Unmarshal(data, &rt) //Converting XML data to variables
-				//fmt.Println("Successful API call data: ",ssbc.Rt2.Rt3.Attr)
-				routingtables = rt.RoutingTables2.RoutingTables3.Attr //ssbc.Rt2.Rt3.Attr
+					_, data, err := http.GetAPIData("https://"+hosts[i].Ip+"/rest/routingtable", phpsessid)
+						if err != nil {
+							fmt.Println("Error routingtable data", hosts[i].Ip, err)
+							continue
+						}
+					rt := &routingTables{}
+					xml.Unmarshal(data, &rt) //Converting XML data to variables
+					//fmt.Println("Successful API call data: ",ssbc.Rt2.Rt3.Attr)
+					routingtables = rt.RoutingTables2.RoutingTables3.Attr //ssbc.Rt2.Rt3.Attr
 			}
 
 			if len(routingtables) <= 0 {
@@ -183,12 +181,10 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				continue
 			}
 
-			fmt.Println("tables",tables)
 			for j := range routingtables {
 				var match []string //variable to hold routingentries cleaned with regex
 				//Trying to fetch routingentries from database, if not exist yet, fetch new ones
 				if (exists) {
-					fmt.Println(exists)
 					for k,v := range routingEntryMap {
 						if (k == routingtables[j]) {
 							for re := range v {
@@ -199,7 +195,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 
 				}
 				if (database.WithinTime(24, timeLast))  {
-					fmt.Println("using previous routingentries") //using previous routingentries (match)
+					//fmt.Println("using previous routingentries") //using previous routingentries (match)
 				} else {
 					url := "https://" + hosts[i].Ip + "/rest/routingtable/" + routingtables[j] + "/routingentry"
 					_, data2, err := http.GetAPIData(url, phpsessid)
