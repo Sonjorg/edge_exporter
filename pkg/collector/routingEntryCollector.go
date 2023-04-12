@@ -139,7 +139,8 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 	var metricValue4 float64
 	var metricValue5 float64
 	var metricValue6 float64
-
+	
+	var timeLast string
 	var sqliteDatabase *sql.DB
 	sqliteDatabase, err := sql.Open("sqlite3", "./sqlite-database.db")
 	if err != nil {
@@ -155,7 +156,6 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			}
 			var routingtables []string
 			var routingEntryMap = make(map[string][]string)
-			var timeLast string
 			var exists bool = database.RoutingTablesExists(sqliteDatabase,hosts[i].Ip)
 
 			if (exists) {

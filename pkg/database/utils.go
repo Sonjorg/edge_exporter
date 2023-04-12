@@ -12,11 +12,19 @@ import (
 
 
 
-func WithinTime(hours int, previousTime string) bool{
+func WithinTime(hours float64, previousTime string) bool{
 	//mins := time.Minute * time.Duration(8)
-timeSchedule :=  time.Duration(hours)*time.Hour
+	var duration time.Duration = time.Duration(hours)
+
+    // in hours
+    fmt.Println(duration.Hours())
+timeSchedule :=  duration
 now := time.Now().Format(time.RFC3339)
-timeNowParsed, _ := time.Parse(time.RFC3339, now)
+timeNowParsed, err := time.Parse(time.RFC3339, now)
+if err != nil {
+	fmt.Println(err)
+	return false
+}
 pt,err := time.Parse(time.RFC3339, previousTime)
 if err != nil {
 	fmt.Println(err)
