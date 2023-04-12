@@ -156,6 +156,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 		chassisType, serialNumber, err := utils.GetChassisLabels(hosts[i].Ip,phpsessid)
 		if err!= nil {
 			chassisType, serialNumber = "database failure", "database failure"
+			fmt.Println(err)
 		}
 		//Fetching systemdata
 		_, data,err := http.GetAPIData(dataStr, phpsessid)

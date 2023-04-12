@@ -39,26 +39,33 @@ func GetChassisLabels(ipaddress string, phpsessid string) (chassisType string, s
 	defer sqliteDatabase.Close()
 	if (database.RowExists(sqliteDatabase, ipaddress)) {
 		labels, err = database.GetChassis(sqliteDatabase, ipaddress)
-	} else {
+		if labels != nil || err != nil {
+			//} else {
 
-			dataStr := "https://"+ipaddress+"/rest/chassis"
-			_, data,err := http.GetAPIData(dataStr, phpsessid)
-			if err != nil {
-					fmt.Println("Error collecting from : ", err)
-
-			}
-			b := []byte(data) //Converting string of data to bytestream
-			ssbc := &ChassisData{}
-			xml.Unmarshal(b, &ssbc) //Converting XML data to variables
-			//fmt.Println("Successful API call data: ",ssbc.SystemData,"\n")
-
-			chassisType := ssbc.Chassis.Rt_Chassis_Type
-			serialNumber := ssbc.Chassis.SerialNumber
-			err = database.InsertChassis(sqliteDatabase, ipaddress, chassisType, serialNumber)
+				dataStr := "https://"+ipaddress+"/rest/chassis"
+				_, data,err := http.GetAPIData(dataStr, phpsessid)
 				if err != nil {
-					fmt.Println("insert chassis error", err)
+						fmt.Println("Error collecting from : ", err)
+
 				}
-			return chassisType, serialNumber, err
+				b := []byte(data) //Converting string of data to bytestream
+				ssbc := &ChassisData{}
+				xml.Unmarshal(b, &ssbc) //Converting XML data to variables
+				//fmt.Println("Successful API call data: ",ssbc.SystemData,"\n")
+
+				chassisType := ssbc.Chassis.Rt_Chassis_Type
+				serialNumber := ssbc.Chassis.SerialNumber
+				err = database.InsertChassis(sqliteDatabase, ipaddress, chassisType, serialNumber)
+					if err != nil {
+						fmt.Println("insert chassis error", err)
+					}
+				return chassisType, serialNumber, err
+		}
 	}
 return labels.ChassisType, labels.SerialNumber, err
 }
+/*
+func test() {
+	s, t, err :=GetChassisLabels()
+}
+*/

@@ -54,8 +54,8 @@ func GetChassis(db *sql.DB, ipaddress string) (*Chassis, error){
 	row, err := db.Query("SELECT * FROM chassis WHERE ipaddress = ?", ipaddress)
 	//row.Scan(ip)
 	if err != nil {
-		return nil, err
 		fmt.Println(err)
+		return nil, err
 	}
 	defer row.Close()
 
