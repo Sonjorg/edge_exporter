@@ -50,27 +50,27 @@ func InsertChassis(db *sql.DB, ipaddress string, chassisType string, serialNumbe
 	return nil
 }
 
-func GetChassis(db *sql.DB, ipaddress string) (*Chassis, error){
+func GetChassis(db *sql.DB, ipaddress string) (string, string, error){
 	row, err := db.Query("SELECT * FROM chassis WHERE ipaddress = ?", ipaddress)
 	//row.Scan(ip)
 	if err != nil {
 		fmt.Println(err)
-		return nil, err
+		return "","", err
 	}
 	defer row.Close()
 
-	var c *Chassis
+	//var c *Chassis
 	for row.Next() {
 			p := &Chassis{}
 			if err := row.Scan(&p.Id, &p.Ipaddress, &p.ChassisType, &p.SerialNumber); err != nil{
-				 //fmt.Println(err)
+				 fmt.Println("No data from db", err)
 			}
 			if (p.Ipaddress == ipaddress) {
-				c.ChassisType, c.SerialNumber = p.ChassisType, p.SerialNumber
+				return p.ChassisType, p.SerialNumber,err
 			}
 	}
+return "", "", err
 
-	return c, err
 }
 
 func chassisExists(db * sql.DB, ip string) bool {

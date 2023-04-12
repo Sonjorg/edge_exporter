@@ -38,8 +38,8 @@ func GetChassisLabels(ipaddress string, phpsessid string) (chassisType string, s
 	// Defer Closing the database
 	defer sqliteDatabase.Close()
 	if (database.RowExists(sqliteDatabase, ipaddress)) {
-		labels, err = database.GetChassis(sqliteDatabase, ipaddress)
-		if labels != nil || err != nil {
+		chassisType, serialNumber, err = database.GetChassis(sqliteDatabase, ipaddress)
+		if (chassisType =="" || serialNumber == "" || err != nil) {
 			//} else {
 
 				dataStr := "https://"+ipaddress+"/rest/chassis"
