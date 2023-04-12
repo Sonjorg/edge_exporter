@@ -187,6 +187,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					if err != nil {
 						fmt.Println("XML Conversion error", err)
 					}
+					fmt.Println("fetched from router")
 					routingtables = rt.RoutingTables2.RoutingTables3.Attr
 			}
 
