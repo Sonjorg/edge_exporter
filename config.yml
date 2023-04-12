@@ -14,4 +14,5 @@ hosts:
     - routingentry
     - system
     - systemcallstats
+    - diskpartition
 #Excluding collectors for this host
