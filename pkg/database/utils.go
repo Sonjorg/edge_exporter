@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"os"
 )
-func WithinTime(hours int, previousTime string) bool{
+func OutOfTime(hours int, previousTime string) bool{
 	//mins := time.Minute * time.Duration(8)
 timeSchedule := time.Hour * time.Duration(hours)
 now := time.Now().Format(time.RFC3339)

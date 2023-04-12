@@ -164,10 +164,10 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					fmt.Println(err)
 				}
 			}
-			var b = database.WithinTime(24, timeLast)
+			var b = database.OutOfTime(24, timeLast)
 			fmt.Println(b)
 			//If the time stored in database is less than 24 hours ago, use these routingentries
-			if (database.WithinTime(24, timeLast))  {
+			if (!database.OutOfTime(24, timeLast))  {
 
 				//using previous routingentries if within time
 			} else { //Routing data has expired, fetching new routingentries
