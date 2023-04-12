@@ -8,6 +8,10 @@ import (
 	"fmt"
 	"os"
 )
+
+
+
+
 func WithinTime(hours int, previousTime string) bool{
 	//mins := time.Minute * time.Duration(8)
 timeSchedule := time.Hour * time.Duration(hours)
@@ -18,10 +22,8 @@ if err != nil {
 	fmt.Println(err)
 	return false
 }
-if (pt.Add(timeSchedule).After(timeNowParsed)) {
-	return false
-} else {
-	 return true}
+return pt.Add(timeSchedule).After(timeNowParsed)
+
 }
 
 func InitializeDB() {
