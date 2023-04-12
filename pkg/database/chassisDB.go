@@ -2,7 +2,7 @@ package database
 
 import (
 	//"encoding/xml"
-	//"fmt"
+	"fmt"
 	"log"
 	_ "github.com/mattn/go-sqlite3" // Import go-sqlite3 library
 	"database/sql"
@@ -55,7 +55,7 @@ func GetChassis(db *sql.DB, ipaddress string) (*Chassis, error){
 	//row.Scan(ip)
 	if err != nil {
 		return nil, err
-		//fmt.Println(err)
+		fmt.Println(err)
 	}
 	defer row.Close()
 
@@ -73,3 +73,18 @@ func GetChassis(db *sql.DB, ipaddress string) (*Chassis, error){
 	return c, err
 }
 
+func chassisExists(db * sql.DB, ip string) bool {
+    sqlStmt := `SELECT ipaddress FROM chassis WHERE ipaddress = ?`
+    err := db.QueryRow(sqlStmt, ip).Scan(&ip)
+    if err != nil {
+        if err != sql.ErrNoRows {
+            // a real error happened! you should change your function return
+            // to "(bool, error)" and return "false, err" here
+            log.Print(err)
+        }
+
+        return false
+    }
+
+    return true
+}
