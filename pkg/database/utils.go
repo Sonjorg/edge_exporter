@@ -29,7 +29,7 @@ if err != nil {
 	fmt.Println(err)
 	return false
 }
-return pt.Add(timeSchedule).After(timeNowParsed)
+return previoust.Add(timeSchedule).After(timeNowParsed)
 
 }
 
