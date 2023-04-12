@@ -62,7 +62,7 @@ func GetChassisLabels(ipaddress string, phpsessid string) (chassisType string, s
 				return string(chassisType), string(serialNumber), err
 		}
 	}
-return "", "", err
+return chassisType, serialNumber, err
 }
 /*
 func test() {
