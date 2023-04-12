@@ -14,7 +14,7 @@ import (
 
 func WithinTime(hours int, previousTime string) bool{
 	//mins := time.Minute * time.Duration(8)
-timeSchedule := time.Hour * time.Duration(float64(hours))
+timeSchedule :=  time.Duration(hours)*time.Hour
 now := time.Now().Format(time.RFC3339)
 timeNowParsed, _ := time.Parse(time.RFC3339, now)
 pt,err := time.Parse(time.RFC3339, previousTime)
