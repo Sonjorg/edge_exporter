@@ -52,7 +52,7 @@ func StoreRoutingEntries(db *sql.DB, ipaddress string, time string, routingTable
 			fmt.Println(err)
 			return err
 		}
-}
+	}
 	return nil
 }
 
@@ -74,7 +74,7 @@ func RoutingTablesExists(db * sql.DB,ip string) bool {
 
 
 func GetRoutingData(db *sql.DB,ipaddress string) (map[string][]string,[]string,string, error) {
-		row, err := db.Query("SELECT * FROM routingtables WHERE ipaddress = ?", ipaddress)
+		row, err := db.Query("SELECT * FROM routingtables")
 		//row.Scan(ip)
 		if err != nil {
 			return nil, nil,"", err
