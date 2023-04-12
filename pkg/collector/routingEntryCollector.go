@@ -157,7 +157,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			var routingtables []string
 			var routingEntryMap = make(map[string][]string)
 			var exists bool = database.RoutingTablesExists(sqliteDatabase,hosts[i].Ip)
-
+			fmt.Println(exists)
 			if (exists) {
 				routingEntryMap,routingtables,timeLastString,err = database.GetRoutingData(sqliteDatabase,hosts[i].Ip)
 				if err != nil {
