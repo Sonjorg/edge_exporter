@@ -29,7 +29,7 @@ func GetChassisLabels(ipaddress string, phpsessid string) (chassisType string, s
 
 	//fmt.Println(hosts)
 	var sqliteDatabase *sql.DB
-	var labels *database.Chassis
+	//var labels *database.Chassis
 	sqliteDatabase, err = sql.Open("sqlite3", "./sqlite-database.db")
 	if err != nil {
 		fmt.Println(err)
@@ -59,13 +59,37 @@ func GetChassisLabels(ipaddress string, phpsessid string) (chassisType string, s
 					if err != nil {
 						fmt.Println("insert chassis error", err)
 					}
-				return chassisType, serialNumber, err
+				return string(chassisType), string(serialNumber), err
 		}
 	}
-return labels.ChassisType, labels.SerialNumber, err
+return "", "", err
 }
 /*
 func test() {
-	s, t, err :=GetChassisLabels()
+	var sqliteDatabase *sql.DB
+	//var labels *database.Chassis
+	sqliteDatabase, err = sql.Open("sqlite3", "./sqlite-database.db")
+	if err != nil {
+		fmt.Println(err)
+	}
+	phpsessid,err := http.APISessionAuth("student", "PanneKake", "10.233.234.11")
+	dataStr := "https://10.233.234.11/rest/chassis"
+				_, data,err := http.GetAPIData(dataStr, phpsessid)
+				if err != nil {
+						fmt.Println("Error collecting from : ", err)
+
+				}
+				b := []byte(data) //Converting string of data to bytestream
+				ssbc := &ChassisData{}
+				xml.Unmarshal(b, &ssbc) //Converting XML data to variables
+				//fmt.Println("Successful API call data: ",ssbc.SystemData,"\n")
+
+				chassisType := ssbc.Chassis.Rt_Chassis_Type
+				serialNumber := ssbc.Chassis.SerialNumber
+				err = database.InsertChassis(sqliteDatabase, ipaddress, chassisType, serialNumber)
+					if err != nil {
+						fmt.Println("insert chassis error", err)
+					}
+				return chassisType, serialNumber, err
 }
 */
