@@ -165,12 +165,9 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 				   )
 				continue
 		}
-		//b := []byte(data) //bytestream
+		b := []byte(data) //bytestream
 		ssbc := &sSBCdata{}
-		err = xml.Unmarshal(data, &ssbc) //Converting XML data to variables
-		if err != nil {
-			fmt.Println("XML Conversion error", err)
-		}
+		xml.Unmarshal(b, &ssbc) //Converting XML data to variables
 		//fmt.Println("Successful API call data: ",ssbc.SystemData,"\n")
 
 		metricValue1 = float64(ssbc.SystemData.Rt_CPULoadAverage15m)

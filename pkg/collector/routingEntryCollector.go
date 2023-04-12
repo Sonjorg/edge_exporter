@@ -174,10 +174,8 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 							continue
 						}
 					rt := &routingTables{}
-					err = xml.Unmarshal(data, &rt) //Converting XML data to variables
-					if err != nil {
-						fmt.Println("XML Conversion error", err)
-					}
+					xml.Unmarshal(data, &rt) //Converting XML data to variables
+					
 					routingtables = rt.RoutingTables2.RoutingTables3.Attr
 			}
 
