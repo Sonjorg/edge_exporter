@@ -77,8 +77,9 @@ func GetRoutingData(db *sql.DB,ipaddress string) (map[string][]string,[]string,s
 		row, err := db.Query("SELECT * FROM routingtables")
 		//row.Scan(ip)
 		if err != nil {
+			fmt.Println(err)
+
 			return nil, nil,"", err
-			//fmt.Println(err)
 		}
 
 		defer row.Close()
