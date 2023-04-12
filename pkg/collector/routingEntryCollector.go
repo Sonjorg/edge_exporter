@@ -157,7 +157,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			var routingtables []string
 			var routingEntryMap = make(map[string][]string)
 			var exists bool = database.RoutingTablesExists(sqliteDatabase,hosts[i].Ip)
-			fmt.Println(exists)
+			fmt.Println("exists:",exists)
 			if (exists) {
 				routingEntryMap,routingtables,timeLastString,err = database.GetRoutingData(sqliteDatabase,hosts[i].Ip)
 				if err != nil {
@@ -170,7 +170,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			var b = database.WithinTime(24, timeLast)
 			fmt.Println(b)
 			//If the time stored in database is less than 24 hours ago, use these routingentries
-			if (b == true)  {
+			if (b == false)  {
 
 				//using previous routingentries if within time
 			} else { //Routing data has expired, fetching new routingentries
