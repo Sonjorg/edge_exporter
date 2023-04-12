@@ -164,7 +164,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					fmt.Println(err)
 				}
 			}
-			fmt.Println(timeLast)
+			fmt.Println("Last: ",timeLast)
 			var b = database.WithinTime(24, timeLast)
 			fmt.Println(b)
 			//If the time stored in database is less than 24 hours ago, use these routingentries
@@ -237,6 +237,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 						fmt.Println(err)
 					}*/
 					now := time.Now().Format(time.RFC3339)
+					fmt.Println("NOW:", now)
 					err = database.StoreRoutingEntries(sqliteDatabase, hosts[i].Ip, now,routingtables[j], match)
 					if err != nil {
 						fmt.Println(err)
