@@ -7,7 +7,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"log"
 	"net/http"
-	
+
 
 	//_ "github.com/mattn/go-sqlite3"
 
@@ -25,6 +25,6 @@ func main() {
 
 	//Serving metrics
 	http.Handle("/metrics", promhttp.Handler())
-	log.Fatal(http.ListenAndServe(":1231", nil))
+	log.Fatal(http.ListenAndServe(":5123", nil))
 
 }
