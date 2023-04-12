@@ -139,7 +139,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 	var metricValue4 float64
 	var metricValue5 float64
 	var metricValue6 float64
-	
+
 	var timeLast string
 	var sqliteDatabase *sql.DB
 	sqliteDatabase, err := sql.Open("sqlite3", "./sqlite-database.db")
@@ -164,6 +164,8 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					fmt.Println(err)
 				}
 			}
+			timeLast,err := time.Parse(time.RFC3339, timeLast)
+
 			fmt.Println("Last: ",timeLast)
 			var b = database.WithinTime(24, timeLast)
 			fmt.Println(b)

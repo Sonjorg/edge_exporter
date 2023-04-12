@@ -104,6 +104,7 @@ func GetRoutingData(db *sql.DB,ipaddress string) (map[string][]string,[]string,s
 		for key, _ := range routingEntries {
 			tables = append(tables, key)
 		}
+		fmt.Println("fra db: ", time)
 		return routingEntries,tables,time,err
 	}
 
