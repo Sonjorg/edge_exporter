@@ -58,13 +58,13 @@ func StoreRoutingEntries(db *sql.DB, ipaddress string, time string, routingTable
 }
 
 func RoutingTablesExists(db * sql.DB,ip string) bool {
-   // sqlStmt := `SELECT ipaddress FROM routingtables WHERE ipaddress = ?`
 	sqlStmt := `SELECT ipaddress FROM routingtables WHERE ipaddress = ?`
-    err := db.QueryRow(sqlStmt).Scan(&ip)
+    err := db.QueryRow(sqlStmt, ip).Scan(&ip)
     if err != nil {
         if err != sql.ErrNoRows {
-
-            return false
+            // a real error happened! you should change your function return
+            // to "(bool, error)" and return "false, err" here
+            log.Print(err)
         }
 
         return false
@@ -77,10 +77,10 @@ func RoutingTablesExists(db * sql.DB,ip string) bool {
 func GetRoutingData(db *sql.DB,ipaddress string) (map[string][]string,[]string,string, error) {
 		row, err := db.Query("SELECT * FROM routingtables")
 		//row.Scan(ip)
-		/*if err != nil {
+		if err != nil {
 			fmt.Println(err)
-			return nil, nil,"", err
-		}*/
+			//return nil, nil,"", err
+		}
 
 		defer row.Close()
 
