@@ -76,11 +76,10 @@ func RoutingTablesExists(db * sql.DB,ip string) bool {
 func GetRoutingData(db *sql.DB,ipaddress string) (map[string][]string,[]string,string, error) {
 		row, err := db.Query("SELECT * FROM routingtables")
 		//row.Scan(ip)
-		if err != nil {
+		/*if err != nil {
 			fmt.Println(err)
-
 			return nil, nil,"", err
-		}
+		}*/
 
 		defer row.Close()
 
