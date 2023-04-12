@@ -140,14 +140,14 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 	var metricValue5 float64
 	var metricValue6 float64
 
-	var timeLast string
+	//var timeLast string
 	var sqliteDatabase *sql.DB
 	sqliteDatabase, err := sql.Open("sqlite3", "./sqlite-database.db")
 	if err != nil {
 		fmt.Println(err)
 	}
 	for i := range hosts {
-
+		var timeLastString string
 		phpsessid, err := http.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
 			if err != nil {
 				fmt.Println("Error auth", hosts[i].Ip, err)
@@ -159,18 +159,18 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			var exists bool = database.RoutingTablesExists(sqliteDatabase,hosts[i].Ip)
 
 			if (exists) {
-				routingEntryMap,routingtables,timeLast,err = database.GetRoutingData(sqliteDatabase,hosts[i].Ip)
+				routingEntryMap,routingtables,timeLastString,err = database.GetRoutingData(sqliteDatabase,hosts[i].Ip)
 				if err != nil {
 					fmt.Println(err)
 				}
 			}
-			fmt.Println("Last: ",timeLast)
-			timeLast,err := time.Parse(time.RFC3339, timeLast)
+			fmt.Println("Last: ",timeLastString)
+			timeLast,err := time.Parse(time.RFC3339, timeLastString)
 
 			var b = database.WithinTime(24, timeLast)
 			fmt.Println(b)
 			//If the time stored in database is less than 24 hours ago, use these routingentries
-			if (database.WithinTime(24, timeLast))  {
+			if (b == true)  {
 
 				//using previous routingentries if within time
 			} else { //Routing data has expired, fetching new routingentries
