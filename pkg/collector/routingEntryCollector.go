@@ -166,12 +166,10 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			}
 			fmt.Println("Last: ",timeLastString)
 			timeLast,err := time.Parse(time.RFC3339, timeLastString)
-
-			var b = database.WithinTime(24, timeLast)
-			fmt.Println(b)
-			//If the time stored in database is less than 24 hours ago, use these routingentries
+			//If 24 hours has not passed since last data was stored, use this data
+			var b = database.TimeIsUp(24, timeLast)
+			//fmt.Println(b)
 			if (b == false)  {
-
 				//using previous routingentries if within time
 			} else { //Routing data has expired, fetching new routingentries
 					_, data, err := http.GetAPIData("https://"+hosts[i].Ip+"/rest/routingtable", phpsessid)
