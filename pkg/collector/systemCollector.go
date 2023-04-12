@@ -152,7 +152,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 				   )
 				   continue //trying next ip address
 		}
-
+		//fetching labels from DB or router if not exist yet
 		chassisType, serialNumber, err := utils.GetChassisLabels(hosts[i].Ip,phpsessid)
 		//Fetching systemdata
 		_, data,err := http.GetAPIData(dataStr, phpsessid)
@@ -165,9 +165,12 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 				   )
 				continue
 		}
-		b := []byte(data) //bytestream
+		//b := []byte(data) //bytestream
 		ssbc := &sSBCdata{}
-		xml.Unmarshal(b, &ssbc) //Converting XML data to variables
+		err = xml.Unmarshal(data, &ssbc) //Converting XML data to variables
+		if err != nil {
+			fmt.Println("XML Conversion error", err)
+		}
 		//fmt.Println("Successful API call data: ",ssbc.SystemData,"\n")
 
 		metricValue1 = float64(ssbc.SystemData.Rt_CPULoadAverage15m)
