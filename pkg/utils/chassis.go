@@ -45,12 +45,15 @@ func GetChassisLabels(ipaddress string, phpsessid string) (chassisType string, s
 				dataStr := "https://"+ipaddress+"/rest/chassis"
 				_, data,err := http.GetAPIData(dataStr, phpsessid)
 				if err != nil {
-						fmt.Println("Error collecting from : ", err)
-
+						//fmt.Println("Error collecting from : ", err)
+					return "http error","http error",err
 				}
 				b := []byte(data) //Converting string of data to bytestream
 				ssbc := &ChassisData{}
-				xml.Unmarshal(b, &ssbc) //Converting XML data to variables
+				err = xml.Unmarshal(b, &ssbc) //Converting XML data to variables
+				if err != nil {
+				return "http error","http error",err
+			}
 				//fmt.Println("Successful API call data: ",ssbc.SystemData,"\n")
 
 				chassisType := ssbc.Chassis.Rt_Chassis_Type
