@@ -108,7 +108,7 @@ func routingCollector() *rMetrics {
 		),
 		Error_ip: prometheus.NewDesc("error_edge_routing",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname"}, nil,
+			[]string{"Instance", "hostname","job","routing_table", "error_reason"}, nil,
 		),
 	}
 }
@@ -171,6 +171,9 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					_, data, err := http.GetAPIData("https://"+hosts[i].Ip+"/rest/routingtable", phpsessid)
 						if err != nil {
 							fmt.Println("Error routingtable data", hosts[i].Ip, err)
+							c <- prometheus.MustNewConstMetric(
+									collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, "routingentry","NA", "no_routing_tables")
+
 							continue
 						}
 					rt := &routingTables{}
@@ -208,11 +211,6 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					re := &routingEntries{}
 					xml.Unmarshal(data2, &re) //Converting XML data to variables
 					routingEntries := re.RoutingEntry2.RoutingEntry3.Attr
-					if len(routingEntries) <= 0 {
-						fmt.Println("No routingEntry for this routingtable")
-						continue
-					}
-					//
 					entries := regexp.MustCompile(`\d+$`)
 
 					//Because routingentries from the hosts are displayed as a list of for example "2:4", "2:5", we are using regex to get only the routingentries
@@ -235,6 +233,11 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					}
 				}
 
+				if (len(match) <= 0) {
+					c <- prometheus.MustNewConstMetric(
+						collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, "routingentry",routingtables[j], "no_routing_entries")
+						continue
+				}
 				for k := range match {
 
 					url := "https://" + hosts[i].Ip + "/rest/routingtable/" + routingtables[j] + "/routingentry/" + match[k] + "/historicalstatistics/1"
