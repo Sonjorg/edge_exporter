@@ -45,7 +45,7 @@ func GetChassisLabels(ipaddress string, phpsessid string) (chassisType string, s
 		dataStr := "https://"+ipaddress+"/rest/chassis"
 		_, data,err := http.GetAPIData(dataStr, phpsessid)
 		if err != nil {
-				fmt.Println("Error collecting from : ",log.Flags(), err,"\n")
+				fmt.Println("Error collecting from : ", err)
 
 		}
 		b := []byte(data) //Converting string of data to bytestream
@@ -57,9 +57,9 @@ func GetChassisLabels(ipaddress string, phpsessid string) (chassisType string, s
 		serialNumber := ssbc.Chassis.SerialNumber
 		err = database.InsertChassis(sqliteDatabase, ipaddress, chassisType, serialNumber)
 			if err != nil {
-				log.Println(err)
+				fmt.Println(err)
 			}
-		return chassisType, serialNumber, nil
+		return chassisType, serialNumber, err
 	}
 return labels.ChassisType, labels.SerialNumber, err
 }

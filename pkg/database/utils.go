@@ -25,7 +25,7 @@ if (pt.Add(timeSchedule).After(timeNowParsed)) {
 
 func InitializeDB() {
 	var sqliteDatabase *sql.DB
-	
+
 	_, err := os.Stat("sqlite-database.db")
 	if err != nil {
 		fmt.Println("Creating sqlite-database.db...")
@@ -51,7 +51,7 @@ func InitializeDB() {
 	}
 	err = CreateChassis(sqliteDatabase)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("Chassis DB error",err)
 	}
 
 }
