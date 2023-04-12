@@ -46,7 +46,6 @@ func StoreRoutingEntries(db *sql.DB, ipaddress string, time string, routingTable
 			fmt.Println(err)
 
 			return err
-
 		}
 		_, err = statement.Exec(ipaddress, time, routingTable, routingEntries[i])
 		if err != nil {
@@ -73,9 +72,8 @@ func RoutingTablesExists(db * sql.DB,ip string) bool {
     return true
 }
 
-
+/* Old function
 func GetRoutingEntries(db *sql.DB,ipaddress string,routingTable string) ([]string,string, error) {
-
 
 		row, err := db.Query("SELECT * FROM routingtables WHERE ipaddress = ?", ipaddress)
 		//row.Scan(ip)
@@ -104,7 +102,8 @@ func GetRoutingEntries(db *sql.DB,ipaddress string,routingTable string) ([]strin
 		}
 		return re, time, err
 }
-
+*/
+/*
 type RoutingTest struct {
 	Id        int
 	Ipaddress string
@@ -113,8 +112,8 @@ type RoutingTest struct {
 	RoutingEntry string
 	 //map consisting of routingtables and their routingentries
 }
-
-func Test(db *sql.DB,ipaddress string) (map[string][]string,[]string,string, error) {
+*/
+func GetRoutingData(db *sql.DB,ipaddress string) (map[string][]string,[]string,string, error) {
 		row, err := db.Query("SELECT * FROM routingtables WHERE ipaddress = ?", ipaddress)
 		//row.Scan(ip)
 		if err != nil {

@@ -170,7 +170,7 @@ func (collector *diskMetrics) Collect(c chan<- prometheus.Metric) {
 // Initializing the exporter
 
 
-func HardwareCollector() {
+func DiskPartitionCollector() {
 		c := diskCollector()
 		prometheus.MustRegister(c)
 }

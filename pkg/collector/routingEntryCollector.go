@@ -159,15 +159,15 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			var exists bool = database.RoutingTablesExists(sqliteDatabase,hosts[i].Ip)
 
 			if (exists) {
-				routingEntryMap,routingtables,timeLast,err = database.Test(sqliteDatabase,hosts[i].Ip)
+				routingEntryMap,routingtables,timeLast,err = database.GetRoutingData(sqliteDatabase,hosts[i].Ip)
 				if err != nil {
 					fmt.Println(err)
 				}
 			}
 			//If the time stored in database is less than 24 hours ago, use these routingentries
 			if (database.WithinTime(24, timeLast))  {
-			} else {
-
+				//using previous routingentries if within time
+			} else { //Routing data has expired, fetching new routingentries
 					_, data, err := http.GetAPIData("https://"+hosts[i].Ip+"/rest/routingtable", phpsessid)
 						if err != nil {
 							fmt.Println("Error routingtable data", hosts[i].Ip, err)
@@ -175,13 +175,12 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 						}
 					rt := &routingTables{}
 					xml.Unmarshal(data, &rt) //Converting XML data to variables
-					//fmt.Println("Successful API call data: ",ssbc.Rt2.Rt3.Attr)
-					routingtables = rt.RoutingTables2.RoutingTables3.Attr //ssbc.Rt2.Rt3.Attr
+					routingtables = rt.RoutingTables2.RoutingTables3.Attr
 			}
 
 			if len(routingtables) <= 0 {
 				fmt.Println("Routingtables empty")
-				continue
+				continue //routingtables emtpy, try next host
 			}
 
 			for j := range routingtables {
@@ -191,14 +190,12 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					for k,v := range routingEntryMap {
 						if (k == routingtables[j]) {
 							for re := range v {
-								match = append(match,v[re])
+								match = append(match,v[re]) //using previous routingentries (match)
+
 							}
 						}
 					}
 
-
-
-					//fmt.Println("using previous routingentries") //using previous routingentries (match)
 				} else {
 					url := "https://" + hosts[i].Ip + "/rest/routingtable/" + routingtables[j] + "/routingentry"
 					_, data2, err := http.GetAPIData(url, phpsessid)
@@ -215,7 +212,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					//
 					entries := regexp.MustCompile(`\d+$`)
 
-
+					//Because routingentries from the hosts are displayed as a list of for example "2:4", "2:5", we are using regex to get only the routingentries
 					for k := range routingEntries {
 						tmp := entries.FindStringSubmatch(routingEntries[k])
 						for l := range tmp {

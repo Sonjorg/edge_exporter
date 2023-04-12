@@ -11,6 +11,7 @@ import (
 // Template used for struct and the functions NewConfig(), ValidateConfigPath() and ParseFlags() are copied from:
 // https://dev.to/koddr/let-s-write-config-for-your-golang-web-app-on-right-way-yaml-5ggp
 
+//Describing config.yml file
     type Config struct {
         Hosts []Host
         Authtimeout int `yaml:"authtimeout"`
@@ -21,7 +22,7 @@ import (
         Username       string `yaml:"username"`
         Password       string `yaml:"password"`
         Exclude      []string `yaml:"exclude"`
-        }
+    }
 
             //From stackoverflow
     func GetConf(c *Config) *Config {
@@ -44,10 +45,22 @@ import (
         Username   string
         Password   string
     }
+
+    func GetAllHosts() []IncludedHosts{
+        cfg := GetConf(&Config{})
+        list := make([]IncludedHosts,0,8)
+
+        for i := range cfg.Hosts {
+            list = append(list, IncludedHosts{cfg.Hosts[i].Ipaddress, cfg.Hosts[i].HostName,cfg.Hosts[i].Username, cfg.Hosts[i].Password})
+        }
+    return list
+    }
+
+    //Returns hosts config for hosts with a collectorname that have not been excluded in config.yml
     // This functions iterates through all hosts in the saved config and
     // returns a list of hosts that doesn't have the specified collector excluded in the config file
     // exporterName must be equal to "system", "routingentry" ..
-     func GetIncludedHosts(collectorName string) []IncludedHosts {
+    func GetIncludedHosts(collectorName string) []IncludedHosts {
         cfg := GetConf(&Config{})
         list := make([]IncludedHosts,0,8)
         var excluded bool

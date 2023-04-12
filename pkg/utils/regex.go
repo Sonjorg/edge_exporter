@@ -1,7 +1,7 @@
 // Read this repo to understand better: https://github.com/antonputra/tutorials/blob/main/lessons/141/prometheus-nginx-exporter/cmd/exporter/main.go
 // So far it is scraping one metric from a txt file
 // Edit path of file
-package main
+package utils
 
 import (
 	//	"bytes"

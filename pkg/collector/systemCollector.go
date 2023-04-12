@@ -4,15 +4,17 @@ package collector
 //rest/system/historicalstatistics/1
 
 import (
+	"edge_exporter/pkg/config"
+	//"edge_exporter/pkg/database"
+	"edge_exporter/pkg/http"
+	"edge_exporter/pkg/utils"
 	"encoding/xml"
 	"fmt"
 	"log"
-	"github.com/prometheus/client_golang/prometheus"
 	"strconv"
 	"time"
-	"edge_exporter/pkg/config"
-	"edge_exporter/pkg/http"
 
+	"github.com/prometheus/client_golang/prometheus"
 )
 
 type sSBCdata struct {
@@ -54,39 +56,39 @@ func systemCollector()*sMetrics{
 	 return &sMetrics{
 		Rt_CPUUsage: prometheus.NewDesc("rt_CPUUsage",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job","host_nr", "Href", "HTTP_status"}, nil,
+			[]string{"Instance", "hostname", "job","host_nr", "Href", "chassis_type","serial_number"}, nil,
 		),
 		Rt_MemoryUsage: prometheus.NewDesc("rt_MemoryUsage",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job","host_nr", "Href", "HTTP_status"}, nil,
+			[]string{"Instance", "hostname", "job","host_nr", "Href", "chassis_type","serial_number"}, nil,
 		),
 		Rt_CPUUptime: prometheus.NewDesc("rt_CPUUptime",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job","host_nr", "Href", "HTTP_status"}, nil,
+			[]string{"Instance", "hostname", "job","host_nr", "Href", "chassis_type","serial_number"}, nil,
 		),
 		Rt_FDUsage: prometheus.NewDesc("rt_FDUsage",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job","host_nr", "Href", "HTTP_status"}, nil,
+			[]string{"Instance", "hostname", "job","host_nr", "Href", "chassis_type","serial_number"}, nil,
 		),
 		Rt_CPULoadAverage1m: prometheus.NewDesc("rt_CPULoadAverage1m",
 			"NoDescriptionYet.",
-			[]string{"Instance", "hostname", "job","host_nr", "Href", "HTTP_status"}, nil,
+			[]string{"Instance", "hostname", "job","host_nr", "Href", "chassis_type","serial_number"}, nil,
 		),
 		Rt_CPULoadAverage5m: prometheus.NewDesc("rt_CPULoadAverage5m",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job","host_nr", "Href", "HTTP_status"}, nil,
+			[]string{"Instance", "hostname", "job","host_nr", "Href", "chassis_type","serial_number"}, nil,
 		),
 		Rt_CPULoadAverage15m: prometheus.NewDesc("rt_CPULoadAverage15m",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job","host_nr", "Href", "HTTP_status"}, nil,
+			[]string{"Instance", "hostname", "job","host_nr", "Href", "chassis_type","serial_number"}, nil,
 		),
 		Rt_TmpPartUsage: prometheus.NewDesc("Rt_TmpPartUsage",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job","host_nr", "Href", "HTTP_status"}, nil,
+			[]string{"Instance", "hostname", "job","host_nr", "Href", "chassis_type","serial_number"}, nil,
 		),
 		Rt_LoggingPartUsage: prometheus.NewDesc("Rt_LoggingPartUsage",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job","host_nr", "Href", "HTTP_status"}, nil,
+			[]string{"Instance", "hostname", "job","host_nr", "Href", "chassis_type","serial_number"}, nil,
 		),
 		Error_ip: prometheus.NewDesc("error_edge_system",
 			"NoDescriptionYet",
@@ -150,6 +152,9 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 				   )
 				   continue //trying next ip address
 		}
+
+		chassisType, serialNumber, err := utils.GetChassisLabels(hosts[i].Ip,phpsessid)
+		//Fetching systemdata
 		_, data,err := http.GetAPIData(dataStr, phpsessid)
 		if err != nil {
 				fmt.Println("Error collecting from host: ",log.Flags(), err,"\n")
@@ -160,7 +165,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 				   )
 				continue
 		}
-		b := []byte(data) //Converting string of data to bytestream
+		b := []byte(data) //bytestream
 		ssbc := &sSBCdata{}
 		xml.Unmarshal(b, &ssbc) //Converting XML data to variables
 		//fmt.Println("Successful API call data: ",ssbc.SystemData,"\n")
@@ -175,15 +180,15 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 		metricValue8 = float64(ssbc.SystemData.Rt_MemoryUsage)
 		metricValue9 = float64(ssbc.SystemData.Rt_TmpPartUsage)
 
-			c <- prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue1, hosts[i].Ip, hosts[i].Hostname, "systemstats",nr, ssbc.SystemData.Href, ssbc.Status.HTTPcode)
-			c <- prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage1m, prometheus.GaugeValue, metricValue2, hosts[i].Ip, hosts[i].Hostname, "systemstats",nr, ssbc.SystemData.Href, ssbc.Status.HTTPcode)
-			c <- prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage5m, prometheus.GaugeValue, metricValue3, hosts[i].Ip, hosts[i].Hostname, "systemstats",nr, ssbc.SystemData.Href, ssbc.Status.HTTPcode)
-			c <- prometheus.MustNewConstMetric(collector.Rt_CPUUptime, prometheus.GaugeValue, metricValue4, hosts[i].Ip, hosts[i].Hostname, "systemstats",nr, ssbc.SystemData.Href, ssbc.Status.HTTPcode)
-			c <- prometheus.MustNewConstMetric(collector.Rt_CPUUsage, prometheus.GaugeValue, metricValue5, hosts[i].Ip, hosts[i].Hostname, "systemstats",nr, ssbc.SystemData.Href, ssbc.Status.HTTPcode)
-			c <- prometheus.MustNewConstMetric(collector.Rt_FDUsage, prometheus.GaugeValue, metricValue6, hosts[i].Ip, hosts[i].Hostname, "systemstats",nr, ssbc.SystemData.Href, ssbc.Status.HTTPcode)
-			c <- prometheus.MustNewConstMetric(collector.Rt_LoggingPartUsage, prometheus.GaugeValue, metricValue7, hosts[i].Ip, hosts[i].Hostname, "systemstats",nr, ssbc.SystemData.Href, ssbc.Status.HTTPcode)
-			c <- prometheus.MustNewConstMetric(collector.Rt_MemoryUsage, prometheus.GaugeValue, metricValue8, hosts[i].Ip, hosts[i].Hostname, "systemstats",nr, ssbc.SystemData.Href, ssbc.Status.HTTPcode)
-			c <- prometheus.MustNewConstMetric(collector.Rt_TmpPartUsage, prometheus.GaugeValue, metricValue9, hosts[i].Ip, hosts[i].Hostname, "systemstats",nr, ssbc.SystemData.Href, ssbc.Status.HTTPcode)
+			c <- prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue1, hosts[i].Ip, hosts[i].Hostname, "systemstats",nr, ssbc.SystemData.Href, chassisType, serialNumber,)
+			c <- prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage1m, prometheus.GaugeValue, metricValue2, hosts[i].Ip, hosts[i].Hostname, "systemstats",nr, ssbc.SystemData.Href, chassisType, serialNumber,)
+			c <- prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage5m, prometheus.GaugeValue, metricValue3, hosts[i].Ip, hosts[i].Hostname, "systemstats",nr, ssbc.SystemData.Href, chassisType, serialNumber,)
+			c <- prometheus.MustNewConstMetric(collector.Rt_CPUUptime, prometheus.GaugeValue, metricValue4, hosts[i].Ip, hosts[i].Hostname, "systemstats",nr, ssbc.SystemData.Href, chassisType, serialNumber,)
+			c <- prometheus.MustNewConstMetric(collector.Rt_CPUUsage, prometheus.GaugeValue, metricValue5, hosts[i].Ip, hosts[i].Hostname, "systemstats",nr, ssbc.SystemData.Href, chassisType, serialNumber,)
+			c <- prometheus.MustNewConstMetric(collector.Rt_FDUsage, prometheus.GaugeValue, metricValue6, hosts[i].Ip, hosts[i].Hostname, "systemstats",nr, ssbc.SystemData.Href, chassisType, serialNumber,)
+			c <- prometheus.MustNewConstMetric(collector.Rt_LoggingPartUsage, prometheus.GaugeValue, metricValue7, hosts[i].Ip, hosts[i].Hostname, "systemstats",nr, ssbc.SystemData.Href, chassisType, serialNumber,)
+			c <- prometheus.MustNewConstMetric(collector.Rt_MemoryUsage, prometheus.GaugeValue, metricValue8, hosts[i].Ip, hosts[i].Hostname, "systemstats",nr, ssbc.SystemData.Href, chassisType, serialNumber,)
+			c <- prometheus.MustNewConstMetric(collector.Rt_TmpPartUsage, prometheus.GaugeValue, metricValue9, hosts[i].Ip, hosts[i].Hostname, "systemstats",nr, ssbc.SystemData.Href, chassisType, serialNumber,)
 	}
 }
 
