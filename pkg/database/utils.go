@@ -15,12 +15,13 @@ now := time.Now().Format(time.RFC3339)
 timeNowParsed, _ := time.Parse(time.RFC3339, now)
 pt,err := time.Parse(time.RFC3339, previousTime)
 if err != nil {
+	fmt.Println(err)
 	return false
 }
 if (pt.Add(timeSchedule).After(timeNowParsed)) {
-	return true
+	return false
 } else {
-	 return false}
+	 return true}
 }
 
 func InitializeDB() {
