@@ -6,7 +6,6 @@ package utils
 import (
 	"encoding/xml"
 	"fmt"
-	"log"
 	_ "github.com/mattn/go-sqlite3" // Import go-sqlite3 library
 	"database/sql"
 	"edge_exporter/pkg/database"
