@@ -146,7 +146,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 		fmt.Println(err)
 	}
 	for i := range hosts {
-		var match []string
+
 		phpsessid, err := http.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
 			if err != nil {
 				fmt.Println("Error auth", hosts[i].Ip, err)
@@ -172,7 +172,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 						if err != nil {
 							fmt.Println("Error routingtable data", hosts[i].Ip, err)
 							c <- prometheus.MustNewConstMetric(
-									collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, hosts[i].Hostname, "routingentry","NA", "no_routing_tables")
+									collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, "routingentry", "no_routing_tables")
 
 							continue
 						}
@@ -190,14 +190,13 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			}
 
 			for j := range routingtables {
-				 //variable to hold routingentries cleaned with regex
+				var match []string //variable to hold routingentries cleaned with regex
 				//Trying to fetch routingentries from database, if not exist yet, fetch new ones
 				if (exists) {
 					for k,v := range routingEntryMap {
 						if (k == routingtables[j]) {
 							for re := range v {
 								match = append(match,v[re]) //using previous routingentries (match)
-
 							}
 						}
 					}
@@ -211,6 +210,13 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					re := &routingEntries{}
 					xml.Unmarshal(data2, &re) //Converting XML data to variables
 					routingEntries := re.RoutingEntry2.RoutingEntry3.Attr
+					/*if len(routingEntries) <= 0 {
+						c <- prometheus.MustNewConstMetric(
+							collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, "systemstats", "no_routing_entries")
+							continue
+
+					}*/
+					//
 					entries := regexp.MustCompile(`\d+$`)
 
 					//Because routingentries from the hosts are displayed as a list of for example "2:4", "2:5", we are using regex to get only the routingentries
@@ -235,7 +241,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 
 				if (len(match) <= 0) {
 					c <- prometheus.MustNewConstMetric(
-						collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip,hosts[i].Hostname, "routingentry",routingtables[j], "no_routing_entries")
+						collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, "systemstats", "no_routing_entries")
 						continue
 				}
 				for k := range match {
