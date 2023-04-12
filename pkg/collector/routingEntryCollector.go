@@ -273,10 +273,10 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			}
 	}
 }
-
+/*
 func RoutingTablesExists(sqliteDatabase *sql.DB, s string) {
 	panic("unimplemented")
-}
+}*/
 
 func RoutingEntryCollector() {
 	c := routingCollector()
