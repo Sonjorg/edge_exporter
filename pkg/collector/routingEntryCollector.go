@@ -146,7 +146,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 		fmt.Println(err)
 	}
 	for i := range hosts {
-
+		var match []string
 		phpsessid, err := http.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
 			if err != nil {
 				fmt.Println("Error auth", hosts[i].Ip, err)
@@ -190,7 +190,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			}
 
 			for j := range routingtables {
-				var match []string //variable to hold routingentries cleaned with regex
+				 //variable to hold routingentries cleaned with regex
 				//Trying to fetch routingentries from database, if not exist yet, fetch new ones
 				if (exists) {
 					for k,v := range routingEntryMap {
