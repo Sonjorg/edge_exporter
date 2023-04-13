@@ -15,13 +15,14 @@ import (
 
 func main() {
 
-	//Creating database
+	//Creating database and tables
 	database.InitializeDB()
 	//starting collectors
 	collector.SystemResourceCollector()
 	collector.DiskPartitionCollector()
 	collector.RoutingEntryCollector()
 	collector.CallStatsCollector()
+	collector.LinecardCollector()
 
 	//Serving metrics
 	http.Handle("/metrics", promhttp.Handler())

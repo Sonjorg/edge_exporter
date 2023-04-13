@@ -145,7 +145,7 @@ func (collector *linecardMetrics) Collect(c chan<- prometheus.Metric) {
 }
 
 // Initializing the collector
-func linecardCollector() {
+func LinecardCollector() {
 		c := lineCCollector()
 		prometheus.MustRegister(c)
 }
