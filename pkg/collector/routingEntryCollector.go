@@ -196,7 +196,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				fmt.Println("Routingtables empty")
 				continue //routingtables emtpy, try next host
 			}
-
+			//chassis labels from db or http
 			chassisType, serialNumber, err := utils.GetChassisLabels(hosts[i].Ip,phpsessid)
 			if err!= nil {
 				chassisType, serialNumber = "database failure", "database failure"
