@@ -29,7 +29,7 @@ func GetSqliteKey(ipaddress string) (cookie string, err error) {
 	} // Open the created SQLite File
 	// Defer Closing the database
 
-	Hosts, err := DisplayAuth(sqliteDatabase, ipaddress)
+	Hosts, err := GetCookieDB(sqliteDatabase, ipaddress)
 	if err != nil {
 		return "", err
 	}
@@ -40,7 +40,6 @@ func GetSqliteKey(ipaddress string) (cookie string, err error) {
 	for i := range Hosts {
 		//fmt.Println(Hosts[i].Ipaddress)
 		if Hosts[i].Ipaddress == ipaddress {
-
 			now := time.Now().Format(time.RFC3339)
 			parsed, _ := time.Parse(time.RFC3339, now)
 			parsed2, err := time.Parse(time.RFC3339, Hosts[i].Time)
@@ -77,7 +76,7 @@ func InsertAuth(db *sql.DB, ipaddress string, phpsessid string, time string) err
 	}
 	return nil
 }
-func DisplayAuth(db *sql.DB, ipaddress string) ([]*Cookie, error){
+func GetCookieDB(db *sql.DB, ipaddress string) ([]*Cookie, error){
 	row, err := db.Query("SELECT * FROM authentication")
 	//row.Scan(ip)
 	if err != nil {
