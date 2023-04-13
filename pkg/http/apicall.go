@@ -26,11 +26,11 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	//var read []byte
 	var phpsessid string
 	var err error
+	
 	phpsessid, err = database.GetSqliteKey(ipaddress)
 	//fmt.Println(phpsessid)
 	if phpsessid != "" {
 		//fmt.Println("henta fra sql")
-
 		return phpsessid, nil
 	}
 

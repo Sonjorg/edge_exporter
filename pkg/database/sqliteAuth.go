@@ -28,7 +28,9 @@ func GetSqliteKey(ipaddress string) (cookie string, err error) {
 		return "", err
 	} // Open the created SQLite File
 	// Defer Closing the database
-
+	if (!RowExists(sqliteDatabase, ipaddress)) {
+		return "",nil
+	}
 	Hosts, err := GetCookieDB(sqliteDatabase, ipaddress)
 	if err != nil {
 		return "", err
