@@ -39,8 +39,7 @@ func GetChassisLabels(ipaddress string, phpsessid string) (chassisType string, s
 	defer sqliteDatabase.Close()
 	if (database.RowExists(sqliteDatabase, ipaddress)) {
 		chassisType, serialNumber, err = database.GetChassis(sqliteDatabase, ipaddress)
-		if (chassisType =="" || serialNumber == "" || err != nil) {
-			//} else {
+		if (chassisType == "" || serialNumber == "" || err != nil) {
 
 				dataStr := "https://"+ipaddress+"/rest/chassis"
 				_, data,err := http.GetAPIData(dataStr, phpsessid)
@@ -53,11 +52,12 @@ func GetChassisLabels(ipaddress string, phpsessid string) (chassisType string, s
 				err = xml.Unmarshal(b, &ssbc) //Converting XML data to variables
 				if err != nil {
 				return "http error","http error",err
-			}
+				}
 				//fmt.Println("Successful API call data: ",ssbc.SystemData,"\n")
 
 				chassisType := ssbc.Chassis.Rt_Chassis_Type
 				serialNumber := ssbc.Chassis.SerialNumber
+				
 				err = database.InsertChassis(sqliteDatabase, ipaddress, chassisType, serialNumber)
 					if err != nil {
 						fmt.Println("insert chassis error", err)

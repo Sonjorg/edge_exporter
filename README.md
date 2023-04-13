@@ -12,6 +12,15 @@
 ### To test a specific file, for use
 ``` go run main.go ``` However this will not make use of dependencies from other files
 
+### Installation of Go on HDO's VMs
+#### As root folders are not accessible on HDO's VMs we need to install Go in home directory
+- Download last version of Go to home directory, from Go's official website
+- Unzip the file with tar
+- Execute the commands:
+``` export GOPATH=$HOME/go ```
+``` export PATH=$PATH:$GOPATH/bin ```
+- If starting Go gives a message that its not yet installed, make a startup script that executes:
+``` source .bashrc ``` from home directory
 
 ## Grafana and prometheus setup with docker
 
