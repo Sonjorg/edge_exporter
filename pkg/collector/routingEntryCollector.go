@@ -149,7 +149,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 		fmt.Println(err)
 	}
 	for i := range hosts {
-		var timeLastString string
+		var timeLastString string //Fetched from database, the routingentries and tables are stored for 24 hours as requested by HDO
 		var timeLast time.Time
 		phpsessid, err := http.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
 			if err != nil {

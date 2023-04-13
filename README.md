@@ -13,7 +13,7 @@
 ``` go run main.go ``` However this will not make use of dependencies from other files
 
 ### Installation of Go on HDO's VMs
-#### As root folders are not accessible on HDO's VMs we need to install Go in home directory
+#### As root folders are not accessible on HDO's VMs we need to install Go in home directory if docker is not utilized
 - Download last version of Go to home directory, from Go's official website
 - Unzip the file with tar
 - Execute the commands:
