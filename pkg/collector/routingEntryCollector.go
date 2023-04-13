@@ -159,35 +159,39 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			}
 			var routingtables []string
 			var routingEntryMap = make(map[string][]string)
-			var exists bool = database.RoutingTablesExists(sqliteDatabase,hosts[i].Ip) //Previous data is stored in db? Fetch this data
+			var DBexists bool = database.RoutingTablesExists(sqliteDatabase,hosts[i].Ip) //Previous data is stored in db? Fetch this data
 			//fmt.Println("exists:",exists)
-			if (exists) {
+			if (DBexists) {
 				routingEntryMap,routingtables,timeLastString,err = database.GetRoutingData(sqliteDatabase,hosts[i].Ip)
 				if err != nil {
 					fmt.Println(err)
 				}
-			}
-			timeLast,err := time.Parse(time.RFC3339, timeLastString)
+				timeLast,err := time.Parse(time.RFC3339, timeLastString)
+				if err != nil {
+					fmt.Println(err)
+				}
 			//If 24 hours has not passed since last data was stored in database, use this data
 			//fmt.Println(b)
-			if (database.TimeIsUp(24, timeLast) == false)  { //Routing data has expired, fetching new routingentries
+			if (!DBexists || database.TimeIsUp(24, timeLast) == false)  { //Routing data has expired, fetching new routingentries
 				_, data, err := http.GetAPIData("https://"+hosts[i].Ip+"/rest/routingtable", phpsessid)
-						if err != nil {
-							fmt.Println("Error routingtable data", hosts[i].Ip, err)
-							c <- prometheus.MustNewConstMetric(
-									collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, "routingentry","NA", "no_routing_tables")
+				if err != nil {
+					fmt.Println("Error routingtable data", hosts[i].Ip, err)
+					c <- prometheus.MustNewConstMetric(
+							collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, "routingentry","NA", "no_routing_tables")
 
-							continue
-						}
-					rt := &routingTables{}
-					err = xml.Unmarshal(data, &rt) //Converting XML data to variables
-					if err != nil {
-						fmt.Println("XML Conversion error", err)
-					}
-					fmt.Println("fetched from router")
-					routingtables = rt.RoutingTables2.RoutingTables3.Attr
+					continue
+				}
+			rt := &routingTables{}
+			err = xml.Unmarshal(data, &rt) //Converting XML data to variables
+			if err != nil {
+				fmt.Println("XML Conversion error", err)
+			}
+			fmt.Println("fetched from router")
+			routingtables = rt.RoutingTables2.RoutingTables3.Attr
 			}
 							//using previous routingentries if within time
+			}
+
 
 
 
@@ -206,7 +210,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			for j := range routingtables {
 				var match []string //variable to hold routingentries cleaned with regex
 				//Trying to fetch routingentries from database, if not exist yet, fetch new ones
-				if (exists) {
+				if (DBexists) {
 					for k,v := range routingEntryMap {
 						if (k == routingtables[j]) {
 							for re := range v {
