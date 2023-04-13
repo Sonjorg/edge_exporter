@@ -170,7 +170,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			timeLast,err := time.Parse(time.RFC3339, timeLastString)
 			//If 24 hours has not passed since last data was stored in database, use this data
 			//fmt.Println(b)
-			if (database.TimeIsUp(24, timeLast) == true)  { //Routing data has expired, fetching new routingentries
+			if (database.TimeIsUp(24, timeLast) == false)  { //Routing data has expired, fetching new routingentries
 				_, data, err := http.GetAPIData("https://"+hosts[i].Ip+"/rest/routingtable", phpsessid)
 						if err != nil {
 							fmt.Println("Error routingtable data", hosts[i].Ip, err)
@@ -196,7 +196,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				fmt.Println("Routingtables empty")
 				continue //routingtables emtpy, try next host
 			}
-			//chassis labels from db or http
+
 			chassisType, serialNumber, err := utils.GetChassisLabels(hosts[i].Ip,phpsessid)
 			if err!= nil {
 				chassisType, serialNumber = "database failure", "database failure"
