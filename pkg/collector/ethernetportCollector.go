@@ -16,9 +16,9 @@ import (
 // /rest/ethernetport
 type eSBCdata struct {
 	XMLname       xml.Name      `xml:"root"`
-	EthernetData  EthernetData  `xml:"ethernetport"`
+	EthernetData  ethernetData  `xml:"ethernetport"`
 }
-type EthernetData struct {
+type ethernetData struct {
 Href                          string `xml:"href,attr"`
 IfName		                  string `xml:"ifName"`
 IfAlias                       string `xml:"ifAlias"`
@@ -285,6 +285,10 @@ func (collector *ethernetMetrics) Collect(c chan<- prometheus.Metric) {
 
 					eData := &eSBCdata{}
 					xml.Unmarshal(data, &eData) //Converting XML data to variables
+					if err!= nil {
+						fmt.Println(err)
+						continue
+					}
 					fmt.Println("Successful API call data: ",eData.EthernetData)
 
 					metricValue1 := float64(eData.EthernetData.IfRedundancy)
