@@ -216,7 +216,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 						}
 					}
 
-				} else { // DB doesn't exist, so fetch new routingentries with 
+				} else { // DB doesn't exist, so fetch new routingentries with
 					url := "https://" + hosts[i].Ip + "/rest/routingtable/" + routingtables[j] + "/routingentry"
 					_, data2, err := http.GetAPIData(url, phpsessid)
 					if err != nil {
@@ -270,6 +270,11 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 
 					rData := &rSBCdata{}
 					xml.Unmarshal(data3, &rData) //Converting XML data to variables
+					if err!= nil {
+						fmt.Println("XML error routing", err)
+						//continue
+					}
+					fmt.Println("Successful API call data: ",rData.RoutingData)
 					//fmt.Println("Successful API call data: ",rData.RoutingData,"\n")
 
 					metricValue1 = float64(rData.RoutingData.Rt_RuleUsage)

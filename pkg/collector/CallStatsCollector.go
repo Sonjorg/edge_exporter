@@ -150,7 +150,7 @@ func (collector *cMetrics) Collect(c chan<- prometheus.Metric) {
 			fmt.Println("XML error callstats", err)
 			//continue
 		}
-		//fmt.Println("Successful API call data: ", ssbc.CallStatsData,"\n")
+		fmt.Println("Successful API call data: ", ssbc.CallStatsData)
 
 		metricValue1 = float64(ssbc.CallStatsData.Rt_NumCallAttempts)
 		metricValue2 = float64(ssbc.CallStatsData.Rt_NumCallSucceeded)
