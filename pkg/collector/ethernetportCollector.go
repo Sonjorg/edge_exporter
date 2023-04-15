@@ -91,115 +91,115 @@ func ethernetCollector()*ethernetMetrics{
 	 return &ethernetMetrics{
 		IfRedundancy: prometheus.NewDesc("ifRedundancy",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job","ethernetportID","chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job","ethernetportID","ifName","ifAlias","chassis_type","serial_number"}, nil,
 		),
 		IfRedundantPort: prometheus.NewDesc("ifRedundantPort",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job","ethernetportID","chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job","ethernetportID","ifName","ifAlias","chassis_type","serial_number"}, nil,
 		),
 		Rt_ifInBroadcastPkts: prometheus.NewDesc("rt_ifInBroadcastPkts",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname","job","ethernetportID","chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job","ethernetportID","ifName","ifAlias","chassis_type","serial_number"}, nil,
 		),
 		Rt_ifInDiscards: prometheus.NewDesc("rt_ifInDiscards",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname","job","ethernetportID","chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job","ethernetportID","ifName","ifAlias","chassis_type","serial_number"}, nil,
 		),
 		Rt_ifInErrors: prometheus.NewDesc("rt_ifInErrors",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname","job","ethernetportID","chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job","ethernetportID","ifName","ifAlias","chassis_type","serial_number"}, nil,
 		),
 		Rt_ifInFCSErrors: prometheus.NewDesc("rt_ifInFCSErrors",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname","job","ethernetportID","chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job","ethernetportID","ifName","ifAlias","chassis_type","serial_number"}, nil,
 		),
 		Rt_ifInFragmentedPkts: prometheus.NewDesc("rt_ifInFragmentedPkts",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname","job","ethernetportID","chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job","ethernetportID","ifName","ifAlias","chassis_type","serial_number"}, nil,
 		),
 		Rt_ifInMulticastPkts: prometheus.NewDesc("rt_ifInMulticastPkts",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname","job","ethernetportID","chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job","ethernetportID","ifName","ifAlias","chassis_type","serial_number"}, nil,
 		),
 		Rt_ifInOctets: prometheus.NewDesc("rt_ifInOctets",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname","job","ethernetportID","chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job","ethernetportID","ifName","ifAlias","chassis_type","serial_number"}, nil,
 		),
 		Rt_ifInOverSizedPkts: prometheus.NewDesc("rt_ifInOverSizedPkts",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname","job","ethernetportID","chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job","ethernetportID","ifName","ifAlias","chassis_type","serial_number"}, nil,
 		),
 		Rt_ifInUcastPkts: prometheus.NewDesc("rt_ifInUcastPkts",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname","job","ethernetportID","chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job","ethernetportID","ifName","ifAlias","chassis_type","serial_number"}, nil,
 		),
 		Rt_ifInUndersizedPkts: prometheus.NewDesc("rt_ifInUndersizedPkts",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname","job","ethernetportID","chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job","ethernetportID","ifName","ifAlias","chassis_type","serial_number"}, nil,
 		),
 		Rt_ifInUnknwnProto: prometheus.NewDesc("rt_ifInUnknwnProto",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname","job","ethernetportID","chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job","ethernetportID","ifName","ifAlias","chassis_type","serial_number"}, nil,
 		),
 		Rt_ifInterfaceIndex: prometheus.NewDesc("rt_ifInterfaceIndex",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname","job","ethernetportID","chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job","ethernetportID","ifName","ifAlias","chassis_type","serial_number"}, nil,
 		),
 		Rt_ifLastChange: prometheus.NewDesc("rt_ifLastChange",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname","job","ethernetportID","chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job","ethernetportID","ifName","ifAlias","chassis_type","serial_number"}, nil,
 		),
 		Rt_ifMtu: prometheus.NewDesc("rt_ifMtu",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname","job","ethernetportID","chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job","ethernetportID","ifName","ifAlias","chassis_type","serial_number"}, nil,
 		),
 		Rt_ifOperatorStatus: prometheus.NewDesc("rt_ifOperatorStatus",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname","job","ethernetportID","chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job","ethernetportID","ifName","ifAlias","chassis_type","serial_number"}, nil,
 		),
 		Rt_ifOutBroadcastPkts: prometheus.NewDesc("rt_ifOutBroadcastPkts",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname","job","ethernetportID","chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job","ethernetportID","ifName","ifAlias","chassis_type","serial_number"}, nil,
 		),
 		Rt_ifOutDeferredTransmissions: prometheus.NewDesc("rt_ifOutDeferredTransmissions",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname","job","ethernetportID","chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job","ethernetportID","ifName","ifAlias","chassis_type","serial_number"}, nil,
 		),
 		Rt_ifOutDiscards: prometheus.NewDesc("rt_ifOutDiscards",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname","job","ethernetportID","chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job","ethernetportID","ifName","ifAlias","chassis_type","serial_number"}, nil,
 		),
 		Rt_ifOutErrors: prometheus.NewDesc("rt_ifOutErrors",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname","job","ethernetportID","chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job","ethernetportID","ifName","ifAlias","chassis_type","serial_number"}, nil,
 		),
 		Rt_ifOutLateCollissions: prometheus.NewDesc("rt_ifOutLateCollissions",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname","job","ethernetportID","chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job","ethernetportID","ifName","ifAlias","chassis_type","serial_number"}, nil,
 		),
 		Rt_ifOutMulticastPkts: prometheus.NewDesc("rt_ifOutMulticastPkts",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname","job","ethernetportID","chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job","ethernetportID","ifName","ifAlias","chassis_type","serial_number"}, nil,
 		),
 		Rt_ifOutOctets: prometheus.NewDesc("rt_ifOutOctets",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname","job","ethernetportID","chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job","ethernetportID","ifName","ifAlias","chassis_type","serial_number"}, nil,
 		),
 		Rt_ifOutUcastPkts: prometheus.NewDesc("rt_ifOutUcastPkts",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname","job","ethernetportID","chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job","ethernetportID","ifName","ifAlias","chassis_type","serial_number"}, nil,
 		),
 		Rt_ifSpeed: prometheus.NewDesc("rt_ifSpeed",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname","job","ethernetportID","chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job","ethernetportID","ifName","ifAlias","chassis_type","serial_number"}, nil,
 		),
 		Rt_redundancyRole: prometheus.NewDesc("rt_redundancyRole",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname","job","ethernetportID","chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job","ethernetportID","ifName","ifAlias","chassis_type","serial_number"}, nil,
 		),
 		Rt_redundancyState: prometheus.NewDesc("rt_redundancyState",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname","job","ethernetportID","chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job","ethernetportID","ifName","ifAlias","chassis_type","serial_number"}, nil,
 		),
 		Error_ip: prometheus.NewDesc("error_ethernetport",
 			"NoDescriptionYet",
@@ -317,35 +317,34 @@ func (collector *ethernetMetrics) Collect(c chan<- prometheus.Metric) {
 					metricValue27 := float64(eData.EthernetData.Rt_ifSpeed)
 					metricValue28 := float64(eData.EthernetData.Rt_redundancyRole)
 					metricValue29 := float64(eData.EthernetData.Rt_redundancyState)
-
-						c <- prometheus.MustNewConstMetric(collector.IfRedundancy, prometheus.GaugeValue, metricValue1, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
-						c <- prometheus.MustNewConstMetric(collector.IfRedundantPort, prometheus.GaugeValue, metricValue2, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
-						c <- prometheus.MustNewConstMetric(collector.Rt_ifInBroadcastPkts, prometheus.GaugeValue, metricValue3, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
-						c <- prometheus.MustNewConstMetric(collector.Rt_ifInDiscards, prometheus.GaugeValue, metricValue4, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
-						c <- prometheus.MustNewConstMetric(collector.Rt_ifInErrors, prometheus.GaugeValue, metricValue5, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
-						c <- prometheus.MustNewConstMetric(collector.Rt_ifInFCSErrors, prometheus.GaugeValue, metricValue6, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
-						c <- prometheus.MustNewConstMetric(collector.Rt_ifInFragmentedPkts, prometheus.GaugeValue, metricValue7, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
-						c <- prometheus.MustNewConstMetric(collector.Rt_ifInMulticastPkts, prometheus.GaugeValue, metricValue8, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
-						c <- prometheus.MustNewConstMetric(collector.Rt_ifInOctets, prometheus.GaugeValue, metricValue9, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
-						c <- prometheus.MustNewConstMetric(collector.Rt_ifInOverSizedPkts, prometheus.GaugeValue, metricValue10, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
-						c <- prometheus.MustNewConstMetric(collector.Rt_ifInUcastPkts, prometheus.GaugeValue, metricValue11, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
-						c <- prometheus.MustNewConstMetric(collector.Rt_ifInUndersizedPkts, prometheus.GaugeValue, metricValue12, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
-						c <- prometheus.MustNewConstMetric(collector.Rt_ifInUnknwnProto, prometheus.GaugeValue, metricValue13, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
-						c <- prometheus.MustNewConstMetric(collector.Rt_ifInterfaceIndex, prometheus.GaugeValue, metricValue14, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
-						c <- prometheus.MustNewConstMetric(collector.Rt_ifLastChange, prometheus.GaugeValue, metricValue15, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
-						c <- prometheus.MustNewConstMetric(collector.Rt_ifMtu, prometheus.GaugeValue, metricValue16, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
-						c <- prometheus.MustNewConstMetric(collector.Rt_ifOperatorStatus, prometheus.GaugeValue, metricValue18, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
-						c <- prometheus.MustNewConstMetric(collector.Rt_ifOutBroadcastPkts, prometheus.GaugeValue, metricValue19, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
-						c <- prometheus.MustNewConstMetric(collector.Rt_ifOutDeferredTransmissions, prometheus.GaugeValue, metricValue20, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
-						c <- prometheus.MustNewConstMetric(collector.Rt_ifOutDiscards, prometheus.GaugeValue, metricValue21, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
-						c <- prometheus.MustNewConstMetric(collector.Rt_ifOutErrors, prometheus.GaugeValue, metricValue22, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
-						c <- prometheus.MustNewConstMetric(collector.Rt_ifOutLateCollissions, prometheus.GaugeValue, metricValue23, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
-						c <- prometheus.MustNewConstMetric(collector.Rt_ifOutMulticastPkts, prometheus.GaugeValue, metricValue24, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
-						c <- prometheus.MustNewConstMetric(collector.Rt_ifOutOctets, prometheus.GaugeValue, metricValue25, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
-						c <- prometheus.MustNewConstMetric(collector.Rt_ifOutUcastPkts, prometheus.GaugeValue, metricValue26, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
-						c <- prometheus.MustNewConstMetric(collector.Rt_ifSpeed, prometheus.GaugeValue, metricValue27, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
-						c <- prometheus.MustNewConstMetric(collector.Rt_redundancyRole, prometheus.GaugeValue, metricValue28, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
-						c <- prometheus.MustNewConstMetric(collector.Rt_redundancyState, prometheus.GaugeValue, metricValue29, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
+						c <- prometheus.MustNewConstMetric(collector.IfRedundancy, prometheus.GaugeValue, metricValue1, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias, chassisType, serialNumber)
+						c <- prometheus.MustNewConstMetric(collector.IfRedundantPort, prometheus.GaugeValue, metricValue2, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias, chassisType, serialNumber)
+						c <- prometheus.MustNewConstMetric(collector.Rt_ifInBroadcastPkts, prometheus.GaugeValue, metricValue3, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias, chassisType, serialNumber)
+						c <- prometheus.MustNewConstMetric(collector.Rt_ifInDiscards, prometheus.GaugeValue, metricValue4, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias, chassisType, serialNumber)
+						c <- prometheus.MustNewConstMetric(collector.Rt_ifInErrors, prometheus.GaugeValue, metricValue5, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias, chassisType, serialNumber)
+						c <- prometheus.MustNewConstMetric(collector.Rt_ifInFCSErrors, prometheus.GaugeValue, metricValue6, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias, chassisType, serialNumber)
+						c <- prometheus.MustNewConstMetric(collector.Rt_ifInFragmentedPkts, prometheus.GaugeValue, metricValue7, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias, chassisType, serialNumber)
+						c <- prometheus.MustNewConstMetric(collector.Rt_ifInMulticastPkts, prometheus.GaugeValue, metricValue8, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias, chassisType, serialNumber)
+						c <- prometheus.MustNewConstMetric(collector.Rt_ifInOctets, prometheus.GaugeValue, metricValue9, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias, chassisType, serialNumber)
+						c <- prometheus.MustNewConstMetric(collector.Rt_ifInOverSizedPkts, prometheus.GaugeValue, metricValue10, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias, chassisType, serialNumber)
+						c <- prometheus.MustNewConstMetric(collector.Rt_ifInUcastPkts, prometheus.GaugeValue, metricValue11, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias, chassisType, serialNumber)
+						c <- prometheus.MustNewConstMetric(collector.Rt_ifInUndersizedPkts, prometheus.GaugeValue, metricValue12, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias, chassisType, serialNumber)
+						c <- prometheus.MustNewConstMetric(collector.Rt_ifInUnknwnProto, prometheus.GaugeValue, metricValue13, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias, chassisType, serialNumber)
+						c <- prometheus.MustNewConstMetric(collector.Rt_ifInterfaceIndex, prometheus.GaugeValue, metricValue14, hosts[i].Ip, hosts[i].Hostname,"ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias, chassisType, serialNumber)
+						c <- prometheus.MustNewConstMetric(collector.Rt_ifLastChange, prometheus.GaugeValue, metricValue15, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias, chassisType, serialNumber)
+						c <- prometheus.MustNewConstMetric(collector.Rt_ifMtu, prometheus.GaugeValue, metricValue16, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias, chassisType, serialNumber)
+						c <- prometheus.MustNewConstMetric(collector.Rt_ifOperatorStatus, prometheus.GaugeValue, metricValue18, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias, chassisType, serialNumber)
+						c <- prometheus.MustNewConstMetric(collector.Rt_ifOutBroadcastPkts, prometheus.GaugeValue, metricValue19, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias, chassisType, serialNumber)
+						c <- prometheus.MustNewConstMetric(collector.Rt_ifOutDeferredTransmissions, prometheus.GaugeValue, metricValue20, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias, chassisType, serialNumber)
+						c <- prometheus.MustNewConstMetric(collector.Rt_ifOutDiscards, prometheus.GaugeValue, metricValue21, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias, chassisType, serialNumber)
+						c <- prometheus.MustNewConstMetric(collector.Rt_ifOutErrors, prometheus.GaugeValue, metricValue22, hosts[i].Ip, hosts[i].Hostname,"ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias, chassisType, serialNumber)
+						c <- prometheus.MustNewConstMetric(collector.Rt_ifOutLateCollissions, prometheus.GaugeValue, metricValue23, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias, chassisType, serialNumber)
+						c <- prometheus.MustNewConstMetric(collector.Rt_ifOutMulticastPkts, prometheus.GaugeValue, metricValue24, hosts[i].Ip, hosts[i].Hostname,"ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias, chassisType, serialNumber)
+						c <- prometheus.MustNewConstMetric(collector.Rt_ifOutOctets, prometheus.GaugeValue, metricValue25, hosts[i].Ip, hosts[i].Hostname,"ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias, chassisType, serialNumber)
+						c <- prometheus.MustNewConstMetric(collector.Rt_ifOutUcastPkts, prometheus.GaugeValue, metricValue26, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias, chassisType, serialNumber)
+						c <- prometheus.MustNewConstMetric(collector.Rt_ifSpeed, prometheus.GaugeValue, metricValue27, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias, chassisType, serialNumber)
+						c <- prometheus.MustNewConstMetric(collector.Rt_redundancyRole, prometheus.GaugeValue, metricValue28, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias, chassisType, serialNumber)
+						c <- prometheus.MustNewConstMetric(collector.Rt_redundancyState, prometheus.GaugeValue, metricValue29, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias, chassisType, serialNumber)
 		}
 	}
 }
