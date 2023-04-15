@@ -274,8 +274,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 						fmt.Println("XML error routing", err)
 						//continue
 					}
-					fmt.Println("Successful API call data: ",rData.RoutingData)
-					//fmt.Println("Successful API call data: ",rData.RoutingData,"\n")
+					//fmt.Println("Successful API call data: ",rData.RoutingData)
 
 					metricValue1 = float64(rData.RoutingData.Rt_RuleUsage)
 					metricValue2 = float64(rData.RoutingData.Rt_ASR)

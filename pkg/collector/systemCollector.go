@@ -175,7 +175,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 		if err != nil {
 			fmt.Println("XML error system", err)
 		}
-		fmt.Println("Successful API call data: ",ssbc.SystemData)
+		//fmt.Println("Successful API call data: ",ssbc.SystemData)
 
 		metricValue1 = float64(ssbc.SystemData.Rt_CPULoadAverage15m)
 		metricValue2 = float64(ssbc.SystemData.Rt_CPULoadAverage1m)

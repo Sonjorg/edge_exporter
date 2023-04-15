@@ -287,7 +287,7 @@ func (collector *ethernetMetrics) Collect(c chan<- prometheus.Metric) {
 						fmt.Println("XML error ethernet", err)
 						//continue
 					}
-					fmt.Println("Successful API call data: ",eData.EthernetData)
+					//fmt.Println("Successful API call data: ",eData.EthernetData)
 
 					metricValue1 := float64(eData.EthernetData.IfRedundancy)
 					metricValue2 := float64(eData.EthernetData.IfRedundantPort)

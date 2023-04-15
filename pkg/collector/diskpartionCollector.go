@@ -152,7 +152,7 @@ func (collector *diskMetrics) Collect(c chan<- prometheus.Metric) {
 
 					dData := &dSBCdata{}
 					err = xml.Unmarshal(data2, &dData) //Converting XML data to variables
-					fmt.Println("Successful API call data: ",dData.DiskData)
+					//fmt.Println("Successful API call data: ",dData.DiskData)
 					if err!= nil {
 						fmt.Println("XML error disk", err)
 						//continue
