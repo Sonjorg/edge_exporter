@@ -20,8 +20,8 @@ type eSBCdata struct {
 }
 type ethernetData struct {
 Href                          string `xml:"href,attr"`
-IfName		                  string `xml:"ifName"`
-IfAlias                       string `xml:"ifAlias"`
+//IfName		                  string `xml:"ifName"`
+//IfAlias                       string `xml:"ifAlias"`
 IfRedundancy                  int    `xml:"ifRedundancy"`
 IfRedundantPort               int    `xml:"ifRedundantPort"`
 Rt_ifInBroadcastPkts		  int    `xml:"rt_ifInBroadcastPkts"`
@@ -256,7 +256,7 @@ func (collector *ethernetMetrics) Collect(c chan<- prometheus.Metric) {
 
 		phpsessid,err := http.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
 		if err != nil {
-			fmt.Println("Error auth", hosts[i].Ip, err)
+			fmt.Println("Error session cookie", hosts[i].Ip, err)
 			continue
 		}
 
@@ -274,7 +274,7 @@ func (collector *ethernetMetrics) Collect(c chan<- prometheus.Metric) {
 			ethernetportID = append(ethernetportID, "24")
 			//Couldnt fetch chassis type from db or http: try next host
 			for j := range ethernetportID {
-					url := "https://"+hosts[i].Ip+"/rest/ethernetport/"+ethernetportID[j]
+					url := "https://"+hosts[i].Ip+"/rest/ethernetport/"+ethernetportID[j] + "/"
 					_, data, err := http.GetAPIData(url, phpsessid)
 						if err != nil {
 							fmt.Println(err)
