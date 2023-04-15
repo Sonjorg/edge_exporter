@@ -284,8 +284,8 @@ func (collector *ethernetMetrics) Collect(c chan<- prometheus.Metric) {
 					eData := &eSBCdata{}
 					err = xml.Unmarshal(data, &eData) //Converting XML data to variables
 					if err!= nil {
-						fmt.Println(err)
-						continue
+						fmt.Println("XML error ethernet", err)
+						//continue
 					}
 					fmt.Println("Successful API call data: ",eData.EthernetData)
 

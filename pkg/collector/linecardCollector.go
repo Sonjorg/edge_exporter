@@ -126,9 +126,12 @@ func (collector *linecardMetrics) Collect(c chan<- prometheus.Metric) {
 						}
 
 					lData := &lSBCdata{}
-					xml.Unmarshal(data, &lData) //Converting XML data to variables
+					err = xml.Unmarshal(data, &lData) //Converting XML data to variables
 					//fmt.Println("Successful API call data: ",dData.DiskData,"\n")
-
+					if err!= nil {
+						fmt.Println("XML error linecard", err)
+						//continue
+					}
 					metricValue1 = float64(lData.LinecardData.Rt_CardType)
 					metricValue2 = float64(lData.LinecardData.Rt_Location)
 					metricValue3 = float64(lData.LinecardData.Rt_ServiceStatus)

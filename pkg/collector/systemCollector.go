@@ -173,7 +173,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 		ssbc := &sSBCdata{}
 		err = xml.Unmarshal(data, &ssbc) //Converting XML data to variables
 		if err != nil {
-			fmt.Println("XML Conversion error", err)
+			fmt.Println("XML error system", err)
 		}
 		//fmt.Println("Successful API call data: ",ssbc.SystemData,"\n")
 

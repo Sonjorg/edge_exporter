@@ -145,7 +145,11 @@ func (collector *cMetrics) Collect(c chan<- prometheus.Metric) {
 		}
 		b := []byte(data) //Converting string of data to bytestream
 		ssbc := &cSBCdata{}
-		xml.Unmarshal(b, &ssbc) //Converting XML data to variables
+		err = xml.Unmarshal(b, &ssbc) //Converting XML data to variables
+		if err!= nil {
+			fmt.Println("XML error callstats", err)
+			//continue
+		}
 		//fmt.Println("Successful API call data: ", ssbc.CallStatsData,"\n")
 
 		metricValue1 = float64(ssbc.CallStatsData.Rt_NumCallAttempts)
