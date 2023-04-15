@@ -12,13 +12,12 @@ import (
 
 
 
-func TimeIsUp(hours float64, previoust time.Time) bool{
+func TimeIsUp(hours float64, previoustime time.Time) bool{
 	//mins := time.Minute * time.Duration(8)
-	var duration time.Duration = time.Duration(hours)
+	var timeSchedule time.Duration = time.Duration(hours)
 
     // in hours
-		fmt.Println(duration.Hours())
-	timeSchedule :=  duration
+	//	fmt.Println(duration.Hours())
 	now := time.Now().Format(time.RFC3339)
 	timeNowParsed, err := time.Parse(time.RFC3339, now)
 	if err != nil {
@@ -29,7 +28,7 @@ func TimeIsUp(hours float64, previoust time.Time) bool{
 		fmt.Println(err)
 		return false
 	}
-	return previoust.Add(timeSchedule).After(timeNowParsed)
+	return previoustime.Add(timeSchedule).After(timeNowParsed)
 
 }
 
@@ -38,7 +37,7 @@ func InitializeDB() {
 
 	_, err := os.Stat("sqlite-database.db")
 	if err != nil {
-		fmt.Println("Creating sqlite-database.db...")
+		fmt.Println("Creating sqlite-database.db...") //"./pkg/database/sqlite-database.db"
 		file, err := os.Create("sqlite-database.db") // Create SQLite file
 		if err != nil {
 			fmt.Println(err.Error())
