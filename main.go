@@ -23,6 +23,7 @@ func main() {
 	collector.RoutingEntryCollector()
 	collector.CallStatsCollector()
 	collector.LinecardCollector()
+	collector.EthernetportCollector()
 
 	//Serving metrics
 	http.Handle("/metrics", promhttp.Handler())

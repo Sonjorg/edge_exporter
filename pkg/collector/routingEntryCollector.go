@@ -163,7 +163,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			var DBexists bool = database.RoutingTablesExists(sqliteDatabase,hosts[i].Ip) //Previous data is stored in db? Fetch this data
 			//fmt.Println("exists:",exists)
 			if (DBexists) {
-				routingEntryMap,routingtables,timeLastString,err = database.GetRoutingData(sqliteDatabase,hosts[i].Ip)
+				routingEntryMap,routingtables,timeLastString,err = database.GetRoutingData(sqliteDatabase,hosts[i].Ip) // From db: returning a map of routingentables to routingentries (array),
 				if err != nil {
 					fmt.Println(err)
 				}
@@ -208,7 +208,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				var match []string //variable to hold routingentries cleaned with regex
 				//Trying to fetch routingentries from database, if not exist yet, fetch new ones
 				if (DBexists) {
-					for k,v := range routingEntryMap {
+					for k,v := range routingEntryMap {// fetching routingentries from a map from db
 						if (k == routingtables[j]) {
 							for re := range v {
 								match = append(match,v[re]) //using previous routingentries (match)
@@ -216,7 +216,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 						}
 					}
 
-				} else {
+				} else { // DB doesn't exist, so fetch new routingentries with 
 					url := "https://" + hosts[i].Ip + "/rest/routingtable/" + routingtables[j] + "/routingentry"
 					_, data2, err := http.GetAPIData(url, phpsessid)
 					if err != nil {
