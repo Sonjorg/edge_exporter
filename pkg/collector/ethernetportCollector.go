@@ -20,8 +20,8 @@ type eSBCdata struct {
 }
 type ethernetData struct {
 Href                          string `xml:"href,attr"`
-//IfName		                  string `xml:"ifName"`
-//IfAlias                       string `xml:"ifAlias"`
+IfName		                  string `xml:"ifName"`
+IfAlias                       string `xml:"ifAlias"`
 IfRedundancy                  int    `xml:"ifRedundancy"`
 IfRedundantPort               int    `xml:"ifRedundantPort"`
 Rt_ifInBroadcastPkts		  int    `xml:"rt_ifInBroadcastPkts"`
@@ -71,7 +71,6 @@ Rt_ifInUnknwnProto	          *prometheus.Desc
 Rt_ifInterfaceIndex	          *prometheus.Desc
 Rt_ifLastChange	              *prometheus.Desc
 Rt_ifMtu	                  *prometheus.Desc
-Rt_ifName	                  *prometheus.Desc
 Rt_ifOperatorStatus	          *prometheus.Desc
 Rt_ifOutBroadcastPkts	      *prometheus.Desc
 Rt_ifOutDeferredTransmissions *prometheus.Desc
@@ -229,7 +228,6 @@ func (collector *ethernetMetrics) Describe(ch chan<- *prometheus.Desc) {
 	ch <- collector.Rt_ifInterfaceIndex
 	ch <- collector.Rt_ifLastChange
 	ch <- collector.Rt_ifMtu
-	ch <- collector.Rt_ifName
 	ch <- collector.Rt_ifOperatorStatus
 	ch <- collector.Rt_ifOutBroadcastPkts
 	ch <- collector.Rt_ifOutDeferredTransmissions
@@ -284,7 +282,7 @@ func (collector *ethernetMetrics) Collect(c chan<- prometheus.Metric) {
 						}
 
 					eData := &eSBCdata{}
-					xml.Unmarshal(data, &eData) //Converting XML data to variables
+					err = xml.Unmarshal(data, &eData) //Converting XML data to variables
 					if err!= nil {
 						fmt.Println(err)
 						continue
@@ -307,7 +305,6 @@ func (collector *ethernetMetrics) Collect(c chan<- prometheus.Metric) {
 					metricValue14 := float64(eData.EthernetData.Rt_ifInterfaceIndex)
 					metricValue15 := float64(eData.EthernetData.Rt_ifLastChange)
 					metricValue16 := float64(eData.EthernetData.Rt_ifMtu)
-					metricValue17 := float64(eData.EthernetData.Rt_ifName)
 					metricValue18 := float64(eData.EthernetData.Rt_ifOperatorStatus)
 					metricValue19 := float64(eData.EthernetData.Rt_ifOutBroadcastPkts)
 					metricValue20 := float64(eData.EthernetData.Rt_ifOutDeferredTransmissions)
@@ -337,7 +334,6 @@ func (collector *ethernetMetrics) Collect(c chan<- prometheus.Metric) {
 						c <- prometheus.MustNewConstMetric(collector.Rt_ifInterfaceIndex, prometheus.GaugeValue, metricValue14, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
 						c <- prometheus.MustNewConstMetric(collector.Rt_ifLastChange, prometheus.GaugeValue, metricValue15, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
 						c <- prometheus.MustNewConstMetric(collector.Rt_ifMtu, prometheus.GaugeValue, metricValue16, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
-						c <- prometheus.MustNewConstMetric(collector.Rt_ifName, prometheus.GaugeValue, metricValue17, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
 						c <- prometheus.MustNewConstMetric(collector.Rt_ifOperatorStatus, prometheus.GaugeValue, metricValue18, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
 						c <- prometheus.MustNewConstMetric(collector.Rt_ifOutBroadcastPkts, prometheus.GaugeValue, metricValue19, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
 						c <- prometheus.MustNewConstMetric(collector.Rt_ifOutDeferredTransmissions, prometheus.GaugeValue, metricValue20, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
@@ -350,9 +346,6 @@ func (collector *ethernetMetrics) Collect(c chan<- prometheus.Metric) {
 						c <- prometheus.MustNewConstMetric(collector.Rt_ifSpeed, prometheus.GaugeValue, metricValue27, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
 						c <- prometheus.MustNewConstMetric(collector.Rt_redundancyRole, prometheus.GaugeValue, metricValue28, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
 						c <- prometheus.MustNewConstMetric(collector.Rt_redundancyState, prometheus.GaugeValue, metricValue29, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j], chassisType, serialNumber)
-
-
-
 		}
 	}
 }
