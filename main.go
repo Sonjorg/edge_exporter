@@ -5,7 +5,7 @@ import (
 	"edge_exporter/pkg/config"
 	"edge_exporter/pkg/database"
 	myhttp "edge_exporter/pkg/http"
-	//"fmt"
+	"fmt"
 
 	//"github.com/prometheus/client_golang/prometheus"
 	"log"
