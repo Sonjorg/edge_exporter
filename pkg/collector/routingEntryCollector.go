@@ -295,8 +295,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 }
 
 func RoutingEntryCollector() {
-	hosts := config.GetIncludedHosts("routingentry") //retrieving targets for this exporter
-	if len(hosts) <= 0 {
+	if len(config.GetIncludedHosts("routingentry")) <= 0 {
 		log.Print("no hosts")
 		return
 	}

@@ -1,17 +1,18 @@
-FROM golang:1.16-alpine
+FROM golang:1.20
 
-WORKDIR /SBCexporter
+WORKDIR /usr/local/exporter
 
-COPY go.mod ./
-COPY go.sum ./
-
+# pre-copy/cache go.mod for pre-downloading dependencies and only redownloading them in subsequent builds if they change
+#RUN mkdir exporter
+COPY go.mod go.sum ./
 RUN go mod download && go mod verify
 
-COPY /SBCexporter ./exporter
+##COPY --chown=.:. . .
+RUN chmod 777 /usr
 
-RUN go build -o ./exporter
+RUN go build -o main.go
 
-COPY --from=build /exporter /exporter
+#RUN chmod -x /
+CMD ["/usr/local/exporter"]
 
-EXPOSE 9100
-#ENTRYPOINT ["/exporter"]
+EXPOSE 5123

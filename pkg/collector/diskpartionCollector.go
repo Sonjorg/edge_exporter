@@ -48,7 +48,6 @@ type diskMetrics struct {
 	Rt_MaximumSize		*prometheus.Desc
 	Rt_MemoryAvailable	*prometheus.Desc
 	Rt_MemoryUsed       *prometheus.Desc
-	//Rt_PartitionName    *prometheus.Desc
 	Rt_PartitionType    *prometheus.Desc
 	Error_ip            *prometheus.Desc
 	}
@@ -91,7 +90,6 @@ func (collector *diskMetrics) Describe(ch chan<- *prometheus.Desc) {
 	ch <- collector.Rt_MaximumSize
 	ch <- collector.Rt_MemoryAvailable
 	ch <- collector.Rt_MemoryUsed
-	//ch <- collector.Rt_PartitionName
 	ch <- collector.Rt_PartitionType
 	ch <- collector.Error_ip
 }
