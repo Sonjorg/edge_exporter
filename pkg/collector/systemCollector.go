@@ -205,6 +205,10 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 }*/
 // Initializing the exporter
 func SystemResourceCollector() {
-		c := systemCollector()
-		prometheus.MustRegister(c)
+	hosts := config.GetIncludedHosts("system")//retrieving targets for this exporter
+	if (len(hosts) <= 0) {
+		return
+	}
+	c := systemCollector()
+	prometheus.MustRegister(c)
 }

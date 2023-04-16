@@ -78,7 +78,7 @@ func (collector *linecardMetrics) Describe(ch chan<- *prometheus.Desc) {
 func (collector *linecardMetrics) Collect(c chan<- prometheus.Metric) {
 	hosts := config.GetIncludedHosts("linecard")//retrieving targets for this exporter
 	if (len(hosts) <= 0) {
-		log.Print("no hosts")
+		log.Print("no hosts, linecard")
 		return
 	}
 	var metricValue1 float64
@@ -149,6 +149,11 @@ func (collector *linecardMetrics) Collect(c chan<- prometheus.Metric) {
 
 // Initializing the collector
 func LinecardCollector() {
+	hosts := config.GetIncludedHosts("linecard")//retrieving targets for this exporter
+	if (len(hosts) <= 0) {
+		log.Print("no hosts")
+		return
+	}
 		c := lineCCollector()
 		prometheus.MustRegister(c)
 }

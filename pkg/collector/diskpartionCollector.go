@@ -179,6 +179,11 @@ func (collector *diskMetrics) Collect(c chan<- prometheus.Metric) {
 
 
 func DiskPartitionCollector() {
-		c := diskCollector()
-		prometheus.MustRegister(c)
+	hosts := config.GetIncludedHosts("diskpartition")//retrieving targets for this exporter
+	if (len(hosts) <= 0) {
+		log.Print("no hosts diskpartition")
+		return
+	}
+	c := diskCollector()
+	prometheus.MustRegister(c)
 }
