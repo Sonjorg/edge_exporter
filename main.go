@@ -4,15 +4,12 @@ import (
 	"edge_exporter/pkg/collector"
 	"edge_exporter/pkg/config"
 	"edge_exporter/pkg/database"
+	"edge_exporter/pkg/utils"
 	myhttp "edge_exporter/pkg/http"
 	"fmt"
-
-	//"github.com/prometheus/client_golang/prometheus"
 	"log"
 	"net/http"
-
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	//_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
@@ -20,12 +17,21 @@ func main() {
 
 	//Creating database and tables
 	database.InitializeDB()
-//Fetching sessioncookies
+
 	hosts := config.GetAllHosts()
 	for i := range hosts {
-		_, err := myhttp.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
-		fmt.Println("myhttp, err", err)
+		//Fetching sessioncookies and placing them in database
+		phpsessid, err := myhttp.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
+		if err!= nil {
+			fmt.Println(err)
+		}
+		//Fetching SBC type and serialnumbers, and placing them in database
+		_, _, err = utils.GetChassisLabels(hosts[i].Ip,phpsessid)
+		if err!= nil {
+			fmt.Println(err)
+		}
 	}
+
 	//starting collectors
 	collector.SystemResourceCollector()
 	collector.DiskPartitionCollector()
