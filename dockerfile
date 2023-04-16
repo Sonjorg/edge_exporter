@@ -1,6 +1,6 @@
-FROM golang:1.20
+FROM golang:1.20 as build
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
 # pre-copy/cache go.mod for pre-downloading dependencies and only redownloading them in subsequent builds if they change
 COPY go.mod go.sum ./
@@ -10,10 +10,10 @@ COPY . .
 #RUN chmod 777 /var
 #RUN chmod 777 /var/exporter
 
-COPY --from=build /app /var/exporter
+#COPY --from=build /app /var/exporter
+RUN go build -v -o /usr/local/bin/app ./
+#RUN go build -o main.go
 
-RUN go build -o main.go
-
-CMD ["/var/exporter"]
+CMD ["app"]
 
 EXPOSE 5123
