@@ -41,7 +41,7 @@ func GetSqliteKey(ipaddress string) (cookie string, err error) {
 	defer sqliteDatabase.Close()
 	//defer file.Close()
 	var c string
-	mins := time.Minute * time.Duration(8)
+	mins := time.Minute*time.Duration(8)
 	for i := range Hosts {
 		//fmt.Println(Hosts[i].Ipaddress)
 		if Hosts[i].Ipaddress == ipaddress {
@@ -54,6 +54,7 @@ func GetSqliteKey(ipaddress string) (cookie string, err error) {
 			}
 			if parsed2.Add(mins).After(parsed) == true {
 				c = Hosts[i].Phpsessid
+				fmt.Println("sessid fra db", c)
 				return c, nil
 				//break
 			} else {
