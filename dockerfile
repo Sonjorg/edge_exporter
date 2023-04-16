@@ -7,7 +7,7 @@ WORKDIR /var/exporter
 COPY go.mod go.sum ./
 RUN go mod download && go mod verify
 
-##COPY --chown=.:. . .
+COPY . .
 RUN chmod 777 /usr
 
 RUN go build -o main.go
