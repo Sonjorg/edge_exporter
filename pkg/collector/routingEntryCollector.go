@@ -155,7 +155,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			if err != nil {
 				log.Print("Error authentication", hosts[i].Ip, err)
 				c <- prometheus.MustNewConstMetric(
-					collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, "routingentry","NA", "authentication error")
+					collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, hosts[i].Hostname,"routingentry","NA", "authentication error","NA","NA")
 				continue
 			}
 			var routingtables []string
@@ -179,7 +179,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				if err != nil {
 					log.Print("Error routingtable data", hosts[i].Ip, err)
 					c <- prometheus.MustNewConstMetric(
-							collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, "routingentry","NA", "no_routing_tables")
+							collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, "routingentry","NA", "no_routing_tables","NA","NA")
 
 					continue
 				}
@@ -221,17 +221,10 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					_, data2, err := http.GetAPIData(url, phpsessid)
 					if err != nil {
 					}
-					//b2 := []byte(data2) //Converting string of data to bytestream
 					re := &routingEntries{}
 					xml.Unmarshal(data2, &re) //Converting XML data to variables
 					routingEntries := re.RoutingEntry2.RoutingEntry3.Attr
-					/*if len(routingEntries) <= 0 {
-						c <- prometheus.MustNewConstMetric(
-							collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, "systemstats", "no_routing_entries")
-							continue
 
-					}*/
-					//
 					entries := regexp.MustCompile(`\d+$`)
 
 					//Because routingentries from the hosts are displayed as a list of for example "2:4", "2:5", we are using regex to get only the routingentries
