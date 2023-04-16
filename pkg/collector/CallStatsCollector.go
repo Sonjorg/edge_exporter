@@ -170,6 +170,10 @@ func (collector *cMetrics) Collect(c chan<- prometheus.Metric) {
 
 // Initializing the exporter
 func CallStatsCollector() {
-		c := callStats()
-		prometheus.MustRegister(c)
+	hosts := config.GetIncludedHosts("systemcallstats") //retrieving targets for this collector
+	if (len(hosts) <= 0) {
+		return
+	}
+	c := callStats()
+	prometheus.MustRegister(c)
 }

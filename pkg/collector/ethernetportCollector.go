@@ -351,6 +351,11 @@ func (collector *ethernetMetrics) Collect(c chan<- prometheus.Metric) {
 
 // Initializing the collector
 func EthernetportCollector() {
+	hosts := config.GetIncludedHosts("ethernetport")//retrieving targets for this exporter
+	if (len(hosts) <= 0) {
+		//log.Print("no hosts ethernetport")
+		return
+	}
 		c := ethernetCollector()
 		prometheus.MustRegister(c)
 }

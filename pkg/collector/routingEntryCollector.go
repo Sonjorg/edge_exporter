@@ -293,12 +293,13 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			}
 	}
 }
-/*
-func RoutingTablesExists(sqliteDatabase *sql.DB, s string) {
-	panic("unimplemented")
-}*/
 
 func RoutingEntryCollector() {
+	hosts := config.GetIncludedHosts("routingentry") //retrieving targets for this exporter
+	if len(hosts) <= 0 {
+		log.Print("no hosts")
+		return
+	}
 	c := routingCollector()
 	prometheus.MustRegister(c)
 }
