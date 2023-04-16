@@ -8,11 +8,11 @@ COPY go.mod go.sum ./
 RUN go mod download && go mod verify
 
 COPY . .
-RUN chmod 777 /usr
+RUN chmod 777 /var
+RUN chmod 777 /var/exporter
 
 RUN go build -o main.go
 
-#RUN chmod -x /
 CMD ["/var/exporter"]
 
 EXPOSE 5123
