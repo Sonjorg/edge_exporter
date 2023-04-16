@@ -28,11 +28,14 @@ func GetSqliteKey(ipaddress string) (cookie string, err error) {
 		return "", err
 	} // Open the created SQLite File
 	// Defer Closing the database
+	fmt.Println(RowExists(sqliteDatabase, ipaddress))
 	if (!RowExists(sqliteDatabase, ipaddress)) {
+		//fmt.Println(err)
 		return "",nil
 	}
 	Hosts, err := GetCookieDB(sqliteDatabase, ipaddress)
 	if err != nil {
+		fmt.Println(err)
 		return "", err
 	}
 	defer sqliteDatabase.Close()
@@ -51,7 +54,8 @@ func GetSqliteKey(ipaddress string) (cookie string, err error) {
 			}
 			if parsed2.Add(mins).After(parsed) == true {
 				c = Hosts[i].Phpsessid
-				break
+				return c, nil
+				//break
 			} else {
 				return "", nil
 			}
