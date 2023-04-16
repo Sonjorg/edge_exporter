@@ -10,10 +10,10 @@ hosts:
   ipaddress: 10.233.230.11
   username: student
   password: PanneKake23
-  #exclude:
+  exclude:
   #  - routingentry
-  #  - system
+    - system
   #  - systemcallstats
-  #  - diskpartition
-  
+    - diskpartition
+
 #Excluding collectors for this host
