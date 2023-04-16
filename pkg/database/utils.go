@@ -16,6 +16,7 @@ func TimeIsUp(hours float64, previoustime time.Time) bool{
 	//mins := time.Minute * time.Duration(8)
 	var timeSchedule time.Duration = time.Duration(hours)
 	duration := timeSchedule*time.Hour
+	fmt.Println("duration", duration)
     // in hours
 	//	fmt.Println(duration.Hours())
 	now := time.Now().Format(time.RFC3339)

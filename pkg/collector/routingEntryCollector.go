@@ -174,7 +174,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			}
 			//If 24 hours has not passed since last data was stored in database, use this data
 			//fmt.Println(b)
-			if (!DBexists || database.TimeIsUp(24, timeLast) == true)  { //Routing data has expired, fetching new routingentries
+			if (!DBexists || database.TimeIsUp(24, timeLast) == false)  { //Routing data has expired, fetching new routingentries
 				_, data, err := http.GetAPIData("https://"+hosts[i].Ip+"/rest/routingtable", phpsessid)
 				if err != nil {
 					fmt.Println("Error routingtable data", hosts[i].Ip, err)
@@ -188,7 +188,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				if err != nil {
 					fmt.Println("XML Conversion error", err)
 				}
-				fmt.Println("fetched from router")
+				fmt.Println("rt fetched from router")
 				routingtables = rt.RoutingTables2.RoutingTables3.Attr
 			}
 							//using previous routingentries if within time
