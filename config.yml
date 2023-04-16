@@ -11,9 +11,9 @@ hosts:
   username: student
   password: PanneKake23
   exclude:
-  #  - routingentry
+    - routingentry
     - system
   #  - systemcallstats
     - diskpartition
-
+  # - linecard
 #Excluding collectors for this host
