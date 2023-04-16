@@ -34,6 +34,7 @@ func GetSqliteKey(ipaddress string) (cookie string, err error) {
 		return "",nil
 	}
 	Hosts, err := GetCookieDB(sqliteDatabase, ipaddress)
+	fmt.Println("Hosts fra db", Hosts)
 	if err != nil {
 		fmt.Println(err)
 		return "", err
@@ -106,7 +107,7 @@ func GetCookieDB(db *sql.DB, ipaddress string) ([]*Cookie, error){
 	return c,err
 }
 
-func CreateTable(db *sql.DB) error {
+func CreateAuthTable(db *sql.DB) error {
 	createAuthTableSQL := `CREATE TABLE IF NOT EXISTS authentication (
 		"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
 		"ipaddress" TEXT,

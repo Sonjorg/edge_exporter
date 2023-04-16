@@ -82,11 +82,13 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 		fmt.Println(err)
 	}
 
-
 	now := time.Now().Format(time.RFC3339)
 
+	if (database.RowExists(sqliteDatabase,ipaddress)) {
+		database.Update(sqliteDatabase,phpsessid,now,ipaddress)
+	} else {
 		database.InsertAuth(sqliteDatabase, ipaddress, phpsessid, now)
-
+	}
 	return phpsessid, nil
 }
 

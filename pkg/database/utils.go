@@ -50,7 +50,7 @@ func InitializeDB() {
 	}
 
 	// Creating tables
-	err = CreateTable(sqliteDatabase)
+	err = CreateAuthTable(sqliteDatabase)
 	if err != nil {
 		fmt.Println(err)
 	}
