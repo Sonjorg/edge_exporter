@@ -57,7 +57,7 @@ func GetChassisLabels(ipaddress string, phpsessid string) (chassisType string, s
 
 				chassisType := ssbc.Chassis.Rt_Chassis_Type
 				serialNumber := ssbc.Chassis.SerialNumber
-				
+
 				err = database.InsertChassis(sqliteDatabase, ipaddress, chassisType, serialNumber)
 					if err != nil {
 						fmt.Println("insert chassis error", err)

@@ -82,8 +82,8 @@ func GetCookieDB(db *sql.DB, ipaddress string) ([]*Cookie, error){
 	row, err := db.Query("SELECT * FROM authentication")
 	//row.Scan(ip)
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
-		//fmt.Println(err)
 	}
 	defer row.Close()
 
