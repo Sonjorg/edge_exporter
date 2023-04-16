@@ -3,9 +3,8 @@ package collector
 
 import (
 	"encoding/xml"
-	"fmt"
-
-	//"log"
+	//"fmt"
+	"log"
 	"edge_exporter/pkg/config"
 	"edge_exporter/pkg/http"
 	"edge_exporter/pkg/utils"
@@ -100,7 +99,7 @@ func (collector *diskMetrics) Describe(ch chan<- *prometheus.Desc) {
 func (collector *diskMetrics) Collect(c chan<- prometheus.Metric) {
 	hosts := config.GetIncludedHosts("diskpartition")//retrieving targets for this exporter
 	if (len(hosts) <= 0) {
-		fmt.Println("no hosts")
+		log.Print("no hosts")
 		return
 	}
 	var metricValue1 float64
@@ -114,12 +113,12 @@ func (collector *diskMetrics) Collect(c chan<- prometheus.Metric) {
 
 		phpsessid,err := http.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
 		if err != nil {
-			fmt.Println("Error auth", hosts[i].Ip, err)
+			log.Print("Error auth", hosts[i].Ip, err)
 			continue
 		}
 		_, data,err := http.GetAPIData("https://"+hosts[i].Ip+"/rest/diskpartition", phpsessid)
 		if err != nil {
-			fmt.Println("Error disk data", hosts[i].Ip, err)
+			log.Print("Error disk data", hosts[i].Ip, err)
 			continue
 		}
 		//b := []byte(data) //Converting string of data to bytestream
@@ -130,7 +129,7 @@ func (collector *diskMetrics) Collect(c chan<- prometheus.Metric) {
 		disks := disk.DiskPartitionList.DiskPartitionEntry.Attr
 		if (len(disks) <= 0) {
 			//return nil, "Routingtables empty"
-			fmt.Println("disks empty")
+			log.Print("disks empty")
 			continue
 
 		}
@@ -138,23 +137,23 @@ func (collector *diskMetrics) Collect(c chan<- prometheus.Metric) {
 		chassisType, serialNumber, err := utils.GetChassisLabels(hosts[i].Ip,phpsessid)
 		if err!= nil {
 			chassisType, serialNumber = "db chassisData fail", "db chassisData fail"
-			fmt.Println(err)
+			log.Print(err)
 		}
 			for j := range disks {
 
 					url := "https://"+hosts[i].Ip+"/rest/diskpartition/"+disks[j]
 					_, data2, err := http.GetAPIData(url, phpsessid)
 						if err != nil {
-							fmt.Println(err)
+							log.Print(err)
 
 							continue
 						}
 
 					dData := &dSBCdata{}
 					err = xml.Unmarshal(data2, &dData) //Converting XML data to variables
-					//fmt.Println("Successful API call data: ",dData.DiskData)
+					//log.Print("Successful API call data: ",dData.DiskData)
 					if err!= nil {
-						fmt.Println("XML error disk", err)
+						log.Print("XML error disk", err)
 						//continue
 					}
 					metricValue1 = float64(dData.DiskData.Rt_CurrentUsage)

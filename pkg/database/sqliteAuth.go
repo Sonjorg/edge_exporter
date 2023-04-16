@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"log"
 	//"github.com/mattn/go-sqlite3" // Import go-sqlite3 library
-	"fmt"
+	//"fmt"
 	"time"
 )
 
@@ -24,18 +24,18 @@ func GetSqliteKey(ipaddress string) (cookie string, err error) {
 
 	sqliteDatabase, err = sql.Open("sqlite3", "./sqlite-database.db")
 	if err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		return "", err
 	} // Open the created SQLite File
 	// Defer Closing the database
-	//fmt.Println(RowExists(sqliteDatabase, ipaddress))
+	//log.Print(RowExists(sqliteDatabase, ipaddress))
 	if (!RowExists(sqliteDatabase, ipaddress)) {
-		//fmt.Println(err)
+		//log.Print(err)
 		return "",nil
 	}
 	Hosts, err := GetCookieDB(sqliteDatabase, ipaddress)
 	if err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		return "", err
 	}
 	defer sqliteDatabase.Close()
@@ -43,18 +43,18 @@ func GetSqliteKey(ipaddress string) (cookie string, err error) {
 	var c string
 	mins := time.Minute*time.Duration(8)
 	for i := range Hosts {
-		//fmt.Println(Hosts[i].Ipaddress)
+		//log.Print(Hosts[i].Ipaddress)
 		if Hosts[i].Ipaddress == ipaddress {
 			now := time.Now().Format(time.RFC3339)
 			parsed, _ := time.Parse(time.RFC3339, now)
 			parsed2, err := time.Parse(time.RFC3339, Hosts[i].Time)
 			if err != nil {
-				fmt.Println(err)
+				log.Print(err)
 				return "", nil
 			}
 			if parsed2.Add(mins).After(parsed) == true {
 				c = Hosts[i].Phpsessid
-				fmt.Println("sessid fra db", c)
+				log.Print("sessid fra db", c)
 				return c, nil
 				//break
 			} else {
@@ -87,7 +87,7 @@ func GetCookieDB(db *sql.DB, ipaddress string) ([]*Cookie, error){
 	row, err := db.Query("SELECT * FROM authentication")
 	//row.Scan(ip)
 	if err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		return nil, err
 	}
 	defer row.Close()
@@ -96,7 +96,7 @@ func GetCookieDB(db *sql.DB, ipaddress string) ([]*Cookie, error){
 	for row.Next() {
 			p := &Cookie{}
 			if err := row.Scan(&p.Id, &p.Ipaddress, &p.Phpsessid, &p.Time); err != nil{
-				 //fmt.Println(err)
+				 //log.Print(err)
 			}
 			if (p.Ipaddress == ipaddress) {
 				c = append(c, p)
@@ -134,7 +134,7 @@ func DropTable(db *sql.DB) error{
 	if err != nil {
 		return err
 	}// Execute SQL Statements
-	fmt.Println("table dropped")
+	log.Print("table dropped")
 	return nil
 }
 
@@ -160,11 +160,11 @@ func Update(db *sql.DB,  phpsessid string, time string, ipaddress string) {
 	stmt, err := db.Prepare("UPDATE authentication set phpsessid=?, time=? WHERE ipaddress=?")
 	if err != nil {
 	 //log.Fatal(err)
-	 fmt.Println("update",err)
+	 log.Print("update",err)
 	}
 	res, err := stmt.Exec(phpsessid, time, ipaddress)
 	if err != nil {
-	 //log.Fatal(err)	 fmt.Println("update",err)
+	 //log.Fatal(err)	 log.Print("update",err)
 
 	}
 	affected, _ := res.RowsAffected()

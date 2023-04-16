@@ -5,7 +5,7 @@ package collector
 
 import (
 	"encoding/xml"
-	"fmt"
+	//"fmt"
 	"log"
 	"github.com/prometheus/client_golang/prometheus"
 	"strconv"
@@ -106,7 +106,7 @@ func (collector *cMetrics) Collect(c chan<- prometheus.Metric) {
 	var metricValue5 float64
 	var metricValue6 float64
 
-	//fmt.Println(hosts)
+	//log.Print(hosts)
 
 	for i := 0; i < len(hosts); i++ {
 		nr := strconv.Itoa(i)
@@ -116,7 +116,7 @@ func (collector *cMetrics) Collect(c chan<- prometheus.Metric) {
 		timeReportedByExternalSystem := time.Now()//time.Parse(timelayout, mytimevalue)
 		phpsessid,err :=  http.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
 		if err != nil {
-			log.Println("Error retrieving session cookie: ",log.Flags(), err,"\n")
+			log.Print("Error retrieving session cookie: ", err,"\n")
 			//return nil, err <-this line would result in error for systemexp on all hosts
 			//returning a prometheus error metric
 				 c <- prometheus.NewMetricWithTimestamp(
@@ -130,12 +130,12 @@ func (collector *cMetrics) Collect(c chan<- prometheus.Metric) {
 		chassisType, serialNumber, err := utils.GetChassisLabels(hosts[i].Ip,phpsessid)
 		if err!= nil {
 			chassisType, serialNumber = "db chassisData fail", "db chassisData fail"
-			fmt.Println(err)
+			log.Print(err)
 		}
 		dataStr := "https://"+hosts[i].Ip+"/rest/systemcallstats"
 		_, data,err := http.GetAPIData(dataStr, phpsessid)
 		if err != nil {
-				fmt.Println("Error collecting from host: ",log.Flags(), err,"\n")
+				log.Print("Error collecting from host: ", err,"\n")
 				  c <- prometheus.NewMetricWithTimestamp(
 					timeReportedByExternalSystem,
 					prometheus.MustNewConstMetric(
@@ -147,10 +147,10 @@ func (collector *cMetrics) Collect(c chan<- prometheus.Metric) {
 		ssbc := &cSBCdata{}
 		err = xml.Unmarshal(b, &ssbc) //Converting XML data to variables
 		if err!= nil {
-			fmt.Println("XML error callstats", err)
+			log.Print("XML error callstats", err)
 			//continue
 		}
-		//fmt.Println("Successful API call data: ", ssbc.CallStatsData)
+		//log.Print("Successful API call data: ", ssbc.CallStatsData)
 
 		metricValue1 = float64(ssbc.CallStatsData.Rt_NumCallAttempts)
 		metricValue2 = float64(ssbc.CallStatsData.Rt_NumCallSucceeded)

@@ -35,7 +35,7 @@ func CreateChassis(db *sql.DB) error {
 }
 
 func InsertChassis(db *sql.DB, ipaddress string, chassisType string, serialNumber string) error{
-	log.Println("Inserting session Chassis data ...")
+	//log.Println("Inserting session Chassis data ...")
 	insertAuthSQL := `INSERT INTO chassis(ipaddress, chassistype, serialnumber) VALUES (?, ?, ?)`
 
 	statement, err := db.Prepare(insertAuthSQL) // Prepare statement.
@@ -54,7 +54,7 @@ func GetChassis(db *sql.DB, ipaddress string) (string, string, error){
 	row, err := db.Query("SELECT * FROM chassis WHERE ipaddress = ?", ipaddress)
 	//row.Scan(ip)
 	if err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		return "","", err
 	}
 	defer row.Close()

@@ -14,7 +14,6 @@ import (
 
 func main() {
 
-
 	//Creating database and tables
 	database.InitializeDB()
 
@@ -23,12 +22,12 @@ func main() {
 		//Fetching sessioncookies and placing them in database
 		phpsessid, err := myhttp.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
 		if err!= nil {
-			fmt.Println(err)
+			log.Print(err)
 		}
 		//Fetching SBC type and serialnumbers, and placing them in database
-		_, _, err = utils.GetChassisLabels(hosts[i].Ip,phpsessid)
+		_, _, err = utils.GetChassisLabels(hosts[i].Ip, phpsessid)
 		if err!= nil {
-			fmt.Println(err)
+			log.Print(err)
 		}
 	}
 

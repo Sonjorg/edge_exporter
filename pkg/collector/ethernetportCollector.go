@@ -3,8 +3,8 @@ package collector
 
 import (
 	"encoding/xml"
-	"fmt"
-	//"log"
+	//"fmt"
+	"log"
 	"edge_exporter/pkg/config"
 	"edge_exporter/pkg/http"
 	"edge_exporter/pkg/utils"
@@ -246,7 +246,7 @@ func (collector *ethernetMetrics) Describe(ch chan<- *prometheus.Desc) {
 func (collector *ethernetMetrics) Collect(c chan<- prometheus.Metric) {
 	hosts := config.GetIncludedHosts("ethernetport")//retrieving targets for this exporter
 	if (len(hosts) <= 0) {
-		fmt.Println("no hosts")
+		log.Print("no hosts")
 		return
 	}
 
@@ -254,7 +254,7 @@ func (collector *ethernetMetrics) Collect(c chan<- prometheus.Metric) {
 
 		phpsessid,err := http.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
 		if err != nil {
-			fmt.Println("Error session cookie", hosts[i].Ip, err)
+			log.Print("Error session cookie", hosts[i].Ip, err)
 			continue
 		}
 
@@ -262,7 +262,7 @@ func (collector *ethernetMetrics) Collect(c chan<- prometheus.Metric) {
 		chassisType, serialNumber, err := utils.GetChassisLabels(hosts[i].Ip,phpsessid)
 		if err!= nil {
 			chassisType, serialNumber = "db chassisData fail", "db chassisData fail"
-			fmt.Println(err)
+			log.Print(err)
 		}
 
 		var ethernetportID []string
@@ -275,7 +275,7 @@ func (collector *ethernetMetrics) Collect(c chan<- prometheus.Metric) {
 					url := "https://"+hosts[i].Ip+"/rest/ethernetport/"+ethernetportID[j] + "/"
 					_, data, err := http.GetAPIData(url, phpsessid)
 						if err != nil {
-							fmt.Println(err)
+							log.Print(err)
 							c <- prometheus.MustNewConstMetric(
 								collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip,hosts[i].Hostname, "ethernetport",ethernetportID[j], "fetching data from this ethernetport failed",chassisType,serialNumber)
 							continue
@@ -284,10 +284,10 @@ func (collector *ethernetMetrics) Collect(c chan<- prometheus.Metric) {
 					eData := &eSBCdata{}
 					err = xml.Unmarshal(data, &eData) //Converting XML data to variables
 					if err!= nil {
-						fmt.Println("XML error ethernet", err)
+						log.Print("XML error ethernet", err)
 						//continue
 					}
-					//fmt.Println("Successful API call data: ",eData.EthernetData)
+					//log.Print("Successful API call data: ",eData.EthernetData)
 
 					metricValue1 := float64(eData.EthernetData.IfRedundancy)
 					metricValue2 := float64(eData.EthernetData.IfRedundantPort)

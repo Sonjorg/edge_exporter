@@ -7,9 +7,9 @@ import (
 	"edge_exporter/pkg/http"
 	"edge_exporter/pkg/utils"
 	"encoding/xml"
-	"fmt"
+	//"fmt"
 	//"sync"
-	//"log"
+	"log"
 	"regexp"
 	"time"
 	"github.com/prometheus/client_golang/prometheus"
@@ -132,7 +132,7 @@ func (collector *rMetrics) Describe(ch chan<- *prometheus.Desc) {
 func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 	hosts := config.GetIncludedHosts("routingentry") //retrieving targets for this exporter
 	if len(hosts) <= 0 {
-		fmt.Println("no hosts")
+		log.Print("no hosts")
 		return
 	}
 	var metricValue1 float64
@@ -146,14 +146,14 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 	var sqliteDatabase *sql.DB
 	sqliteDatabase, err := sql.Open("sqlite3", "./sqlite-database.db")
 	if err != nil {
-		fmt.Println(err)
+		log.Print(err)
 	}
 	for i := range hosts {
 		var timeLastString string //Fetched from database, the routingentries and tables are stored for 24 hours as requested by HDO
 		var timeLast time.Time
 		phpsessid, err := http.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
 			if err != nil {
-				fmt.Println("Error authentication", hosts[i].Ip, err)
+				log.Print("Error authentication", hosts[i].Ip, err)
 				c <- prometheus.MustNewConstMetric(
 					collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, "routingentry","NA", "authentication error")
 				continue
@@ -161,23 +161,23 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			var routingtables []string
 			var routingEntryMap = make(map[string][]string)
 			var DBexists bool = database.RoutingTablesExists(sqliteDatabase,hosts[i].Ip) //Previous data is stored in db? Fetch this data
-			//fmt.Println("exists:",exists)
+			//log.Print("exists:",exists)
 			if (DBexists) {
 				routingEntryMap,routingtables,timeLastString,err = database.GetRoutingData(sqliteDatabase,hosts[i].Ip) // From db: returning a map of routingentables to routingentries (array),
 				if err != nil {
-					fmt.Println(err)
+					log.Print(err)
 				}
 				timeLast,err = time.Parse(time.RFC3339, timeLastString)
 				if err != nil {
-					fmt.Println(err)
+					log.Print(err)
 				}
 			}
 			//If 24 hours has not passed since last data was stored in database, use this data
-			//fmt.Println(b)
+			//log.Print(b)
 			if (!DBexists || !database.StillTime(24, timeLast))  { //Routing data has expired, fetching new routingentries
 				_, data, err := http.GetAPIData("https://"+hosts[i].Ip+"/rest/routingtable", phpsessid)
 				if err != nil {
-					fmt.Println("Error routingtable data", hosts[i].Ip, err)
+					log.Print("Error routingtable data", hosts[i].Ip, err)
 					c <- prometheus.MustNewConstMetric(
 							collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, "routingentry","NA", "no_routing_tables")
 
@@ -186,22 +186,22 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				rt := &routingTables{}
 				err = xml.Unmarshal(data, &rt) //Converting XML data to variables
 				if err != nil {
-					fmt.Println("XML Conversion error", err)
+					log.Print("XML Conversion error", err)
 				}
-				fmt.Println("rt fetched from router")
+				log.Print("rt fetched from router")
 				routingtables = rt.RoutingTables2.RoutingTables3.Attr
 			}
 							//using previous routingentries if within time
 
 			if len(routingtables) <= 0 {
-				fmt.Println("Routingtables empty")
+				log.Print("Routingtables empty")
 				continue //routingtables emtpy, try next host
 			}
 
 			chassisType, serialNumber, err := utils.GetChassisLabels(hosts[i].Ip,phpsessid)
 			if err!= nil {
 				chassisType, serialNumber = "database failure", "database failure"
-				fmt.Println(err)
+				log.Print(err)
 			}
 
 			for j := range routingtables {
@@ -239,19 +239,19 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 						tmp := entries.FindStringSubmatch(routingEntries[k])
 						for l := range tmp {
 							match = append(match, tmp[l])
-							//fmt.Println(tmp[l])
+							//log.Print(tmp[l])
 						}
 					}
 					//Storing fetched routingentries
 					/*err = database.CreateRoutingSqlite(sqliteDatabase)
 					if err != nil {
-						fmt.Println(err)
+						log.Print(err)
 					}*/
 					now := time.Now().Format(time.RFC3339)
-					fmt.Println("NOW:", now)
+					log.Print("NOW:", now)
 					err = database.StoreRoutingEntries(sqliteDatabase, hosts[i].Ip, now, routingtables[j], match)
 					if err != nil {
-						fmt.Println(err)
+						log.Print(err)
 					}
 				}
 
@@ -263,7 +263,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					url := "https://" + hosts[i].Ip + "/rest/routingtable/" + routingtables[j] + "/routingentry/" + match[k] + "/historicalstatistics/1"
 					_, data3, err := http.GetAPIData(url, phpsessid)
 					if err != nil {
-						fmt.Println(err)
+						log.Print(err)
 
 						continue
 					}
@@ -271,10 +271,10 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					rData := &rSBCdata{}
 					xml.Unmarshal(data3, &rData) //Converting XML data to variables
 					if err!= nil {
-						fmt.Println("XML error routing", err)
+						log.Print("XML error routing", err)
 						//continue
 					}
-					//fmt.Println("Successful API call data: ",rData.RoutingData)
+					//log.Print("Successful API call data: ",rData.RoutingData)
 
 					metricValue1 = float64(rData.RoutingData.Rt_RuleUsage)
 					metricValue2 = float64(rData.RoutingData.Rt_ASR)

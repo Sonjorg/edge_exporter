@@ -4,7 +4,7 @@ import (
 	"edge_exporter/pkg/database"
 	"edge_exporter/pkg/config"
 	"crypto/tls"
-	"fmt"
+	//"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -28,10 +28,10 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	var err error
 
 	phpsessid, err = database.GetSqliteKey(ipaddress)
-	//fmt.Println(phpsessid)
+	//log.Print(phpsessid)
 	if phpsessid != "" {
 
-		fmt.Println("henta fra sql")
+		//log.Print("henta fra sql")
 		return phpsessid, nil
 	}
 
@@ -51,18 +51,18 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	req, err := http.NewRequest("POST", "https://"+ipaddress+"/rest/login", body)
 	if err != nil {
 		log.Flags()
-		fmt.Println("error in auth:", err)
+		log.Print("error in auth:", err)
 		return "Error fetching data", err
-		//	fmt.Println("error in systemExporter:", error)
+		//	log.Print("error in systemExporter:", error)
 	}
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Flags()
-		fmt.Println("error in auth:", err)
+		//log.Flags()
+		log.Print("error in auth:", err)
 		return "Error fetching data", err
-		//fmt.Println("error in systemExporter:", err)
+		//log.Print("error in systemExporter:", err)
 	}
 
 	m := make(map[string]string)
@@ -79,7 +79,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 
 	sqliteDatabase, err = sql.Open("sqlite3", "./sqlite-database.db")
 	if err != nil {
-		fmt.Println(err)
+		log.Print(err)
 	}
 
 	now := time.Now().Format(time.RFC3339)
@@ -112,15 +112,15 @@ func GetAPIData(url string, phpsessid string) (string, []byte, error) {
 	req2, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		log.Flags()
-		fmt.Println("error in getapidata():", err)
+		log.Print("error in getapidata():", err)
 		return "Error fetching data", nil, err
-		//	fmt.Println("error in systemExporter:", error)
+		//	log.Print("error in systemExporter:", error)
 	}
 	req2.AddCookie(cookie1)
 	resp2, err := client2.Do(req2)
 	if err != nil {
 		log.Flags()
-		fmt.Println("error in getapidata():", err)
+		log.Print("error in getapidata():", err)
 		return "Error fetching data", nil, err
 	}
 

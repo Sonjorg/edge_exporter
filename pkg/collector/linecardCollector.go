@@ -3,9 +3,9 @@ package collector
 
 import (
 	"encoding/xml"
-	"fmt"
+	//"fmt"
 
-	//"log"
+	"log"
 	"edge_exporter/pkg/config"
 	"edge_exporter/pkg/http"
 	"edge_exporter/pkg/utils"
@@ -78,7 +78,7 @@ func (collector *linecardMetrics) Describe(ch chan<- *prometheus.Desc) {
 func (collector *linecardMetrics) Collect(c chan<- prometheus.Metric) {
 	hosts := config.GetIncludedHosts("linecard")//retrieving targets for this exporter
 	if (len(hosts) <= 0) {
-		fmt.Println("no hosts")
+		log.Print("no hosts")
 		return
 	}
 	var metricValue1 float64
@@ -90,7 +90,7 @@ func (collector *linecardMetrics) Collect(c chan<- prometheus.Metric) {
 
 		phpsessid,err := http.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
 		if err != nil {
-			fmt.Println("Error auth", hosts[i].Ip, err)
+			log.Print("Error auth", hosts[i].Ip, err)
 			continue
 		}
 
@@ -98,7 +98,7 @@ func (collector *linecardMetrics) Collect(c chan<- prometheus.Metric) {
 		chassisType, serialNumber, err := utils.GetChassisLabels(hosts[i].Ip,phpsessid)
 		if err!= nil {
 			chassisType, serialNumber = "db chassisData fail", "db chassisData fail"
-			fmt.Println(err)
+			log.Print(err)
 		}
 
 		var linecardID []string
@@ -119,7 +119,7 @@ func (collector *linecardMetrics) Collect(c chan<- prometheus.Metric) {
 					url := "https://"+hosts[i].Ip+"/rest/linecard/"+linecardID[j]
 					_, data, err := http.GetAPIData(url, phpsessid)
 						if err != nil {
-							fmt.Println(err)
+							log.Print(err)
 							c <- prometheus.MustNewConstMetric(
 								collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip,hosts[i].Hostname, "linecard",linecardID[j], "fetching data from this linecard failed",chassisType,serialNumber)
 							continue
@@ -127,9 +127,9 @@ func (collector *linecardMetrics) Collect(c chan<- prometheus.Metric) {
 
 					lData := &lSBCdata{}
 					err = xml.Unmarshal(data, &lData) //Converting XML data to variables
-					//fmt.Println("Successful API call data: ",lData.LinecardData,"\n")
+					//log.Print("Successful API call data: ",lData.LinecardData,"\n")
 					if err!= nil {
-						fmt.Println("XML error linecard", err)
+						log.Print("XML error linecard", err)
 						//continue
 					}
 					metricValue1 = float64(lData.LinecardData.Rt_CardType)

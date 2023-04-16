@@ -1,11 +1,11 @@
 package config
 
 import (
-	"fmt"
+	//"fmt"
 	//"os"
 	"gopkg.in/yaml.v2"
     //"flag"
-   // "log"
+    "log"
    "io/ioutil"
 )
 // Template used for struct and the functions NewConfig(), ValidateConfigPath() and ParseFlags() are copied from:
@@ -29,12 +29,12 @@ import (
         yamlFile, err := ioutil.ReadFile("config.yml")
             if err != nil {
                   //log.Printf("yamlFile.Get err   #%v ", err)
-                     fmt.Println("yamlFile.Get err   # ", err)
+                     log.Print("yamlFile.Get err   # ", err)
             }
         err = yaml.Unmarshal(yamlFile, c)
         if err != nil {
              // log.Fatalf("Unmarshal: %v", err)
-              fmt.Println("yamlFile.Get err   # ", err)
+              log.Print("yamlFile.Get err   # ", err)
          }
       return c
      }
@@ -84,7 +84,7 @@ func main() {
 
     g:= getIncludedHosts("system")
     for i:= range g {
-    fmt.Println(g[i].hostname,g[i].username)
+    log.Print(g[i].hostname,g[i].username)
     }
 }
 */

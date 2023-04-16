@@ -9,7 +9,7 @@ import (
 	"edge_exporter/pkg/http"
 	"edge_exporter/pkg/utils"
 	"encoding/xml"
-	"fmt"
+	//"fmt"
 	"log"
 	"strconv"
 	"time"
@@ -131,7 +131,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 	var metricValue8 float64
 	var metricValue9 float64
 
-	fmt.Println(hosts)
+	log.Print(hosts)
 
 	for i := 0; i < len(hosts); i++ {
 		nr := strconv.Itoa(i)
@@ -156,12 +156,12 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 		chassisType, serialNumber, err := utils.GetChassisLabels(hosts[i].Ip,phpsessid)
 		if err!= nil {
 			chassisType, serialNumber = "database failure", "database failure"
-			fmt.Println(err)
+			log.Print(err)
 		}
 		//Fetching systemdata
 		_, data,err := http.GetAPIData(dataStr, phpsessid)
 		if err != nil {
-				fmt.Println("Error collecting from host: ",log.Flags(), err,"\n")
+				log.Print("Error collecting from host: ",log.Flags(), err,"\n")
 				  c <- prometheus.NewMetricWithTimestamp(
 					timeReportedByExternalSystem,
 					prometheus.MustNewConstMetric(
@@ -173,9 +173,9 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 		ssbc := &sSBCdata{}
 		err = xml.Unmarshal(data, &ssbc) //Converting XML data to variables
 		if err != nil {
-			fmt.Println("XML error system", err)
+			log.Print("XML error system", err)
 		}
-		//fmt.Println("Successful API call data: ",ssbc.SystemData)
+		//log.Print("Successful API call data: ",ssbc.SystemData)
 
 		metricValue1 = float64(ssbc.SystemData.Rt_CPULoadAverage15m)
 		metricValue2 = float64(ssbc.SystemData.Rt_CPULoadAverage1m)

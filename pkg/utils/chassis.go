@@ -5,7 +5,7 @@ package utils
 
 import (
 	"encoding/xml"
-	"fmt"
+	"log"
 	_ "github.com/mattn/go-sqlite3" // Import go-sqlite3 library
 	"database/sql"
 	"edge_exporter/pkg/database"
@@ -27,12 +27,12 @@ type chassis struct {
 func GetChassisLabels(ipaddress string, phpsessid string) (chassisType string, serialNumber string, err error){
 	//hosts := config.GetAllHosts()//retrieving targets for this exporter
 
-	//fmt.Println(hosts)
+	//log.Print(hosts)
 	var sqliteDatabase *sql.DB
 	//var labels *database.Chassis
 	sqliteDatabase, err = sql.Open("sqlite3", "./sqlite-database.db")
 	if err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		return "","", err
 	} // Open the created SQLite File
 	// Defer Closing the database
@@ -44,7 +44,7 @@ func GetChassisLabels(ipaddress string, phpsessid string) (chassisType string, s
 				dataStr := "https://"+ipaddress+"/rest/chassis"
 				_, data,err := http.GetAPIData(dataStr, phpsessid)
 				if err != nil {
-						//fmt.Println("Error collecting from : ", err)
+						//log.Print("Error collecting from : ", err)
 					return "http error","http error",err
 				}
 				b := []byte(data) //Converting string of data to bytestream
@@ -53,14 +53,14 @@ func GetChassisLabels(ipaddress string, phpsessid string) (chassisType string, s
 				if err != nil {
 				return "http error","http error",err
 				}
-				//fmt.Println("Successful API call data: ",ssbc.SystemData,"\n")
+				//log.Print("Successful API call data: ",ssbc.SystemData,"\n")
 
 				chassisType := ssbc.Chassis.Rt_Chassis_Type
 				serialNumber := ssbc.Chassis.SerialNumber
 
 				err = database.InsertChassis(sqliteDatabase, ipaddress, chassisType, serialNumber)
 					if err != nil {
-						fmt.Println("insert chassis error", err)
+						log.Print("insert chassis error", err)
 					}
 				return string(chassisType), string(serialNumber), err
 		}
@@ -73,25 +73,25 @@ func test() {
 	//var labels *database.Chassis
 	sqliteDatabase, err = sql.Open("sqlite3", "./sqlite-database.db")
 	if err != nil {
-		fmt.Println(err)
+		log.Print(err)
 	}
 	phpsessid,err := http.APISessionAuth("student", "PanneKake", "10.233.234.11")
 	dataStr := "https://10.233.234.11/rest/chassis"
 				_, data,err := http.GetAPIData(dataStr, phpsessid)
 				if err != nil {
-						fmt.Println("Error collecting from : ", err)
+						log.Print("Error collecting from : ", err)
 
 				}
 				b := []byte(data) //Converting string of data to bytestream
 				ssbc := &ChassisData{}
 				xml.Unmarshal(b, &ssbc) //Converting XML data to variables
-				//fmt.Println("Successful API call data: ",ssbc.SystemData,"\n")
+				//log.Print("Successful API call data: ",ssbc.SystemData,"\n")
 
 				chassisType := ssbc.Chassis.Rt_Chassis_Type
 				serialNumber := ssbc.Chassis.SerialNumber
 				err = database.InsertChassis(sqliteDatabase, ipaddress, chassisType, serialNumber)
 					if err != nil {
-						fmt.Println("insert chassis error", err)
+						log.Print("insert chassis error", err)
 					}
 				return chassisType, serialNumber, err
 }
