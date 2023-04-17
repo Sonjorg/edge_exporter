@@ -3,7 +3,6 @@ package collector
 
 import (
 	"encoding/xml"
-	"fmt"
 	//"fmt"
 	"edge_exporter/pkg/config"
 	"edge_exporter/pkg/http"
@@ -281,7 +280,6 @@ func (collector *ethernetMetrics) Collect(c chan<- prometheus.Metric) {
 								collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip,hosts[i].Hostname, "ethernetport",ethernetportID[j], "fetching data from this ethernetport failed",chassisType,serialNumber)
 							continue
 						}
-					fmt.Println(data)
 					eData := &eSBCdata{}
 					err = xml.Unmarshal(data, &eData) //Converting XML data to variables
 					if err!= nil {
