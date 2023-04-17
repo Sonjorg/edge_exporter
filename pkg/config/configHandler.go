@@ -18,11 +18,11 @@ import (
 
     }
     type Host struct {
-        HostName       string `yaml:"hostname"`
-        Ipaddress      string `yaml:"ipaddress"`
-        Username       string `yaml:"username"`
-        Password       string `yaml:"password"`
-        Exclude      []string `yaml:"exclude"`
+        HostName          string `yaml:"hostname"`
+        Ipaddress         string `yaml:"ipaddress"`
+        Username          string `yaml:"username"`
+        Password          string `yaml:"password"`
+        Exclude         []string `yaml:"exclude"`
         RoutingEntryTime  float64 `yaml:"routing-database-hours"`
     }
 
@@ -80,14 +80,3 @@ import (
         }
     return list
     }
-
-/*
-
-func main() {
-
-    g:= getIncludedHosts("system")
-    for i:= range g {
-    log.Print(g[i].hostname,g[i].username)
-    }
-}
-*/
