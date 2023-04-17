@@ -3,11 +3,13 @@ package collector
 
 import (
 	"encoding/xml"
+	"fmt"
 	//"fmt"
-	"log"
 	"edge_exporter/pkg/config"
 	"edge_exporter/pkg/http"
 	"edge_exporter/pkg/utils"
+	"log"
+
 	"github.com/prometheus/client_golang/prometheus"
 	//"strconv"
 	//"time"
@@ -38,7 +40,6 @@ Rt_ifInUnknwnProto		      int    `xml:"rt_ifInUnknwnProto"`
 Rt_ifInterfaceIndex	          int    `xml:"rt_ifInterfaceIndex"`
 Rt_ifLastChange		          int    `xml:"rt_ifLastChange"`
 Rt_ifMtu		              int    `xml:"rt_ifMtu"`
-Rt_ifName		              int    `xml:"rt_ifName"`
 Rt_ifOperatorStatus		      int    `xml:"rt_ifOperatorStatus"`
 Rt_ifOutBroadcastPkts		  int    `xml:"rt_ifOutBroadcastPkts"`//Displays the number of transmitted broadcast packets on this port.
 Rt_ifOutDeferredTransmissions int    `xml:"rt_ifOutDeferredTransmissions"`//Displays the number of Deferred Transmission errors detected on this port.
@@ -280,7 +281,7 @@ func (collector *ethernetMetrics) Collect(c chan<- prometheus.Metric) {
 								collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip,hosts[i].Hostname, "ethernetport",ethernetportID[j], "fetching data from this ethernetport failed",chassisType,serialNumber)
 							continue
 						}
-
+					fmt.Println(data)
 					eData := &eSBCdata{}
 					err = xml.Unmarshal(data, &eData) //Converting XML data to variables
 					if err!= nil {
