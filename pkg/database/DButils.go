@@ -25,10 +25,10 @@ func Expired(hours float64, previoustime time.Time) bool{
 		log.Print(err)
 		return false
 	}
+	//previoustime.
 	//If previous time + 24 hours is not after (before) now: not expired
-	fmt.Print(!previoustime.Add(duration).After(timeNowParsed))
-	return !previoustime.Add(duration).After(timeNowParsed)
-
+	fmt.Print(previoustime.Add(duration).Before(timeNowParsed))
+	return previoustime.Add(duration).Before(timeNowParsed) //after, contioue using this
 }
 
 func InitializeDB() {
