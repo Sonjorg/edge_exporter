@@ -36,14 +36,11 @@ func CreateRoutingSqlite(db * sql.DB) error{
 	return nil
 }
 
+
+
 func StoreRoutingEntries(db *sql.DB, ipaddress string, time string, routingTable string, routingEntries []string) error{
 	//log.Println("Inserting entry ...")
-	stmt, err := db.Prepare("delete from routingtables where ipaddress=?")
 
-    res, err := stmt.Exec(ipaddress)
-
-    affect, err := res.RowsAffected()
-    log.Println(affect,err)
 
 	for i := range routingEntries {
 		insertSQL1 := `INSERT INTO routingtables(ipaddress, time, routingtable, routingentries) VALUES (?, ?, ?, ?)`
@@ -64,24 +61,14 @@ func StoreRoutingEntries(db *sql.DB, ipaddress string, time string, routingTable
 	return nil
 }
 
-func DeleteRoutingTables(db *sql.DB) {
-		stmt, err := db.Prepare("DELETE FROM routingtables;")
-		if err != nil {
-		//log.Fatal(err)
-		log.Print("delete table",err)
-		}
-		res, err := stmt.Exec()
-		if err != nil {
-		  log.Fatal(err)
-		  log.Print("delete table",err)
+func DeleteRoutingTables(db *sql.DB, ipaddress string) {
+	stmt, err := db.Prepare("delete from routingtables where ipaddress=?")
 
-		}
-		affected, _ := res.RowsAffected()
-		log.Printf("Affected rows %d", affected)
+    res, err := stmt.Exec(ipaddress)
 
+    affect, err := res.RowsAffected()
+    log.Println(affect,err)
 }
-
-
 
 func RoutingTablesExists(db * sql.DB,ip string) bool {
 	sqlStmt := `SELECT ipaddress FROM routingtables WHERE ipaddress = ?`
