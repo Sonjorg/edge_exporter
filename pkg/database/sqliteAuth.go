@@ -18,7 +18,7 @@ type Cookie struct {
 
 // This function retrieves the session cookie from the sqlite database
 //if 8 mins have passed since last sessioncookie was retrieved, fetch new, else return the last one.
-func GetSqliteKey(ipaddress string) (cookie string, err error) {
+func GetSqliteKeyIfNotExpired(ipaddress string) (cookie string, err error) {
 
 	var sqliteDatabase *sql.DB
 
@@ -26,11 +26,8 @@ func GetSqliteKey(ipaddress string) (cookie string, err error) {
 	if err != nil {
 		log.Print(err)
 		return "", err
-	} // Open the created SQLite File
-	// Defer Closing the database
-	//log.Print(RowExists(sqliteDatabase, ipaddress))
+	}
 	if (!RowExists(sqliteDatabase, ipaddress)) {
-		//log.Print(err)
 		return "",nil
 	}
 	Hosts, err := GetCookieDB(sqliteDatabase, ipaddress)
@@ -39,11 +36,10 @@ func GetSqliteKey(ipaddress string) (cookie string, err error) {
 		return "", err
 	}
 	defer sqliteDatabase.Close()
-	//defer file.Close()
+
 	var c string
 	mins := time.Minute*time.Duration(8)
 	for i := range Hosts {
-		//log.Print(Hosts[i].Ipaddress)
 		if Hosts[i].Ipaddress == ipaddress {
 			now := time.Now().Format(time.RFC3339)
 			parsed, _ := time.Parse(time.RFC3339, now)
@@ -54,9 +50,7 @@ func GetSqliteKey(ipaddress string) (cookie string, err error) {
 			}
 			if parsed2.Add(mins).After(parsed) == true {
 				c = Hosts[i].Phpsessid
-				log.Print("sessid fra db", c)
 				return c, nil
-				//break
 			} else {
 				return "", nil
 			}
@@ -85,7 +79,6 @@ func InsertAuth(db *sql.DB, ipaddress string, phpsessid string, time string) err
 }
 func GetCookieDB(db *sql.DB, ipaddress string) ([]*Cookie, error){
 	row, err := db.Query("SELECT * FROM authentication")
-	//row.Scan(ip)
 	if err != nil {
 		log.Print(err)
 		return nil, err
@@ -96,7 +89,6 @@ func GetCookieDB(db *sql.DB, ipaddress string) ([]*Cookie, error){
 	for row.Next() {
 			p := &Cookie{}
 			if err := row.Scan(&p.Id, &p.Ipaddress, &p.Phpsessid, &p.Time); err != nil{
-				 //log.Print(err)
 			}
 			if (p.Ipaddress == ipaddress) {
 				c = append(c, p)

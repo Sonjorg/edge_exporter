@@ -27,7 +27,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	var phpsessid string
 	var err error
 
-	phpsessid, err = database.GetSqliteKey(ipaddress)
+	phpsessid, err = database.GetSqliteKeyIfNotExpired(ipaddress)
 	//log.Print(phpsessid)
 	if phpsessid != "" {
 

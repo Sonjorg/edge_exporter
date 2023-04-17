@@ -130,7 +130,7 @@ func (collector *linecardMetrics) Collect(c chan<- prometheus.Metric) {
 					//log.Print("Successful API call data: ",lData.LinecardData,"\n")
 					if err!= nil {
 						log.Print("XML error linecard", err)
-						//continue
+						continue
 					}
 					metricValue1 = float64(lData.LinecardData.Rt_CardType)
 					metricValue2 = float64(lData.LinecardData.Rt_Location)

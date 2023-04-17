@@ -5,15 +5,15 @@ import (
 	"log"
 	"time"
 	_ "github.com/mattn/go-sqlite3" // Import go-sqlite3 library
-	//"fmt"
+	"fmt"
 	"os"
 )
 
 
-func StillTime(hours float64, previoustime time.Time) bool{
+func Expired(hours float64, previoustime time.Time) bool{
 	//mins := time.Minute * time.Duration(8)
 	var timeSchedule time.Duration = time.Duration(hours)
-	duration := timeSchedule*time.Hour
+	duration := timeSchedule*time.Minute
 	//log.Print("duration", duration)
 	now := time.Now().Format(time.RFC3339)
 	timeNowParsed, err := time.Parse(time.RFC3339, now)
@@ -25,7 +25,9 @@ func StillTime(hours float64, previoustime time.Time) bool{
 		log.Print(err)
 		return false
 	}
-	return previoustime.Add(duration).After(timeNowParsed)
+	//If previous time + 24 hours is not after (before) now: not expired
+	fmt.Print(!previoustime.Add(duration).After(timeNowParsed))
+	return !previoustime.Add(duration).After(timeNowParsed)
 
 }
 
