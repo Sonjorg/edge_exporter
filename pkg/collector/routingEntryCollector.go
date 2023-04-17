@@ -249,7 +249,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					}
 					now := time.Now().Format(time.RFC3339)
 					//log.Print("NOW:", now)
-					database.DeleteRoutingTables(sqliteDatabase)
+					//database.DeleteRoutingTables(sqliteDatabase)
 					err = database.StoreRoutingEntries(sqliteDatabase, hosts[i].Ip, now, routingtables[j], match)
 					if err != nil {
 						log.Print(err)

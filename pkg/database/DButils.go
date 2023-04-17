@@ -53,13 +53,17 @@ func InitializeDB() {
 	if err != nil {
 		log.Print(err)
 	}
+	log.Print("Create authentication table")
 	err = CreateRoutingSqlite(sqliteDatabase)
 	if err != nil {
 		log.Print(err)
+		log.Print("Create routing entry table")
+
 	}
 	err = CreateChassis(sqliteDatabase)
 	if err != nil {
 		log.Print("Chassis DB error",err)
+		log.Print("Create chassis table")
 	}
 
 }
