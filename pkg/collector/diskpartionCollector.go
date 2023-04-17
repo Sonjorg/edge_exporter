@@ -9,7 +9,7 @@ import (
 	"edge_exporter/pkg/http"
 	"edge_exporter/pkg/utils"
 	"github.com/prometheus/client_golang/prometheus"
-	//"strconv"
+	"strconv"
 	//"time"
 )
 
@@ -160,7 +160,7 @@ func (collector *diskMetrics) Collect(c chan<- prometheus.Metric) {
 					metricValue4 = float64(dData.DiskData.Rt_MemoryUsed)
 					metricValue5 = float64(dData.DiskData.Rt_PartitionType)
 					partitionName = dData.DiskData.Rt_PartitionName
-					id := string(j)
+					id := strconv.Itoa(j)
 
 						c <- prometheus.MustNewConstMetric(collector.Rt_CurrentUsage, prometheus.GaugeValue, metricValue1, hosts[i].Ip, hosts[i].Hostname, "diskpartition",id, partitionName,chassisType, serialNumber,)
 						c <- prometheus.MustNewConstMetric(collector.Rt_MaximumSize, prometheus.GaugeValue, metricValue2, hosts[i].Ip, hosts[i].Hostname, "diskpartition",id, partitionName,chassisType, serialNumber,)
