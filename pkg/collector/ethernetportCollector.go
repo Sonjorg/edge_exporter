@@ -272,7 +272,7 @@ func (collector *ethernetMetrics) Collect(c chan<- prometheus.Metric) {
 			ethernetportID = append(ethernetportID, "24")
 			//Couldnt fetch chassis type from db or http: try next host
 			for j := range ethernetportID {
-					url := "https://"+hosts[i].Ip+"/rest/ethernetport/"+ethernetportID[j] + "/"
+					url := "https://"+hosts[i].Ip+"/rest/ethernetport/"+ethernetportID[j]
 					_, data, err := http.GetAPIData(url, phpsessid)
 						if err != nil {
 							log.Print(err)
@@ -285,7 +285,7 @@ func (collector *ethernetMetrics) Collect(c chan<- prometheus.Metric) {
 					err = xml.Unmarshal(data, &eData) //Converting XML data to variables
 					if err!= nil {
 						log.Print("XML error ethernet", err)
-						//continue
+						continue
 					}
 					//log.Print("Successful API call data: ",eData.EthernetData)
 

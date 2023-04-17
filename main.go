@@ -5,7 +5,7 @@ import (
 	"edge_exporter/pkg/config"
 	"edge_exporter/pkg/database"
 	"edge_exporter/pkg/utils"
-	myhttp "edge_exporter/pkg/http"
+	thishttp "edge_exporter/pkg/http"
 	//"fmt"
 	"log"
 	"net/http"
@@ -20,24 +20,27 @@ func main() {
 	hosts := config.GetAllHosts()
 	for i := range hosts {
 		//Fetching sessioncookies and placing them in database
-		phpsessid, err := myhttp.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
+		phpsessid, err := thishttp.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
 		if err!= nil {
 			log.Print(err)
+			continue
 		}
 		//Fetching SBC type and serialnumbers, and placing them in database
 		_, _, err = utils.GetChassisLabels(hosts[i].Ip, phpsessid)
 		if err!= nil {
 			log.Print(err)
+			continue
 		}
 	}
 
-	//starting collectors
+	//initializing collectors
+	//The collectors only start to run after a scrape is made to host:5123/metrics
 	collector.SystemResourceCollector()
 	collector.DiskPartitionCollector()
 	collector.RoutingEntryCollector()
 	collector.CallStatsCollector()
 	collector.LinecardCollector()
-	//collector.EthernetportCollector()
+	collector.EthernetportCollector()
 
 	//Serving metrics
 	http.Handle("/metrics", promhttp.Handler())

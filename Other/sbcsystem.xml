@@ -2,7 +2,7 @@
 <status>
 <http_code>200</http_code>
 </status>
-<historicalstatistics id="1" href="https://10.233.230.11/rest/system/historicalstatistics/1">
+<historicalstatistics id="1" href="https://SBC-IP-address/rest/system/historicalstatistics/1">
 <rt_CPULoadAverage15m>7</rt_CPULoadAverage15m>
 <rt_CPULoadAverage1m>0</rt_CPULoadAverage1m>
 <rt_CPULoadAverage5m>5</rt_CPULoadAverage5m>
