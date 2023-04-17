@@ -13,7 +13,7 @@ import (
 func Expired(hours float64, previoustime time.Time) bool{
 	//mins := time.Minute * time.Duration(8)
 	var timeSchedule time.Duration = time.Duration(hours)
-	duration := timeSchedule*time.Minute
+	duration := timeSchedule*time.Hour
 	//log.Print("duration", duration)
 	now := time.Now().Format(time.RFC3339)
 	timeNowParsed, err := time.Parse(time.RFC3339, now)
@@ -25,8 +25,7 @@ func Expired(hours float64, previoustime time.Time) bool{
 		log.Print(err)
 		return false
 	}
-	//previoustime.
-	//If previous time + 24 hours is not after (before) now: not expired
+	//If previous time + 24 hours is before now: database for routingentries has expired
 	fmt.Print(previoustime.Add(duration).Before(timeNowParsed))
 	return previoustime.Add(duration).Before(timeNowParsed) //after, contioue using this
 }

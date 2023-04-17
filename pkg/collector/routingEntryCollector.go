@@ -178,7 +178,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			}
 			//If 24 hours has not passed since last data was stored in database, use this data
 			//log.Print(b)
-			if (!DBexists || database.Expired(2, timeLast))  { //Routing data has expired, fetching new routingentries
+			if (!DBexists || database.Expired(hosts[i].RoutingEntryTime, timeLast))  { //Routing data has expired, fetching new routingentries
 				fmt.Println("expired, fetching from http")
 				_, data, err := http.GetAPIData("https://"+hosts[i].Ip+"/rest/routingtable", phpsessid)
 				if err != nil {

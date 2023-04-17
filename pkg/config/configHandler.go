@@ -15,6 +15,7 @@ import (
     type Config struct {
         Hosts []Host
         Authtimeout int `yaml:"authtimeout"`
+
     }
     type Host struct {
         HostName       string `yaml:"hostname"`
@@ -22,6 +23,7 @@ import (
         Username       string `yaml:"username"`
         Password       string `yaml:"password"`
         Exclude      []string `yaml:"exclude"`
+        RoutingEntryTime  float64 `yaml:"routing-database-hours"`
     }
 
             //From stackoverflow
@@ -44,6 +46,7 @@ import (
         Hostname   string
         Username   string
         Password   string
+        RoutingEntryTime  float64
     }
 
     func GetAllHosts() []IncludedHosts{
@@ -51,7 +54,7 @@ import (
         list := make([]IncludedHosts,0,8)
 
         for i := range cfg.Hosts {
-            list = append(list, IncludedHosts{cfg.Hosts[i].Ipaddress, cfg.Hosts[i].HostName,cfg.Hosts[i].Username, cfg.Hosts[i].Password})
+            list = append(list, IncludedHosts{cfg.Hosts[i].Ipaddress, cfg.Hosts[i].HostName,cfg.Hosts[i].Username, cfg.Hosts[i].Password,cfg.Hosts[i].RoutingEntryTime})
         }
     return list
     }
@@ -72,7 +75,7 @@ import (
                }
           }
             if !excluded {
-                list = append(list, IncludedHosts{cfg.Hosts[i].Ipaddress, cfg.Hosts[i].HostName,cfg.Hosts[i].Username, cfg.Hosts[i].Password})
+                list = append(list, IncludedHosts{cfg.Hosts[i].Ipaddress, cfg.Hosts[i].HostName,cfg.Hosts[i].Username, cfg.Hosts[i].Password,cfg.Hosts[i].RoutingEntryTime})
             }
         }
     return list
