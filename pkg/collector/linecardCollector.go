@@ -81,10 +81,6 @@ func (collector *linecardMetrics) Collect(c chan<- prometheus.Metric) {
 		log.Print("no hosts, linecard")
 		return
 	}
-	var metricValue1 float64
-	var metricValue2 float64
-	var metricValue3 float64
-	var metricValue4 float64
 
 	for i := range hosts {
 
@@ -132,10 +128,10 @@ func (collector *linecardMetrics) Collect(c chan<- prometheus.Metric) {
 						log.Print("XML error linecard", err)
 						continue
 					}
-					metricValue1 = float64(lData.LinecardData.Rt_CardType)
-					metricValue2 = float64(lData.LinecardData.Rt_Location)
-					metricValue3 = float64(lData.LinecardData.Rt_ServiceStatus)
-					metricValue4 = float64(lData.LinecardData.Rt_Status)
+					metricValue1 := float64(lData.LinecardData.Rt_CardType)
+					metricValue2 := float64(lData.LinecardData.Rt_Location)
+					metricValue3 := float64(lData.LinecardData.Rt_ServiceStatus)
+					metricValue4 := float64(lData.LinecardData.Rt_Status)
 
 						c <- prometheus.MustNewConstMetric(collector.Rt_CardType, prometheus.GaugeValue, metricValue1, hosts[i].Ip, hosts[i].Hostname, "linecard",linecardID[j], chassisType, serialNumber)
 						c <- prometheus.MustNewConstMetric(collector.Rt_Location, prometheus.GaugeValue, metricValue2, hosts[i].Ip, hosts[i].Hostname, "linecard",linecardID[j], chassisType, serialNumber)

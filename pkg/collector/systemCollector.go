@@ -121,15 +121,6 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 	if (len(hosts) <= 0) {
 		return
 	}
-	var metricValue1 float64
-	var metricValue2 float64
-	var metricValue3 float64
-	var metricValue4 float64
-	var metricValue5 float64
-	var metricValue6 float64
-	var metricValue7 float64
-	var metricValue8 float64
-	var metricValue9 float64
 
 	log.Print(hosts)
 
@@ -177,15 +168,15 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 		}
 		//log.Print("Successful API call data: ",ssbc.SystemData)
 
-		metricValue1 = float64(ssbc.SystemData.Rt_CPULoadAverage15m)
-		metricValue2 = float64(ssbc.SystemData.Rt_CPULoadAverage1m)
-		metricValue3 = float64(ssbc.SystemData.Rt_CPULoadAverage5m)
-		metricValue4 = float64(ssbc.SystemData.Rt_CPUUptime)
-		metricValue5 = float64(ssbc.SystemData.Rt_CPUUsage)
-		metricValue6 = float64(ssbc.SystemData.Rt_FDUsage)
-		metricValue7 = float64(ssbc.SystemData.Rt_LoggingPartUsage)
-		metricValue8 = float64(ssbc.SystemData.Rt_MemoryUsage)
-		metricValue9 = float64(ssbc.SystemData.Rt_TmpPartUsage)
+		metricValue1 := float64(ssbc.SystemData.Rt_CPULoadAverage15m)
+		metricValue2 := float64(ssbc.SystemData.Rt_CPULoadAverage1m)
+		metricValue3 := float64(ssbc.SystemData.Rt_CPULoadAverage5m)
+		metricValue4 := float64(ssbc.SystemData.Rt_CPUUptime)
+		metricValue5 := float64(ssbc.SystemData.Rt_CPUUsage)
+		metricValue6 := float64(ssbc.SystemData.Rt_FDUsage)
+		metricValue7 := float64(ssbc.SystemData.Rt_LoggingPartUsage)
+		metricValue8 := float64(ssbc.SystemData.Rt_MemoryUsage)
+		metricValue9 := float64(ssbc.SystemData.Rt_TmpPartUsage)
 
 			c <- prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue1, hosts[i].Ip, hosts[i].Hostname, "systemstats",nr, ssbc.SystemData.Href, chassisType, serialNumber,)
 			c <- prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage1m, prometheus.GaugeValue, metricValue2, hosts[i].Ip, hosts[i].Hostname, "systemstats",nr, ssbc.SystemData.Href, chassisType, serialNumber,)

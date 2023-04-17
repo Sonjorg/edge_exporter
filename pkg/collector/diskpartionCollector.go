@@ -100,11 +100,7 @@ func (collector *diskMetrics) Collect(c chan<- prometheus.Metric) {
 		log.Print("no hosts")
 		return
 	}
-	var metricValue1 float64
-	var metricValue2 float64
-	var metricValue3 float64
-	var metricValue4 float64
-	var metricValue5 float64
+
 	var partitionName string
 
 	for i := range hosts {
@@ -154,11 +150,11 @@ func (collector *diskMetrics) Collect(c chan<- prometheus.Metric) {
 						log.Print("XML error disk", err)
 						continue
 					}
-					metricValue1 = float64(dData.DiskData.Rt_CurrentUsage)
-					metricValue2 = float64(dData.DiskData.Rt_MaximumSize)
-					metricValue3 = float64(dData.DiskData.Rt_MemoryAvailable)
-					metricValue4 = float64(dData.DiskData.Rt_MemoryUsed)
-					metricValue5 = float64(dData.DiskData.Rt_PartitionType)
+					metricValue1 := float64(dData.DiskData.Rt_CurrentUsage)
+					metricValue2 := float64(dData.DiskData.Rt_MaximumSize)
+					metricValue3 := float64(dData.DiskData.Rt_MemoryAvailable)
+					metricValue4 := float64(dData.DiskData.Rt_MemoryUsed)
+					metricValue5 := float64(dData.DiskData.Rt_PartitionType)
 					partitionName = dData.DiskData.Rt_PartitionName
 					id := strconv.Itoa(j)
 

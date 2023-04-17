@@ -99,14 +99,6 @@ func (collector *cMetrics) Collect(c chan<- prometheus.Metric) {
 	if (len(hosts) <= 0) {
 		return
 	}
-	var metricValue1 float64
-	var metricValue2 float64
-	var metricValue3 float64
-	var metricValue4 float64
-	var metricValue5 float64
-	var metricValue6 float64
-
-	//log.Print(hosts)
 
 	for i := 0; i < len(hosts); i++ {
 		nr := strconv.Itoa(i)
@@ -152,12 +144,12 @@ func (collector *cMetrics) Collect(c chan<- prometheus.Metric) {
 		}
 		//log.Print("Successful API call data: ", ssbc.CallStatsData)
 
-		metricValue1 = float64(ssbc.CallStatsData.Rt_NumCallAttempts)
-		metricValue2 = float64(ssbc.CallStatsData.Rt_NumCallSucceeded)
-		metricValue3 = float64(ssbc.CallStatsData.Rt_NumCallFailed)
-		metricValue4 = float64(ssbc.CallStatsData.Rt_NumCallCurrentlyUp)
-		metricValue5 = float64(ssbc.CallStatsData.Rt_NumCallAbandonedNoTrunk)
-		metricValue6 = float64(ssbc.CallStatsData.Rt_NumCallUnAnswered)
+		metricValue1 := float64(ssbc.CallStatsData.Rt_NumCallAttempts)
+		metricValue2 := float64(ssbc.CallStatsData.Rt_NumCallSucceeded)
+		metricValue3 := float64(ssbc.CallStatsData.Rt_NumCallFailed)
+		metricValue4 := float64(ssbc.CallStatsData.Rt_NumCallCurrentlyUp)
+		metricValue5 := float64(ssbc.CallStatsData.Rt_NumCallAbandonedNoTrunk)
+		metricValue6 := float64(ssbc.CallStatsData.Rt_NumCallUnAnswered)
 
 			c <- prometheus.MustNewConstMetric(collector.Rt_NumCallAttempts, prometheus.GaugeValue, metricValue1, hosts[i].Ip, hosts[i].Hostname, "systemstats",nr, ssbc.CallStatsData.Href, chassisType, serialNumber)
 			c <- prometheus.MustNewConstMetric(collector.Rt_NumCallSucceeded, prometheus.GaugeValue, metricValue2, hosts[i].Ip, hosts[i].Hostname, "systemstats",nr, ssbc.CallStatsData.Href, chassisType, serialNumber)

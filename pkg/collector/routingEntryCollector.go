@@ -139,12 +139,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 		log.Print("no hosts")
 		return
 	}
-	var metricValue1 float64
-	var metricValue2 float64
-	var metricValue3 float64
-	var metricValue4 float64
-	var metricValue5 float64
-	var metricValue6 float64
+
 
 	//var timeLast string
 	var sqliteDatabase *sql.DB
@@ -179,7 +174,6 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			//If 24 hours has not passed since last data was stored in database, use this data
 			//log.Print(b)
 			timeSchedule := hosts[i].RoutingEntryTime
-			fmt.Println(timeSchedule)
 				if timeSchedule == 0 {
 					timeSchedule = 24
 				}
@@ -283,12 +277,12 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					}
 					//log.Print("Successful API call data: ",rData.RoutingData)
 
-					metricValue1 = float64(rData.RoutingData.Rt_RuleUsage)
-					metricValue2 = float64(rData.RoutingData.Rt_ASR)
-					metricValue3 = float64(rData.RoutingData.Rt_RoundTripDelay)
-					metricValue4 = float64(rData.RoutingData.Rt_Jitter)
-					metricValue5 = float64(rData.RoutingData.Rt_MOS)
-					metricValue6 = float64(rData.RoutingData.Rt_QualityFailed)
+					metricValue1 := float64(rData.RoutingData.Rt_RuleUsage)
+					metricValue2 := float64(rData.RoutingData.Rt_ASR)
+					metricValue3 := float64(rData.RoutingData.Rt_RoundTripDelay)
+					metricValue4 := float64(rData.RoutingData.Rt_Jitter)
+					metricValue5 := float64(rData.RoutingData.Rt_MOS)
+					metricValue6 := float64(rData.RoutingData.Rt_QualityFailed)
 
 					c <- prometheus.MustNewConstMetric(collector.Rt_RuleUsage, prometheus.GaugeValue, metricValue1, hosts[i].Ip, hosts[i].Hostname, "routingentry", routingtables[j], match[k], chassisType,serialNumber)
 					c <- prometheus.MustNewConstMetric(collector.Rt_ASR, prometheus.GaugeValue, metricValue2, hosts[i].Ip, hosts[i].Hostname, "routingentry", routingtables[j], match[k], chassisType,serialNumber)
