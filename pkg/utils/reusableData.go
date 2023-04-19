@@ -22,16 +22,16 @@ func StoreRoutingEntries(ipaddress string, time string, routingTable string, rou
 	m :=  make(map[string][]string)
 	m2 :=  make(map[string]RoutingTablesUtils)
 
-	s := RoutingData{}
-	t := RoutingTablesUtils{}
+	s := &RoutingData{}
+	t := &RoutingTablesUtils{}
 	t.Time = time
 
 	m[routingTable] = routingEntries
 
-		t.RoutingEntries = m
+	t.RoutingEntries = m
 
 	t.RoutingTables = append(t.RoutingTables, routingTable)
-	m2[ipaddress] = t
+	m2[ipaddress] = *t
 	s.Routing = m2
 
 }
