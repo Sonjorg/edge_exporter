@@ -1,10 +1,10 @@
 package utils
 
-import (
-	//"github.com/mattn/go-sqlite3" // Import go-sqlite3 library
-	//_ "github.com/mattn/go-sqlite3"
-	//"fmt"
-)
+import "fmt"
+
+//"github.com/mattn/go-sqlite3" // Import go-sqlite3 library
+//_ "github.com/mattn/go-sqlite3"
+//"fmt"
 
 type RoutingTablesUtils struct {
 	Id                int
@@ -42,6 +42,7 @@ func GetRoutingData(ipaddress string, r RoutingData) (map[string][]string,[]stri
 	if !ok {
 		return nil,nil,	"no data"
 	}
+	fmt.Println(r.Routing[ipaddress].RoutingEntries, r.Routing[ipaddress].RoutingTables,r.Routing[ipaddress].Time)
 	return r.Routing[ipaddress].RoutingEntries, r.Routing[ipaddress].RoutingTables,r.Routing[ipaddress].Time
 
 }
