@@ -19,13 +19,15 @@ type RoutingData struct {
 }
 func StoreRoutingEntries(ipaddress string, time string, routingTable string, routingEntries []string) {
 
+	m :=  make(map[string][]string)
 	s := RoutingData{}
 	t := RoutingTablesUtils{}
 	t.Time = time
-	if t.RoutingEntries[routingTable] == nil {
 
-		t.RoutingEntries[routingTable] = routingEntries
-	}
+	m[routingTable] = routingEntries
+
+		t.RoutingEntries = m
+
 	t.RoutingTables = append(t.RoutingTables, routingTable)
 	s.Routing[ipaddress] = t
 
