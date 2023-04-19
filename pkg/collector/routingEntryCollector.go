@@ -20,7 +20,7 @@ import (
 	//"strconv"
 	//"time"
 	//"exporter/sqlite"
-	"database/sql"
+	//"database/sql"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -142,11 +142,11 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 
 
 	//var timeLast string
-	var sqliteDatabase *sql.DB
+	/*var sqliteDatabase *sql.DB
 	sqliteDatabase, err := sql.Open("sqlite3", "./sqlite-database.db")
 	if err != nil {
 		log.Print(err)
-	}
+	}*/
 	for i := range hosts {
 		var timeLastString string //Fetched from database, the routingentries and tables are stored for 24 hours as requested by HDO
 		var timeLast time.Time
@@ -159,25 +159,23 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			}
 			var routingtables []string
 			var routingEntryMap = make(map[string][]string)
-			var DBexists bool = database.RoutingTablesExists(sqliteDatabase,hosts[i].Ip) //Previous data is stored in db? Fetch this data
+			//var DBexists bool = database.RoutingTablesExists(sqliteDatabase,hosts[i].Ip) //Previous data is stored in db? Fetch this data
 			//log.Print("exists:",exists)
-			if (DBexists) {
-				routingEntryMap,routingtables,timeLastString,err = database.GetRoutingData(sqliteDatabase,hosts[i].Ip) // From db: returning a map of routingentables to routingentries (array),
-				if err != nil {
-					log.Print(err)
-				}
-				timeLast,err = time.Parse(time.RFC3339, timeLastString)
-				if err != nil {
-					log.Print(err)
-				}
+			//if (DBexists) {
+				routingEntryMap,routingtables,timeLastString = utils.GetRoutingData(hosts[i].Ip, utils.RoutingData{}) // From db: returning a map of routingentables to routingentries (array),
+				if (timeLastString != "no data") {
+					timeLast,err = time.Parse(time.RFC3339, timeLastString)
+					if err != nil {
+						timeLastString = "no data"
+					}
+
+
+
 			}
 			//If 24 hours has not passed since last data was stored in database, use this data
 			//log.Print(b)
 			timeSchedule := hosts[i].RoutingEntryTime
-				if timeSchedule == 0 {
-					timeSchedule = 24
-				}
-			if (!DBexists || database.Expired(timeSchedule, timeLast))  { //Routing data has expired, fetching new routingentries
+			if (timeLastString == "no data" || database.Expired(timeSchedule, timeLast))  { //Routing data has expired, fetching new routingentries
 				fmt.Println("Fetching routing data from http")
 				_, data, err := http.GetAPIData("https://"+hosts[i].Ip+"/rest/routingtable", phpsessid)
 				if err != nil {
@@ -196,7 +194,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				//log.Print("rt fetched from router")
 				routingtables = rt.RoutingTables2.RoutingTables3.Attr
 				//Delete previous routing data
-				database.DeleteRoutingTables(sqliteDatabase,hosts[i].Ip)
+				//database.DeleteRoutingTables(sqliteDatabase,hosts[i].Ip)
 			}
 							//using previous routingentries if within time
 
@@ -214,7 +212,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			for j := range routingtables {
 				var match []string //variable to hold routingentries cleaned with regex
 				//Trying to fetch routingentries from database, if not exist yet, fetch new ones
-				if (DBexists) {
+				if (timeLastString != "no data") {
 					for k,v := range routingEntryMap {// fetching routingentries from a map from db
 						if (k == routingtables[j]) {
 							for re := range v {
@@ -251,7 +249,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					now := time.Now().Format(time.RFC3339)
 					//log.Print("NOW:", now)
 
-					err = database.StoreRoutingEntries(sqliteDatabase, hosts[i].Ip, now, routingtables[j], match)
+					utils.StoreRoutingEntries(hosts[i].Ip, now, routingtables[j], match)
 					if err != nil {
 						log.Print(err)
 					}

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="0f272258-cfb9-47b3-b8d5-8d77985e6ad9" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/Other/APIoutput.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Other/APIoutput.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Other/Grafana-Prometheus/grafanacloud/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Other/Grafana-Prometheus/grafanacloud/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Other/Grafana-Prometheus/grafanacloud/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/Other/Grafana-Prometheus/grafanacloud/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Other/Grafana-Prometheus/grafanacloud/prometheus.yml" beforeDir="false" afterPath="$PROJECT_DIR$/Other/Grafana-Prometheus/grafanacloud/prometheus.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Other/Grafana-Prometheus/grafanalocal/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Other/Grafana-Prometheus/grafanalocal/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Other/Grafana-Prometheus/grafanalocal/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/Other/Grafana-Prometheus/grafanalocal/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Other/Grafana-Prometheus/grafanalocal/prometheus.yml" beforeDir="false" afterPath="$PROJECT_DIR$/Other/Grafana-Prometheus/grafanalocal/prometheus.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Other/Ribbon SBC REST API Authentication/AuthenticationTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/Other/Ribbon SBC REST API Authentication/AuthenticationTest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Other/sbcsystem.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Other/sbcsystem.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/collector/CallStatsCollector.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/collector/CallStatsCollector.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/collector/diskpartionCollector.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/collector/diskpartionCollector.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/collector/ethernetportCollector.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/collector/ethernetportCollector.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/collector/linecardCollector.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/collector/linecardCollector.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/collector/routingEntryCollector.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/collector/routingEntryCollector.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/collector/systemCollector.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/collector/systemCollector.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/config/configHandler.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/config/configHandler.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/database/DButils.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/database/DButils.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/database/chassisDB.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/database/chassisDB.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/database/sqliteAuth.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/database/sqliteAuth.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/database/sqliteRouting.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/database/sqliteRouting.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/http/apicall.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/http/apicall.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/utils/chassis.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/utils/chassis.go" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="GOROOT" url="file:///usr/local/go" />
+  <component name="ProjectId" id="2OWaZsehk455LGbdoWp0GiQvKb1" />
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.go.formatter.settings.were.checked": "true",
+    "RunOnceActivity.go.migrated.go.modules.settings": "true",
+    "go.import.settings.migrated": "true",
+    "go.sdk.automatically.set": "true",
+    "last_opened_file_path": "/root"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="VgoProject">
+    <settings-migrated>true</settings-migrated>
+  </component>
+</project>
