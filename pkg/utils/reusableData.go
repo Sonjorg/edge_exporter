@@ -38,11 +38,12 @@ func StoreRoutingEntries(ipaddress string, time string, routingTable string, rou
 
 func GetRoutingData(ipaddress string, r RoutingData) (map[string][]string,[]string,string) {
 
+	fmt.Println(r.Routing[ipaddress].RoutingEntries, r.Routing[ipaddress].RoutingTables,r.Routing[ipaddress].Time)
+
 	_, ok := r.Routing[ipaddress]
 	if !ok {
 		return nil,nil,	"no data"
 	}
-	fmt.Println(r.Routing[ipaddress].RoutingEntries, r.Routing[ipaddress].RoutingTables,r.Routing[ipaddress].Time)
 	return r.Routing[ipaddress].RoutingEntries, r.Routing[ipaddress].RoutingTables,r.Routing[ipaddress].Time
 
 }
