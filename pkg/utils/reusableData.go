@@ -22,7 +22,10 @@ func StoreRoutingEntries(ipaddress string, time string, routingTable string, rou
 	s := RoutingData{}
 	t := RoutingTablesUtils{}
 	t.Time = time
-	t.RoutingEntries[routingTable] = routingEntries
+	if t.RoutingEntries[routingTable] == nil {
+
+		t.RoutingEntries[routingTable] = routingEntries
+	}
 	t.RoutingTables = append(t.RoutingTables, routingTable)
 	s.Routing[ipaddress] = t
 
