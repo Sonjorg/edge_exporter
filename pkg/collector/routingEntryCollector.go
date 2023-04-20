@@ -162,7 +162,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			//var DBexists bool = database.RoutingTablesExists(sqliteDatabase,hosts[i].Ip) //Previous data is stored in db? Fetch this data
 			//log.Print("exists:",exists)
 			//if (DBexists) {
-				routingEntryMap,routingtables,timeLastString = utils.GetRoutingData(hosts[i].Ip, &utils.RoutingData{}) // From db: returning a map of routingentables to routingentries (array),
+				routingEntryMap,routingtables,timeLastString = utils.GetRoutingData(hosts[i].Ip, &[]utils.RoutingTablesUtils{}) // From db: returning a map of routingentables to routingentries (array),
 				if (timeLastString != "no data") {
 					timeLast,err = time.Parse(time.RFC3339, timeLastString)
 					if err != nil {
