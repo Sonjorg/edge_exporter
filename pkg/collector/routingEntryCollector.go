@@ -168,9 +168,7 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					if err != nil {
 						timeLastString = "no data"
 					}
-
-
-
+				fmt.Println(routingEntryMap,routingtables,timeLastString)
 			}
 			//If 24 hours has not passed since last data was stored in database, use this data
 			//log.Print(b)
