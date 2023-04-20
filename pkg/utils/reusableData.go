@@ -45,7 +45,7 @@ func StoreRoutingEntries(ipaddress string, time string, routingTable string, rou
 
 }
 
-func GetRoutingData(ipaddress string, r RoutingData) (map[string][]string,[]string,string) {
+func GetRoutingData(ipaddress string, r *RoutingData) (map[string][]string,[]string,string) {
 
 	//fmt.Println(r.Routing[ipaddress].RoutingEntries, r.Routing[ipaddress].RoutingTables,r.Routing[ipaddress].Time)
 
@@ -56,7 +56,7 @@ func GetRoutingData(ipaddress string, r RoutingData) (map[string][]string,[]stri
 	s := []RoutingTablesUtils{}
 	for i:= range s {
 		if (s[i].Ipaddress == ipaddress) {
-			fmt.Println(s[i].RoutingEntries, s[i].RoutingTables,s[i].Time)
+			fmt.Println("data:",s[i].RoutingEntries, s[i].RoutingTables,s[i].Time)
 			return s[i].RoutingEntries, s[i].RoutingTables,s[i].Time
 		}
 
