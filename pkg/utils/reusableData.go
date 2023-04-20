@@ -1,5 +1,7 @@
 package utils
 
+import "fmt"
+
 //import "fmt"
 
 //"github.com/mattn/go-sqlite3" // Import go-sqlite3 library
@@ -31,6 +33,7 @@ func StoreRoutingEntries(ipaddress string, time string, routingTable string, rou
 	m[routingTable] = routingEntries
 
 	a := RoutingTablesUtils{Ipaddress: ipaddress, Time: time, RoutingEntries: m}
+	a.RoutingTables = append(a.RoutingTables, routingTable)
 	t.RoutingEntries = m
 
 	t.RoutingTables = append(t.RoutingTables, routingTable)
@@ -39,9 +42,6 @@ func StoreRoutingEntries(ipaddress string, time string, routingTable string, rou
 
 		s = append(s, a)
 		//	s.Routing = append(s.Routing,t)
-
-
-
 
 }
 
@@ -55,7 +55,8 @@ func GetRoutingData(ipaddress string, r RoutingData) (map[string][]string,[]stri
 	}*/
 	s := []RoutingTablesUtils{}
 	for i:= range s {
-		if (s[i].Ipaddress == ipaddress){
+		if (s[i].Ipaddress == ipaddress) {
+			fmt.Println(s[i].RoutingEntries, s[i].RoutingTables,s[i].Time)
 			return s[i].RoutingEntries, s[i].RoutingTables,s[i].Time
 		}
 
