@@ -41,7 +41,7 @@ func StoreRoutingEntries(ipaddress string, time string, routingTable string, rou
 	//Ipaddress := ipaddress
 
 		s = append(s, a)
-		//	s.Routing = append(s.Routing,t)
+		fmt.Println(s)//	s.Routing = append(s.Routing,t)
 
 }
 
