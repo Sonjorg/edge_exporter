@@ -1,20 +1,11 @@
 # Readme
 ## Prometheus exporter for Ribbon Communications SBC routers
-#### Developed by Sondre Jørgensen and Sang Ngoc Nguyen at NTNU: Norwegian University of Science and Technology, sondre2409@gmail.com and 29sangu@gmail.com.
-### Deployment of the exporter running docker
-- Run:
-``` sudo docker build -t exporter .```
-``` sudo docker run -p 5123:5123 exporter ```
-- Metrics can be gathered from ```host:5123/metrics```
+
+## SBC Exporter written in golang
+#### Developed in collaboration with Sondre Jørgensen and Sang Ngoc Nguyen at NTNU: Norwegian University of Science and Technology, sondre2409@gmail.com and 29sangu@gmail.com.
 
 ### Configuration of the exporter
 ##### The configuration is implemented in config.yml in the root folder of the source code.
-- Below you can see the layout of a config.yml file having 3 hosts with dummy data.
-- It is required to use a hostname, ipaddress, username and password.
-- You can choose which collectors you want to exclude for each host by adding them to the list "exclude" as shown below the last host. The name of the collectors have to match exactly as spelled in this example.
-- "Authtimeout" is the maximum chosen time to attempt authentication to a host. Usually it is not reachable if the duration is more than 1-2 second.
-- "routing-database-hours" is the duration of which data related to the routingentry collector is stored within the database. Fetching new data through http takes several extra seconds per scrape. Metrics are never stored, only data such as routing tables and their routing entries.
-- It is recommended not to use too many hosts per docker instance because of performance issues; a scrape on 2 hosts with no collectors excluded takes around 13 seconds on the first scrape, and around 10 seconds on the following scrapes.
 ```
 ---
 authtimeout: 3  #all hosts will have max 3 sec timout
@@ -41,9 +32,20 @@ hosts:
    - systemcallstats
    - linecard
    - ethernetport
-
 #Excluding the above collectors for this host
 ```
+- Above you can see the layout of a config.yml file having 3 hosts with dummy data.
+- It is required to use a hostname, ipaddress, username and password.
+- You can choose which collectors you want to exclude for each host by adding them to the list "exclude" as shown below the last host. The name of the collectors have to match exactly as spelled in this example.
+- "Authtimeout" is the maximum chosen time to attempt authentication to a host. Usually it is not reachable if the duration is more than 1-2 second.
+- "routing-database-hours" is the duration of which data related to the routingentry collector is stored within the database. Fetching new data through http takes several extra seconds per scrape. Metrics are never stored, only data such as routing tables and their routing entries.
+- It is recommended not to use too many hosts per docker instance because of performance issues; a scrape on 2 hosts with no collectors excluded takes around 13 seconds on the first scrape, and around 10 seconds on the following scrapes.
+
+### Deployment running docker
+- Run:
+``` sudo docker build -t exporter .```
+``` sudo docker run -p 5123:5123 exporter ```
+- Metrics can be gathered from ```host:5123/metrics```
 
 ### Deployment of the SBCexporter on a linux server
 **The exporter is developed and tested for the official ubuntu server image found at https://ubuntu.com/download/server.**
@@ -52,6 +54,7 @@ hosts:
 ``` go install ```
 ### To test go exporters:
 ``` go run . ``` in the SBCexporter directory, then use ```curl localhost:9100/metrics``` in another windows to view live metrics data that can be collected by prometheus
+
 ### To test a specific file, for use
 ``` go run main.go ``` However this will not make use of dependencies from other files
 
