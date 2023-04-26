@@ -39,17 +39,13 @@ func CreateRoutingSqlite(db * sql.DB) error{
 
 
 func StoreRoutingEntries(db *sql.DB, ipaddress string, time string, routingTable string, routingEntries []string) error{
-	//log.Println("Inserting entry ...")
-
 
 	for i := range routingEntries {
 		insertSQL1 := `INSERT INTO routingtables(ipaddress, time, routingtable, routingentries) VALUES (?, ?, ?, ?)`
 
-		statement, err := db.Prepare(insertSQL1) // Prepare statement.
-													// This is good to avoid SQL injections
+		statement, err := db.Prepare(insertSQL1)
 		if err != nil {
 			log.Print(err)
-
 			return err
 		}
 		_, err = statement.Exec(ipaddress, time, routingTable, routingEntries[i])
@@ -89,23 +85,20 @@ func RoutingTablesExists(db * sql.DB,ip string) bool {
 
 func GetRoutingData(db *sql.DB,ipaddress string) (map[string][]string,[]string,string, error) {
 		row, err := db.Query("SELECT * FROM routingtables")
-		//row.Scan(ip)
 		if err != nil {
 			log.Print(err)
-			//return nil, nil,"", err
+			return nil, nil,"", err
 		}
-
 		defer row.Close()
 
-		//var re []RoutingTest
-		//var data []*RoutingT
 		var time string
 		var routingEntries = make(map[string][]string)
 		var tables []string
 
 		for row.Next() {
 			r := &RoutingT{}
-				if err := row.Scan(&r.Id, &r.Ipaddress,&r.Time,&r.RoutingTable, &r.RoutingEntry); err != nil{
+				err := row.Scan(&r.Id, &r.Ipaddress,&r.Time,&r.RoutingTable, &r.RoutingEntry)
+				if err != nil{
 					log.Print(err)
 				}
 				if (r.Ipaddress == ipaddress) {
@@ -117,34 +110,5 @@ func GetRoutingData(db *sql.DB,ipaddress string) (map[string][]string,[]string,s
 		for key, _ := range routingEntries {
 			tables = append(tables, key)
 		}
-		//log.Print("fra db: ", time)
 		return routingEntries,tables,time,err
-	}
-
-/*
-func main() {
-
-	var sqliteDatabase *sql.DB
-
-				sqliteDatabase, err := sql.Open("sqlite3", "./sqlite-database.db")
-				if err != nil {
-					log.Print(err)
-				}
-	var s []string
-	s = append(s, "1")
-	s = append(s, "2")
-	s = append(s, "3")
-
-
-	createRoutingSqlite(sqliteDatabase)
-	storeRoutingEntries(sqliteDatabase, "ipadresse", "time","5", s)
-	if (routingTablesExists(sqliteDatabase, "ipadresse")) {
-		g, err := getRoutingEntries(sqliteDatabase,"ipadresse","5")
-		if err != nil {
-			log.Print(err)
-		}
-		log.Print(g)
-
-	}
 }
-*/

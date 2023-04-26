@@ -28,7 +28,6 @@ Rt_Status         int    `xml:"rt_Status"`
 
 }
 
-//Metrics for each routingentry
 type linecardMetrics struct {
 	Href                *prometheus.Desc
 	Rt_CardType		  	*prometheus.Desc
@@ -93,18 +92,16 @@ func (collector *linecardMetrics) Collect(c chan<- prometheus.Metric) {
 		//chassis labels from db or http
 		chassisType, serialNumber, err := utils.GetChassisLabels(hosts[i].Ip,phpsessid)
 		if err!= nil {
-			chassisType, serialNumber = "db chassisData fail", "db chassisData fail"
+			chassisType, serialNumber = "db chassisData failed", "db chassisData failed"
 			log.Print(err)
 		}
 
 		var linecardID []string
 		// There are two linecard linecardIDs which are different for type of SBC router
 		if (chassisType == "SBC1000") {
-			linecardID = append(linecardID, "7")
-			linecardID = append(linecardID, "8")
+			linecardID = []string {"7", "8"}
 		} else if (chassisType == "SBC2000") {
-			linecardID = append(linecardID, "1")
-			linecardID = append(linecardID, "2")
+			linecardID = []string {"1", "2"}
 		} else {
 			//Couldnt fetch chassis type from db or http: try next host
 			c <- prometheus.MustNewConstMetric(
@@ -145,7 +142,8 @@ func (collector *linecardMetrics) Collect(c chan<- prometheus.Metric) {
 
 // Initializing the collector
 func LinecardCollector() {
-	hosts := config.GetIncludedHosts("linecard")//retrieving targets for this exporter
+	//If no targets for this collector, return from function
+	hosts := config.GetIncludedHosts("linecard")
 	if (len(hosts) <= 0) {
 		log.Print("no hosts")
 		return

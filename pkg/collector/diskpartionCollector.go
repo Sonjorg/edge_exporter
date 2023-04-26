@@ -97,7 +97,7 @@ func (collector *diskMetrics) Describe(ch chan<- *prometheus.Desc) {
 func (collector *diskMetrics) Collect(c chan<- prometheus.Metric) {
 	hosts := config.GetIncludedHosts("diskpartition")//retrieving targets for this exporter
 	if (len(hosts) <= 0) {
-		log.Print("no hosts")
+		log.Print("no hosts disk")
 		return
 	}
 

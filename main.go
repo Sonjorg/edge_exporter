@@ -13,13 +13,12 @@ import (
 )
 
 func main() {
-
 	//Creating database and tables
 	database.InitializeDB()
 
 	hosts := config.GetAllHosts()
 	for i := range hosts {
-		//Fetching sessioncookies and placing them in database
+		//Fetching sessioncookies and inserting them into the database
 		phpsessid, err := thishttp.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
 		if err!= nil {
 			log.Print(err)
@@ -34,7 +33,7 @@ func main() {
 	}
 
 	//initializing collectors
-	//The collectors only start to run after a scrape is made to host:5123/metrics
+	//The collectors only start to run after a scrape is made to this host
 	collector.SystemResourceCollector()
 	collector.DiskPartitionCollector()
 	collector.RoutingEntryCollector()
