@@ -10,7 +10,7 @@
 
 ### Configuration of the exporter
 ##### The configuration is implemented in config.yml in the root folder of the source code.
-- Below you can see the layout of a config.yml file having 3 hosts. 
+- Below you can see the layout of a config.yml file having 3 hosts with dummy data. 
 - It is required to use a hostname, ipaddress, username and password. 
 - You can choose which collectors you want to exclude for each host by adding them to the list "exclude" as shown below the last host. The name of the collectors have to match exactly as spelled in this example.
 - "Authtimeout" is the maximum chosen time to attempt authentication to a host. Usually it is not reachable if the duration is more than 1-2 second. 
