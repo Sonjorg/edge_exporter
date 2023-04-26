@@ -11,7 +11,7 @@
 ### Configuration of the exporter
 **The configuration is implemented in config.yml in the root folder**
 Below you can see the layout of a config.yml file with 3 hosts which values are not shown. It is required to use a hostname, ipaddress, username and password. You can choose which collectors you want to exclude for each host by adding them to the list "exclude" as shown below the last host.  "Authtimeout" is the maximum chosen time to attempt authentication to a host. Usually it is not reachable if the duration is more than 2 second. It is recommended not to use too many hosts per docker instance because of performance issues; a scrape on 2 hosts with no collectors excluded takes around 13 seconds on the first scrape, and around 10 seconds on the following scrapes.
-
+```
 ---
 authtimeout: 3  #all hosts will have max 3 sec timout
 hosts:
@@ -39,7 +39,7 @@ hosts:
    - ethernetport
 
 #Excluding the above collectors for this host
-
+```
 
 ### Deployment of the SBCexporter on a linux server
 **The exporter is developed and tested for the official ubuntu server image found at https://ubuntu.com/download/server.**
