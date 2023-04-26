@@ -7,6 +7,40 @@
 ``` sudo docker build -t exporter .```
 ``` sudo docker run -p 5123:5123 exporter ```
 - Metrics can be gathered from ```host:5123/metrics```
+
+### Configuration of the exporter
+**The configuration is implemented in config.yml in the root folder**
+Below you can see the layout of a config.yml file with 3 hosts which values are not shown. It is required to use a hostname, ipaddress, username and password. You can choose which collectors you want to exclude for each host by adding them to the list "exclude" as shown below the last host.  "Authtimeout" is the maximum chosen time to attempt authentication to a host. Usually it is not reachable if the duration is more than 2 second. It is recommended not to use too many hosts per docker instance because of performance issues; a scrape on 2 hosts with no collectors excluded takes around 13 seconds on the first scrape, and around 10 seconds on the following scrapes.
+
+---
+authtimeout: 3  #all hosts will have max 3 sec timout
+hosts:
+- hostname:
+  ipaddress:
+  username:
+  password:
+  routing-database-hours: 24 #For routingentry collector, data is stored in the database for 24 hours for this host, NB: can not be 0
+- hostname:
+  ipaddress:
+  username:
+  password:
+  routing-database-hours: 24
+- hostname:
+  ipaddress:
+  username:
+  password:
+  routing-database-hours: 24
+  exclude:
+   - routingentry
+   - system
+   - diskpartition
+   - systemcallstats
+   - linecard
+   - ethernetport
+
+#Excluding the above collectors for this host
+
+
 ### Deployment of the SBCexporter on a linux server
 **The exporter is developed and tested for the official ubuntu server image found at https://ubuntu.com/download/server.**
 - Download golang using the official download page: [install golang](https://go.dev/doc/install), and remember to reboot
