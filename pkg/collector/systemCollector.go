@@ -11,7 +11,6 @@ import (
 	"encoding/xml"
 	//"fmt"
 	"log"
-	"strconv"
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
