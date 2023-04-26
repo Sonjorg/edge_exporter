@@ -114,7 +114,7 @@ func (collector *cMetrics) Collect(c chan<- prometheus.Metric) {
 				 c <- prometheus.NewMetricWithTimestamp(
 					timeReportedByExternalSystem,
 					prometheus.MustNewConstMetric(
-						collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, hosts[i].Hostname, "systemcallstats",nr, "/rest/systemcallstats"),
+						collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, hosts[i].Hostname, "systemcallstats",nr, "/rest/systemcallstats","NA","NA"),
 				   )
 				   continue //trying next ip address
 		}
