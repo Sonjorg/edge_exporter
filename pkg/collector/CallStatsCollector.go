@@ -49,31 +49,31 @@ func callStats()*cMetrics{
 	 return &cMetrics{
 		Rt_NumCallAttempts: prometheus.NewDesc("rt_NumCallAttempts",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job","host_nr", "Href", "chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job", "Href", "chassis_type","serial_number"}, nil,
 		),
 		Rt_NumCallSucceeded: prometheus.NewDesc("rt_NumCallSucceeded",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job","host_nr", "Href", "chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job", "Href", "chassis_type","serial_number"}, nil,
 		),
 		Rt_NumCallFailed: prometheus.NewDesc("rt_NumCallFailed",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job","host_nr", "Href", "chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job", "Href", "chassis_type","serial_number"}, nil,
 		),
 		Rt_NumCallCurrentlyUp: prometheus.NewDesc("rt_NumCallCurrentlyUp",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job","host_nr", "Href", "chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job", "Href", "chassis_type","serial_number"}, nil,
 		),
 		Rt_NumCallAbandonedNoTrunk: prometheus.NewDesc("rt_NumCallAbandonedNoTrunk",
 			"NoDescriptionYet.",
-			[]string{"Instance", "hostname", "job","host_nr", "Href", "chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job", "Href", "chassis_type","serial_number"}, nil,
 		),
 		Rt_NumCallUnAnswered: prometheus.NewDesc("rt_NumCallUnAnswered",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job","host_nr", "Href", "chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job", "Href", "chassis_type","serial_number"}, nil,
 		),
 		Error_ip: prometheus.NewDesc("error_edge_call_stats",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job","host_nr", "Href","chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job", "Href","chassis_type","serial_number"}, nil,
 		),
 	 }
 }
@@ -101,7 +101,6 @@ func (collector *cMetrics) Collect(c chan<- prometheus.Metric) {
 	}
 
 	for i := 0; i < len(hosts); i++ {
-		nr := strconv.Itoa(i)
 		//authStr := "https://" +hosts[i].ip + "/rest/login"
 
 		//username, password := getAuth(ipaddresses[i])
@@ -114,7 +113,7 @@ func (collector *cMetrics) Collect(c chan<- prometheus.Metric) {
 				 c <- prometheus.NewMetricWithTimestamp(
 					timeReportedByExternalSystem,
 					prometheus.MustNewConstMetric(
-						collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, hosts[i].Hostname, "systemcallstats",nr, "/rest/systemcallstats","NA","NA"),
+						collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, hosts[i].Hostname, "systemcallstats", "/rest/systemcallstats","NA","NA"),
 				   )
 				   continue //trying next ip address
 		}
@@ -131,7 +130,7 @@ func (collector *cMetrics) Collect(c chan<- prometheus.Metric) {
 				  c <- prometheus.NewMetricWithTimestamp(
 					timeReportedByExternalSystem,
 					prometheus.MustNewConstMetric(
-						collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, hosts[i].Hostname, "systemcallstats",nr, "/rest/systemcallstats",chassisType, serialNumber),
+						collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, hosts[i].Hostname, "systemcallstats", "/rest/systemcallstats",chassisType, serialNumber),
 				   )
 				continue
 		}
@@ -151,12 +150,12 @@ func (collector *cMetrics) Collect(c chan<- prometheus.Metric) {
 		metricValue5 := float64(ssbc.CallStatsData.Rt_NumCallAbandonedNoTrunk)
 		metricValue6 := float64(ssbc.CallStatsData.Rt_NumCallUnAnswered)
 
-			c <- prometheus.MustNewConstMetric(collector.Rt_NumCallAttempts, prometheus.GaugeValue, metricValue1, hosts[i].Ip, hosts[i].Hostname, "systemstats",nr, ssbc.CallStatsData.Href, chassisType, serialNumber)
-			c <- prometheus.MustNewConstMetric(collector.Rt_NumCallSucceeded, prometheus.GaugeValue, metricValue2, hosts[i].Ip, hosts[i].Hostname, "systemstats",nr, ssbc.CallStatsData.Href, chassisType, serialNumber)
-			c <- prometheus.MustNewConstMetric(collector.Rt_NumCallFailed, prometheus.GaugeValue, metricValue3, hosts[i].Ip, hosts[i].Hostname, "systemstats",nr, ssbc.CallStatsData.Href, chassisType, serialNumber)
-			c <- prometheus.MustNewConstMetric(collector.Rt_NumCallCurrentlyUp, prometheus.GaugeValue, metricValue4, hosts[i].Ip, hosts[i].Hostname, "systemstats",nr, ssbc.CallStatsData.Href, chassisType, serialNumber)
-			c <- prometheus.MustNewConstMetric(collector.Rt_NumCallAbandonedNoTrunk, prometheus.GaugeValue, metricValue5, hosts[i].Ip, hosts[i].Hostname, "systemstats",nr, ssbc.CallStatsData.Href, chassisType, serialNumber)
-			c <- prometheus.MustNewConstMetric(collector.Rt_NumCallUnAnswered, prometheus.GaugeValue, metricValue6, hosts[i].Ip, hosts[i].Hostname, "systemstats",nr, ssbc.CallStatsData.Href, chassisType, serialNumber)
+			c <- prometheus.MustNewConstMetric(collector.Rt_NumCallAttempts, prometheus.GaugeValue, metricValue1, hosts[i].Ip, hosts[i].Hostname, "systemstats", ssbc.CallStatsData.Href, chassisType, serialNumber)
+			c <- prometheus.MustNewConstMetric(collector.Rt_NumCallSucceeded, prometheus.GaugeValue, metricValue2, hosts[i].Ip, hosts[i].Hostname, "systemstats", ssbc.CallStatsData.Href, chassisType, serialNumber)
+			c <- prometheus.MustNewConstMetric(collector.Rt_NumCallFailed, prometheus.GaugeValue, metricValue3, hosts[i].Ip, hosts[i].Hostname, "systemstats", ssbc.CallStatsData.Href, chassisType, serialNumber)
+			c <- prometheus.MustNewConstMetric(collector.Rt_NumCallCurrentlyUp, prometheus.GaugeValue, metricValue4, hosts[i].Ip, hosts[i].Hostname, "systemstats", ssbc.CallStatsData.Href, chassisType, serialNumber)
+			c <- prometheus.MustNewConstMetric(collector.Rt_NumCallAbandonedNoTrunk, prometheus.GaugeValue, metricValue5, hosts[i].Ip, hosts[i].Hostname, "systemstats", ssbc.CallStatsData.Href, chassisType, serialNumber)
+			c <- prometheus.MustNewConstMetric(collector.Rt_NumCallUnAnswered, prometheus.GaugeValue, metricValue6, hosts[i].Ip, hosts[i].Hostname, "systemstats", ssbc.CallStatsData.Href, chassisType, serialNumber)
 	}
 }
 

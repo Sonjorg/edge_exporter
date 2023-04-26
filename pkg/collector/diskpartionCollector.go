@@ -77,7 +77,7 @@ func diskCollector()*diskMetrics{
 		),
 		Error_ip: prometheus.NewDesc("error_edge_disk",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname"}, nil,
+			[]string{"Instance", "hostname","job","error_reason","chassis_type","serial_number"}, nil,
 		),
 	 }
 }
@@ -108,11 +108,22 @@ func (collector *diskMetrics) Collect(c chan<- prometheus.Metric) {
 		phpsessid,err := http.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
 		if err != nil {
 			log.Print("Error auth", hosts[i].Ip, err)
+			c <- prometheus.MustNewConstMetric(
+				collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, hosts[i].Hostname, "diskpartition","Authentication failed","NA","NA")
 			continue
 		}
+		//chassis labels from db or http
+		chassisType, serialNumber, err := utils.GetChassisLabels(hosts[i].Ip,phpsessid)
+		if err!= nil {
+			chassisType, serialNumber = "db chassisData fail", "db chassisData fail"
+			log.Print(err)
+		}
+
 		_, data,err := http.GetAPIData("https://"+hosts[i].Ip+"/rest/diskpartition", phpsessid)
 		if err != nil {
 			log.Print("Error disk data", hosts[i].Ip, err)
+			c <- prometheus.MustNewConstMetric(
+				collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, hosts[i].Hostname, "diskpartition","Fetching data failed",chassisType,serialNumber)
 			continue
 		}
 		//b := []byte(data) //Converting string of data to bytestream
@@ -127,19 +138,13 @@ func (collector *diskMetrics) Collect(c chan<- prometheus.Metric) {
 			continue
 
 		}
-		//chassis labels from db or http
-		chassisType, serialNumber, err := utils.GetChassisLabels(hosts[i].Ip,phpsessid)
-		if err!= nil {
-			chassisType, serialNumber = "db chassisData fail", "db chassisData fail"
-			log.Print(err)
-		}
+
 			for j := range disks {
 
 					url := "https://"+hosts[i].Ip+"/rest/diskpartition/"+disks[j]
 					_, data2, err := http.GetAPIData(url, phpsessid)
 						if err != nil {
 							log.Print(err)
-
 							continue
 						}
 
