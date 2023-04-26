@@ -1,5 +1,5 @@
 # Readme
-## SBC Exporter written in golang
+## Prometheus exporter for Ribbon Communications SBC routers
 #### Developed by Sondre Jørgensen and Sang Ngoc Nguyen at NTNU: Norwegian University of Science and Technology, sondre2409@gmail.com and 29sangu@gmail.com.
 ### Deployment of the exporter running docker
 - Run:
