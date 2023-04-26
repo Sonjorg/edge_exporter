@@ -125,7 +125,6 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 	log.Print(hosts)
 
 	for i := 0; i < len(hosts); i++ {
-		nr := strconv.Itoa(i)
 		//authStr := "https://" +hosts[i].ip + "/rest/login"
 		dataStr := "https://"+hosts[i].Ip+"/rest/system/historicalstatistics/1"
 

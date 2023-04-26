@@ -8,7 +8,6 @@ import (
 	//"fmt"
 	"log"
 	"github.com/prometheus/client_golang/prometheus"
-	"strconv"
 	"time"
 	"edge_exporter/pkg/http"
 	"edge_exporter/pkg/config"
