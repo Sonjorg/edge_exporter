@@ -131,7 +131,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 		timeReportedByExternalSystem := time.Now()//time.Parse(timelayout, mytimevalue)
 		phpsessid,err :=  http.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
 		if err != nil {
-			log.Println("Error retrieving session cookie: ",log.Flags(), err,"\n")
+			log.Println("Error retrieving session cookie (system): ",log.Flags(), err,"\n")
 			//return nil, err <-this line would result in error for systemexp on all hosts
 			//returning a prometheus error metric
 				 c <- prometheus.NewMetricWithTimestamp(
