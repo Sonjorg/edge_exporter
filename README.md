@@ -24,7 +24,7 @@ hosts:
   ipaddress: 11.111.111.11
   username: Username1
   password: Password1
-  routing-database-hours: 24 #For routingentry collector, data is stored in the database for 24 hours for this host, NB: can not be 0
+  routing-database-hours: 24 #For routingentry collector, data is stored in the database for 24 hours for this host.
 - hostname: Host2
   ipaddress: 11.111.111.12
   username: Username2
