@@ -86,6 +86,8 @@ func (collector *linecardMetrics) Collect(c chan<- prometheus.Metric) {
 		phpsessid,err := http.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
 		if err != nil {
 			log.Print("Error auth", hosts[i].Ip, err)
+			c <- prometheus.MustNewConstMetric(
+				collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip,hosts[i].Hostname, "linecard","All linecards", "Authentication failed","NA","NA")
 			continue
 		}
 

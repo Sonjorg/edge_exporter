@@ -255,6 +255,8 @@ func (collector *ethernetMetrics) Collect(c chan<- prometheus.Metric) {
 		phpsessid,err := http.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
 		if err != nil {
 			log.Print("Error session cookie", hosts[i].Ip, err)
+			c <- prometheus.MustNewConstMetric(
+				collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip,hosts[i].Hostname, "ethernetport","NA", "Authentication failed","NA","NA")
 			continue
 		}
 
