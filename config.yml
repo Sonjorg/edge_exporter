@@ -6,18 +6,12 @@ hosts:
   ipaddress: 10.233.234.11
   username: student
   password: PanneKake23
-  routing-database-hours: 24 #For routingentry collector, data is stored in the database for 24 hours for this host, NB: can not be 0
+  routing-database-hours: 0 #For routingentry collector, data is stored in the database for 24 hours for this host, NB: can not be 0
 - hostname: host2
   ipaddress: 10.233.230.11
   username: student
   password: PanneKake23
-  routing-database-hours: 24
-  exclude:
-- hostname: host3
-  ipaddress: 10.233.113.11
-  username: student
-  password: PanneKake23
-  routing-database-hours: 24
+  routing-database-hours: 0
   exclude:
 #  - routingentry
 #  - system

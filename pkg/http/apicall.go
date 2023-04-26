@@ -51,7 +51,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	req, err := http.NewRequest("POST", "https://"+ipaddress+"/rest/login", body)
 	if err != nil {
 		log.Flags()
-		log.Print("error in auth:", err)
+		log.Print("error authentication (APISessionAuth):", err)
 		return "Error fetching data", err
 		//	log.Print("error in systemExporter:", error)
 	}
