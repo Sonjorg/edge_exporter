@@ -92,7 +92,7 @@ func systemCollector()*sMetrics{
 		),
 		Error_ip: prometheus.NewDesc("error_edge_system",
 			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job","host_nr", "Href","chassis_type","serial_number"}, nil,
+			[]string{"Instance", "hostname", "job", "Href","chassis_type","serial_number"}, nil,
 		),
 	 }
 }
@@ -139,7 +139,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 				 c <- prometheus.NewMetricWithTimestamp(
 					timeReportedByExternalSystem,
 					prometheus.MustNewConstMetric(
-						collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, hosts[i].Hostname, "systemstats",nr, "/rest/system/"),
+						collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, hosts[i].Hostname, "systemstats","/rest/system/","NA","NA"),
 				   )
 				   continue //trying next ip address
 		}
