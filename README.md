@@ -12,7 +12,7 @@
 ##### The configuration is implemented in config.yml in the root folder of the source code.
 - Below you can see the layout of a config.yml file having 3 hosts. 
 - It is required to use a hostname, ipaddress, username and password. 
-- You can choose which collectors you want to exclude for each host by adding them to the list "exclude" as shown below the last host.  
+- You can choose which collectors you want to exclude for each host by adding them to the list "exclude" as shown below the last host. The name of the collectors have to match exactly as spelled in this example.
 - "Authtimeout" is the maximum chosen time to attempt authentication to a host. Usually it is not reachable if the duration is more than 1-2 second. 
 - "routing-database-hours" is the duration of which data related to the routingentry collector is stored within the database. Fetching new data through http takes several extra seconds per scrape. Metrics are never stored, only data such as routing tables and their routing entries.
 - It is recommended not to use too many hosts per docker instance because of performance issues; a scrape on 2 hosts with no collectors excluded takes around 13 seconds on the first scrape, and around 9 seconds on the following scrapes.
