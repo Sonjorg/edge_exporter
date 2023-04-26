@@ -9,7 +9,7 @@
 - Metrics can be gathered from ```host:5123/metrics```
 
 ### Configuration of the exporter
-**The configuration is implemented in config.yml in the root folder of the source code. **
+##### The configuration is implemented in config.yml in the root folder of the source code.
 - Below you can see the layout of a config.yml file having 3 hosts. 
 - It is required to use a hostname, ipaddress, username and password. 
 - You can choose which collectors you want to exclude for each host by adding them to the list "exclude" as shown below the last host.  
