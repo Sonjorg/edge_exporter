@@ -49,11 +49,11 @@ func lineCCollector()*linecardMetrics{
 			[]string{"hostip", "hostname", "job","linecardID"}, nil,
 		),*/
 		Rt_ServiceStatus: prometheus.NewDesc("rt_ServiceStatus",
-			"NoDescriptionYet",
+			"linecard",
 			[]string{"hostip", "hostname", "job","linecardID","rt_CardType","rt_Location"}, nil,
 		),
 		Rt_Status: prometheus.NewDesc("rt_Status",
-			"NoDescriptionYet",
+			"linecard",
 			[]string{"hostip", "hostname", "job","linecardID"}, nil,
 		),
 		/*Error_ip: prometheus.NewDesc("error_linecard",

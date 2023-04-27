@@ -41,8 +41,8 @@ hosts:
 
 ### Deployment running docker
 - Run:
-``` sudo docker build -t exporter .```
-``` sudo docker run -p 5123:5123 exporter ```
+``` sudo docker build -t edge_exporter .```
+``` sudo docker run -p 5123:5123 edge_exporter ```
 - Metrics can be gathered from ```host:5123/metrics```
 
 ### Deployment of the SBCexporter on a linux server

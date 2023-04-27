@@ -8,7 +8,7 @@ RUN go mod download && go mod verify
 COPY . .
 
 RUN go build -v -o /usr/local/bin/exporter ./
-
+RUN  pwd
 CMD ["exporter"]
-
+#ENTRYPOINT ["/usr/local/bin/exporter/config.yml"]
 EXPOSE 5123
