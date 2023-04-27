@@ -124,10 +124,8 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 	log.Print(hosts)
 
 	for i := 0; i < len(hosts); i++ {
-		//authStr := "https://" +hosts[i].ip + "/rest/login"
 		dataStr := "https://"+hosts[i].Ip+"/rest/system/historicalstatistics/1"
 
-		//username, password := getAuth(ipaddresses[i])
 		timeReportedByExternalSystem := time.Now()//time.Parse(timelayout, mytimevalue)
 		chassisType, serialNumber, err := utils.GetChassisLabels(hosts[i].Ip,"null")
 		if err!= nil {
@@ -163,13 +161,11 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 				   )
 				continue
 		}
-		//b := []byte(data) //bytestream
 		ssbc := &sSBCdata{}
 		err = xml.Unmarshal(data, &ssbc) //Converting XML data to variables
 		if err != nil {
 			log.Print("XML error system", err)
 		}
-		//log.Print("Successful API call data: ",ssbc.SystemData)
 
 		metricValue1 := float64(ssbc.SystemData.Rt_CPULoadAverage15m)
 		metricValue2 := float64(ssbc.SystemData.Rt_CPULoadAverage1m)

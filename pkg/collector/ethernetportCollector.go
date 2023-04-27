@@ -258,11 +258,10 @@ func (collector *ethernetMetrics) Collect(c chan<- prometheus.Metric) {
 			continue
 		}
 		var ethernetportID []string
-			//Every router has these ethernetports regardless of SBC1000 or SBC2000
+			//Every router has these ethernetports regardless of SBC1000 or SBC2000, according to HDO
 			ethernetportID = append(ethernetportID, "23")
 			ethernetportID = append(ethernetportID, "29")
 			ethernetportID = append(ethernetportID, "24")
-			//Couldnt fetch chassis type from db or http: try next host
 			for j := range ethernetportID {
 					url := "https://"+hosts[i].Ip+"/rest/ethernetport/"+ethernetportID[j]
 					_, data, err := http.GetAPIData(url, phpsessid)
@@ -276,7 +275,6 @@ func (collector *ethernetMetrics) Collect(c chan<- prometheus.Metric) {
 						log.Print("XML error ethernet", err)
 						continue
 					}
-					//log.Print("Successful API call data: ",eData.EthernetData)
 
 					metricValue1 := float64(eData.EthernetData.IfRedundancy)
 					metricValue2 := float64(eData.EthernetData.IfRedundantPort)

@@ -158,7 +158,6 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			var routingtables []string
 			var routingEntryMap = make(map[string][]string)
 			var DBexists bool = database.RoutingTablesExists(sqliteDatabase,hosts[i].Ip) //Previous data is stored in db? Fetch this data
-			//log.Print("exists:",exists)
 			if (DBexists) {
 				routingEntryMap,routingtables,timeLastString,err = database.GetRoutingData(sqliteDatabase,hosts[i].Ip) // From db: returning a map of routingentables to routingentries (array),
 				if err != nil {
@@ -169,10 +168,8 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					log.Print(err)
 				}
 			}
-			//If 24 hours has not passed since last data was stored in database, use this data
-			//log.Print(b)
 			timeSchedule := hosts[i].RoutingEntryTime
-
+			//If 24 hours has not passed since last data was stored in database, use this data
 			if (!DBexists || utils.Expired(timeSchedule, timeLast))  { //Routing data has expired, fetching new routingentries
 				fmt.Println("Fetching routing data from http")
 				_, data, err := http.GetAPIData("https://"+hosts[i].Ip+"/rest/routingtable", phpsessid)
@@ -186,7 +183,6 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					log.Print("XML error routingentry", err)
 					continue
 				}
-				//log.Print("rt fetched from router")
 				routingtables = rt.RoutingTables2.RoutingTables3.Attr
 				//Delete previous routing data
 				database.DeleteRoutingTables(sqliteDatabase,hosts[i].Ip)

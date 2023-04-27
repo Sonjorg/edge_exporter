@@ -114,9 +114,8 @@ func (collector *cMetrics) Collect(c chan<- prometheus.Metric) {
 				continue
 		}
 
-		b := []byte(data) //Converting string of data to bytestream
 		ssbc := &cSBCdata{}
-		err = xml.Unmarshal(b, &ssbc) //Converting XML data to variables
+		err = xml.Unmarshal(data, &ssbc) //Converting XML data to variables
 		if err!= nil {
 			log.Print("XML error callstats", err)
 			continue
