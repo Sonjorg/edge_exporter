@@ -7,7 +7,7 @@ import (
 	"log"
 	"edge_exporter/pkg/config"
 	"edge_exporter/pkg/http"
-	"edge_exporter/pkg/utils"
+	//"edge_exporter/pkg/utils"
 	"github.com/prometheus/client_golang/prometheus"
 	"strconv"
 	//"time"
@@ -49,7 +49,7 @@ type diskMetrics struct {
 	Rt_MemoryAvailable	*prometheus.Desc
 	Rt_MemoryUsed       *prometheus.Desc
 	Rt_PartitionType    *prometheus.Desc
-	Error_ip            *prometheus.Desc
+	//Error_ip            *prometheus.Desc
 	}
 
 func diskCollector()*diskMetrics{
@@ -57,28 +57,28 @@ func diskCollector()*diskMetrics{
 	 return &diskMetrics{
 		Rt_CurrentUsage: prometheus.NewDesc("rt_CurrentUsage",
 			"diskpartition",
-			[]string{"hostip", "hostname", "disk_partition_id","disk_partition_name","chassis_type","serial_number"}, nil,
+			[]string{"hostip", "hostname", "disk_partition_id","disk_partition_name"}, nil,
 		),
 		Rt_MaximumSize: prometheus.NewDesc("rt_MaximumSize",
 			"diskpartition",
-			[]string{"hostip", "hostname", "disk_partition_id","disk_partition_name","chassis_type","serial_number"}, nil,
+			[]string{"hostip", "hostname", "disk_partition_id","disk_partition_name"}, nil,
 		),
 		Rt_MemoryAvailable: prometheus.NewDesc("rt_MemoryAvailable",
 			"diskpartition",
-			[]string{"hostip", "hostname", "disk_partition_id","disk_partition_name","chassis_type","serial_number"}, nil,
+			[]string{"hostip", "hostname", "disk_partition_id","disk_partition_name"}, nil,
 		),
 		Rt_MemoryUsed: prometheus.NewDesc("rt_MemoryUsed",
 			"diskpartition",
-			[]string{"hostip", "hostname", "disk_partition_id","disk_partition_name","chassis_type","serial_number"}, nil,
+			[]string{"hostip", "hostname", "disk_partition_id","disk_partition_name"}, nil,
 		),
 		Rt_PartitionType: prometheus.NewDesc("rt_PartitionType",
 			"diskpartition",
-			[]string{"hostip", "hostname", "disk_partition_id","disk_partition_name","chassis_type","serial_number"}, nil,
+			[]string{"hostip", "hostname", "disk_partition_id","disk_partition_name"}, nil,
 		),
-		Error_ip: prometheus.NewDesc("error_edge_disk",
+		/*Error_ip: prometheus.NewDesc("error_edge_disk",
 			"diskpartition",
-			[]string{"hostip", "hostname","error_reason","chassis_type","serial_number"}, nil,
-		),
+			[]string{"hostip", "hostname","error_reason"}, nil,
+		),*/
 	 }
 }
 
@@ -91,7 +91,7 @@ func (collector *diskMetrics) Describe(ch chan<- *prometheus.Desc) {
 	ch <- collector.Rt_MemoryAvailable
 	ch <- collector.Rt_MemoryUsed
 	ch <- collector.Rt_PartitionType
-	ch <- collector.Error_ip
+	//ch <- collector.Error_ip
 }
 //Collect implements required collect function for all promehteus collectors
 func (collector *diskMetrics) Collect(c chan<- prometheus.Metric) {
@@ -110,19 +110,12 @@ func (collector *diskMetrics) Collect(c chan<- prometheus.Metric) {
 			log.Print("Error auth", hosts[i].Ip, err)
 			continue
 		}
-		//chassis labels from db or http
-		chassisType, serialNumber, err := utils.GetChassisLabels(hosts[i].Ip,phpsessid)
-		if err!= nil {
-			chassisType, serialNumber = "db chassisData fail", "db chassisData fail"
-			log.Print(err)
-		}
 
 		_, data,err := http.GetAPIData("https://"+hosts[i].Ip+"/rest/diskpartition", phpsessid)
 		if err != nil {
-			log.Print("Error disk data", hosts[i].Ip, err)
+			log.Print("Error fetching diskpartition data: ", hosts[i].Ip, err)
 			continue
 		}
-		//b := []byte(data) //Converting string of data to bytestream
 		disk := &diskPartition{}
 		xml.Unmarshal(data, &disk) //Converting XML data to variables
 
@@ -140,7 +133,7 @@ func (collector *diskMetrics) Collect(c chan<- prometheus.Metric) {
 					url := "https://"+hosts[i].Ip+"/rest/diskpartition/"+disks[j]
 					_, data2, err := http.GetAPIData(url, phpsessid)
 						if err != nil {
-							log.Print(err)
+							log.Print("Error fetching diskpartition data: ", hosts[i].Ip, err)
 							continue
 						}
 
@@ -159,11 +152,11 @@ func (collector *diskMetrics) Collect(c chan<- prometheus.Metric) {
 					partitionName = dData.DiskData.Rt_PartitionName
 					id := strconv.Itoa(j)
 
-						c <- prometheus.MustNewConstMetric(collector.Rt_CurrentUsage, prometheus.GaugeValue, metricValue1, hosts[i].Ip, hosts[i].Hostname,id, partitionName,chassisType, serialNumber,)
-						c <- prometheus.MustNewConstMetric(collector.Rt_MaximumSize, prometheus.GaugeValue, metricValue2, hosts[i].Ip, hosts[i].Hostname,id, partitionName,chassisType, serialNumber,)
-						c <- prometheus.MustNewConstMetric(collector.Rt_MemoryAvailable, prometheus.GaugeValue, metricValue3, hosts[i].Ip, hosts[i].Hostname,id, partitionName,chassisType, serialNumber,)
-						c <- prometheus.MustNewConstMetric(collector.Rt_MemoryUsed, prometheus.GaugeValue, metricValue4, hosts[i].Ip, hosts[i].Hostname,id, partitionName,chassisType, serialNumber,)
-						c <- prometheus.MustNewConstMetric(collector.Rt_PartitionType, prometheus.GaugeValue, metricValue5, hosts[i].Ip, hosts[i].Hostname,id, partitionName,chassisType, serialNumber,)
+						c <- prometheus.MustNewConstMetric(collector.Rt_CurrentUsage, prometheus.GaugeValue, metricValue1, hosts[i].Ip, hosts[i].Hostname,id, partitionName)
+						c <- prometheus.MustNewConstMetric(collector.Rt_MaximumSize, prometheus.GaugeValue, metricValue2, hosts[i].Ip, hosts[i].Hostname,id, partitionName)
+						c <- prometheus.MustNewConstMetric(collector.Rt_MemoryAvailable, prometheus.GaugeValue, metricValue3, hosts[i].Ip, hosts[i].Hostname,id, partitionName)
+						c <- prometheus.MustNewConstMetric(collector.Rt_MemoryUsed, prometheus.GaugeValue, metricValue4, hosts[i].Ip, hosts[i].Hostname,id, partitionName)
+						c <- prometheus.MustNewConstMetric(collector.Rt_PartitionType, prometheus.GaugeValue, metricValue5, hosts[i].Ip, hosts[i].Hostname,id, partitionName)
 
 
 		}

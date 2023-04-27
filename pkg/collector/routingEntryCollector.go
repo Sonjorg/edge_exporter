@@ -112,10 +112,10 @@ func routingCollector() *rMetrics {
 			"routingentry",
 			[]string{"hostip", "hostname",  "routing_table", "routing_entry"}, nil,
 		),
-		Error_ip: prometheus.NewDesc("error_edge_routing",
+		/*Error_ip: prometheus.NewDesc("error_edge_routing",
 			"routingentry",
 			[]string{"hostip", "hostname","routing_table", "error_reason","chassis_type","serial_number"}, nil,
-		),
+		),*/
 	}
 }
 
@@ -129,7 +129,7 @@ func (collector *rMetrics) Describe(ch chan<- *prometheus.Desc) {
 	ch <- collector.Rt_Jitter
 	ch <- collector.Rt_MOS
 	ch <- collector.Rt_QualityFailed
-	ch <- collector.Error_ip
+	//ch <- collector.Error_ip
 }
 
 // Collect implements required collect function for all promehteus collectors

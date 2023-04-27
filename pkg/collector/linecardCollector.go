@@ -4,11 +4,11 @@ package collector
 import (
 	"encoding/xml"
 	//"fmt"
-
-	"log"
 	"edge_exporter/pkg/config"
 	"edge_exporter/pkg/http"
 	"edge_exporter/pkg/utils"
+	"log"
+
 	"github.com/prometheus/client_golang/prometheus"
 	//"strconv"
 	//"time"
@@ -21,8 +21,8 @@ type lSBCdata struct {
 }
 type LinecardData struct {
 Href              string `xml:"href,attr"`
-Rt_CardType		  int    `xml:"rt_CardType"`
-Rt_Location		  int    `xml:"rt_Location"`
+Rt_CardType		  string    `xml:"rt_CardType"`
+Rt_Location		  string    `xml:"rt_Location"`
 Rt_ServiceStatus  int    `xml:"rt_ServiceStatus"`
 Rt_Status         int    `xml:"rt_Status"`
 
@@ -30,8 +30,8 @@ Rt_Status         int    `xml:"rt_Status"`
 
 type linecardMetrics struct {
 	Href                *prometheus.Desc
-	Rt_CardType		  	*prometheus.Desc
-	Rt_Location		  	*prometheus.Desc
+	//Rt_CardType		  	*prometheus.Desc
+	//Rt_Location		  	*prometheus.Desc
 	Rt_ServiceStatus  	*prometheus.Desc
 	Rt_Status           *prometheus.Desc
 	Error_ip            *prometheus.Desc
@@ -40,26 +40,26 @@ type linecardMetrics struct {
 func lineCCollector()*linecardMetrics{
 
 	 return &linecardMetrics{
-		Rt_CardType: prometheus.NewDesc("rt_CardType",
+		/*Rt_CardType: prometheus.NewDesc("rt_CardType",
 			"NoDescriptionYet",
-			[]string{"hostip", "hostname", "job","linecardID","chassis_type","serial_number"}, nil,
+			[]string{"hostip", "hostname", "job","linecardID"}, nil,
 		),
 		Rt_Location: prometheus.NewDesc("rt_Location",
 			"NoDescriptionYet",
-			[]string{"hostip", "hostname", "job","linecardID","chassis_type","serial_number"}, nil,
-		),
+			[]string{"hostip", "hostname", "job","linecardID"}, nil,
+		),*/
 		Rt_ServiceStatus: prometheus.NewDesc("rt_ServiceStatus",
 			"NoDescriptionYet",
-			[]string{"hostip", "hostname", "job","linecardID","chassis_type","serial_number"}, nil,
+			[]string{"hostip", "hostname", "job","linecardID","rt_CardType","rt_Location"}, nil,
 		),
 		Rt_Status: prometheus.NewDesc("rt_Status",
 			"NoDescriptionYet",
-			[]string{"hostip", "hostname", "job","linecardID","chassis_type","serial_number"}, nil,
+			[]string{"hostip", "hostname", "job","linecardID"}, nil,
 		),
-		Error_ip: prometheus.NewDesc("error_linecard",
+		/*Error_ip: prometheus.NewDesc("error_linecard",
 			"NoDescriptionYet",
-			[]string{"hostip", "hostname","job","linecardID","error_reason","chassis_type","serial_number"}, nil,
-		),
+			[]string{"hostip", "hostname","job","linecardID","error_reason"}, nil,
+		),*/
 	 }
 }
 
@@ -67,8 +67,8 @@ func lineCCollector()*linecardMetrics{
 // It essentially writes all descriptors to the prometheus desc channel.
 func (collector *linecardMetrics) Describe(ch chan<- *prometheus.Desc) {
 	//Update this section with the each metric you create for a given collector
-	ch <- collector.Rt_CardType
-	ch <- collector.Rt_Location
+	//ch <- collector.Rt_CardType
+	//ch <- collector.Rt_Location
 	ch <- collector.Rt_ServiceStatus
 	ch <- collector.Rt_Status
 	ch <- collector.Error_ip
@@ -86,15 +86,13 @@ func (collector *linecardMetrics) Collect(c chan<- prometheus.Metric) {
 		phpsessid,err := http.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
 		if err != nil {
 			log.Print("Error auth", hosts[i].Ip, err)
-			c <- prometheus.MustNewConstMetric(
-				collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip,hosts[i].Hostname, "linecard","All linecards", "Authentication failed","NA","NA")
 			continue
 		}
 
 		//chassis labels from db or http
-		chassisType, serialNumber, err := utils.GetChassisLabels(hosts[i].Ip,phpsessid)
+		chassisType, _, err := utils.GetChassisLabels(hosts[i].Ip,phpsessid)
 		if err!= nil {
-			chassisType, serialNumber = "db chassisData failed", "db chassisData failed"
+			chassisType = "db chassisData failed"
 			log.Print(err)
 		}
 
@@ -106,8 +104,6 @@ func (collector *linecardMetrics) Collect(c chan<- prometheus.Metric) {
 			linecardID = []string {"1", "2"}
 		} else {
 			//Couldnt fetch chassis type from db or http: try next host
-			c <- prometheus.MustNewConstMetric(
-				collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip,hosts[i].Hostname, "linecard","All linecards", "fetching chassistype from db or http fail","NA","NA")
 			continue
 		}
 			for j := range linecardID {
@@ -115,8 +111,6 @@ func (collector *linecardMetrics) Collect(c chan<- prometheus.Metric) {
 					_, data, err := http.GetAPIData(url, phpsessid)
 						if err != nil {
 							log.Print(err)
-							c <- prometheus.MustNewConstMetric(
-								collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip,hosts[i].Hostname, "linecard",linecardID[j], "fetching data from this linecard failed",chassisType,serialNumber)
 							continue
 						}
 
@@ -127,15 +121,15 @@ func (collector *linecardMetrics) Collect(c chan<- prometheus.Metric) {
 						log.Print("XML error linecard", err)
 						continue
 					}
-					metricValue1 := float64(lData.LinecardData.Rt_CardType)
-					metricValue2 := float64(lData.LinecardData.Rt_Location)
+					labelCardType := lData.LinecardData.Rt_CardType
+					labelLocation := lData.LinecardData.Rt_Location
 					metricValue3 := float64(lData.LinecardData.Rt_ServiceStatus)
 					metricValue4 := float64(lData.LinecardData.Rt_Status)
 
-						c <- prometheus.MustNewConstMetric(collector.Rt_CardType, prometheus.GaugeValue, metricValue1, hosts[i].Ip, hosts[i].Hostname, "linecard",linecardID[j], chassisType, serialNumber)
-						c <- prometheus.MustNewConstMetric(collector.Rt_Location, prometheus.GaugeValue, metricValue2, hosts[i].Ip, hosts[i].Hostname, "linecard",linecardID[j], chassisType, serialNumber)
-						c <- prometheus.MustNewConstMetric(collector.Rt_ServiceStatus, prometheus.GaugeValue, metricValue3, hosts[i].Ip, hosts[i].Hostname, "linecard",linecardID[j], chassisType, serialNumber)
-						c <- prometheus.MustNewConstMetric(collector.Rt_Status, prometheus.GaugeValue, metricValue4, hosts[i].Ip, hosts[i].Hostname, "linecard",linecardID[j], chassisType, serialNumber)
+						//c <- prometheus.MustNewConstMetric(collector.Rt_CardType, prometheus.GaugeValue, metricValue1, hosts[i].Ip, hosts[i].Hostname, "linecard",linecardID[j])
+						//c <- prometheus.MustNewConstMetric(collector.Rt_Location, prometheus.GaugeValue, metricValue2, hosts[i].Ip, hosts[i].Hostname, "linecard",linecardID[j])
+						c <- prometheus.MustNewConstMetric(collector.Rt_ServiceStatus, prometheus.GaugeValue, metricValue3, hosts[i].Ip, hosts[i].Hostname, "linecard",linecardID[j],labelCardType,labelLocation)
+						c <- prometheus.MustNewConstMetric(collector.Rt_Status, prometheus.GaugeValue, metricValue4, hosts[i].Ip, hosts[i].Hostname, "linecard",linecardID[j])
 
 
 		}

@@ -8,10 +8,10 @@ import (
 	//"fmt"
 	"log"
 	"github.com/prometheus/client_golang/prometheus"
-	"time"
+	//"time"
 	"edge_exporter/pkg/http"
 	"edge_exporter/pkg/config"
-	"edge_exporter/pkg/utils"
+	//"edge_exporter/pkg/utils"
 
 )
 
@@ -40,7 +40,7 @@ type cMetrics struct {
 	Rt_NumCallCurrentlyUp       *prometheus.Desc
 	Rt_NumCallAbandonedNoTrunk  *prometheus.Desc
 	Rt_NumCallUnAnswered        *prometheus.Desc
-	Error_ip                    *prometheus.Desc
+	//Error_ip                    *prometheus.Desc
 }
 
 func callStats()*cMetrics{
@@ -48,32 +48,32 @@ func callStats()*cMetrics{
 	 return &cMetrics{
 		Rt_NumCallAttempts: prometheus.NewDesc("rt_NumCallAttempts",
 			"systemcallstats",
-			[]string{"hostip", "hostname", "job", "Href", "chassis_type","serial_number"}, nil,
+			[]string{"hostip", "hostname"}, nil,
 		),
 		Rt_NumCallSucceeded: prometheus.NewDesc("rt_NumCallSucceeded",
 			"systemcallstats",
-			[]string{"hostip", "hostname", "job", "Href", "chassis_type","serial_number"}, nil,
+			[]string{"hostip", "hostname"}, nil,
 		),
 		Rt_NumCallFailed: prometheus.NewDesc("rt_NumCallFailed",
 			"systemcallstats",
-			[]string{"hostip", "hostname", "job", "Href", "chassis_type","serial_number"}, nil,
+			[]string{"hostip", "hostname"}, nil,
 		),
 		Rt_NumCallCurrentlyUp: prometheus.NewDesc("rt_NumCallCurrentlyUp",
 			"systemcallstats",
-			[]string{"hostip", "hostname", "job", "Href", "chassis_type","serial_number"}, nil,
+			[]string{"hostip", "hostname"}, nil,
 		),
 		Rt_NumCallAbandonedNoTrunk: prometheus.NewDesc("rt_NumCallAbandonedNoTrunk",
 			"systemcallstats.",
-			[]string{"hostip", "hostname", "job", "Href", "chassis_type","serial_number"}, nil,
+			[]string{"hostip", "hostname"}, nil,
 		),
 		Rt_NumCallUnAnswered: prometheus.NewDesc("rt_NumCallUnAnswered",
 			"systemcallstats",
-			[]string{"hostip", "hostname", "job", "Href", "chassis_type","serial_number"}, nil,
+			[]string{"hostip", "hostname"}, nil,
 		),
-		Error_ip: prometheus.NewDesc("error_edge_call_stats",
+		/*Error_ip: prometheus.NewDesc("error_edge_call_stats",
 			"systemcallstats",
-			[]string{"hostip", "hostname", "job", "Href","chassis_type","serial_number"}, nil,
-		),
+			[]string{"hostip", "hostname", "Href","chassis_type","serial_number"}, nil,
+		),*/
 	 }
 }
 
@@ -88,7 +88,7 @@ func (collector *cMetrics) Describe(ch chan<- *prometheus.Desc) {
 	ch <- collector.Rt_NumCallCurrentlyUp
 	ch <- collector.Rt_NumCallAbandonedNoTrunk
 	ch <- collector.Rt_NumCallUnAnswered
-	ch <- collector.Error_ip
+	//ch <- collector.Error_ip
 
 }
 //Collect implements required collect function for all promehteus collectors
@@ -100,32 +100,20 @@ func (collector *cMetrics) Collect(c chan<- prometheus.Metric) {
 	}
 
 	for i := 0; i < len(hosts); i++ {
-		//authStr := "https://" +hosts[i].ip + "/rest/login"
 
-		//username, password := getAuth(ipaddresses[i])
-		timeReportedByExternalSystem := time.Now()//time.Parse(timelayout, mytimevalue)
 		phpsessid,err :=  http.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
 		if err != nil {
 			log.Print("Error retrieving session cookie: ", err,"\n")
 				   continue //trying next ip address
 		}
-		//chassis labels from db or http
-		chassisType, serialNumber, err := utils.GetChassisLabels(hosts[i].Ip,phpsessid)
-		if err!= nil {
-			chassisType, serialNumber = "db chassisData fail", "db chassisData fail"
-			log.Print(err)
-		}
+
 		dataStr := "https://"+hosts[i].Ip+"/rest/systemcallstats"
 		_, data,err := http.GetAPIData(dataStr, phpsessid)
 		if err != nil {
-				log.Print("Error collecting from host: ", err,"\n")
-				  c <- prometheus.NewMetricWithTimestamp(
-					timeReportedByExternalSystem,
-					prometheus.MustNewConstMetric(
-						collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, hosts[i].Hostname, "systemcallstats", "/rest/systemcallstats",chassisType, serialNumber),
-				   )
+				log.Print("Error collecting systemcall data: ", err,"\n")
 				continue
 		}
+
 		b := []byte(data) //Converting string of data to bytestream
 		ssbc := &cSBCdata{}
 		err = xml.Unmarshal(b, &ssbc) //Converting XML data to variables
@@ -133,7 +121,6 @@ func (collector *cMetrics) Collect(c chan<- prometheus.Metric) {
 			log.Print("XML error callstats", err)
 			continue
 		}
-		//log.Print("Successful API call data: ", ssbc.CallStatsData)
 
 		metricValue1 := float64(ssbc.CallStatsData.Rt_NumCallAttempts)
 		metricValue2 := float64(ssbc.CallStatsData.Rt_NumCallSucceeded)
@@ -141,13 +128,13 @@ func (collector *cMetrics) Collect(c chan<- prometheus.Metric) {
 		metricValue4 := float64(ssbc.CallStatsData.Rt_NumCallCurrentlyUp)
 		metricValue5 := float64(ssbc.CallStatsData.Rt_NumCallAbandonedNoTrunk)
 		metricValue6 := float64(ssbc.CallStatsData.Rt_NumCallUnAnswered)
-
-			c <- prometheus.MustNewConstMetric(collector.Rt_NumCallAttempts, prometheus.GaugeValue, metricValue1, hosts[i].Ip, hosts[i].Hostname, "systemstats", ssbc.CallStatsData.Href, chassisType, serialNumber)
-			c <- prometheus.MustNewConstMetric(collector.Rt_NumCallSucceeded, prometheus.GaugeValue, metricValue2, hosts[i].Ip, hosts[i].Hostname, "systemstats", ssbc.CallStatsData.Href, chassisType, serialNumber)
-			c <- prometheus.MustNewConstMetric(collector.Rt_NumCallFailed, prometheus.GaugeValue, metricValue3, hosts[i].Ip, hosts[i].Hostname, "systemstats", ssbc.CallStatsData.Href, chassisType, serialNumber)
-			c <- prometheus.MustNewConstMetric(collector.Rt_NumCallCurrentlyUp, prometheus.GaugeValue, metricValue4, hosts[i].Ip, hosts[i].Hostname, "systemstats", ssbc.CallStatsData.Href, chassisType, serialNumber)
-			c <- prometheus.MustNewConstMetric(collector.Rt_NumCallAbandonedNoTrunk, prometheus.GaugeValue, metricValue5, hosts[i].Ip, hosts[i].Hostname, "systemstats", ssbc.CallStatsData.Href, chassisType, serialNumber)
-			c <- prometheus.MustNewConstMetric(collector.Rt_NumCallUnAnswered, prometheus.GaugeValue, metricValue6, hosts[i].Ip, hosts[i].Hostname, "systemstats", ssbc.CallStatsData.Href, chassisType, serialNumber)
+		// ssbc.CallStatsData.Href
+			c <- prometheus.MustNewConstMetric(collector.Rt_NumCallAttempts, prometheus.GaugeValue, metricValue1, hosts[i].Ip, hosts[i].Hostname)
+			c <- prometheus.MustNewConstMetric(collector.Rt_NumCallSucceeded, prometheus.GaugeValue, metricValue2, hosts[i].Ip, hosts[i].Hostname)
+			c <- prometheus.MustNewConstMetric(collector.Rt_NumCallFailed, prometheus.GaugeValue, metricValue3, hosts[i].Ip, hosts[i].Hostname)
+			c <- prometheus.MustNewConstMetric(collector.Rt_NumCallCurrentlyUp, prometheus.GaugeValue, metricValue4, hosts[i].Ip, hosts[i].Hostname)
+			c <- prometheus.MustNewConstMetric(collector.Rt_NumCallAbandonedNoTrunk, prometheus.GaugeValue, metricValue5, hosts[i].Ip, hosts[i].Hostname)
+			c <- prometheus.MustNewConstMetric(collector.Rt_NumCallUnAnswered, prometheus.GaugeValue, metricValue6, hosts[i].Ip, hosts[i].Hostname)
 	}
 }
 

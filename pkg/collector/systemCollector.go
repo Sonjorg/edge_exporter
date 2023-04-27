@@ -55,43 +55,43 @@ func systemCollector()*sMetrics{
 	 return &sMetrics{
 		Rt_CPUUsage: prometheus.NewDesc("rt_CPUUsage",
 			"/rest/system/",
-			[]string{"hostip", "hostname"}, nil,
+			[]string{"hostip", "hostname", "chassis_type","serial_number"}, nil,
 		),
 		Rt_MemoryUsage: prometheus.NewDesc("rt_MemoryUsage",
 			"/rest/system/",
-			[]string{"hostip", "hostname"}, nil,
+			[]string{"hostip", "hostname", "chassis_type","serial_number"}, nil,
 		),
 		Rt_CPUUptime: prometheus.NewDesc("rt_CPUUptime",
 			"/rest/system/",
-			[]string{"hostip", "hostname"}, nil,
+			[]string{"hostip", "hostname", "chassis_type","serial_number"}, nil,
 		),
 		Rt_FDUsage: prometheus.NewDesc("rt_FDUsage",
 			"/rest/system/",
-			[]string{"hostip", "hostname"}, nil,
+			[]string{"hostip", "hostname", "chassis_type","serial_number"}, nil,
 		),
 		Rt_CPULoadAverage1m: prometheus.NewDesc("rt_CPULoadAverage1m",
 			"/rest/system/.",
-			[]string{"hostip", "hostname"}, nil,
+			[]string{"hostip", "hostname", "chassis_type","serial_number"}, nil,
 		),
 		Rt_CPULoadAverage5m: prometheus.NewDesc("rt_CPULoadAverage5m",
 			"/rest/system/",
-			[]string{"hostip", "hostname"}, nil,
+			[]string{"hostip", "hostname", "chassis_type","serial_number"}, nil,
 		),
 		Rt_CPULoadAverage15m: prometheus.NewDesc("rt_CPULoadAverage15m",
 			"/rest/system/",
-			[]string{"hostip", "hostname"}, nil,
+			[]string{"hostip", "hostname", "chassis_type","serial_number"}, nil,
 		),
 		Rt_TmpPartUsage: prometheus.NewDesc("Rt_TmpPartUsage",
 			"/rest/system/",
-			[]string{"hostip", "hostname"}, nil,
+			[]string{"hostip", "hostname", "chassis_type","serial_number"}, nil,
 		),
 		Rt_LoggingPartUsage: prometheus.NewDesc("Rt_LoggingPartUsage",
 			"/rest/system/",
-			[]string{"hostip", "hostname"}, nil,
+			[]string{"hostip", "hostname", "chassis_type","serial_number"}, nil,
 		),
 		Error_ip: prometheus.NewDesc("scrape_status",
 			"/rest/system/",
-			[]string{"hostip", "hostname", "chassis_type","serial_number"}, nil,
+			[]string{"hostip", "hostname"}, nil,
 		),
 	 }
 }
@@ -136,11 +136,11 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 		}
 		phpsessid,err :=  http.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
 		if err != nil {
-			log.Println("Error retrieving session cookie (system): ",log.Flags(), err,"\n")
+			log.Println("Error retrieving session cookie (system): ",log.Flags(), err)
 				 c <- prometheus.NewMetricWithTimestamp(
 					timeReportedByExternalSystem,
 					prometheus.MustNewConstMetric(
-						collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, hosts[i].Hostname, "NA","NA"),
+						collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, hosts[i].Hostname),
 				   )
 				   continue //trying next ip address
 		}
@@ -148,7 +148,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 		if (chassisType == "database failure") {
 			chassisType, serialNumber, err = utils.GetChassisLabels(hosts[i].Ip,phpsessid)
 			if err!= nil {
-				chassisType, serialNumber = "database failure", "database failure"
+				chassisType, serialNumber = "Failed to get from db", "Failed to get from db"
 				log.Print(err)
 			}
 		}
@@ -159,7 +159,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 				  c <- prometheus.NewMetricWithTimestamp(
 					timeReportedByExternalSystem,
 					prometheus.MustNewConstMetric(
-						collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, hosts[i].Hostname, "systemstats", "/rest/system/",chassisType, serialNumber),
+						collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, hosts[i].Hostname),
 				   )
 				continue
 		}
@@ -182,17 +182,17 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 		metricValue9 := float64(ssbc.SystemData.Rt_TmpPartUsage)
 
 		c <- prometheus.MustNewConstMetric(
-			collector.Error_ip, prometheus.GaugeValue, 1, hosts[i].Ip, hosts[i].Hostname, chassisType, serialNumber)
+			collector.Error_ip, prometheus.GaugeValue, 1, hosts[i].Ip, hosts[i].Hostname)
 
-			c <- prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue1, hosts[i].Ip, hosts[i].Hostname)
-			c <- prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage1m, prometheus.GaugeValue, metricValue2, hosts[i].Ip, hosts[i].Hostname)
-			c <- prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage5m, prometheus.GaugeValue, metricValue3, hosts[i].Ip, hosts[i].Hostname)
-			c <- prometheus.MustNewConstMetric(collector.Rt_CPUUptime, prometheus.GaugeValue, metricValue4, hosts[i].Ip, hosts[i].Hostname)
-			c <- prometheus.MustNewConstMetric(collector.Rt_CPUUsage, prometheus.GaugeValue, metricValue5, hosts[i].Ip, hosts[i].Hostname)
-			c <- prometheus.MustNewConstMetric(collector.Rt_FDUsage, prometheus.GaugeValue, metricValue6, hosts[i].Ip, hosts[i].Hostname)
-			c <- prometheus.MustNewConstMetric(collector.Rt_LoggingPartUsage, prometheus.GaugeValue, metricValue7, hosts[i].Ip, hosts[i].Hostname)
-			c <- prometheus.MustNewConstMetric(collector.Rt_MemoryUsage, prometheus.GaugeValue, metricValue8, hosts[i].Ip, hosts[i].Hostname)
-			c <- prometheus.MustNewConstMetric(collector.Rt_TmpPartUsage, prometheus.GaugeValue, metricValue9, hosts[i].Ip, hosts[i].Hostname)
+			c <- prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue1, hosts[i].Ip, hosts[i].Hostname,chassisType, serialNumber)
+			c <- prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage1m, prometheus.GaugeValue, metricValue2, hosts[i].Ip, hosts[i].Hostname,chassisType, serialNumber)
+			c <- prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage5m, prometheus.GaugeValue, metricValue3, hosts[i].Ip, hosts[i].Hostname,chassisType, serialNumber)
+			c <- prometheus.MustNewConstMetric(collector.Rt_CPUUptime, prometheus.GaugeValue, metricValue4, hosts[i].Ip, hosts[i].Hostname,chassisType, serialNumber)
+			c <- prometheus.MustNewConstMetric(collector.Rt_CPUUsage, prometheus.GaugeValue, metricValue5, hosts[i].Ip, hosts[i].Hostname,chassisType, serialNumber)
+			c <- prometheus.MustNewConstMetric(collector.Rt_FDUsage, prometheus.GaugeValue, metricValue6, hosts[i].Ip, hosts[i].Hostname,chassisType, serialNumber)
+			c <- prometheus.MustNewConstMetric(collector.Rt_LoggingPartUsage, prometheus.GaugeValue, metricValue7, hosts[i].Ip, hosts[i].Hostname,chassisType, serialNumber)
+			c <- prometheus.MustNewConstMetric(collector.Rt_MemoryUsage, prometheus.GaugeValue, metricValue8, hosts[i].Ip, hosts[i].Hostname,chassisType, serialNumber)
+			c <- prometheus.MustNewConstMetric(collector.Rt_TmpPartUsage, prometheus.GaugeValue, metricValue9, hosts[i].Ip, hosts[i].Hostname,chassisType, serialNumber)
 	}
 }
 
