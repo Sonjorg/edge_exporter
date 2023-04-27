@@ -34,7 +34,7 @@ type linecardMetrics struct {
 	//Rt_Location		  	*prometheus.Desc
 	Rt_ServiceStatus  	*prometheus.Desc
 	Rt_Status           *prometheus.Desc
-	Error_ip            *prometheus.Desc
+	//Error_ip            *prometheus.Desc
 	}
 
 func lineCCollector()*linecardMetrics{
@@ -71,7 +71,7 @@ func (collector *linecardMetrics) Describe(ch chan<- *prometheus.Desc) {
 	//ch <- collector.Rt_Location
 	ch <- collector.Rt_ServiceStatus
 	ch <- collector.Rt_Status
-	ch <- collector.Error_ip
+	//ch <- collector.Error_ip
 }
 //Collect implements required collect function for all promehteus collectors
 func (collector *linecardMetrics) Collect(c chan<- prometheus.Metric) {
