@@ -40,7 +40,7 @@ func GetChassisLabels(ipaddress string, phpsessid string) (chassisType string, s
 	if (database.RowExists(sqliteDatabase, ipaddress)) {
 		chassisType, serialNumber, err = database.GetChassis(sqliteDatabase, ipaddress)
 		if (chassisType == "" || serialNumber == "" || err != nil) {
-
+			if (phpsessid != "null") {
 				dataStr := "https://"+ipaddress+"/rest/chassis"
 				_, data,err := http.GetAPIData(dataStr, phpsessid)
 				if err != nil {
@@ -63,6 +63,7 @@ func GetChassisLabels(ipaddress string, phpsessid string) (chassisType string, s
 						log.Print("insert chassis error", err)
 					}
 				return string(chassisType), string(serialNumber), err
+			}
 		}
 	}
 return chassisType, serialNumber, err

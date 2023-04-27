@@ -47,32 +47,32 @@ func callStats()*cMetrics{
 
 	 return &cMetrics{
 		Rt_NumCallAttempts: prometheus.NewDesc("rt_NumCallAttempts",
-			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job", "Href", "chassis_type","serial_number"}, nil,
+			"systemcallstats",
+			[]string{"hostip", "hostname", "job", "Href", "chassis_type","serial_number"}, nil,
 		),
 		Rt_NumCallSucceeded: prometheus.NewDesc("rt_NumCallSucceeded",
-			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job", "Href", "chassis_type","serial_number"}, nil,
+			"systemcallstats",
+			[]string{"hostip", "hostname", "job", "Href", "chassis_type","serial_number"}, nil,
 		),
 		Rt_NumCallFailed: prometheus.NewDesc("rt_NumCallFailed",
-			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job", "Href", "chassis_type","serial_number"}, nil,
+			"systemcallstats",
+			[]string{"hostip", "hostname", "job", "Href", "chassis_type","serial_number"}, nil,
 		),
 		Rt_NumCallCurrentlyUp: prometheus.NewDesc("rt_NumCallCurrentlyUp",
-			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job", "Href", "chassis_type","serial_number"}, nil,
+			"systemcallstats",
+			[]string{"hostip", "hostname", "job", "Href", "chassis_type","serial_number"}, nil,
 		),
 		Rt_NumCallAbandonedNoTrunk: prometheus.NewDesc("rt_NumCallAbandonedNoTrunk",
-			"NoDescriptionYet.",
-			[]string{"Instance", "hostname", "job", "Href", "chassis_type","serial_number"}, nil,
+			"systemcallstats.",
+			[]string{"hostip", "hostname", "job", "Href", "chassis_type","serial_number"}, nil,
 		),
 		Rt_NumCallUnAnswered: prometheus.NewDesc("rt_NumCallUnAnswered",
-			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job", "Href", "chassis_type","serial_number"}, nil,
+			"systemcallstats",
+			[]string{"hostip", "hostname", "job", "Href", "chassis_type","serial_number"}, nil,
 		),
 		Error_ip: prometheus.NewDesc("error_edge_call_stats",
-			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job", "Href","chassis_type","serial_number"}, nil,
+			"systemcallstats",
+			[]string{"hostip", "hostname", "job", "Href","chassis_type","serial_number"}, nil,
 		),
 	 }
 }
@@ -107,13 +107,6 @@ func (collector *cMetrics) Collect(c chan<- prometheus.Metric) {
 		phpsessid,err :=  http.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
 		if err != nil {
 			log.Print("Error retrieving session cookie: ", err,"\n")
-			//return nil, err <-this line would result in error for systemexp on all hosts
-			//returning a prometheus error metric
-				 c <- prometheus.NewMetricWithTimestamp(
-					timeReportedByExternalSystem,
-					prometheus.MustNewConstMetric(
-						collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, hosts[i].Hostname, "systemcallstats", "/rest/systemcallstats","NA","NA"),
-				   )
 				   continue //trying next ip address
 		}
 		//chassis labels from db or http

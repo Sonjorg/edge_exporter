@@ -129,6 +129,11 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 
 		//username, password := getAuth(ipaddresses[i])
 		timeReportedByExternalSystem := time.Now()//time.Parse(timelayout, mytimevalue)
+		chassisType, serialNumber, err := utils.GetChassisLabels(hosts[i].Ip,"null")
+		if err!= nil {
+			chassisType, serialNumber = "database failure", "database failure"
+			log.Print(err)
+		}
 		phpsessid,err :=  http.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
 		if err != nil {
 			log.Println("Error retrieving session cookie (system): ",log.Flags(), err,"\n")
@@ -142,10 +147,12 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 				   continue //trying next ip address
 		}
 		//fetching labels from DB or router if not exist yet
-		chassisType, serialNumber, err := utils.GetChassisLabels(hosts[i].Ip,phpsessid)
-		if err!= nil {
-			chassisType, serialNumber = "database failure", "database failure"
-			log.Print(err)
+		if (chassisType == "database failure") {
+			chassisType, serialNumber, err = utils.GetChassisLabels(hosts[i].Ip,phpsessid)
+			if err!= nil {
+				chassisType, serialNumber = "database failure", "database failure"
+				log.Print(err)
+			}
 		}
 		//Fetching systemdata
 		_, data,err := http.GetAPIData(dataStr, phpsessid)
@@ -175,7 +182,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 		metricValue7 := float64(ssbc.SystemData.Rt_LoggingPartUsage)
 		metricValue8 := float64(ssbc.SystemData.Rt_MemoryUsage)
 		metricValue9 := float64(ssbc.SystemData.Rt_TmpPartUsage)
-		
+
 		c <- prometheus.MustNewConstMetric(
 			collector.Error_ip, prometheus.GaugeValue, 1, hosts[i].Ip, hosts[i].Hostname, chassisType, serialNumber)
 

@@ -89,32 +89,32 @@ func routingCollector() *rMetrics {
 
 	return &rMetrics{
 		Rt_RuleUsage: prometheus.NewDesc("rt_RuleUsage",
-			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job", "routing_table", "routing_entry", "chassis_type","serial_number"}, nil,
+			"routingentry",
+			[]string{"hostip", "hostname",  "routing_table", "routing_entry"}, nil,
 		),
 		Rt_ASR: prometheus.NewDesc("rt_ASR",
-			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job", "routing_table", "routing_entry", "chassis_type","serial_number"}, nil,
+			"routingentry",
+			[]string{"hostip", "hostname",  "routing_table", "routing_entry"}, nil,
 		),
 		Rt_RoundTripDelay: prometheus.NewDesc("rt_RoundTripDelay",
-			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job", "routing_table", "routing_entry", "chassis_type","serial_number"}, nil,
+			"routingentry",
+			[]string{"hostip", "hostname",  "routing_table", "routing_entry"}, nil,
 		),
 		Rt_Jitter: prometheus.NewDesc("rt_Jitter",
-			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job", "routing_table", "routing_entry", "chassis_type","serial_number"}, nil,
+			"routingentry",
+			[]string{"hostip", "hostname",  "routing_table", "routing_entry"}, nil,
 		),
 		Rt_MOS: prometheus.NewDesc("rt_MOS",
-			"NoDescriptionYet.",
-			[]string{"Instance", "hostname", "job", "routing_table", "routing_entry", "chassis_type","serial_number"}, nil,
+			"routingentry.",
+			[]string{"hostip", "hostname",  "routing_table", "routing_entry"}, nil,
 		),
 		Rt_QualityFailed: prometheus.NewDesc("rt_QualityFailed",
-			"NoDescriptionYet",
-			[]string{"Instance", "hostname", "job", "routing_table", "routing_entry", "chassis_type","serial_number"}, nil,
+			"routingentry",
+			[]string{"hostip", "hostname",  "routing_table", "routing_entry"}, nil,
 		),
 		Error_ip: prometheus.NewDesc("error_edge_routing",
-			"NoDescriptionYet",
-			[]string{"Instance", "hostname","job","routing_table", "error_reason","chassis_type","serial_number"}, nil,
+			"routingentry",
+			[]string{"hostip", "hostname","routing_table", "error_reason","chassis_type","serial_number"}, nil,
 		),
 	}
 }
@@ -153,8 +153,6 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 		phpsessid, err := http.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
 			if err != nil {
 				log.Print("Error authentication", hosts[i].Ip, err)
-				c <- prometheus.MustNewConstMetric(
-					collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, hosts[i].Hostname,"routingentry","NA", "authentication error","NA","NA")
 				continue
 			}
 			var routingtables []string
@@ -174,15 +172,12 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 			//If 24 hours has not passed since last data was stored in database, use this data
 			//log.Print(b)
 			timeSchedule := hosts[i].RoutingEntryTime
-			
+
 			if (!DBexists || utils.Expired(timeSchedule, timeLast))  { //Routing data has expired, fetching new routingentries
 				fmt.Println("Fetching routing data from http")
 				_, data, err := http.GetAPIData("https://"+hosts[i].Ip+"/rest/routingtable", phpsessid)
 				if err != nil {
 					log.Print("Error routingtable data", hosts[i].Ip, err)
-					c <- prometheus.MustNewConstMetric(
-							collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, "routingentry","NA", "no_routing_tables","NA","NA")
-
 					continue
 				}
 				rt := &routingTables{}
@@ -203,11 +198,11 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 				continue //routingtables emtpy, try next host
 			}
 
-			chassisType, serialNumber, err := utils.GetChassisLabels(hosts[i].Ip,phpsessid)
+			/*chassisType, serialNumber, err := utils.GetChassisLabels(hosts[i].Ip,phpsessid)
 			if err!= nil {
 				chassisType, serialNumber = "database failure", "database failure"
 				log.Print(err)
-			}
+			}*/
 
 			for j := range routingtables {
 				var match []string //variable to hold routingentries cleaned with regex
@@ -282,12 +277,12 @@ func (collector *rMetrics) Collect(c chan<- prometheus.Metric) {
 					metricValue5 := float64(rData.RoutingData.Rt_MOS)
 					metricValue6 := float64(rData.RoutingData.Rt_QualityFailed)
 
-					c <- prometheus.MustNewConstMetric(collector.Rt_RuleUsage, prometheus.GaugeValue, metricValue1, hosts[i].Ip, hosts[i].Hostname, "routingentry", routingtables[j], match[k], chassisType,serialNumber)
-					c <- prometheus.MustNewConstMetric(collector.Rt_ASR, prometheus.GaugeValue, metricValue2, hosts[i].Ip, hosts[i].Hostname, "routingentry", routingtables[j], match[k], chassisType,serialNumber)
-					c <- prometheus.MustNewConstMetric(collector.Rt_RoundTripDelay, prometheus.GaugeValue, metricValue3, hosts[i].Ip, hosts[i].Hostname, "routingentry", routingtables[j], match[k], chassisType,serialNumber)
-					c <- prometheus.MustNewConstMetric(collector.Rt_Jitter, prometheus.GaugeValue, metricValue4, hosts[i].Ip, hosts[i].Hostname, "routingentry", routingtables[j], match[k], chassisType,serialNumber)
-					c <- prometheus.MustNewConstMetric(collector.Rt_MOS, prometheus.GaugeValue, metricValue5, hosts[i].Ip, hosts[i].Hostname, "routingentry", routingtables[j], match[k], chassisType,serialNumber)
-					c <- prometheus.MustNewConstMetric(collector.Rt_QualityFailed, prometheus.GaugeValue, metricValue6, hosts[i].Ip, hosts[i].Hostname, "routingentry", routingtables[j], match[k], chassisType,serialNumber)
+					c <- prometheus.MustNewConstMetric(collector.Rt_RuleUsage, prometheus.GaugeValue, metricValue1, hosts[i].Ip, hosts[i].Hostname, routingtables[j], match[k])
+					c <- prometheus.MustNewConstMetric(collector.Rt_ASR, prometheus.GaugeValue, metricValue2, hosts[i].Ip, hosts[i].Hostname, routingtables[j], match[k])
+					c <- prometheus.MustNewConstMetric(collector.Rt_RoundTripDelay, prometheus.GaugeValue, metricValue3, hosts[i].Ip, hosts[i].Hostname, routingtables[j], match[k])
+					c <- prometheus.MustNewConstMetric(collector.Rt_Jitter, prometheus.GaugeValue, metricValue4, hosts[i].Ip, hosts[i].Hostname, routingtables[j], match[k])
+					c <- prometheus.MustNewConstMetric(collector.Rt_MOS, prometheus.GaugeValue, metricValue5, hosts[i].Ip, hosts[i].Hostname, routingtables[j], match[k])
+					c <- prometheus.MustNewConstMetric(collector.Rt_QualityFailed, prometheus.GaugeValue, metricValue6, hosts[i].Ip, hosts[i].Hostname, routingtables[j], match[k])
 				}
 			}
 	}
