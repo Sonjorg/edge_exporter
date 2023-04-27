@@ -83,7 +83,7 @@ Rt_ifOutUcastPkts	          *prometheus.Desc
 Rt_ifSpeed	                  *prometheus.Desc
 Rt_redundancyRole 	          *prometheus.Desc
 Rt_redundancyState		      *prometheus.Desc
-Error_ip                      *prometheus.Desc
+//Error_ip                      *prometheus.Desc
 }
 
 func ethernetCollector()*ethernetMetrics{
@@ -240,7 +240,7 @@ func (collector *ethernetMetrics) Describe(ch chan<- *prometheus.Desc) {
 	ch <- collector.Rt_ifSpeed
 	ch <- collector.Rt_redundancyRole
 	ch <- collector.Rt_redundancyState
-	ch <- collector.Error_ip
+	//ch <- collector.Error_ip
 }
 //Collect implements required collect function for all promehteus collectors
 func (collector *ethernetMetrics) Collect(c chan<- prometheus.Metric) {
