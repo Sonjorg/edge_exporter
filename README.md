@@ -43,6 +43,8 @@ hosts:
 - Run:
 ``` sudo docker build -t edge_exporter .```
 ``` sudo docker run -p 5123:5123 edge_exporter ```
+- Or if you have an external config.yml file:
+``` sudo docker run -v path/to/your/config.yml:/usr/src/exporter/config.yml sondrjor/edge_exporter ```
 - Metrics can be gathered from ```host:5123/metrics```
 
 ### Deployment of the SBCexporter on a linux server
