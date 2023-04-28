@@ -20,24 +20,23 @@ type Cookie struct {
 
 // This function retrieves the session cookie from the sqlite database
 //if 8 mins have passed since last sessioncookie was retrieved, fetch new, else return the last one.
-func GetSqliteKeyIfNotExpired(ipaddress string) (cookie string, err error) {
+func GetSqliteKeyIfNotExpired(db *sql.DB, ipaddress string) (cookie string, err error) {
 
-	var sqliteDatabase *sql.DB
+	/*var sqliteDatabase *sql.DB
 
 	sqliteDatabase, err = sql.Open("sqlite3", "./sqlite-database.db")
 	if err != nil {
 		log.Print(err)
 		return "", err
-	}
-	if (!RowExists(sqliteDatabase, ipaddress)) {
+	}*/
+	if (!RowExists(db, ipaddress)) {
 		return "",nil
 	}
-	Hosts, err := GetCookieDB(sqliteDatabase, ipaddress)
+	Hosts, err := GetCookieDB(db, ipaddress)
 	if err != nil {
 		log.Print(err)
 		return "", err
 	}
-	defer sqliteDatabase.Close()
 
 	var c string
 	mins := time.Minute*time.Duration(9)

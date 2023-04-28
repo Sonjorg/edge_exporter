@@ -27,13 +27,22 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	var phpsessid string
 	var err error
 
-	phpsessid, err = database.GetSqliteKeyIfNotExpired(ipaddress)
+	var sqliteDatabase *sql.DB
+
+	sqliteDatabase, err = sql.Open("sqlite3", "./sqlite-database.db")
+	if err != nil {
+		log.Print(err)
+	}
+	defer sqliteDatabase.Close()
+
+	phpsessid, err = database.GetSqliteKeyIfNotExpired(sqliteDatabase, ipaddress)
 	//log.Print(phpsessid)
 	if phpsessid != "" {
 
-		//log.Print("henta fra sql")
+		log.Print("henta cookie fra sql")
 		return phpsessid, nil
 	}
+	log.Print("henta cookie fra http")
 
 	cfg := config.GetConf(&config.Config{})
 	timeout := cfg.Authtimeout
@@ -72,15 +81,6 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	phpsessid = m["PHPSESSID"]
 
 	defer resp.Body.Close()
-
-
-
-	var sqliteDatabase *sql.DB
-
-	sqliteDatabase, err = sql.Open("sqlite3", "./sqlite-database.db")
-	if err != nil {
-		log.Print(err)
-	}
 
 	now := time.Now().Format(time.RFC3339)
 
