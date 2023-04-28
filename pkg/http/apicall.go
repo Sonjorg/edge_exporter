@@ -39,10 +39,10 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	//log.Print(phpsessid)
 	if phpsessid != "" {
 
-		log.Print("henta cookie fra sql")
+	//	log.Print("henta cookie fra sql")
 		return phpsessid, nil
 	}
-	log.Print("henta cookie fra http")
+	//log.Print("henta cookie fra http")
 
 	cfg := config.GetConf(&config.Config{})
 	timeout := cfg.Authtimeout

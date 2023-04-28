@@ -2,7 +2,7 @@ package database
 
 import (
 	"database/sql"
-	"fmt"
+	//"fmt"
 	"log"
 
 	//"github.com/mattn/go-sqlite3" // Import go-sqlite3 library
@@ -96,9 +96,9 @@ func GetCookieDB(db *sql.DB, ipaddress string) ([]*Cookie, error){
 
 			}
 	}
-	for i :=range c{
+	/*for i :=range c{
 		fmt.Println(c[i].Ipaddress, c[i].Phpsessid, c[i].Time)
-	}
+	}*/
 	return c,err
 }
 
