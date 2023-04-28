@@ -64,7 +64,7 @@ func GetSqliteKeyIfNotExpired(ipaddress string) (cookie string, err error) {
 // We are passing db reference connection from main to our method with other parameters
 func InsertAuth(db *sql.DB, ipaddress string, phpsessid string, time string) error{
 	log.Println("Inserting session cookie ...")
-	insertAuthSQL := `INSERT OR REPLACE INTO authentication(ipaddress, phpsessid, time) VALUES (?, ?, ?)`
+	insertAuthSQL := `INSERT INTO authentication(ipaddress, phpsessid, time) VALUES (?, ?, ?)`
 
 	statement, err := db.Prepare(insertAuthSQL) // Prepare statement.
                                                    // This is good to avoid SQL injections
