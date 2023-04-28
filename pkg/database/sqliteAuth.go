@@ -2,7 +2,9 @@ package database
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
+
 	//"github.com/mattn/go-sqlite3" // Import go-sqlite3 library
 	//"fmt"
 	"time"
@@ -38,7 +40,7 @@ func GetSqliteKeyIfNotExpired(ipaddress string) (cookie string, err error) {
 	defer sqliteDatabase.Close()
 
 	var c string
-	mins := time.Minute*time.Duration(8)
+	mins := time.Minute*time.Duration(9)
 	for i := range Hosts {
 		if Hosts[i].Ipaddress == ipaddress {
 			now := time.Now().Format(time.RFC3339)
@@ -92,9 +94,12 @@ func GetCookieDB(db *sql.DB, ipaddress string) ([]*Cookie, error){
 			}
 			if (p.Ipaddress == ipaddress) {
 				c = append(c, p)
+
 			}
 	}
-
+	for i :=range c{
+		fmt.Println(c[i].Ipaddress, c[i].Phpsessid, c[i].Time)
+	}
 	return c,err
 }
 
