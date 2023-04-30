@@ -1,5 +1,4 @@
-# oops, this setup cant be used
-## A simple setup following this url:
+# A simple setup following this url:
 https://grafana.com/docs/grafana-cloud/quickstart/docker-compose-linux/
 ## Execute following commands from current directory
 sudo snap install docker
