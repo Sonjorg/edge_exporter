@@ -59,7 +59,7 @@ func (collector *linecardMetrics) Describe(ch chan<- *prometheus.Desc) {
 	//ch <- collector.Error_ip
 }
 //Collect implements required collect function for all promehteus collectors
-func LinecardCollector2()  []prometheus.Metric {
+func LinecardCollector2()  (m []prometheus.Metric) {
 	hosts := config.GetIncludedHosts("linecard")//retrieving targets for this exporter
 	if (len(hosts) <= 0) {
 		log.Print("no hosts, linecard")
@@ -109,7 +109,7 @@ func LinecardCollector2()  []prometheus.Metric {
 					labelLocation := lData.LinecardData.Rt_Location
 					metricValue3 := float64(lData.LinecardData.Rt_ServiceStatus)
 					metricValue4 := float64(lData.LinecardData.Rt_Status)
-				m := []prometheus.Metric
+				//m := []prometheus.Metric
 				collector:=linecardMetrics{}
 					m = append(m, prometheus.MustNewConstMetric(collector.Rt_ServiceStatus, prometheus.GaugeValue, metricValue3, hosts[i].Ip, hosts[i].Hostname, "linecard",linecardID[j],labelCardType,labelLocation))
 					m = append(m, prometheus.MustNewConstMetric(collector.Rt_Status, prometheus.GaugeValue, metricValue4, hosts[i].Ip, hosts[i].Hostname, "linecard",linecardID[j]))
