@@ -236,7 +236,7 @@ var (
 				}
 				for k  := range match {
 
-					url  := "https =//" + hosts[i].Ip + "/rest/routingtable/" + routingtables[j] + "/routingentry/" + match[k] + "/historicalstatistics/1"
+					url  := "https://" + hosts[i].Ip + "/rest/routingtable/" + routingtables[j] + "/routingentry/" + match[k] + "/historicalstatistics/1"
 					_, data3, err  := http.GetAPIData(url, phpsessid)
 					if err != nil {
 						log.Print(err)
