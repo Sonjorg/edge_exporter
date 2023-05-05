@@ -32,7 +32,7 @@ type linecardMetrics struct {
 	Rt_ServiceStatus  	*prometheus.Desc
 	Rt_Status           *prometheus.Desc
 	}
-
+/*
 func lineCCollector()*linecardMetrics{
 
 	 return &linecardMetrics{
@@ -47,17 +47,17 @@ func lineCCollector()*linecardMetrics{
 		),
 	 }
 }
-
+*/
 // Each and every collector must implement the Describe function.
 // It essentially writes all descriptors to the prometheus desc channel.
-func (collector *linecardMetrics) Describe(ch chan<- *prometheus.Desc) {
+/*func (collector *linecardMetrics) Describe(ch chan<- *prometheus.Desc) {
 	//Update this section with the each metric you create for a given collector
 	//ch <- collector.Rt_CardType
 	//ch <- collector.Rt_Location
 	ch <- collector.Rt_ServiceStatus
 	ch <- collector.Rt_Status
 	//ch <- collector.Error_ip
-}
+}*/
 //Collect implements required collect function for all promehteus collectors
 func LinecardCollector2()  (m []prometheus.Metric) {
 var (
