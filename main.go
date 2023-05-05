@@ -45,7 +45,7 @@ func main() {
 	c := &collector.AllCollectors{}
 
 	registry.MustRegister(c)
-	go c.Probe()
+	go c.Probe(registry)
 
 	mux := http.NewServeMux()
 	promHandler := promhttp.HandlerFor(registry, promhttp.HandlerOpts{})

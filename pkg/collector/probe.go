@@ -12,7 +12,7 @@ type AllCollectors struct{
 	metrics []prometheus.Metric
 }
 
-func (m *AllCollectors) Probe() {
+func (m *AllCollectors) Probe(reg prometheus.Registerer) {
 	metrics := LinecardCollector2()
 	for i := range metrics {
 		m.metrics= append(m.metrics, metrics[i])
