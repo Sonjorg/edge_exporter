@@ -50,6 +50,6 @@ func main() {
 	//h.ServeHTTP()
 	//Serving metrics
 	http.Handle("/metrics", h)
-	log.Fatal(http.ListenAndServe(":1234", nil))
+	log.Fatal(http.ListenAndServe(":9103", nil))
 
 }
