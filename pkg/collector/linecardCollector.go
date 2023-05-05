@@ -60,6 +60,16 @@ func (collector *linecardMetrics) Describe(ch chan<- *prometheus.Desc) {
 }
 //Collect implements required collect function for all promehteus collectors
 func LinecardCollector2()  (m []prometheus.Metric) {
+var (
+	Rt_ServiceStatus = prometheus.NewDesc("rt_ServiceStatus",
+			"The service status of the module.",
+			[]string{"hostip", "hostname", "job","linecardID","rt_CardType","rt_Location"}, nil,
+		)
+		Rt_Status = prometheus.NewDesc("rt_Status",
+			"Indicates the hardware initialization state for this card.",
+			[]string{"hostip", "hostname", "job","linecardID"}, nil,
+		)
+	)
 	hosts := config.GetIncludedHosts("linecard")//retrieving targets for this exporter
 	if (len(hosts) <= 0) {
 		log.Print("no hosts, linecard")
@@ -110,9 +120,9 @@ func LinecardCollector2()  (m []prometheus.Metric) {
 					metricValue3 := float64(lData.LinecardData.Rt_ServiceStatus)
 					metricValue4 := float64(lData.LinecardData.Rt_Status)
 				//m := []prometheus.Metric
-				collector:=linecardMetrics{}
-					m = append(m, prometheus.MustNewConstMetric(collector.Rt_ServiceStatus, prometheus.GaugeValue, metricValue3, hosts[i].Ip, hosts[i].Hostname, "linecard",linecardID[j],labelCardType,labelLocation))
-					m = append(m, prometheus.MustNewConstMetric(collector.Rt_Status, prometheus.GaugeValue, metricValue4, hosts[i].Ip, hosts[i].Hostname, "linecard",linecardID[j]))
+				//collector:=linecardMetrics{}
+					m = append(m, prometheus.MustNewConstMetric(Rt_ServiceStatus, prometheus.GaugeValue, metricValue3, hosts[i].Ip, hosts[i].Hostname, "linecard",linecardID[j],labelCardType,labelLocation))
+					m = append(m, prometheus.MustNewConstMetric(Rt_Status, prometheus.GaugeValue, metricValue4, hosts[i].Ip, hosts[i].Hostname, "linecard",linecardID[j]))
 		}
 	}
 	return m

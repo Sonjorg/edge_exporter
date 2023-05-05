@@ -1,7 +1,7 @@
 package main
 
 import (
-	//"edge_exporter/pkg/collector"
+	"edge_exporter/pkg/collector"
 	"edge_exporter/pkg/config"
 	"edge_exporter/pkg/database"
 	"edge_exporter/pkg/utils"
@@ -41,9 +41,11 @@ func main() {
 	//collector.CallStatsCollector()
 	//collector.LinecardCollector()
 	//collector.EthernetportCollector()
-	c := &AllCollectors{}
-	prometheus.MustRegister(c)
-	c.Probe()
+	registry := prometheus.NewRegistry()
+	c := &collector.AllCollectors{}
+	registry.MustRegister(c)
+		c.Probe()
+
 	//Serving metrics
 	http.Handle("/metrics", promhttp.Handler())
 	log.Fatal(http.ListenAndServe(":1234", nil))
