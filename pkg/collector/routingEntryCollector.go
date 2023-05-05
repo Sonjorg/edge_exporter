@@ -198,7 +198,7 @@ var (
 					}
 
 				} else { // DB doesn't exist, so fetch new routingentries with
-					url  := "https =//" + hosts[i].Ip + "/rest/routingtable/" + routingtables[j] + "/routingentry"
+					url  := "https://" + hosts[i].Ip + "/rest/routingtable/" + routingtables[j] + "/routingentry"
 					_, data2, err  := http.GetAPIData(url, phpsessid)
 					if err != nil {
 						log.Print("Error getAPIData, routingentry = ", err)
