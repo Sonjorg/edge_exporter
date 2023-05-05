@@ -93,7 +93,7 @@ func GetCookieDB(db *sql.DB, ipaddress string) ([]*Cookie, error){
 			}
 			if (p.Ipaddress == ipaddress) {
 				c = append(c, p)
-
+				
 			}
 	}
 	/*for i :=range c{

@@ -29,37 +29,22 @@ Rt_Status         int    `xml:"rt_Status"`
 }
 
 type linecardMetrics struct {
-	Href                *prometheus.Desc
-	//Rt_CardType		  	*prometheus.Desc
-	//Rt_Location		  	*prometheus.Desc
 	Rt_ServiceStatus  	*prometheus.Desc
 	Rt_Status           *prometheus.Desc
-	//Error_ip            *prometheus.Desc
 	}
 
 func lineCCollector()*linecardMetrics{
 
 	 return &linecardMetrics{
-		/*Rt_CardType: prometheus.NewDesc("rt_CardType",
-			"NoDescriptionYet",
-			[]string{"hostip", "hostname", "job","linecardID"}, nil,
-		),
-		Rt_Location: prometheus.NewDesc("rt_Location",
-			"NoDescriptionYet",
-			[]string{"hostip", "hostname", "job","linecardID"}, nil,
-		),*/
+
 		Rt_ServiceStatus: prometheus.NewDesc("rt_ServiceStatus",
-			"linecard",
+			"The service status of the module.",
 			[]string{"hostip", "hostname", "job","linecardID","rt_CardType","rt_Location"}, nil,
 		),
 		Rt_Status: prometheus.NewDesc("rt_Status",
-			"linecard",
+			"Indicates the hardware initialization state for this card.",
 			[]string{"hostip", "hostname", "job","linecardID"}, nil,
 		),
-		/*Error_ip: prometheus.NewDesc("error_linecard",
-			"NoDescriptionYet",
-			[]string{"hostip", "hostname","job","linecardID","error_reason"}, nil,
-		),*/
 	 }
 }
 
@@ -125,16 +110,11 @@ func (collector *linecardMetrics) Collect(c chan<- prometheus.Metric) {
 					metricValue3 := float64(lData.LinecardData.Rt_ServiceStatus)
 					metricValue4 := float64(lData.LinecardData.Rt_Status)
 
-						//c <- prometheus.MustNewConstMetric(collector.Rt_CardType, prometheus.GaugeValue, metricValue1, hosts[i].Ip, hosts[i].Hostname, "linecard",linecardID[j])
-						//c <- prometheus.MustNewConstMetric(collector.Rt_Location, prometheus.GaugeValue, metricValue2, hosts[i].Ip, hosts[i].Hostname, "linecard",linecardID[j])
 						c <- prometheus.MustNewConstMetric(collector.Rt_ServiceStatus, prometheus.GaugeValue, metricValue3, hosts[i].Ip, hosts[i].Hostname, "linecard",linecardID[j],labelCardType,labelLocation)
 						c <- prometheus.MustNewConstMetric(collector.Rt_Status, prometheus.GaugeValue, metricValue4, hosts[i].Ip, hosts[i].Hostname, "linecard",linecardID[j])
-
-
 		}
 	}
 }
-
 // Initializing the collector
 func LinecardCollector() {
 	//If no targets for this collector, return from function
