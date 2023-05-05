@@ -157,7 +157,7 @@ var (
 			//If 24 hours has not passed since last data was stored in database, use this data
 			if (!DBexists || utils.Expired(timeSchedule, timeLast))  { //Routing data has expired, fetching new routingentries
 				fmt.Println("Fetching routing data from http")
-				_, data, err  := http.GetAPIData("https =//"+hosts[i].Ip+"/rest/routingtable", phpsessid)
+				_, data, err  := http.GetAPIData("https://"+hosts[i].Ip+"/rest/routingtable", phpsessid)
 				if err != nil {
 					log.Print("Error routingtable data", hosts[i].Ip, err)
 					continue
