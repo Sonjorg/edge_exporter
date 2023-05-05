@@ -1,7 +1,7 @@
 package main
 
 import (
-	"edge_exporter/pkg/collector"
+	//"edge_exporter/pkg/collector"
 	"edge_exporter/pkg/config"
 	"edge_exporter/pkg/database"
 	"edge_exporter/pkg/utils"
@@ -34,13 +34,15 @@ func main() {
 
 	//initializing collectors
 	//The collectors only start to run after a scrape is made to this host
-	collector.SystemResourceCollector()
-	collector.DiskPartitionCollector()
-	collector.RoutingEntryCollector()
-	collector.CallStatsCollector()
-	collector.LinecardCollector()
-	collector.EthernetportCollector()
-
+	//collector.SystemResourceCollector()
+	//collector.DiskPartitionCollector()
+	//collector.RoutingEntryCollector()
+	//collector.CallStatsCollector()
+	//collector.LinecardCollector()
+	//collector.EthernetportCollector()
+	c := &AllCollectors{}
+	prometheus.MustRegister(c)
+	c.Probe()
 	//Serving metrics
 	http.Handle("/metrics", promhttp.Handler())
 	log.Fatal(http.ListenAndServe(":1234", nil))
