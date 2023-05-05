@@ -46,11 +46,15 @@ func main() {
 
 	registry.MustRegister(c)
 	c.Probe()
-	//h := promhttp.HandlerFor(registry, promhttp.HandlerOpts{})
+	h := promhttp.HandlerFor(registry, promhttp.HandlerOpts{})
 	//h.ServeHTTP()
 	//Serving metrics
-	//http.Handle("/metrics", h)
-	http.Handle("/metrics", promhttp.Handler())
-	log.Fatal(http.ListenAndServe(":9103", nil))
-
+	http.Handle("/metrics", h)
+	//http.Handle("/metrics", promhttp.Handler())
+	//log.Fatal(http.ListenAndServe(":9103", nil))
+	go func() {
+		if err := http.ListenAndServe(":9103", nil); err != nil {
+			log.Fatalf("Unable to serve: %v", err)
+		}
+	}()
 }
