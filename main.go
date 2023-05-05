@@ -57,7 +57,7 @@ func main() {
 			log.Fatalf("Unable to serve: %v", err)
 		}
 	}()
-	//h.ServeHTTP(nil,nil)
-	log.Printf("Fortigate exporter running, listening on :9103")
+	h.ServeHTTP(nil,nil)
+	log.Printf("Edge exporter running, listening on :9103")
 	select {}
 }
