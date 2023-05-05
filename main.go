@@ -53,10 +53,11 @@ func main() {
 	//http.Handle("/metrics", promhttp.Handler())
 	//log.Fatal(http.ListenAndServe(":9103", nil))
 	go func() {
-		if err := http.ListenAndServe(":9103", nil); err != nil {
+		if err := http.ListenAndServe(":9103", h); err != nil {
 			log.Fatalf("Unable to serve: %v", err)
 		}
 	}()
+	//h.ServeHTTP(nil,nil)
 	log.Printf("Fortigate exporter running, listening on :9103")
 	select {}
 }
