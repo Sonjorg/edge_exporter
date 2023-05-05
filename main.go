@@ -45,19 +45,16 @@ func main() {
 	c := &collector.AllCollectors{}
 
 	registry.MustRegister(c)
-	c.Probe()
+	go func() {
+		c.Probe()
+	}()
 	h := promhttp.HandlerFor(registry, promhttp.HandlerOpts{})
 	//h.ServeHTTP()
 	//Serving metrics
 	http.Handle("/metrics", h)
 	//http.Handle("/metrics", promhttp.Handler())
-	//log.Fatal(http.ListenAndServe(":9103", nil))
-	go func() {
-		if err := http.ListenAndServe(":9103", h); err != nil {
-			log.Fatalf("Unable to serve: %v", err)
-		}
-	}()
-	h.ServeHTTP(nil,nil)
+	log.Fatal(http.ListenAndServe(":9103", nil))
+	
 	log.Printf("Edge exporter running, listening on :9103")
 	select {}
 }
