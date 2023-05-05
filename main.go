@@ -57,6 +57,6 @@ func main() {
 			log.Fatalf("Unable to serve: %v", err)
 		}
 	}()
-	log.Printf("Fortigate exporter running, listening on %q", savedConfig.Listen)
+	log.Printf("Fortigate exporter running, listening on :9103")
 	select {}
 }
