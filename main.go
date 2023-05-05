@@ -43,8 +43,9 @@ func main() {
 	//collector.EthernetportCollector()
 	registry := prometheus.NewRegistry()
 	c := &collector.AllCollectors{}
+	c.Probe()
+
 	registry.MustRegister(c)
-		c.Probe()
 
 	//Serving metrics
 	http.Handle("/metrics", promhttp.Handler())
