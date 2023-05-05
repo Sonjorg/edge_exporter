@@ -4,15 +4,30 @@ import (
 	//"fmt"
 	//"edge_exporter/pkg/collector"
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	//"strconv"
 	//"time"
+	"net/http"
+
 )
 
 type AllCollectors struct{
 	metrics []prometheus.Metric
 }
 
-func (m *AllCollectors) Probe(reg prometheus.Registerer) {
+func ProbeHandler(w http.ResponseWriter, r *http.Request) {
+	
+	registry := prometheus.NewRegistry()
+	
+	pc := &AllCollectors{}
+	registry.MustRegister(pc)
+	pc.Probe()
+	
+	h := promhttp.HandlerFor(registry, promhttp.HandlerOpts{})
+	h.ServeHTTP(w, r)
+}
+
+func (m *AllCollectors) Probe() {
 	metrics := LinecardCollector2()
 	for i := range metrics {
 		m.metrics= append(m.metrics, metrics[i])

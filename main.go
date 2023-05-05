@@ -45,16 +45,17 @@ func main() {
 	c := &collector.AllCollectors{}
 
 	registry.MustRegister(c)
-	go c.Probe(registry)
+	
 
-	mux := http.NewServeMux()
-	promHandler := promhttp.HandlerFor(registry, promhttp.HandlerOpts{})
-	mux.Handle("/metrics", promHandler)
+	h := promhttp.HandlerFor(registry, promhttp.HandlerOpts{})
+	//h.ServeHTTP()
+	//Serving metrics
+	http.HandleFunc("/probe", collector.ProbeHandler)
 
-	// Start listening for HTTP connections.
-	//port := fmt.Sprintf(":%d", *promPort)
-	//log.Printf("starting nginx exporter on %q/metrics", port)
-	if err := http.ListenAndServe(":9103", mux); err != nil {
-		log.Fatalf("cannot start edge exporter: %s", err)
-	}
+	http.Handle("/metrics", h)
+	//http.Handle("/metrics", promhttp.Handler())
+	log.Fatal(http.ListenAndServe(":9103", nil))
+	
+	log.Printf("Edge exporter running, listening on :9103")
+	select {}
 }
