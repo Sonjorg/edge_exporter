@@ -49,7 +49,7 @@ type sMetrics struct {
 	Rt_LoggingPartUsage  *prometheus.Desc
 	Error_ip             *prometheus.Desc
 }
-
+/*
 func systemCollector()*sMetrics{
 
 	 return &sMetrics{
@@ -95,10 +95,10 @@ func systemCollector()*sMetrics{
 		),
 	 }
 }
-
+*/
 // Each and every collector must implement the Describe function.
 // It essentially writes all descriptors to the prometheus desc channel.
-func (collector *sMetrics) Describe(ch chan<- *prometheus.Desc) {
+/*func (collector *sMetrics) Describe(ch chan<- *prometheus.Desc) {
 
 	//Update this section with the each metric you create for a given collector
 	ch <- collector.Rt_CPULoadAverage15m
@@ -112,10 +112,53 @@ func (collector *sMetrics) Describe(ch chan<- *prometheus.Desc) {
 	ch <- collector.Rt_TmpPartUsage
 	ch <- collector.Error_ip
 
-}
+}*/
 //Collect implements required collect function for all promehteus collectors
 
-func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
+func SystemCollector()(m []prometheus.Metric){
+
+	var ( Rt_CPUUsage = prometheus.NewDesc("rt_CPUUsage",
+			"Average percent usage of the CPU.",
+			[]string{"hostip", "hostname", "chassis_type","serial_number"}, nil,
+		)
+		Rt_MemoryUsage = prometheus.NewDesc("rt_MemoryUsage",
+			"Average percent usage of system memory.",
+			[]string{"hostip", "hostname", "chassis_type","serial_number"}, nil,
+		)
+		Rt_CPUUptime = prometheus.NewDesc("rt_CPUUptime",
+			"The total duration in seconds, that the system CPU has been UP and running.",
+			[]string{"hostip", "hostname", "chassis_type","serial_number"}, nil,
+		)
+		Rt_FDUsage = prometheus.NewDesc("rt_FDUsage",
+			"Number of file descriptors used by the system.",
+			[]string{"hostip", "hostname", "chassis_type","serial_number"}, nil,
+		)
+		Rt_CPULoadAverage1m = prometheus.NewDesc("rt_CPULoadAverage1m",
+			"Average number of processes over the last one minute waiting to run because CPU is busy.",
+			[]string{"hostip", "hostname", "chassis_type","serial_number"}, nil,
+		)
+		Rt_CPULoadAverage5m = prometheus.NewDesc("rt_CPULoadAverage5m",
+			"Average number of processes over the last five minutes waiting to run because CPU is busy.",
+			[]string{"hostip", "hostname", "chassis_type","serial_number"}, nil,
+		)
+		Rt_CPULoadAverage15m = prometheus.NewDesc("rt_CPULoadAverage15m",
+			"Average number of processes over the last fifteen minutes waiting to run because CPU is busy.",
+			[]string{"hostip", "hostname", "chassis_type","serial_number"}, nil,
+		)
+		Rt_TmpPartUsage = prometheus.NewDesc("Rt_TmpPartUsage",
+			"Percentage of the temporary partition used.",
+			[]string{"hostip", "hostname", "chassis_type","serial_number"}, nil,
+		)
+		Rt_LoggingPartUsage = prometheus.NewDesc("Rt_LoggingPartUsage",
+			"Percentage of the logging partition used. This is applicable only for the SBC2000.",
+			[]string{"hostip", "hostname", "chassis_type","serial_number"}, nil,
+		)
+		Error_ip = prometheus.NewDesc("scrape_status",
+			"/rest/system/",
+			[]string{"hostip", "hostname"}, nil,
+		)
+	)
+
 	hosts := config.GetIncludedHosts("system")//retrieving targets for this exporter
 	if (len(hosts) <= 0) {
 		return
@@ -135,11 +178,11 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 		phpsessid,err :=  http.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
 		if err != nil {
 			log.Println("Error retrieving session cookie (system): ",log.Flags(), err)
-				 c <- prometheus.NewMetricWithTimestamp(
+				 m = append(m,  prometheus.NewMetricWithTimestamp(
 					timeReportedByExternalSystem,
 					prometheus.MustNewConstMetric(
-						collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, hosts[i].Hostname),
-				   )
+						Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, hosts[i].Hostname),
+				   ))
 				   continue //trying next ip address
 		}
 		//fetching labels from DB or router if not exist yet
@@ -154,11 +197,11 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 		_, data,err := http.GetAPIData(dataStr, phpsessid)
 		if err != nil {
 				log.Print("Error collecting from host: ",log.Flags(), err,"\n")
-				  c <- prometheus.NewMetricWithTimestamp(
+				  m = append(m,  prometheus.NewMetricWithTimestamp(
 					timeReportedByExternalSystem,
 					prometheus.MustNewConstMetric(
-						collector.Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, hosts[i].Hostname),
-				   )
+						Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, hosts[i].Hostname),
+				   ))
 				continue
 		}
 		ssbc := &sSBCdata{}
@@ -177,19 +220,20 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 		metricValue8 := float64(ssbc.SystemData.Rt_MemoryUsage)
 		metricValue9 := float64(ssbc.SystemData.Rt_TmpPartUsage)
 
-		c <- prometheus.MustNewConstMetric(
-			collector.Error_ip, prometheus.GaugeValue, 1, hosts[i].Ip, hosts[i].Hostname)
+		m = append(m, prometheus.MustNewConstMetric(
+			Error_ip, prometheus.GaugeValue, 1, hosts[i].Ip, hosts[i].Hostname))
 
-			c <- prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue1, hosts[i].Ip, hosts[i].Hostname,chassisType, serialNumber)
-			c <- prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage1m, prometheus.GaugeValue, metricValue2, hosts[i].Ip, hosts[i].Hostname,chassisType, serialNumber)
-			c <- prometheus.MustNewConstMetric(collector.Rt_CPULoadAverage5m, prometheus.GaugeValue, metricValue3, hosts[i].Ip, hosts[i].Hostname,chassisType, serialNumber)
-			c <- prometheus.MustNewConstMetric(collector.Rt_CPUUptime, prometheus.GaugeValue, metricValue4, hosts[i].Ip, hosts[i].Hostname,chassisType, serialNumber)
-			c <- prometheus.MustNewConstMetric(collector.Rt_CPUUsage, prometheus.GaugeValue, metricValue5, hosts[i].Ip, hosts[i].Hostname,chassisType, serialNumber)
-			c <- prometheus.MustNewConstMetric(collector.Rt_FDUsage, prometheus.GaugeValue, metricValue6, hosts[i].Ip, hosts[i].Hostname,chassisType, serialNumber)
-			c <- prometheus.MustNewConstMetric(collector.Rt_LoggingPartUsage, prometheus.GaugeValue, metricValue7, hosts[i].Ip, hosts[i].Hostname,chassisType, serialNumber)
-			c <- prometheus.MustNewConstMetric(collector.Rt_MemoryUsage, prometheus.GaugeValue, metricValue8, hosts[i].Ip, hosts[i].Hostname,chassisType, serialNumber)
-			c <- prometheus.MustNewConstMetric(collector.Rt_TmpPartUsage, prometheus.GaugeValue, metricValue9, hosts[i].Ip, hosts[i].Hostname,chassisType, serialNumber)
+			m = append(m, prometheus.MustNewConstMetric(Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue1, hosts[i].Ip, hosts[i].Hostname,chassisType, serialNumber))
+			m = append(m, prometheus.MustNewConstMetric(Rt_CPULoadAverage1m, prometheus.GaugeValue, metricValue2, hosts[i].Ip, hosts[i].Hostname,chassisType, serialNumber))
+			m = append(m, prometheus.MustNewConstMetric(Rt_CPULoadAverage5m, prometheus.GaugeValue, metricValue3, hosts[i].Ip, hosts[i].Hostname,chassisType, serialNumber))
+			m = append(m, prometheus.MustNewConstMetric(Rt_CPUUptime, prometheus.GaugeValue, metricValue4, hosts[i].Ip, hosts[i].Hostname,chassisType, serialNumber))
+			m = append(m, prometheus.MustNewConstMetric(Rt_CPUUsage, prometheus.GaugeValue, metricValue5, hosts[i].Ip, hosts[i].Hostname,chassisType, serialNumber))
+			m = append(m, prometheus.MustNewConstMetric(Rt_FDUsage, prometheus.GaugeValue, metricValue6, hosts[i].Ip, hosts[i].Hostname,chassisType, serialNumber))
+			m = append(m, prometheus.MustNewConstMetric(Rt_LoggingPartUsage, prometheus.GaugeValue, metricValue7, hosts[i].Ip, hosts[i].Hostname,chassisType, serialNumber))
+			m = append(m, prometheus.MustNewConstMetric(Rt_MemoryUsage, prometheus.GaugeValue, metricValue8, hosts[i].Ip, hosts[i].Hostname,chassisType, serialNumber))
+			m = append(m, prometheus.MustNewConstMetric(Rt_TmpPartUsage, prometheus.GaugeValue, metricValue9, hosts[i].Ip, hosts[i].Hostname,chassisType, serialNumber))
 	}
+	return m
 }
 
 /*func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prometheus.Metric){
@@ -197,7 +241,7 @@ func (collector *sMetrics) Collect(c chan<- prometheus.Metric) {
 
 }*/
 // Initializing the exporter
-func SystemResourceCollector() {
+/*func SystemResourceCollector() {
 	hosts := config.GetIncludedHosts("system")//retrieving targets for this exporter
 	if (len(hosts) <= 0) {
 		return
@@ -205,3 +249,4 @@ func SystemResourceCollector() {
 	c := systemCollector()
 	prometheus.MustRegister(c)
 }
+*/

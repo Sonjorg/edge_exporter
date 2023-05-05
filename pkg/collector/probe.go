@@ -17,6 +17,14 @@ func (m *AllCollectors) Probe() {
 	for i := range metrics {
 		m.metrics= append(m.metrics, metrics[i])
 	}
+	metrics = SystemCollector()
+	for i := range metrics {
+		m.metrics= append(m.metrics, metrics[i])
+	}
+	metrics = RoutingEntryCollector()
+	for i := range metrics {
+		m.metrics= append(m.metrics, metrics[i])
+	}
 }
 
 
