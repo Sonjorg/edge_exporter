@@ -92,6 +92,12 @@ func (collector *rMetrics) Describe(ch chan<- *prometheus.Desc) {
 // Collect implements required collect function for all promehteus collectors
 func RoutingEntryCollector()(m []prometheus.Metric) {
 
+	hosts  := config.GetIncludedHosts("routingentry") //retrieving targets for this exporter
+	if len(hosts) <= 0 {
+		log.Print("no hosts")
+		return
+	}
+
 var ( 
 	Rt_RuleUsage = prometheus.NewDesc("rt_RuleUsage",
 			"Displays the number of times this call route has been selected for a call.",
@@ -118,12 +124,6 @@ var (
 			[]string{"hostip", "hostname",  "routing_table", "routing_entry"}, nil,
 		)
 )
-
-	hosts  := config.GetIncludedHosts("routingentry") //retrieving targets for this exporter
-	if len(hosts) <= 0 {
-		log.Print("no hosts")
-		return
-	}
 	
 	//var timeLast string
 	var sqliteDatabase *sql.DB

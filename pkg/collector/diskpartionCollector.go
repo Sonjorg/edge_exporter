@@ -42,6 +42,12 @@ Rt_PartitionType    int    `xml:"rt_PartitionType"`
 }
 
 func DiskPartitionCollector()(m []prometheus.Metric) {
+	
+	hosts := config.GetIncludedHosts("diskpartition")//retrieving targets for this exporter
+	if (len(hosts) <= 0) {
+		log.Print("no hosts disk")
+		return
+	}
 	var (
 		Rt_CurrentUsage = prometheus.NewDesc("rt_CurrentUsage",
 			"Amount of memory used by this partition, expressed as percentage",
@@ -64,12 +70,6 @@ func DiskPartitionCollector()(m []prometheus.Metric) {
 			[]string{"hostip", "hostname", "disk_partition_id","disk_partition_name"}, nil,
 		)
 	)
-
-	hosts := config.GetIncludedHosts("diskpartition")//retrieving targets for this exporter
-	if (len(hosts) <= 0) {
-		log.Print("no hosts disk")
-		return
-	}
 
 	for i := range hosts {
 

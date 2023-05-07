@@ -34,6 +34,11 @@ type callStatsData struct {
 }
 
 func CallStatsCollector()(m []prometheus.Metric) {
+	
+	hosts := config.GetIncludedHosts("systemcallstats") //retrieving targets for this collector
+	if (len(hosts) <= 0) {
+		return
+	}
 
 	var (
 		Rt_NumCallAttempts = prometheus.NewDesc("rt_NumCallAttempts",
@@ -61,10 +66,6 @@ func CallStatsCollector()(m []prometheus.Metric) {
 			[]string{"hostip", "hostname"}, nil,
 		)
 	)
-	hosts := config.GetIncludedHosts("systemcallstats") //retrieving targets for this collector
-	if (len(hosts) <= 0) {
-		return
-	}
 
 	for i := 0; i < len(hosts); i++ {
 

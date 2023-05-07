@@ -32,49 +32,23 @@ type linecardMetrics struct {
 	Rt_ServiceStatus  	*prometheus.Desc
 	Rt_Status           *prometheus.Desc
 	}
-/*
-func lineCCollector()*linecardMetrics{
 
-	 return &linecardMetrics{
-
-		Rt_ServiceStatus: prometheus.NewDesc("rt_ServiceStatus",
-			"The service status of the module.",
-			[]string{"hostip", "hostname", "job","linecardID","rt_CardType","rt_Location"}, nil,
-		),
-		Rt_Status: prometheus.NewDesc("rt_Status",
-			"Indicates the hardware initialization state for this card.",
-			[]string{"hostip", "hostname", "job","linecardID"}, nil,
-		),
-	 }
-}
-*/
-// Each and every collector must implement the Describe function.
-// It essentially writes all descriptors to the prometheus desc channel.
-/*func (collector *linecardMetrics) Describe(ch chan<- *prometheus.Desc) {
-	//Update this section with the each metric you create for a given collector
-	//ch <- collector.Rt_CardType
-	//ch <- collector.Rt_Location
-	ch <- collector.Rt_ServiceStatus
-	ch <- collector.Rt_Status
-	//ch <- collector.Error_ip
-}*/
-//Collect implements required collect function for all promehteus collectors
 func LinecardCollector2()  (m []prometheus.Metric) {
-var (
-	Rt_ServiceStatus = prometheus.NewDesc("rt_ServiceStatus",
-			"The service status of the module.",
-			[]string{"hostip", "hostname", "job","linecardID","rt_CardType","rt_Location"}, nil,
-		)
-		Rt_Status = prometheus.NewDesc("rt_Status",
-			"Indicates the hardware initialization state for this card.",
-			[]string{"hostip", "hostname", "job","linecardID"}, nil,
-		)
-	)
 	hosts := config.GetIncludedHosts("linecard")//retrieving targets for this exporter
 	if (len(hosts) <= 0) {
 		log.Print("no hosts, linecard")
 		return nil
 	}
+	var (
+			Rt_ServiceStatus = prometheus.NewDesc("rt_ServiceStatus",
+				"The service status of the module.",
+				[]string{"hostip", "hostname", "job","linecardID","rt_CardType","rt_Location"}, nil,
+			)
+			Rt_Status = prometheus.NewDesc("rt_Status",
+				"Indicates the hardware initialization state for this card.",
+				[]string{"hostip", "hostname", "job","linecardID"}, nil,
+			)
+		)
 
 	for i := range hosts {
 

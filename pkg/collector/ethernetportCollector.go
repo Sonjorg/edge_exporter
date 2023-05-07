@@ -56,6 +56,12 @@ Rt_redundancyState		      int    `xml:"rt_redundancyState"`
 //Collect implements required collect function for all promehteus collectors
 func EthernetPortCollector()(m []prometheus.Metric) {
 
+	hosts := config.GetIncludedHosts("ethernetport")//retrieving targets for this exporter
+	if (len(hosts) <= 0) {
+		log.Print("no hosts")
+		return
+	}
+
 var (
 	IfRedundancy = prometheus.NewDesc("ifRedundancy",
 			"ethernetport",
@@ -171,12 +177,6 @@ var (
 		)
 )
 
-	hosts := config.GetIncludedHosts("ethernetport")//retrieving targets for this exporter
-	if (len(hosts) <= 0) {
-		log.Print("no hosts")
-		return
-	}
-
 	for i := range hosts {
 
 		phpsessid,err := http.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
@@ -267,16 +267,3 @@ var (
 	}
 	return m
 }
-
-// Initializing the collector
-/*
-func EthernetportCollector() {
-	hosts := config.GetIncludedHosts("ethernetport")//retrieving targets for this exporter
-	if (len(hosts) <= 0) {
-		//log.Print("no hosts ethernetport")
-		return
-	}
-		c := ethernetCollector()
-		prometheus.MustRegister(c)
-}
-*/

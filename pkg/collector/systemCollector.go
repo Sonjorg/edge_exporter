@@ -37,85 +37,12 @@ type systemData struct {
 	Rt_LoggingPartUsage  int    `xml:"rt_LoggingPartUsage"`
 }
 
-type sMetrics struct {
-	Rt_CPUUsage          *prometheus.Desc
-	Rt_MemoryUsage       *prometheus.Desc
-	Rt_CPUUptime         *prometheus.Desc
-	Rt_FDUsage           *prometheus.Desc
-	Rt_CPULoadAverage1m  *prometheus.Desc
-	Rt_CPULoadAverage5m  *prometheus.Desc
-	Rt_CPULoadAverage15m *prometheus.Desc
-	Rt_TmpPartUsage      *prometheus.Desc
-	Rt_LoggingPartUsage  *prometheus.Desc
-	Error_ip             *prometheus.Desc
-}
-/*
-func systemCollector()*sMetrics{
-
-	 return &sMetrics{
-		Rt_CPUUsage: prometheus.NewDesc("rt_CPUUsage",
-			"Average percent usage of the CPU.",
-			[]string{"hostip", "hostname", "chassis_type","serial_number"}, nil,
-		),
-		Rt_MemoryUsage: prometheus.NewDesc("rt_MemoryUsage",
-			"Average percent usage of system memory.",
-			[]string{"hostip", "hostname", "chassis_type","serial_number"}, nil,
-		),
-		Rt_CPUUptime: prometheus.NewDesc("rt_CPUUptime",
-			"The total duration in seconds, that the system CPU has been UP and running.",
-			[]string{"hostip", "hostname", "chassis_type","serial_number"}, nil,
-		),
-		Rt_FDUsage: prometheus.NewDesc("rt_FDUsage",
-			"Number of file descriptors used by the system.",
-			[]string{"hostip", "hostname", "chassis_type","serial_number"}, nil,
-		),
-		Rt_CPULoadAverage1m: prometheus.NewDesc("rt_CPULoadAverage1m",
-			"Average number of processes over the last one minute waiting to run because CPU is busy.",
-			[]string{"hostip", "hostname", "chassis_type","serial_number"}, nil,
-		),
-		Rt_CPULoadAverage5m: prometheus.NewDesc("rt_CPULoadAverage5m",
-			"Average number of processes over the last five minutes waiting to run because CPU is busy.",
-			[]string{"hostip", "hostname", "chassis_type","serial_number"}, nil,
-		),
-		Rt_CPULoadAverage15m: prometheus.NewDesc("rt_CPULoadAverage15m",
-			"Average number of processes over the last fifteen minutes waiting to run because CPU is busy.",
-			[]string{"hostip", "hostname", "chassis_type","serial_number"}, nil,
-		),
-		Rt_TmpPartUsage: prometheus.NewDesc("Rt_TmpPartUsage",
-			"Percentage of the temporary partition used.",
-			[]string{"hostip", "hostname", "chassis_type","serial_number"}, nil,
-		),
-		Rt_LoggingPartUsage: prometheus.NewDesc("Rt_LoggingPartUsage",
-			"Percentage of the logging partition used. This is applicable only for the SBC2000.",
-			[]string{"hostip", "hostname", "chassis_type","serial_number"}, nil,
-		),
-		Error_ip: prometheus.NewDesc("scrape_status",
-			"/rest/system/",
-			[]string{"hostip", "hostname"}, nil,
-		),
-	 }
-}
-*/
-// Each and every collector must implement the Describe function.
-// It essentially writes all descriptors to the prometheus desc channel.
-/*func (collector *sMetrics) Describe(ch chan<- *prometheus.Desc) {
-
-	//Update this section with the each metric you create for a given collector
-	ch <- collector.Rt_CPULoadAverage15m
-	ch <- collector.Rt_CPULoadAverage1m
-	ch <- collector.Rt_CPULoadAverage5m
-	ch <- collector.Rt_CPUUptime
-	ch <- collector.Rt_CPUUsage
-	ch <- collector.Rt_FDUsage
-	ch <- collector.Rt_LoggingPartUsage
-	ch <- collector.Rt_MemoryUsage
-	ch <- collector.Rt_TmpPartUsage
-	ch <- collector.Error_ip
-
-}*/
-//Collect implements required collect function for all promehteus collectors
-
 func SystemCollector()(m []prometheus.Metric){
+
+	hosts := config.GetIncludedHosts("system")//retrieving targets for this exporter
+	if (len(hosts) <= 0) {
+		return
+	}
 
 	var ( Rt_CPUUsage = prometheus.NewDesc("rt_CPUUsage",
 			"Average percent usage of the CPU.",
@@ -159,12 +86,7 @@ func SystemCollector()(m []prometheus.Metric){
 		)
 	)
 
-	hosts := config.GetIncludedHosts("system")//retrieving targets for this exporter
-	if (len(hosts) <= 0) {
-		return
-	}
-
-	log.Print(hosts)
+	//log.Print(hosts)
 
 	for i := 0; i < len(hosts); i++ {
 		dataStr := "https://"+hosts[i].Ip+"/rest/system/historicalstatistics/1"
