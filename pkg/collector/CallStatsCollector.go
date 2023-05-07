@@ -33,67 +33,34 @@ type callStatsData struct {
 	Rt_NumCallUnAnswered        int `xml:"rt_NumCallUnAnswered"`
 }
 
-type cMetrics struct {
-	Rt_NumCallAttempts          *prometheus.Desc
-	Rt_NumCallSucceeded         *prometheus.Desc
-	Rt_NumCallFailed            *prometheus.Desc
-	Rt_NumCallCurrentlyUp       *prometheus.Desc
-	Rt_NumCallAbandonedNoTrunk  *prometheus.Desc
-	Rt_NumCallUnAnswered        *prometheus.Desc
-	//Error_ip                    *prometheus.Desc
-}
+func CallStatsCollector()(m []prometheus.Metric) {
 
-func callStats()*cMetrics{
-
-	 return &cMetrics{
-		Rt_NumCallAttempts: prometheus.NewDesc("rt_NumCallAttempts",
+	var (
+		Rt_NumCallAttempts = prometheus.NewDesc("rt_NumCallAttempts",
 			"Total number of call attempts system wide since system came up.",
 			[]string{"hostip", "hostname"}, nil,
-		),
-		Rt_NumCallSucceeded: prometheus.NewDesc("rt_NumCallSucceeded",
+		)
+		Rt_NumCallSucceeded = prometheus.NewDesc("rt_NumCallSucceeded",
 			"Total number of successful calls system wide since system came up.",
 			[]string{"hostip", "hostname"}, nil,
-		),
-		Rt_NumCallFailed: prometheus.NewDesc("rt_NumCallFailed",
+		)
+		Rt_NumCallFailed = prometheus.NewDesc("rt_NumCallFailed",
 			"Total number of failed calls system wide since system came up.",
 			[]string{"hostip", "hostname"}, nil,
-		),
-		Rt_NumCallCurrentlyUp: prometheus.NewDesc("rt_NumCallCurrentlyUp",
+		)
+		Rt_NumCallCurrentlyUp = prometheus.NewDesc("rt_NumCallCurrentlyUp",
 			"Number of currently connected calls system wide.",
 			[]string{"hostip", "hostname"}, nil,
-		),
-		Rt_NumCallAbandonedNoTrunk: prometheus.NewDesc("rt_NumCallAbandonedNoTrunk",
+		)
+		Rt_NumCallAbandonedNoTrunk = prometheus.NewDesc("rt_NumCallAbandonedNoTrunk",
 			"Number of rejected calls due to no channel available system wide since system came up.",
 			[]string{"hostip", "hostname"}, nil,
-		),
-		Rt_NumCallUnAnswered: prometheus.NewDesc("rt_NumCallUnAnswered",
+		)
+		Rt_NumCallUnAnswered = prometheus.NewDesc("rt_NumCallUnAnswered",
 			"Number of unanswered calls system wide since system came up.",
 			[]string{"hostip", "hostname"}, nil,
-		),
-		/*Error_ip: prometheus.NewDesc("error_edge_call_stats",
-			"systemcallstats",
-			[]string{"hostip", "hostname", "Href","chassis_type","serial_number"}, nil,
-		),*/
-	 }
-}
-
-// Each and every collector must implement the Describe function.
-// It essentially writes all descriptors to the prometheus desc channel.
-func (collector *cMetrics) Describe(ch chan<- *prometheus.Desc) {
-
-	//Update this section with the each metric you create for a given collector
-	ch <- collector.Rt_NumCallAttempts
-	ch <- collector.Rt_NumCallSucceeded
-	ch <- collector.Rt_NumCallFailed
-	ch <- collector.Rt_NumCallCurrentlyUp
-	ch <- collector.Rt_NumCallAbandonedNoTrunk
-	ch <- collector.Rt_NumCallUnAnswered
-	//ch <- collector.Error_ip
-
-}
-//Collect implements required collect function for all promehteus collectors
-
-func (collector *cMetrics) Collect(c chan<- prometheus.Metric) {
+		)
+	)
 	hosts := config.GetIncludedHosts("systemcallstats") //retrieving targets for this collector
 	if (len(hosts) <= 0) {
 		return
@@ -103,14 +70,14 @@ func (collector *cMetrics) Collect(c chan<- prometheus.Metric) {
 
 		phpsessid,err :=  http.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
 		if err != nil {
-			log.Print("Error retrieving session cookie: ", err,"\n")
+			log.Print("Error retrieving session cookie = ", err,"\n")
 				   continue //trying next ip address
 		}
 
 		dataStr := "https://"+hosts[i].Ip+"/rest/systemcallstats"
 		_, data,err := http.GetAPIData(dataStr, phpsessid)
 		if err != nil {
-				log.Print("Error collecting systemcall data: ", err,"\n")
+				log.Print("Error collecting systemcall data = ", err,"\n")
 				continue
 		}
 
@@ -128,21 +95,13 @@ func (collector *cMetrics) Collect(c chan<- prometheus.Metric) {
 		metricValue5 := float64(ssbc.CallStatsData.Rt_NumCallAbandonedNoTrunk)
 		metricValue6 := float64(ssbc.CallStatsData.Rt_NumCallUnAnswered)
 		// ssbc.CallStatsData.Href
-			c <- prometheus.MustNewConstMetric(collector.Rt_NumCallAttempts, prometheus.GaugeValue, metricValue1, hosts[i].Ip, hosts[i].Hostname)
-			c <- prometheus.MustNewConstMetric(collector.Rt_NumCallSucceeded, prometheus.GaugeValue, metricValue2, hosts[i].Ip, hosts[i].Hostname)
-			c <- prometheus.MustNewConstMetric(collector.Rt_NumCallFailed, prometheus.GaugeValue, metricValue3, hosts[i].Ip, hosts[i].Hostname)
-			c <- prometheus.MustNewConstMetric(collector.Rt_NumCallCurrentlyUp, prometheus.GaugeValue, metricValue4, hosts[i].Ip, hosts[i].Hostname)
-			c <- prometheus.MustNewConstMetric(collector.Rt_NumCallAbandonedNoTrunk, prometheus.GaugeValue, metricValue5, hosts[i].Ip, hosts[i].Hostname)
-			c <- prometheus.MustNewConstMetric(collector.Rt_NumCallUnAnswered, prometheus.GaugeValue, metricValue6, hosts[i].Ip, hosts[i].Hostname)
+			m = append(m, prometheus.MustNewConstMetric(Rt_NumCallAttempts, prometheus.GaugeValue, metricValue1, hosts[i].Ip, hosts[i].Hostname))
+			m = append(m, prometheus.MustNewConstMetric(Rt_NumCallSucceeded, prometheus.GaugeValue, metricValue2, hosts[i].Ip, hosts[i].Hostname))
+			m = append(m, prometheus.MustNewConstMetric(Rt_NumCallFailed, prometheus.GaugeValue, metricValue3, hosts[i].Ip, hosts[i].Hostname))
+			m = append(m, prometheus.MustNewConstMetric(Rt_NumCallCurrentlyUp, prometheus.GaugeValue, metricValue4, hosts[i].Ip, hosts[i].Hostname))
+			m = append(m, prometheus.MustNewConstMetric(Rt_NumCallAbandonedNoTrunk, prometheus.GaugeValue, metricValue5, hosts[i].Ip, hosts[i].Hostname))
+			m = append(m, prometheus.MustNewConstMetric(Rt_NumCallUnAnswered, prometheus.GaugeValue, metricValue6, hosts[i].Ip, hosts[i].Hostname))
 	}
+	return m
 }
 
-// Initializing the exporter
-func CallStatsCollector() {
-	hosts := config.GetIncludedHosts("systemcallstats") //retrieving targets for this collector
-	if (len(hosts) <= 0) {
-		return
-	}
-	c := callStats()
-	prometheus.MustRegister(c)
-}

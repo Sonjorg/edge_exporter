@@ -54,6 +54,7 @@ func main() {
 
 	//http.Handle("/metrics", h)
 	//http.Handle("/metrics", promhttp.Handler())
+	
 	log.Fatal(http.ListenAndServe(":9103", nil))
 	
 	log.Printf("Edge exporter running, listening on :9103")

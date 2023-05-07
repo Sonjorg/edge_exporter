@@ -41,67 +41,35 @@ Rt_PartitionName    string `xml:"rt_PartitionName"`
 Rt_PartitionType    int    `xml:"rt_PartitionType"`
 }
 
-//Metrics for each routingentry
-type diskMetrics struct {
-	Href                *prometheus.Desc
-	Rt_CurrentUsage		*prometheus.Desc
-	Rt_MaximumSize		*prometheus.Desc
-	Rt_MemoryAvailable	*prometheus.Desc
-	Rt_MemoryUsed       *prometheus.Desc
-	Rt_PartitionType    *prometheus.Desc
-	//Error_ip            *prometheus.Desc
-	}
-
-func diskCollector()*diskMetrics{
-
-	 return &diskMetrics{
-		Rt_CurrentUsage: prometheus.NewDesc("rt_CurrentUsage",
+func DiskPartitionCollector()(m []prometheus.Metric) {
+	var (
+		Rt_CurrentUsage = prometheus.NewDesc("rt_CurrentUsage",
 			"Amount of memory used by this partition, expressed as percentage",
 			[]string{"hostip", "hostname", "disk_partition_id","disk_partition_name"}, nil,
-		),
-		Rt_MaximumSize: prometheus.NewDesc("rt_MaximumSize",
+		)
+		Rt_MaximumSize = prometheus.NewDesc("rt_MaximumSize",
 			"Specifies the maximum amount of memory, in bytes available in this partition.",
 			[]string{"hostip", "hostname", "disk_partition_id","disk_partition_name"}, nil,
-		),
-		Rt_MemoryAvailable: prometheus.NewDesc("rt_MemoryAvailable",
+		)
+		Rt_MemoryAvailable = prometheus.NewDesc("rt_MemoryAvailable",
 			"Amount of memory in bytes, available for use in the filesystem.",
 			[]string{"hostip", "hostname", "disk_partition_id","disk_partition_name"}, nil,
-		),
-		Rt_MemoryUsed: prometheus.NewDesc("rt_MemoryUsed",
+		)
+		Rt_MemoryUsed = prometheus.NewDesc("rt_MemoryUsed",
 			"Amount of memory in bytes, used by the existing files in the filesystem",
 			[]string{"hostip", "hostname", "disk_partition_id","disk_partition_name"}, nil,
-		),
-		Rt_PartitionType: prometheus.NewDesc("rt_PartitionType",
+		)
+		Rt_PartitionType = prometheus.NewDesc("rt_PartitionType",
 			"Identifies the user-friendly physical device holding the partition.",
 			[]string{"hostip", "hostname", "disk_partition_id","disk_partition_name"}, nil,
-		),
-		/*Error_ip: prometheus.NewDesc("error_edge_disk",
-			"diskpartition",
-			[]string{"hostip", "hostname","error_reason"}, nil,
-		),*/
-	 }
-}
+		)
+	)
 
-// Each and every collector must implement the Describe function.
-// It essentially writes all descriptors to the prometheus desc channel.
-func (collector *diskMetrics) Describe(ch chan<- *prometheus.Desc) {
-	//Update this section with the each metric you create for a given collector
-	ch <- collector.Rt_CurrentUsage
-	ch <- collector.Rt_MaximumSize
-	ch <- collector.Rt_MemoryAvailable
-	ch <- collector.Rt_MemoryUsed
-	ch <- collector.Rt_PartitionType
-	//ch <- collector.Error_ip
-}
-//Collect implements required collect function for all promehteus collectors
-func (collector *diskMetrics) Collect(c chan<- prometheus.Metric) {
 	hosts := config.GetIncludedHosts("diskpartition")//retrieving targets for this exporter
 	if (len(hosts) <= 0) {
 		log.Print("no hosts disk")
 		return
 	}
-
-	var partitionName string
 
 	for i := range hosts {
 
@@ -113,7 +81,7 @@ func (collector *diskMetrics) Collect(c chan<- prometheus.Metric) {
 
 		_, data,err := http.GetAPIData("https://"+hosts[i].Ip+"/rest/diskpartition", phpsessid)
 		if err != nil {
-			log.Print("Error fetching diskpartition data: ", hosts[i].Ip, err)
+			log.Print("Error fetching diskpartition data = ", hosts[i].Ip, err)
 			continue
 		}
 		disk := &diskPartition{}
@@ -133,13 +101,13 @@ func (collector *diskMetrics) Collect(c chan<- prometheus.Metric) {
 					url := "https://"+hosts[i].Ip+"/rest/diskpartition/"+disks[j]
 					_, data2, err := http.GetAPIData(url, phpsessid)
 						if err != nil {
-							log.Print("Error fetching diskpartition data: ", hosts[i].Ip, err)
+							log.Print("Error fetching diskpartition data = ", hosts[i].Ip, err)
 							continue
 						}
 
 					dData := &dSBCdata{}
 					err = xml.Unmarshal(data2, &dData) //Converting XML data to variables
-					//log.Print("Successful API call data: ",dData.DiskData)
+					//log.Print("Successful API call data = ",dData.DiskData)
 					if err!= nil {
 						log.Print("XML error disk", err)
 						continue
@@ -149,29 +117,19 @@ func (collector *diskMetrics) Collect(c chan<- prometheus.Metric) {
 					metricValue3 := float64(dData.DiskData.Rt_MemoryAvailable)
 					metricValue4 := float64(dData.DiskData.Rt_MemoryUsed)
 					metricValue5 := float64(dData.DiskData.Rt_PartitionType)
-					partitionName = dData.DiskData.Rt_PartitionName
+					partitionName := dData.DiskData.Rt_PartitionName
 					id := strconv.Itoa(j)
 
-						c <- prometheus.MustNewConstMetric(collector.Rt_CurrentUsage, prometheus.GaugeValue, metricValue1, hosts[i].Ip, hosts[i].Hostname,id, partitionName)
-						c <- prometheus.MustNewConstMetric(collector.Rt_MaximumSize, prometheus.GaugeValue, metricValue2, hosts[i].Ip, hosts[i].Hostname,id, partitionName)
-						c <- prometheus.MustNewConstMetric(collector.Rt_MemoryAvailable, prometheus.GaugeValue, metricValue3, hosts[i].Ip, hosts[i].Hostname,id, partitionName)
-						c <- prometheus.MustNewConstMetric(collector.Rt_MemoryUsed, prometheus.GaugeValue, metricValue4, hosts[i].Ip, hosts[i].Hostname,id, partitionName)
-						c <- prometheus.MustNewConstMetric(collector.Rt_PartitionType, prometheus.GaugeValue, metricValue5, hosts[i].Ip, hosts[i].Hostname,id, partitionName)
-
-
+					m = append(m, prometheus.MustNewConstMetric(Rt_CurrentUsage, prometheus.GaugeValue, metricValue1, hosts[i].Ip, hosts[i].Hostname,id, partitionName))
+					m = append(m, prometheus.MustNewConstMetric(Rt_MaximumSize, prometheus.GaugeValue, metricValue2, hosts[i].Ip, hosts[i].Hostname,id, partitionName))
+					m = append(m, prometheus.MustNewConstMetric(Rt_MemoryAvailable, prometheus.GaugeValue, metricValue3, hosts[i].Ip, hosts[i].Hostname,id, partitionName))
+					m = append(m, prometheus.MustNewConstMetric(Rt_MemoryUsed, prometheus.GaugeValue, metricValue4, hosts[i].Ip, hosts[i].Hostname,id, partitionName))
+					m = append(m, prometheus.MustNewConstMetric(Rt_PartitionType, prometheus.GaugeValue, metricValue5, hosts[i].Ip, hosts[i].Hostname,id, partitionName))
 		}
 	}
+	return m
 }
 
 // Initializing the exporter
 
 
-func DiskPartitionCollector() {
-	hosts := config.GetIncludedHosts("diskpartition")//retrieving targets for this exporter
-	if (len(hosts) <= 0) {
-		log.Print("no hosts diskpartition")
-		return
-	}
-	c := diskCollector()
-	prometheus.MustRegister(c)
-}
