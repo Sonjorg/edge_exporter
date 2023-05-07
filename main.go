@@ -9,7 +9,7 @@ import (
 	//"fmt"
 	"log"
 	"net/http"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
+	//"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/prometheus/client_golang/prometheus"
 )
 
@@ -47,12 +47,12 @@ func main() {
 	registry.MustRegister(c)
 	
 
-	h := promhttp.HandlerFor(registry, promhttp.HandlerOpts{})
-	//h.ServeHTTP()
+	//h := promhttp.HandlerFor(registry, promhttp.HandlerOpts{})
+	///h.ServeHTTP()
 	//Serving metrics
-	http.HandleFunc("/probe", collector.ProbeHandler)
+	http.HandleFunc("/metrics", collector.ProbeHandler)
 
-	http.Handle("/metrics", h)
+	//http.Handle("/metrics", h)
 	//http.Handle("/metrics", promhttp.Handler())
 	log.Fatal(http.ListenAndServe(":9103", nil))
 	

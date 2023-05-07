@@ -18,7 +18,6 @@ type AllCollectors struct{
 func ProbeHandler(w http.ResponseWriter, r *http.Request) {
 	
 	registry := prometheus.NewRegistry()
-	
 	pc := &AllCollectors{}
 	registry.MustRegister(pc)
 	pc.Probe()

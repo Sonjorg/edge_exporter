@@ -124,8 +124,7 @@ var (
 		log.Print("no hosts")
 		return
 	}
-
-
+	
 	//var timeLast string
 	var sqliteDatabase *sql.DB
 	sqliteDatabase, err  := sql.Open("sqlite3", "./sqlite-database.db")
