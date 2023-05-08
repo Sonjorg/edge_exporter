@@ -33,30 +33,16 @@ func main() {
 		}
 	}
 
-	//initializing collectors
-	//The collectors only start to run after a scrape is made to this host
-	//collector.SystemResourceCollector()
-	//collector.DiskPartitionCollector()
-	//collector.RoutingEntryCollector()
-	//collector.CallStatsCollector()
-	//collector.LinecardCollector()
-	//collector.EthernetportCollector()
+
 	registry := prometheus.NewRegistry()
 	c := &collector.AllCollectors{}
 
 	registry.MustRegister(c)
-	
 
-	//h := promhttp.HandlerFor(registry, promhttp.HandlerOpts{})
-	///h.ServeHTTP()
-	//Serving metrics
 	http.HandleFunc("/metrics", collector.ProbeHandler)
 
-	//http.Handle("/metrics", h)
-	//http.Handle("/metrics", promhttp.Handler())
-	
 	log.Fatal(http.ListenAndServe(":9103", nil))
-	
+
 	log.Printf("Edge exporter running, listening on :9103")
 	select {}
 }
