@@ -20,26 +20,39 @@ func (m *AllCollectors) Probe() {
 	for i := range metrics {
 		m.metrics= append(m.metrics, metrics[i])
 	}
-	metrics = LinecardCollector2()
-	for i := range metrics {
-		m.metrics= append(m.metrics, metrics[i])
-	}
-	metrics = RoutingEntryCollector()
-	for i := range metrics {
-		m.metrics= append(m.metrics, metrics[i])
-	}
-	metrics = EthernetPortCollector()
-	for i := range metrics {
-		m.metrics= append(m.metrics, metrics[i])
-	}
-	metrics = DiskPartitionCollector()
-	for i := range metrics {
-		m.metrics= append(m.metrics, metrics[i])
-	}
-	metrics = CallStatsCollector()
-	for i := range metrics {
-		m.metrics= append(m.metrics, metrics[i])
-	}
+
+	go func() {
+		metrics = LinecardCollector2()
+		for i := range metrics {
+			m.metrics= append(m.metrics, metrics[i])
+		}
+	}()
+		go func() {
+			metrics = RoutingEntryCollector()
+			for i := range metrics {
+				m.metrics= append(m.metrics, metrics[i])
+			}
+		}()
+
+			go func() {
+				metrics = EthernetPortCollector()
+				for i := range metrics {
+					m.metrics= append(m.metrics, metrics[i])
+				}
+			}()
+
+				go func() {
+					metrics = DiskPartitionCollector()
+					for i := range metrics {
+						m.metrics= append(m.metrics, metrics[i])
+					}
+				}()
+					go func() {
+						metrics = CallStatsCollector()
+						for i := range metrics {
+							m.metrics= append(m.metrics, metrics[i])
+						}
+					}()
 }
 func (collector *AllCollectors) Collect(c chan<- prometheus.Metric) {
 	for _, m := range collector.metrics {
@@ -53,12 +66,12 @@ func (collector *AllCollectors) Describe(ch chan<- *prometheus.Desc) {
 //Metrics descriptions are now instead defined directly in each collector function
 }
 func ProbeHandler(w http.ResponseWriter, r *http.Request) {
-	
+
 	registry := prometheus.NewRegistry()
 	pc := &AllCollectors{}
 	registry.MustRegister(pc)
 	pc.Probe()
-	
+
 	h := promhttp.HandlerFor(registry, promhttp.HandlerOpts{})
 	h.ServeHTTP(w, r)
 }
