@@ -15,7 +15,7 @@ import (
     type Config struct {
         Hosts []Host
         Authtimeout int `yaml:"authtimeout"`
-
+        Expose   string `yaml:"expose-port"`
     }
     type Host struct {
         HostName          string `yaml:"hostname"`

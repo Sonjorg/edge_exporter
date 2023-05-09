@@ -40,8 +40,9 @@ func main() {
 	registry.MustRegister(c)
 
 	http.HandleFunc("/metrics", collector.ProbeHandler)
+	savedConfig := config.GetConf(&config.Config{})
 
-	log.Fatal(http.ListenAndServe(":9103", nil))
+	log.Fatal(http.ListenAndServe(":"+savedConfig.Expose, nil))
 
 	log.Printf("Edge exporter running, listening on :9103")
 	select {}
