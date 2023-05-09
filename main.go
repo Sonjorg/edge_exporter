@@ -40,11 +40,10 @@ func main() {
 	registry.MustRegister(c)
 
 	http.HandleFunc("/metrics", collector.ProbeHandler)
-	savedConfig := config.GetConf(&config.Config{})
 
-	log.Fatal(http.ListenAndServe(":"+savedConfig.Expose, nil))
+	log.Fatal(http.ListenAndServe(":9100", nil))
 
 
-	log.Println("Edge exporter running, listening on ", savedConfig.Expose)
+	log.Println("Edge exporter running, listening on 9100")
 	select {}
 }
