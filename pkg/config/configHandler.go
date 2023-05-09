@@ -14,8 +14,8 @@ import (
 //Describing config.yml file
     type Config struct {
         Hosts []Host
-        Authtimeout int `yaml:"authtimeout"`
-
+        Authtimeout int    `yaml:"authtimeout"`
+        Expose      string `yaml:"expose-port"`
     }
     type Host struct {
         HostName          string `yaml:"hostname"`

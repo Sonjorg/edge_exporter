@@ -41,8 +41,10 @@ func main() {
 
 	http.HandleFunc("/metrics", collector.ProbeHandler)
 
-	log.Fatal(http.ListenAndServe(":9103", nil))
+	savedConfig := config.GetConf(&config.Config{})
+	
+	log.Fatal(http.ListenAndServe(savedConfig.Expose, nil))
 
-	log.Printf("Edge exporter running, listening on :9103")
+	log.Println("Edge exporter running, listening on ", savedConfig.Expose)
 	select {}
 }
