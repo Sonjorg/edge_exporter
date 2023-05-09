@@ -8,14 +8,11 @@ import (
     "log"
    "io/ioutil"
 )
-// Template used for struct and the functions NewConfig(), ValidateConfigPath() and ParseFlags() are copied from:
-// https://dev.to/koddr/let-s-write-config-for-your-golang-web-app-on-right-way-yaml-5ggp
 
 //Describing config.yml file
     type Config struct {
         Hosts []Host
         Authtimeout int `yaml:"authtimeout"`
-        Expose   string `yaml:"expose-port"`
     }
     type Host struct {
         HostName          string `yaml:"hostname"`

@@ -1,7 +1,6 @@
 ---
 
 authtimeout: 3  #all hosts will have max 3 sec timout
-expose-port: 9103
 hosts:
 - hostname: host1
   ipaddress: 10.233.234.11
