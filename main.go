@@ -44,6 +44,7 @@ func main() {
 
 	log.Fatal(http.ListenAndServe(":"+savedConfig.Expose, nil))
 
-	log.Printf("Edge exporter running, listening on :9103")
+
+	log.Println("Edge exporter running, listening on ", savedConfig.Expose)
 	select {}
 }
