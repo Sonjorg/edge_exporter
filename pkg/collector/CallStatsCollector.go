@@ -1,18 +1,11 @@
 package collector
 
-//system status exporter
-//rest/system/historicalstatistics/1
-
 import (
 	"encoding/xml"
-	//"fmt"
 	"log"
 	"github.com/prometheus/client_golang/prometheus"
-	//"time"
 	"edge_exporter/pkg/http"
 	"edge_exporter/pkg/config"
-	//"edge_exporter/pkg/utils"
-
 )
 
 type cSBCdata struct {
@@ -34,7 +27,7 @@ type callStatsData struct {
 }
 
 func CallStatsCollector()(m []prometheus.Metric) {
-	
+
 	hosts := config.GetIncludedHosts("systemcallstats") //retrieving targets for this collector
 	if (len(hosts) <= 0) {
 		return

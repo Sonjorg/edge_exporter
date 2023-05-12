@@ -1,17 +1,12 @@
-// routingentry
 package collector
 
 import (
 	"encoding/xml"
-	//"fmt"
 	"edge_exporter/pkg/config"
 	"edge_exporter/pkg/http"
 	"edge_exporter/pkg/utils"
 	"log"
-
 	"github.com/prometheus/client_golang/prometheus"
-	//"strconv"
-	//"time"
 )
 
 // /rest/linecard
@@ -20,21 +15,16 @@ type lSBCdata struct {
 	LinecardData  LinecardData  `xml:"linecard"`
 }
 type LinecardData struct {
-Href              string `xml:"href,attr"`
-Rt_CardType		  string    `xml:"rt_CardType"`
-Rt_Location		  string    `xml:"rt_Location"`
-Rt_ServiceStatus  int    `xml:"rt_ServiceStatus"`
-Rt_Status         int    `xml:"rt_Status"`
+	Href              string `xml:"href,attr"`
+	Rt_CardType		  string `xml:"rt_CardType"`
+	Rt_Location		  string `xml:"rt_Location"`
+	Rt_ServiceStatus  int    `xml:"rt_ServiceStatus"`
+	Rt_Status         int    `xml:"rt_Status"`
 
 }
 
-type linecardMetrics struct {
-	Rt_ServiceStatus  	*prometheus.Desc
-	Rt_Status           *prometheus.Desc
-	}
-
 func LinecardCollector2()  (m []prometheus.Metric) {
-	hosts := config.GetIncludedHosts("linecard")//retrieving targets for this exporter
+	hosts := config.GetIncludedHosts("linecard")//retrieving targets for this collector
 	if (len(hosts) <= 0) {
 		log.Print("no hosts, linecard")
 		return nil
@@ -93,22 +83,9 @@ func LinecardCollector2()  (m []prometheus.Metric) {
 					labelLocation := lData.LinecardData.Rt_Location
 					metricValue3 := float64(lData.LinecardData.Rt_ServiceStatus)
 					metricValue4 := float64(lData.LinecardData.Rt_Status)
-				//m := []prometheus.Metric
-				//collector:=linecardMetrics{}
 					m = append(m, prometheus.MustNewConstMetric(Rt_ServiceStatus, prometheus.GaugeValue, metricValue3, hosts[i].Ip, hosts[i].Hostname, "linecard",linecardID[j],labelCardType,labelLocation))
 					m = append(m, prometheus.MustNewConstMetric(Rt_Status, prometheus.GaugeValue, metricValue4, hosts[i].Ip, hosts[i].Hostname, "linecard",linecardID[j]))
 		}
 	}
 	return m
 }
-// Initializing the collector
-/*func LinecardCollector() {
-	//If no targets for this collector, return from function
-	hosts := config.GetIncludedHosts("linecard")
-	if (len(hosts) <= 0) {
-		log.Print("no hosts")
-		return
-	}
-		c := lineCCollector()
-		prometheus.MustRegister(c)
-}*/

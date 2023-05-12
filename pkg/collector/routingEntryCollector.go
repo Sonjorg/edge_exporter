@@ -8,27 +8,17 @@ import (
 	"edge_exporter/pkg/utils"
 	"encoding/xml"
 	"fmt"
-
-	//"fmt"
-	//"sync"
 	"log"
 	"regexp"
 	"time"
-
 	"github.com/prometheus/client_golang/prometheus"
-
-	//"strconv"
-	//"time"
-	//"exporter/sqlite"
 	"database/sql"
-
 	_ "github.com/mattn/go-sqlite3"
 )
 
 // first request
 // rest/routingtable/
 type routingTables struct {
-	// Value  float32 `xml =",chardata"`
 	XMLName        xml.Name       `xml:"root"`
 	RoutingTables2 routingTables2 `xml:"routingtable_list"`
 }
@@ -74,22 +64,6 @@ type routingData struct {
 	Rt_QualityFailed  int    `xml:"rt_QualityFailed"`
 }
 
-
-/*
-// Each and every collector must implement the Describe function.
-// It essentially writes all descriptors to the prometheus desc channel.
-func (collector *rMetrics) Describe(ch chan<- *prometheus.Desc) {
-	//Update this section with the each metric you create for a given collector
-	ch <- Rt_RuleUsage
-	ch <- Rt_ASR
-	ch <- Rt_RoundTripDelay
-	ch <- Rt_Jitter
-	ch <- Rt_MOS
-	ch <- Rt_QualityFailed
-	//ch <- Error_ip
-}
-*/
-// Collect implements required collect function for all promehteus collectors
 func RoutingEntryCollector()(m []prometheus.Metric) {
 
 	hosts  := config.GetIncludedHosts("routingentry") //retrieving targets for this exporter
@@ -98,34 +72,33 @@ func RoutingEntryCollector()(m []prometheus.Metric) {
 		return
 	}
 
-var ( 
-	Rt_RuleUsage = prometheus.NewDesc("rt_RuleUsage",
-			"Displays the number of times this call route has been selected for a call.",
-			[]string{"hostip", "hostname",  "routing_table", "routing_entry"}, nil,
-		)
-		Rt_ASR = prometheus.NewDesc("rt_ASR",
-			"Displays the Answer-Seizure Ratio for this call route. (ASR is calculated by dividing the number of call attempts answered by the number of call attempts.)",
-			[]string{"hostip", "hostname",  "routing_table", "routing_entry"}, nil,
-		)
-		Rt_RoundTripDelay = prometheus.NewDesc("rt_RoundTripDelay",
-			"Displays the average round trip delay for this call route.",
-			[]string{"hostip", "hostname",  "routing_table", "routing_entry"}, nil,
-		)
-		Rt_Jitter = prometheus.NewDesc("rt_Jitter",
-			"Displays the average jitter for this call route.",
-			[]string{"hostip", "hostname",  "routing_table", "routing_entry"}, nil,
-		)
-		Rt_MOS = prometheus.NewDesc("rt_MOS",
-			"Displays the Mean Opinion Score (MOS) for this call route.",
-			[]string{"hostip", "hostname",  "routing_table", "routing_entry"}, nil,
-		)
-		Rt_QualityFailed = prometheus.NewDesc("rt_QualityFailed",
-			"Displays if this call route is currently passing or failing the associated quality metrics. If true then the rule is failing, if false then it is passing.",
-			[]string{"hostip", "hostname",  "routing_table", "routing_entry"}, nil,
-		)
-)
-	
-	//var timeLast string
+	var (
+		Rt_RuleUsage = prometheus.NewDesc("rt_RuleUsage",
+				"Displays the number of times this call route has been selected for a call.",
+				[]string{"hostip", "hostname",  "routing_table", "routing_entry"}, nil,
+			)
+			Rt_ASR = prometheus.NewDesc("rt_ASR",
+				"Displays the Answer-Seizure Ratio for this call route. (ASR is calculated by dividing the number of call attempts answered by the number of call attempts.)",
+				[]string{"hostip", "hostname",  "routing_table", "routing_entry"}, nil,
+			)
+			Rt_RoundTripDelay = prometheus.NewDesc("rt_RoundTripDelay",
+				"Displays the average round trip delay for this call route.",
+				[]string{"hostip", "hostname",  "routing_table", "routing_entry"}, nil,
+			)
+			Rt_Jitter = prometheus.NewDesc("rt_Jitter",
+				"Displays the average jitter for this call route.",
+				[]string{"hostip", "hostname",  "routing_table", "routing_entry"}, nil,
+			)
+			Rt_MOS = prometheus.NewDesc("rt_MOS",
+				"Displays the Mean Opinion Score (MOS) for this call route.",
+				[]string{"hostip", "hostname",  "routing_table", "routing_entry"}, nil,
+			)
+			Rt_QualityFailed = prometheus.NewDesc("rt_QualityFailed",
+				"Displays if this call route is currently passing or failing the associated quality metrics. If true then the rule is failing, if false then it is passing.",
+				[]string{"hostip", "hostname",  "routing_table", "routing_entry"}, nil,
+			)
+	)
+
 	var sqliteDatabase *sql.DB
 	sqliteDatabase, err  := sql.Open("sqlite3", "./sqlite-database.db")
 	if err != nil {
@@ -171,18 +144,11 @@ var (
 				//Delete previous routing data
 				database.DeleteRoutingTables(sqliteDatabase,hosts[i].Ip)
 			}
-							//using previous routingentries if within time
 
 			if len(routingtables) <= 0 {
 				log.Print("Routingtables empty")
 				continue //routingtables emtpy, try next host
 			}
-
-			/*chassisType, serialNumber, err  := utils.GetChassisLabels(hosts[i].Ip,phpsessid)
-			if err!= nil {
-				chassisType, serialNumber = "database failure", "database failure"
-				log.Print(err)
-			}*/
 
 			for j  := range routingtables {
 				var match []string //variable to hold routingentries cleaned with regex
@@ -213,16 +179,14 @@ var (
 
 					entries  := regexp.MustCompile(`\d+$`)
 
-					//Because routingentries from the hosts are displayed as a list of for example "2 =4", "2 =5", we are using regex to get only the routingentries
+					//Because routingentries from the hosts are displayed as a list of for example "2:4", "2:5", we are using regex to get only the routingentries
 					for k  := range routingEntries {
 						tmp  := entries.FindStringSubmatch(routingEntries[k])
 						for l  := range tmp {
 							match = append(match, tmp[l])
-							//log.Print(tmp[l])
 						}
 					}
 					now  := time.Now().Format(time.RFC3339)
-					//log.Print("NOW =", now)
 
 					err = database.StoreRoutingEntries(sqliteDatabase, hosts[i].Ip, now, routingtables[j], match)
 					if err != nil {
@@ -248,7 +212,6 @@ var (
 						log.Print("XML error routing", err)
 						continue
 					}
-					//log.Print("Successful API call data = ",rData.RoutingData)
 
 					metricValue1  := float64(rData.RoutingData.Rt_RuleUsage)
 					metricValue2  := float64(rData.RoutingData.Rt_ASR)
@@ -268,13 +231,3 @@ var (
 	}
 	return m
 }
-/*
-func RoutingEntryCollector() {
-	if len(config.GetIncludedHosts("routingentry")) <= 0 {
-		log.Print("no hosts")
-		return
-	}
-	c  := routingCollector()
-	prometheus.MustRegister(c)
-}
-*/

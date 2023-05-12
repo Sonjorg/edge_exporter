@@ -1,18 +1,13 @@
-// routingentry
 package collector
 
 import (
 	"encoding/xml"
-	//"fmt"
 	"log"
 	"edge_exporter/pkg/config"
 	"edge_exporter/pkg/http"
-	//"edge_exporter/pkg/utils"
 	"github.com/prometheus/client_golang/prometheus"
 	"strconv"
-	//"time"
 )
-
 
  type diskPartition struct {
 	XMLName           xml.Name          `xml:"root"`
@@ -42,8 +37,8 @@ Rt_PartitionType    int    `xml:"rt_PartitionType"`
 }
 
 func DiskPartitionCollector()(m []prometheus.Metric) {
-	
-	hosts := config.GetIncludedHosts("diskpartition")//retrieving targets for this exporter
+
+	hosts := config.GetIncludedHosts("diskpartition")//retrieving targets for this collector
 	if (len(hosts) <= 0) {
 		log.Print("no hosts disk")
 		return

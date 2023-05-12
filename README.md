@@ -68,17 +68,17 @@ hosts:
 ``` source .bashrc ``` from home directory
 
 ## Grafana and prometheus setup with docker
-
+Choose between grafana local or grafana cloud
+### Grafana local
 This is a setup with grafana-docker hosted locally, following a similar approach as this tutorial:
 https://www.youtube.com/watch?v=9TJx7QTrTyo&t=712s
 
 The config for all docker images used, resides in the docker-compose.yml file
 
-### Deployment of docker images
+### Deployment of grafana with docker
 Use
 ``` docker compose up -d ```
-in the current dir
-
+in either directory edge_exporter\Other\Grafana-Prometheus\grafanacloud or grafanalocal, respectively
 
 ## test docker:
 ### get ip address of grafana container

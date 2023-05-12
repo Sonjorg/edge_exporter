@@ -1,14 +1,9 @@
 package collector
 
 import (
-	//"fmt"
-	//"edge_exporter/pkg/collector"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	//"strconv"
-	//"time"
 	"net/http"
-
 )
 
 type AllCollectors struct{
@@ -41,17 +36,21 @@ func (m *AllCollectors) Probe() {
 		m.metrics= append(m.metrics, metrics[i])
 	}
 }
+
+//Collect implements required collect function for all prometheus collectors
 func (collector *AllCollectors) Collect(c chan<- prometheus.Metric) {
 	for _, m := range collector.metrics {
 		c <- m
 	}
 }
+
 func (collector *AllCollectors) Describe(ch chan<- *prometheus.Desc) {
 //The required Describe interface is empty in this project,
 //because we decided to change the overall structure of the code to match a similar approach as the fortigate exporter
 //in order to solve several issues we had with the previous design.
 //Metrics descriptions are now instead defined directly in each collector function
 }
+
 func ProbeHandler(w http.ResponseWriter, r *http.Request) {
 
 	registry := prometheus.NewRegistry()

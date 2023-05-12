@@ -23,16 +23,14 @@ import (
         RoutingEntryTime  float64 `yaml:"routing-database-hours"`
     }
 
-            //From stackoverflow
+    //GetConf is From stackoverflow
     func GetConf(c *Config) *Config {
         yamlFile, err := ioutil.ReadFile("config.yml")
             if err != nil {
-                  //log.Printf("yamlFile.Get err   #%v ", err)
                      log.Print("yamlFile.Get err   # ", err)
             }
         err = yaml.Unmarshal(yamlFile, c)
         if err != nil {
-             // log.Fatalf("Unmarshal: %v", err)
               log.Print("yamlFile.Get err   # ", err)
          }
       return c
@@ -56,7 +54,7 @@ import (
     return list
     }
 
-    //Returns hosts config for hosts with a collectorname that have not been excluded in config.yml
+    // Returns hosts' config for hosts with a collectorname that have not been excluded in config.yml
     // This functions iterates through all hosts in the saved config and
     // returns a list of hosts that doesn't have the specified collector excluded in the config file
     // exporterName must be equal to "system", "routingentry" ..

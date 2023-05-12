@@ -1,17 +1,11 @@
-// routingentry
 package collector
 
 import (
 	"encoding/xml"
-	//"fmt"
 	"edge_exporter/pkg/config"
 	"edge_exporter/pkg/http"
-	//"edge_exporter/pkg/utils"
 	"log"
-
 	"github.com/prometheus/client_golang/prometheus"
-	//"strconv"
-	//"time"
 )
 
 // /rest/ethernetport
@@ -53,7 +47,6 @@ Rt_redundancyRole		      int    `xml:"rt_redundancyRole"`
 Rt_redundancyState		      int    `xml:"rt_redundancyState"`
 }
 
-//Collect implements required collect function for all promehteus collectors
 func EthernetPortCollector()(m []prometheus.Metric) {
 
 	hosts := config.GetIncludedHosts("ethernetport")//retrieving targets for this exporter

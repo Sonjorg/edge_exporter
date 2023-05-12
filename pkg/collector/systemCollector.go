@@ -1,18 +1,15 @@
 package collector
 
-//system status exporter
+//system status collector
 //rest/system/historicalstatistics/1
 
 import (
 	"edge_exporter/pkg/config"
-	//"edge_exporter/pkg/database"
 	"edge_exporter/pkg/http"
 	"edge_exporter/pkg/utils"
 	"encoding/xml"
-	//"fmt"
 	"log"
 	"time"
-
 	"github.com/prometheus/client_golang/prometheus"
 )
 
@@ -39,7 +36,7 @@ type systemData struct {
 
 func SystemCollector()(m []prometheus.Metric){
 
-	hosts := config.GetIncludedHosts("system")//retrieving targets for this exporter
+	hosts := config.GetIncludedHosts("system") //retrieving targets for this collector
 	if (len(hosts) <= 0) {
 		return
 	}
@@ -86,12 +83,10 @@ func SystemCollector()(m []prometheus.Metric){
 		)
 	)
 
-	//log.Print(hosts)
-
 	for i := 0; i < len(hosts); i++ {
 		dataStr := "https://"+hosts[i].Ip+"/rest/system/historicalstatistics/1"
 
-		timeReportedByExternalSystem := time.Now()//time.Parse(timelayout, mytimevalue)
+		timeReportedByExternalSystem := time.Now()
 		chassisType, serialNumber, err := utils.GetChassisLabels(hosts[i].Ip,"null")
 		if err!= nil {
 			chassisType, serialNumber = "database failure", "database failure"
@@ -107,7 +102,7 @@ func SystemCollector()(m []prometheus.Metric){
 				   ))
 				   continue //trying next ip address
 		}
-		//fetching labels from DB or router if not exist yet
+		//fetching labels from DB or if not exist yet; from router
 		if (chassisType == "database failure") {
 			chassisType, serialNumber, err = utils.GetChassisLabels(hosts[i].Ip,phpsessid)
 			if err!= nil {
@@ -157,18 +152,3 @@ func SystemCollector()(m []prometheus.Metric){
 	}
 	return m
 }
-
-/*func sysCollector(collector *sMetrics)  ([]prometheus.Metric) {//(ch chan<- prometheus.Metric){
-
-
-}*/
-// Initializing the exporter
-/*func SystemResourceCollector() {
-	hosts := config.GetIncludedHosts("system")//retrieving targets for this exporter
-	if (len(hosts) <= 0) {
-		return
-	}
-	c := systemCollector()
-	prometheus.MustRegister(c)
-}
-*/

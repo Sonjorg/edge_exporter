@@ -25,7 +25,7 @@ func main() {
 			log.Print(err)
 			continue
 		}
-		//Fetching SBC type and serialnumbers, and placing them in database
+		//Fetching SBC type and serialnumbers, and inserting them in database
 		_, _, err = utils.GetChassisLabels(hosts[i].Ip, phpsessid)
 		if err!= nil {
 			log.Print(err)
@@ -33,16 +33,9 @@ func main() {
 		}
 	}
 
-
-	registry := prometheus.NewRegistry()
-	c := &collector.AllCollectors{}
-
-	registry.MustRegister(c)
-
 	http.HandleFunc("/metrics", collector.ProbeHandler)
 
 	log.Fatal(http.ListenAndServe(":9100", nil))
-
 
 	log.Println("Edge exporter running, listening on 9100")
 	select {}
