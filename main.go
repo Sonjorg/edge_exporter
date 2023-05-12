@@ -6,11 +6,8 @@ import (
 	"edge_exporter/pkg/database"
 	"edge_exporter/pkg/utils"
 	thishttp "edge_exporter/pkg/http"
-	//"fmt"
 	"log"
 	"net/http"
-	//"github.com/prometheus/client_golang/prometheus/promhttp"
-	"github.com/prometheus/client_golang/prometheus"
 )
 
 func main() {
@@ -35,8 +32,8 @@ func main() {
 
 	http.HandleFunc("/metrics", collector.ProbeHandler)
 
-	log.Fatal(http.ListenAndServe(":9100", nil))
+	log.Fatal(http.ListenAndServe(":5123", nil))
 
-	log.Println("Edge exporter running, listening on 9100")
+	log.Println("Edge exporter running, listening on 5123")
 	select {}
 }
