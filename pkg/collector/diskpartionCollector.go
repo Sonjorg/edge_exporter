@@ -40,7 +40,7 @@ func DiskPartitionCollector()(m []prometheus.Metric) {
 
 	hosts := config.GetIncludedHosts("diskpartition")//retrieving targets for this collector
 	if (len(hosts) <= 0) {
-		log.Print("no hosts disk")
+		log.Print("no hosts diskpartition")
 		return
 	}
 	var (
@@ -76,16 +76,15 @@ func DiskPartitionCollector()(m []prometheus.Metric) {
 
 		_, data,err := http.GetAPIData("https://"+hosts[i].Ip+"/rest/diskpartition", phpsessid)
 		if err != nil {
-			log.Print("Error fetching diskpartition data = ", hosts[i].Ip, err)
+			log.Print("Error fetching diskpartition data: ", hosts[i].Ip, err)
 			continue
 		}
 		disk := &diskPartition{}
 		xml.Unmarshal(data, &disk) //Converting XML data to variables
 
-		//List of disks retrieved from routers as XML
+		//List of disks retrieved
 		disks := disk.DiskPartitionList.DiskPartitionEntry.Attr
 		if (len(disks) <= 0) {
-			//return nil, "Routingtables empty"
 			log.Print("disks empty")
 			continue
 
@@ -102,7 +101,7 @@ func DiskPartitionCollector()(m []prometheus.Metric) {
 
 					dData := &dSBCdata{}
 					err = xml.Unmarshal(data2, &dData) //Converting XML data to variables
-					//log.Print("Successful API call data = ",dData.DiskData)
+					//log.Print("Successful API call data: ",dData.DiskData)
 					if err!= nil {
 						log.Print("XML error disk", err)
 						continue
@@ -124,7 +123,5 @@ func DiskPartitionCollector()(m []prometheus.Metric) {
 	}
 	return m
 }
-
-// Initializing the exporter
 
 

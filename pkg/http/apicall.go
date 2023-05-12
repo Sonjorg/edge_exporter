@@ -23,7 +23,6 @@ import (
 
 // TODO: This is insecure; use only in dev environments.
 func APISessionAuth(username string, password string, ipaddress string) (string, error) {
-	//var read []byte
 	var phpsessid string
 	var err error
 
@@ -34,15 +33,11 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 		log.Print(err)
 	}
 	defer sqliteDatabase.Close()
-
+//Trying to fetch session cookie from database if not expired
 	phpsessid, err = database.GetSqliteKeyIfNotExpired(sqliteDatabase, ipaddress)
-	//log.Print(phpsessid)
 	if phpsessid != "" {
-
-	//	log.Print("henta cookie fra sql")
 		return phpsessid, nil
 	}
-	//log.Print("henta cookie fra http")
 
 	cfg := config.GetConf(&config.Config{})
 	timeout := cfg.Authtimeout
@@ -62,7 +57,6 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 		log.Flags()
 		log.Print("error authentication (APISessionAuth):", err)
 		return "Error fetching data", err
-		//	log.Print("error in systemExporter:", error)
 	}
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
@@ -71,7 +65,6 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 		//log.Flags()
 		log.Print("error in auth:", err)
 		return "Error fetching data", err
-		//log.Print("error in systemExporter:", err)
 	}
 
 	m := make(map[string]string)
@@ -83,7 +76,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 	defer resp.Body.Close()
 
 	now := time.Now().Format(time.RFC3339)
-
+	//As session cookie is fetched from http, inserting it into database
 	if (database.RowExists(sqliteDatabase,ipaddress)) {
 		database.Update(sqliteDatabase,phpsessid,now,ipaddress)
 	} else {
@@ -94,7 +87,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 
 
 
-
+//Used to fetch all data except session cookies and chassis labels
 func GetAPIData(url string, phpsessid string) (string, []byte, error) {
 
 	tr2 := &http.Transport{
@@ -114,7 +107,6 @@ func GetAPIData(url string, phpsessid string) (string, []byte, error) {
 		log.Flags()
 		log.Print("error in getapidata():", err)
 		return "Error fetching data", nil, err
-		//	log.Print("error in systemExporter:", error)
 	}
 	req2.AddCookie(cookie1)
 	resp2, err := client2.Do(req2)

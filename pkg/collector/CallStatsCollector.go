@@ -88,7 +88,7 @@ func CallStatsCollector()(m []prometheus.Metric) {
 		metricValue4 := float64(ssbc.CallStatsData.Rt_NumCallCurrentlyUp)
 		metricValue5 := float64(ssbc.CallStatsData.Rt_NumCallAbandonedNoTrunk)
 		metricValue6 := float64(ssbc.CallStatsData.Rt_NumCallUnAnswered)
-		// ssbc.CallStatsData.Href
+
 			m = append(m, prometheus.MustNewConstMetric(Rt_NumCallAttempts, prometheus.GaugeValue, metricValue1, hosts[i].Ip, hosts[i].Hostname))
 			m = append(m, prometheus.MustNewConstMetric(Rt_NumCallSucceeded, prometheus.GaugeValue, metricValue2, hosts[i].Ip, hosts[i].Hostname))
 			m = append(m, prometheus.MustNewConstMetric(Rt_NumCallFailed, prometheus.GaugeValue, metricValue3, hosts[i].Ip, hosts[i].Hostname))

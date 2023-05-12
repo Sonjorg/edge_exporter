@@ -24,18 +24,16 @@ func CreateChassis(db *sql.DB) error {
 		"serialnumber" TEXT
 	  );` // SQL Statement for Create Table
 
-	//log.Println("Create table...")
 	statement, err := db.Prepare(createAuthTableSQL) // Prepare SQL Statement
 	if err != nil {
 		return err
 	}
 	statement.Exec() // Execute SQL Statements
-	//log.Println("table created")
 	return nil
 }
 
 func InsertChassis(db *sql.DB, ipaddress string, chassisType string, serialNumber string) error{
-	//log.Println("Inserting session Chassis data ...")
+	log.Println("Inserting chassis data ...")
 	insertAuthSQL := `INSERT INTO chassis(ipaddress, chassistype, serialnumber) VALUES (?, ?, ?)`
 
 	statement, err := db.Prepare(insertAuthSQL) // Prepare statement.
@@ -52,14 +50,12 @@ func InsertChassis(db *sql.DB, ipaddress string, chassisType string, serialNumbe
 
 func GetChassis(db *sql.DB, ipaddress string) (string, string, error){
 	row, err := db.Query("SELECT * FROM chassis WHERE ipaddress = ?", ipaddress)
-	//row.Scan(ip)
 	if err != nil {
 		log.Print(err)
 		return "","", err
 	}
 	defer row.Close()
 
-	//var c *Chassis
 	for row.Next() {
 			p := &Chassis{}
 			if err := row.Scan(&p.Id, &p.Ipaddress, &p.ChassisType, &p.SerialNumber); err != nil{
@@ -78,8 +74,6 @@ func chassisExists(db * sql.DB, ip string) bool {
     err := db.QueryRow(sqlStmt, ip).Scan(&ip)
     if err != nil {
         if err != sql.ErrNoRows {
-            // a real error happened! you should change your function return
-            // to "(bool, error)" and return "false, err" here
             log.Print(err)
         }
 

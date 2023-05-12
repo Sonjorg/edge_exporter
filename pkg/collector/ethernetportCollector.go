@@ -174,7 +174,7 @@ var (
 
 		phpsessid,err := http.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
 		if err != nil {
-			log.Print("Error session cookie = ", hosts[i].Ip, err)
+			log.Print("Error session cookie: ", hosts[i].Ip, err)
 			continue
 		}
 		var ethernetportID []string

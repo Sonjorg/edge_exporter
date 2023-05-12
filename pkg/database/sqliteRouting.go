@@ -14,7 +14,6 @@ type RoutingT struct {
 	Time      string
 	RoutingTable string
 	RoutingEntry string
-	 //map consisting of routingtables and their routingentries
 }
 
 func CreateRoutingSqlite(db * sql.DB) error{
@@ -25,8 +24,7 @@ func CreateRoutingSqlite(db * sql.DB) error{
 		"routingtable" TEXT,
 		"routingentries" TEXT
 		);`
-//log.Print("creating routingtables")
-	statement, err := db.Prepare(createRoutingTables) // Prepare SQL Statement
+	statement, err := db.Prepare(createRoutingTables)
 	if err != nil {
 		log.Print(err)
 		return err
@@ -58,12 +56,9 @@ func StoreRoutingEntries(db *sql.DB, ipaddress string, time string, routingTable
 }
 
 func DeleteRoutingTables(db *sql.DB, ipaddress string) {
-	stmt, err := db.Prepare("delete from routingtables where ipaddress=?")
+	stmt, _ := db.Prepare("delete from routingtables where ipaddress=?")
 
-    res, err := stmt.Exec(ipaddress)
-
-    affect, err := res.RowsAffected()
-    log.Println(affect,err)
+    stmt.Exec(ipaddress)
 }
 
 func RoutingTablesExists(db * sql.DB,ip string) bool {
@@ -71,8 +66,7 @@ func RoutingTablesExists(db * sql.DB,ip string) bool {
     err := db.QueryRow(sqlStmt, ip).Scan(&ip)
     if err != nil {
         if err != sql.ErrNoRows {
-            // a real error happened! you should change your function return
-            // to "(bool, error)" and return "false, err" here
+
             log.Print(err)
         }
 
@@ -81,7 +75,6 @@ func RoutingTablesExists(db * sql.DB,ip string) bool {
 
     return true
 }
-
 
 func GetRoutingData(db *sql.DB,ipaddress string) (map[string][]string,[]string,string, error) {
 		row, err := db.Query("SELECT * FROM routingtables")

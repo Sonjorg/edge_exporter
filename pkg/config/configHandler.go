@@ -23,7 +23,7 @@ import (
         RoutingEntryTime  float64 `yaml:"routing-database-hours"`
     }
 
-    //GetConf is From stackoverflow
+    //GetConf is from stackoverflow
     func GetConf(c *Config) *Config {
         yamlFile, err := ioutil.ReadFile("config.yml")
             if err != nil {

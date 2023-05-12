@@ -18,5 +18,5 @@ func Expired(hours float64, previoustime time.Time) bool{
 		return false
 	}
 	//If previous time + 24 hours is before now: database for routingentries has expired
-	return previoustime.Add(duration).Before(timeNowParsed) //after, contioue using this
+	return previoustime.Add(duration).Before(timeNowParsed)
 }
