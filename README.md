@@ -2,7 +2,7 @@
 ## Prometheus exporter for Ribbon Communications SBC routers
 
 ### Configuration of the exporter
-##### The configuration is implemented in config.yml in the root folder of the source code.
+#### The configuration is implemented in config.yml in the root folder of the source code.
 ```
 ---
 authtimeout: 3  #all hosts will have max 3 sec timout

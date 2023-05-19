@@ -3,6 +3,10 @@ package utils
 //system status exporter
 //rest/system/historicalstatistics/1
 
+/* Copyright (C) 2023 Sondre Jørgensen - All Rights Reserved
+ * You may use, distribute and modify this code under the
+ * terms of the CC BY 4.0 license
+*/
 import (
 	"encoding/xml"
 	"log"
@@ -19,7 +23,7 @@ type ChassisData struct {
 
 type chassis struct {
 	Rt_Chassis_Type   string `xml:"rt_Chassis_Type"`
-	SerialNumber      string `xml:"SerialNumber"`   
+	SerialNumber      string `xml:"SerialNumber"`
 }
 
 

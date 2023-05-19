@@ -1,3 +1,7 @@
+/* Copyright (C) 2023 Sondre Jørgensen - All Rights Reserved
+ * You may use, distribute and modify this code under the
+ * terms of the CC BY 4.0 license
+*/
 package collector
 
 import (
