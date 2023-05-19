@@ -78,9 +78,9 @@ The config for all docker images used, resides in the docker-compose.yml file
 ### Deployment of grafana with docker
 Use
 ``` docker compose up -d ```
-in either directory edge_exporter\Other\Grafana-Prometheus\grafanacloud or grafanalocal, respectively
+in either directory edge_exporter\Other\Grafana-Prometheus\grafanacloud or .../grafanalocal, respectively
 
-## test docker:
+## test docker containers:
 ### get ip address of grafana container
 ``` sudo docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' grafana ```
 
