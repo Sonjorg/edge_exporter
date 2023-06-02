@@ -202,7 +202,7 @@ REST API Method: GET /rest/linecard/{identifier}
 - Rt_Location - The hardware module's location within the SBC.
 - Rt_ServiceStatus - The service status of the module.
 - Rt_Status - Indicates the hardware initialization state for this card.
-- Routing Entry Collector
+### Routing Entry Collector
 #### API endpoints:
 - REST API Method: GET /rest/routingtable
 - REST API Method: GET /rest/routingtable/[routingtable]/routingentry
@@ -217,7 +217,7 @@ attempts.)
 - Rt_MOS - Displays the Mean Opinion Score (MOS) for this call route.
 - Rt_QualityFailed - Displays if this call route is currently passing or failing the associated
 quality metrics. If true then the rule is failing, if false then it is passing.
-System Collector
+### System Collector
 #### API endpoints:
 REST API Method: GET /rest/system/historicalstatistics/1
 #### Metrics:
