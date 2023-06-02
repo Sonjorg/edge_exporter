@@ -6,7 +6,7 @@ hosts:
   ipaddress:
   username:
   password:
-  routing-database-hours: 24 #For routingentry collector, data is stored in the database for 24 hours for this host, NB: can not be 0
+  routing-database-hours: 24 #For routingentry collector, data is stored in the database for 24 hours for this host
 - hostname:
   ipaddress:
   username:
@@ -18,5 +18,5 @@ hosts:
 #  - diskpartition
 #  - systemcallstats
 #  - linecard
-#  - ethernetport
+
 #Excluding the above collectors for this host

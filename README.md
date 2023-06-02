@@ -39,33 +39,51 @@ hosts:
 - It is recommended not to use too many hosts per docker instance because of performance issues; a scrape on 2 hosts with no collectors excluded takes around 13 seconds on the first scrape, and around 10 seconds on the following scrapes.
 
 ### Deployment running docker
-- Run:
-``` sudo docker build -t edge_exporter .```
-``` sudo docker run -p 5123:5123 edge_exporter ```
-- Or if you have an external config.yml file:
-``` sudo docker run -v path/to/your/config.yml:/usr/src/exporter/config.yml sondrjor/edge_exporter ```
-- Metrics can be gathered from ```host:5123/metrics```
+Run:
+
+    sudo docker build -t edge_exporter .
+
+    sudo docker run -p 5123:5123 edge_exporter
+
+Or if you have an external config.yml file:
+
+    sudo docker run -v path/to/your/config.yml:/usr/src/exporter/config.yml sondrjor/edge_exporter
+
+Metrics can be gathered from ```host:5123/metrics```
 
 ### Deployment of the SBCexporter on a linux server
 **The exporter is developed and tested for the official ubuntu server image found at https://ubuntu.com/download/server.**
 - Download golang using the official download page: [install golang](https://go.dev/doc/install), and remember to reboot
 - To start the exporter and download all necessary packages, navigate to the SBCexporter directory and run
-``` go install ```
+
+    go install
 ### To test go exporters:
-``` go run . ``` in the SBCexporter directory, then use ```curl localhost:9100/metrics``` in another windows to view live metrics data that can be collected by prometheus
+
+    go run .
+
+in the edge_exporter directory, then use
+
+    curl localhost:9100/metrics
+
+in another windows to view live metrics data that can be collected by prometheus
 
 ### To test a specific file, for use
-``` go run main.go ``` However this will not make use of dependencies from other files
+
+    go run main.go
+However this will not make use of dependencies from other files
 
 ### Installation of Go on HDO's VMs
 #### As root folders are not accessible on HDO's VMs we need to install Go in home directory if docker is not utilized
 - Download last version of Go to home directory, from Go's official website
 - Unzip the file with tar
 - Execute the commands:
-``` export GOPATH=$HOME/go ```
-``` export PATH=$PATH:$GOPATH/bin ```
+
+    export GOPATH=$HOME/go
+    export PATH=$PATH:$GOPATH/bin
 - If starting Go gives a message that its not yet installed, make a startup script that executes:
-``` source .bashrc ``` from home directory
+
+    source .bashrc
+from home directory
 
 ## Grafana and prometheus setup with docker
 Choose between grafana local or grafana cloud
@@ -77,17 +95,22 @@ The config for all docker images used, resides in the docker-compose.yml file
 
 ### Deployment of grafana with docker
 Use
-``` docker compose up -d ```
-in either directory edge_exporter\Other\Grafana-Prometheus\grafanacloud or .../grafanalocal, respectively
+
+    docker compose up -d
+
+in either directory ```edge_exporter\Other\Grafana-Prometheus\grafanacloud``` or ```.../grafanalocal```, respectively
 
 ## test docker containers:
 ### get ip address of grafana container
-``` sudo docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' grafana ```
 
-curl ip-address:3000
+    sudo docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' grafana
+
+    curl ip-address:3000
 
 ### Restart all containers if changes are made to docker-compose.yml
-``` docker-compose up -d --force-recreate ```
+
+    docker-compose up -d --force-recreate
 
 ### check status in log files for a container
-```sudo docker-compose logs -f container-name ```
+
+    sudo docker-compose logs -f container-name
