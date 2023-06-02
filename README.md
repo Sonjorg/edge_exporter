@@ -1,8 +1,8 @@
 # Readme
 ## Prometheus exporter for Ribbon Communications SBC routers
-#### Developed by Sondre Jørgensen in cooperation with Sang Ngoc Nguyen at NTNU: Norwegian University of Science and Technology, sondre2409@gmail.com and 29sangu@gmail.com
+#### Developed by Sondre Jørgensen in cooperation with Sang Ngoc Nguyen at NTNU: Norwegian University of Science and Technology, sondre2409@gmail.com and 29sangu@gmail.com as part of our bachelor's thesis
 ### Configuration
-#### The exporter needs to be configured in config.yml in the root folder of this code.
+#### The exporter must be configured in config.yml in the root folder of this repository.
 ```
 ---
 authtimeout: 3  #all hosts will have max 3 sec timout
@@ -72,8 +72,8 @@ in another windows to view live metrics data that can be collected by prometheus
     go run main.go
 However this will not make use of dependencies from other files
 
-### Installation of Go on HDO's VMs
-#### As root folders are not accessible on HDO's VMs we need to install Go in home directory if docker is not utilized
+### Installation of Go on highly secured ubuntu VMs
+#### As root folders are not accessible on some VMs, we need to install Go to the home directory if docker is not utilized
 - Download last version of Go to home directory, from Go's official website
 - Unzip the file with tar
 - Execute the commands:
