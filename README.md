@@ -1,5 +1,5 @@
 # Readme
-## Prometheus exporter for Ribbon Communications SBC routers
+## Prometheus exporter for Ribbon Communications SBC Edge routers
 #### Developed by Sondre Jørgensen in cooperation with Sang Ngoc Nguyen at NTNU: Norwegian University of Science and Technology, sondre2409@gmail.com and 29sangu@gmail.com as part of our bachelor's thesis
 ### Configuration
 #### The exporter must be configured in config.yml in the root folder of this repository.
