@@ -1,5 +1,6 @@
 # Readme
 ## Prometheus exporter for Ribbon Communications SBC Edge routers
+Used together with a Prometheus server where metrics can be gathered from SBC-host-IP:5123/metrics. Metric types are grouped as collectors where each collector can be excluded for each host, ref. Configuration.
 #### Developed by Sondre Jørgensen in cooperation with Sang Ngoc Nguyen at NTNU: Norwegian University of Science and Technology, sondre2409@gmail.com and 29sangu@gmail.com as part of our bachelor's thesis
 ### Configuration
 #### The exporter must be configured in config.yml in the root folder of this repository.
@@ -31,91 +32,23 @@ hosts:
    - ethernetport
 #Excluding the above collectors for this host
 ```
-- Above you can see the layout of a config.yml file having 3 hosts with dummy data.
-- It is required to use a hostname, ipaddress, username and password.
-- You can choose which collectors you want to exclude for each host by adding them to the list "exclude" as shown below the last host. The name of the collectors have to match exactly as spelled in this example.
+- It is required to set hostname, ipaddress, username and password for each SBC.
+- You can choose which collectors you want to exclude for each host by adding them to the list "exclude" as shown above. The name of the collectors have to match exactly as spelled in this example.
 - "Authtimeout" is the maximum chosen time to attempt authentication to a host. Usually it is not reachable if the duration is more than 1-2 second.
 - "routing-database-hours" is the duration of which data related to the routingentry collector is stored within the database. Fetching new data through http takes several extra seconds per scrape. Metrics are never stored, only data such as routing tables and their routing entries.
-- It is recommended not to use too many hosts per docker instance because of performance issues; a scrape on 2 hosts with no collectors excluded takes around 13 seconds on the first scrape, and around 10 seconds on the following scrapes.
+- It is recommended not to configure too many hosts per docker instance because of performance issues.
 
 ### Deployment running docker
 Run:
 
     sudo docker build -t edge_exporter .
 
-    sudo docker run -p 5123:5123 edge_exporter
-
-Or if you have an external config.yml file:
+You should always use an external config.yml. Start an instance with:
 
     sudo docker run -v path/to/your/config.yml:/usr/src/exporter/config.yml sondrjor/edge_exporter
 
 Metrics can be gathered from ```host:5123/metrics```
 
-### Deployment of the SBCexporter on a linux server
-**The exporter is developed and tested for the official ubuntu server image found at https://ubuntu.com/download/server.**
-- Download golang using the official download page: [install golang](https://go.dev/doc/install), and remember to reboot
-- To start the exporter and download all necessary packages, navigate to the SBCexporter directory and run
-
-      go install
-### To test go exporters:
-
-    go run .
-
-in the edge_exporter directory, then use
-
-    curl localhost:9100/metrics
-
-in another windows to view live metrics data that can be collected by prometheus
-
-### To test a specific file, for use
-
-    go run main.go
-However this will not make use of dependencies from other files
-
-### Installation of Go on highly secured ubuntu VMs
-#### As root folders are not accessible on some VMs, we need to install Go to the home directory if docker is not utilized
-- Download last version of Go to home directory, from Go's official website
-- Unzip the file with tar
-- Execute the commands:
-
-      export GOPATH=$HOME/go
-      export PATH=$PATH:$GOPATH/bin
-
-- If starting Go gives a message that its not yet installed, make a startup script that executes:
-
-      source .bashrc
-
-from home directory
-
-## Grafana and prometheus setup with docker
-Choose between grafana local or grafana cloud
-### Grafana local
-This is a setup with grafana-docker hosted locally, following a similar approach as this tutorial:
-https://www.youtube.com/watch?v=9TJx7QTrTyo&t=712s
-
-The config for all docker images used, resides in the docker-compose.yml file
-
-### Deployment of grafana with docker
-Use
-
-    docker compose up -d
-
-in either directory ```edge_exporter\Other\Grafana-Prometheus\grafanacloud``` or ```.../grafanalocal```, respectively
-
-## test docker containers:
-### get ip address of grafana container
-
-    sudo docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' grafana
-
-    curl ip-address:3000
-
-### Restart all containers if changes are made to docker-compose.yml
-
-    docker-compose up -d --force-recreate
-
-### check status in log files for a container
-
-    sudo docker-compose logs -f container-name
 
 ## Collectors and Metrics
 List of Collectors, the API endpoints they use and metrics they support:
@@ -235,3 +168,71 @@ waiting to run because CPU is busy.
 - Rt_TmpPartUsage - Percentage of the temporary partition used.
 - Rt_LoggingPartUsage - Percentage of the logging partition used. This is applicable only
 for the SBC2000.
+
+
+## Grafana and prometheus setup with docker
+Choose between grafana local or grafana cloud
+#### Grafana local
+This is a setup with grafana-docker hosted locally, following a similar approach as this tutorial:
+https://www.youtube.com/watch?v=9TJx7QTrTyo&t=712s
+
+The config for all docker images used, resides in the docker-compose.yml file
+
+### Deployment of grafana with docker
+Use
+
+    docker compose up -d
+
+in either directory ```edge_exporter\Other\Grafana-Prometheus\grafanacloud``` or ```.../grafanalocal```, respectively
+
+## test docker containers:
+### get ip address of grafana container
+
+    sudo docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' grafana
+
+    curl ip-address:3000
+
+### Restart all containers if changes are made to docker-compose.yml
+
+    docker-compose up -d --force-recreate
+
+### check status in log files for a container
+
+    sudo docker-compose logs -f container-name
+
+## Tips for further development of the exporter
+### Deployment of the exporter on a linux server
+**The exporter is developed and tested for the official ubuntu server image found at https://ubuntu.com/download/server.**
+- Download golang using the official download page: [install golang](https://go.dev/doc/install), and remember to reboot
+- To start the exporter and download all necessary packages, navigate to the SBCexporter directory and run
+
+      go install
+### To test go exporters:
+
+    go run .
+
+in the edge_exporter directory, then use
+
+    curl localhost:9100/metrics
+
+in another windows to view live metrics data that can be collected by prometheus
+
+### To test a specific file, for use
+
+    go run main.go
+However this will not make use of dependencies from other files
+
+### Installation of Go on highly secured ubuntu VMs
+#### As root folders are not accessible on some VMs, we need to install Go to the home directory if docker is not utilized
+- Download last version of Go to home directory, from Go's official website
+- Unzip the file with tar
+- Execute the commands:
+
+      export GOPATH=$HOME/go
+      export PATH=$PATH:$GOPATH/bin
+
+- If starting Go gives a message that its not yet installed, make a startup script that executes:
+
+      source .bashrc
+
+from home directory
