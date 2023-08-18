@@ -9,11 +9,10 @@ import (
 	"edge_exporter/pkg/config"
 	"crypto/tls"
 	//"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
-	//"os"
+	"io"
 	"strings"
 	"time"
 	"database/sql"
@@ -120,7 +119,7 @@ func GetAPIData(url string, phpsessid string) (string, []byte, error) {
 		return "Error fetching data", nil, err
 	}
 
-	b, err := ioutil.ReadAll(resp2.Body)
+	b, err := io.ReadAll(resp2.Body)
 	defer resp2.Body.Close()
 
 	return "Success", b, err

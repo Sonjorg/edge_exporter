@@ -11,7 +11,6 @@ import (
 
 	"gopkg.in/yaml.v2"
 	//"flag"
-	"io"
 	"log"
 )
 
