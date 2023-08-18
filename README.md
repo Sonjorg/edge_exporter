@@ -1,6 +1,6 @@
 # Readme
 ## Prometheus exporter for Ribbon Communications SBC Edge routers
-Used together with a Prometheus server where metrics can be gathered from SBC-host-IP:5123/metrics. Metric types are grouped as collectors where each collector can be excluded for each host, ref. Configuration.
+Used together with a Prometheus server where metrics can be gathered from sbc-host-ip:5123/metrics. Metric types are grouped as collectors where each collector can be excluded for each host, ref. Configuration.
 #### Developed by Sondre Jørgensen in cooperation with Sang Ngoc Nguyen at NTNU: Norwegian University of Science and Technology, sondre2409@gmail.com and 29sangu@gmail.com as part of our bachelor's thesis
 ### Configuration
 #### The exporter must be configured in config.yml in the root folder of this repository.
@@ -203,8 +203,9 @@ in either directory ```edge_exporter\Other\Grafana-Prometheus\grafanacloud``` or
 ## Tips for further development of the exporter
 ### Deployment of the exporter on a linux server
 **The exporter is developed and tested for the official ubuntu server image found at https://ubuntu.com/download/server.**
-- Download golang using the official download page: [install golang](https://go.dev/doc/install), and remember to reboot
-- To start the exporter and download all necessary packages, navigate to the SBCexporter directory and run
+- Download golang using the official download page: [install golang](https://go.dev/doc/install), and remember to reboot.
+- Do not install go with apt install because then it downloads an old go version which this repo does not support (this repo uses go 1.20), use wget.
+- To start the exporter and download all necessary packages, navigate to the sbc exporter directory and run
 
       go install
 ### To test go exporters:
@@ -215,7 +216,7 @@ in the edge_exporter directory, then use
 
     curl localhost:9100/metrics
 
-in another windows to view live metrics data that can be collected by prometheus
+in another windows to view live metrics data that can be collected by prometheus.
 
 ### To test a specific file, for use
 
