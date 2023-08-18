@@ -30,35 +30,45 @@ type callStatsData struct {
 	Rt_NumCallUnAnswered       int    `xml:"rt_NumCallUnAnswered"`
 }
 
-func CallStatsCollector() (m []prometheus.Metric) {
+func CallStatsCollector(successfulHosts []string) (m []prometheus.Metric) {
 
-	hosts := config.GetIncludedHosts("systemcallstats") //retrieving targets for this collector
+	includedHosts := config.GetIncludedHosts("systemcallstats") //retrieving targets for this collector
+	if len(includedHosts) <= 0 {
+		return
+	}
+	var hosts []config.IncludedHosts
+	for i := range includedHosts {
+		for j := range successfulHosts {
+			if (includedHosts[i].Ip == successfulHosts[j]) {
+					hosts = append(hosts, includedHosts[j])
+			}
+		}
+	}
 	if len(hosts) <= 0 {
 		return
 	}
-
 	var (
-		Rt_NumCallAttempts = prometheus.NewDesc("rt_NumCallAttempts",
+		Rt_NumCallAttempts = prometheus.NewDesc("edge_callstats_NumCallAttempts",
 			"Total number of call attempts system wide since system came up.",
 			[]string{"hostip", "hostname"}, nil,
 		)
-		Rt_NumCallSucceeded = prometheus.NewDesc("rt_NumCallSucceeded",
+		Rt_NumCallSucceeded = prometheus.NewDesc("edge_callstats_NumCallSucceeded",
 			"Total number of successful calls system wide since system came up.",
 			[]string{"hostip", "hostname"}, nil,
 		)
-		Rt_NumCallFailed = prometheus.NewDesc("rt_NumCallFailed",
+		Rt_NumCallFailed = prometheus.NewDesc("edge_callstats_NumCallFailed",
 			"Total number of failed calls system wide since system came up.",
 			[]string{"hostip", "hostname"}, nil,
 		)
-		Rt_NumCallCurrentlyUp = prometheus.NewDesc("rt_NumCallCurrentlyUp",
+		Rt_NumCallCurrentlyUp = prometheus.NewDesc("edge_callstats_NumCallCurrentlyUp",
 			"Number of currently connected calls system wide.",
 			[]string{"hostip", "hostname"}, nil,
 		)
-		Rt_NumCallAbandonedNoTrunk = prometheus.NewDesc("rt_NumCallAbandonedNoTrunk",
+		Rt_NumCallAbandonedNoTrunk = prometheus.NewDesc("edge_callstats_NumCallAbandonedNoTrunk",
 			"Number of rejected calls due to no channel available system wide since system came up.",
 			[]string{"hostip", "hostname"}, nil,
 		)
-		Rt_NumCallUnAnswered = prometheus.NewDesc("rt_NumCallUnAnswered",
+		Rt_NumCallUnAnswered = prometheus.NewDesc("edge_callstats_NumCallUnAnswered",
 			"Number of unanswered calls system wide since system came up.",
 			[]string{"hostip", "hostname"}, nil,
 		)

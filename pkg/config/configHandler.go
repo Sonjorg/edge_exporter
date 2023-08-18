@@ -1,16 +1,18 @@
 /* Copyright (C) 2023 Sondre Jørgensen - All Rights Reserved
  * You may use, distribute and modify this code under the
  * terms of the CC BY 4.0 license
-*/
+ */
 package config
 
 import (
 	//"fmt"
 	//"os"
+	"os"
+
 	"gopkg.in/yaml.v2"
-    //"flag"
-    "log"
-   "io/ioutil"
+	//"flag"
+	"io"
+	"log"
 )
 
 //Describing config.yml file
@@ -29,7 +31,7 @@ import (
 
     //GetConf is from stackoverflow
     func GetConf(c *Config) *Config {
-        yamlFile, err := ioutil.ReadFile("config.yml")
+        yamlFile, err := os.ReadFile("config.yml")
             if err != nil {
                      log.Print("yamlFile.Get err   # ", err)
             }

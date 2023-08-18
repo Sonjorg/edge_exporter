@@ -40,31 +40,41 @@ Rt_PartitionName    string `xml:"rt_PartitionName"`
 Rt_PartitionType    int    `xml:"rt_PartitionType"`
 }
 
-func DiskPartitionCollector()(m []prometheus.Metric) {
+func DiskPartitionCollector(successfulHosts []string)(m []prometheus.Metric) {
 
-	hosts := config.GetIncludedHosts("diskpartition")//retrieving targets for this collector
-	if (len(hosts) <= 0) {
-		log.Print("no hosts diskpartition")
+	includedHosts := config.GetIncludedHosts("diskpartition")//retrieving targets for this collector
+	if (len(includedHosts) <= 0) {
+		log.Print("no hosts included diskpartition")
 		return
 	}
+
+	var hosts []config.IncludedHosts
+	for i := range includedHosts {
+		for j := range successfulHosts {
+			if (includedHosts[i].Ip == successfulHosts[j]) {
+					hosts = append(hosts, includedHosts[j])
+			}
+		}
+	}
+
 	var (
-		Rt_CurrentUsage = prometheus.NewDesc("rt_CurrentUsage",
+		Rt_CurrentUsage = prometheus.NewDesc("edge_disk_CurrentUsage",
 			"Amount of memory used by this partition, expressed as percentage",
 			[]string{"hostip", "hostname", "disk_partition_id","disk_partition_name"}, nil,
 		)
-		Rt_MaximumSize = prometheus.NewDesc("rt_MaximumSize",
+		Rt_MaximumSize = prometheus.NewDesc("edge_disk_MaximumSize",
 			"Specifies the maximum amount of memory, in bytes available in this partition.",
 			[]string{"hostip", "hostname", "disk_partition_id","disk_partition_name"}, nil,
 		)
-		Rt_MemoryAvailable = prometheus.NewDesc("rt_MemoryAvailable",
+		Rt_MemoryAvailable = prometheus.NewDesc("edge_disk_Available",
 			"Amount of memory in bytes, available for use in the filesystem.",
 			[]string{"hostip", "hostname", "disk_partition_id","disk_partition_name"}, nil,
 		)
-		Rt_MemoryUsed = prometheus.NewDesc("rt_MemoryUsed",
+		Rt_MemoryUsed = prometheus.NewDesc("edge_disk_Used",
 			"Amount of memory in bytes, used by the existing files in the filesystem",
 			[]string{"hostip", "hostname", "disk_partition_id","disk_partition_name"}, nil,
 		)
-		Rt_PartitionType = prometheus.NewDesc("rt_PartitionType",
+		Rt_PartitionType = prometheus.NewDesc("edge_disk_PartitionType",
 			"Identifies the user-friendly physical device holding the partition.",
 			[]string{"hostip", "hostname", "disk_partition_id","disk_partition_name"}, nil,
 		)

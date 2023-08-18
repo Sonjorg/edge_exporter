@@ -51,124 +51,135 @@ Rt_redundancyRole		      int    `xml:"rt_redundancyRole"`
 Rt_redundancyState		      int    `xml:"rt_redundancyState"`
 }
 
-func EthernetPortCollector()(m []prometheus.Metric) {
+func EthernetPortCollector(successfulHosts []string)(m []prometheus.Metric) {
 
-	hosts := config.GetIncludedHosts("ethernetport")//retrieving targets for this exporter
-	if (len(hosts) <= 0) {
+	includedHosts := config.GetIncludedHosts("ethernetport")//retrieving targets for this exporter
+	if (len(includedHosts) <= 0) {
 		log.Print("no hosts")
 		return
 	}
 
+	var hosts []config.IncludedHosts
+	for i := range includedHosts {
+		for j := range successfulHosts {
+			if (includedHosts[i].Ip == successfulHosts[j]) {
+					hosts = append(hosts, includedHosts[j])
+			}
+		}
+	}
+	if len(hosts) <= 0 {
+		return
+	}
 var (
-	IfRedundancy = prometheus.NewDesc("ifRedundancy",
+	IfRedundancy = prometheus.NewDesc("edge_ethernet_ifRedundancy",
 			"ethernetport",
 			[]string{"hostip", "hostname", "job","ethernetportID","ifName","ifAlias"}, nil,
 		)
-		IfRedundantPort = prometheus.NewDesc("ifRedundantPort",
+		IfRedundantPort = prometheus.NewDesc("edge_ethernet_ifRedundantPort",
 			"ethernetport",
 			[]string{"hostip", "hostname", "job","ethernetportID","ifName","ifAlias"}, nil,
 		)
-		Rt_ifInBroadcastPkts = prometheus.NewDesc("rt_ifInBroadcastPkts",
+		Rt_ifInBroadcastPkts = prometheus.NewDesc("edge_ethernet_ifInBroadcastPkts",
 			"Displays the number of received broadcast packets on this port.",
 			[]string{"hostip", "hostname", "job","ethernetportID","ifName","ifAlias"}, nil,
 		)
-		Rt_ifInDiscards = prometheus.NewDesc("rt_ifInDiscards",
+		Rt_ifInDiscards = prometheus.NewDesc("edge_ethernet_ifInDiscards",
 			"Displays the number of discard errors detected on this port.",
 			[]string{"hostip", "hostname", "job","ethernetportID","ifName","ifAlias"}, nil,
 		)
-		Rt_ifInErrors = prometheus.NewDesc("rt_ifInErrors",
+		Rt_ifInErrors = prometheus.NewDesc("edge_ethernet_ifInErrors",
 			"Displays the number of errors detected on this port.",
 			[]string{"hostip", "hostname", "job","ethernetportID","ifName","ifAlias"}, nil,
 		)
-		Rt_ifInFCSErrors = prometheus.NewDesc("rt_ifInFCSErrors",
+		Rt_ifInFCSErrors = prometheus.NewDesc("edge_ethernet_ifInFCSErrors",
 			"Displays the number of discard Frame Check Sequence errors detected on this port.",
 			[]string{"hostip", "hostname", "job","ethernetportID","ifName","ifAlias"}, nil,
 		)
-		Rt_ifInFragmentedPkts = prometheus.NewDesc("rt_ifInFragmentedPkts",
+		Rt_ifInFragmentedPkts = prometheus.NewDesc("edge_ethernet_ifInFragmentedPkts",
 			"Displays the number of Fragmented Packet errors detected on this port",
 			[]string{"hostip", "hostname", "job","ethernetportID","ifName","ifAlias"}, nil,
 		)
-		Rt_ifInMulticastPkts = prometheus.NewDesc("rt_ifInMulticastPkts",
+		Rt_ifInMulticastPkts = prometheus.NewDesc("edge_ethernet_ifInMulticastPkts",
 			"Displays the number of received multicast packets on this port.",
 			[]string{"hostip", "hostname", "job","ethernetportID","ifName","ifAlias"}, nil,
 		)
-		Rt_ifInOctets = prometheus.NewDesc("rt_ifInOctets",
+		Rt_ifInOctets = prometheus.NewDesc("edge_ethernet_ifInOctets",
 			"Displays the number of received octets on this port.",
 			[]string{"hostip", "hostname", "job","ethernetportID","ifName","ifAlias"}, nil,
 		)
-		Rt_ifInOverSizedPkts = prometheus.NewDesc("rt_ifInOverSizedPkts",
+		Rt_ifInOverSizedPkts = prometheus.NewDesc("edge_ethernet_ifInOverSizedPkts",
 			"Displays the number of Oversized Packet errors detected on this port.",
 			[]string{"hostip", "hostname", "job","ethernetportID","ifName","ifAlias"}, nil,
 		)
-		Rt_ifInUcastPkts = prometheus.NewDesc("rt_ifInUcastPkts",
+		Rt_ifInUcastPkts = prometheus.NewDesc("edge_ethernet_ifInUcastPkts",
 			"Displays the number of received unicast packets on this port.  ",
 			[]string{"hostip", "hostname", "job","ethernetportID","ifName","ifAlias"}, nil,
 		)
-		Rt_ifInUndersizedPkts = prometheus.NewDesc("rt_ifInUndersizedPkts",
+		Rt_ifInUndersizedPkts = prometheus.NewDesc("edge_ethernet_ifInUndersizedPkts",
 			"Displays the number of Undersized Packet errors detected on this port.",
 			[]string{"hostip", "hostname", "job","ethernetportID","ifName","ifAlias"}, nil,
 		)
-		Rt_ifInUnknwnProto = prometheus.NewDesc("rt_ifInUnknwnProto",
+		Rt_ifInUnknwnProto = prometheus.NewDesc("edge_ethernet_ifInUnknwnProto",
 			"Displays the number of Unknown Protocol errors detected on this port.",
 			[]string{"hostip", "hostname", "job","ethernetportID","ifName","ifAlias"}, nil,
 		)
-		Rt_ifInterfaceIndex = prometheus.NewDesc("rt_ifInterfaceIndex",
+		Rt_ifInterfaceIndex = prometheus.NewDesc("edge_ethernet_ifInterfaceIndex",
 			"ethernetport",
 			[]string{"hostip", "hostname", "job","ethernetportID","ifName","ifAlias"}, nil,
 		)
-		Rt_ifLastChange = prometheus.NewDesc("rt_ifLastChange",
+		Rt_ifLastChange = prometheus.NewDesc("edge_ethernet_ifLastChange",
 			"The value of sysUpTime at the time the interface entered its current operational state.",
 			[]string{"hostip", "hostname", "job","ethernetportID","ifName","ifAlias"}, nil,
 		)
-		Rt_ifMtu = prometheus.NewDesc("rt_ifMtu",
+		Rt_ifMtu = prometheus.NewDesc("edge_ethernet_ifMtu",
 			"The size of the largest packet which can be sent/received on the interface.",
 			[]string{"hostip", "hostname", "job","ethernetportID","ifName","ifAlias"}, nil,
 		)
-		Rt_ifOperatorStatus = prometheus.NewDesc("rt_ifOperatorStatus",
+		Rt_ifOperatorStatus = prometheus.NewDesc("edge_ethernet_ifOperatorStatus",
 			"The operational status of the interface -  0 = IF_OPER_UP or 1 = IF_OPER_DOWN.",
 			[]string{"hostip", "hostname", "job","ethernetportID","ifName","ifAlias"}, nil,
 		)
-		Rt_ifOutBroadcastPkts = prometheus.NewDesc("rt_ifOutBroadcastPkts",
+		Rt_ifOutBroadcastPkts = prometheus.NewDesc("edge_ethernet_ifOutBroadcastPkts",
 			"Displays the number of transmitted broadcast packets on this port.",
 			[]string{"hostip", "hostname", "job","ethernetportID","ifName","ifAlias"}, nil,
 		)
-		Rt_ifOutDeferredTransmissions = prometheus.NewDesc("rt_ifOutDeferredTransmissions",
+		Rt_ifOutDeferredTransmissions = prometheus.NewDesc("edge_ethernet_ifOutDeferredTransmissions",
 			"Displays the number of Deferred Transmission errors detected on this port.",
 			[]string{"hostip", "hostname", "job","ethernetportID","ifName","ifAlias"}, nil,
 		)
-		Rt_ifOutDiscards = prometheus.NewDesc("rt_ifOutDiscards",
+		Rt_ifOutDiscards = prometheus.NewDesc("edge_ethernet_ifOutDiscards",
 			"Displays the number of discard errors detected on this port.",
 			[]string{"hostip", "hostname", "job","ethernetportID","ifName","ifAlias"}, nil,
 		)
-		Rt_ifOutErrors = prometheus.NewDesc("rt_ifOutErrors",
+		Rt_ifOutErrors = prometheus.NewDesc("edge_ethernet_ifOutErrors",
 			"Displays the number of errors detected on this port.",
 			[]string{"hostip", "hostname", "job","ethernetportID","ifName","ifAlias"}, nil,
 		)
-		Rt_ifOutLateCollissions = prometheus.NewDesc("rt_ifOutLateCollissions",
+		Rt_ifOutLateCollissions = prometheus.NewDesc("edge_ethernet_ifOutLateCollissions",
 			"Displays the number of Late Collision errors detected on this port.",
 			[]string{"hostip", "hostname", "job","ethernetportID","ifName","ifAlias"}, nil,
 		)
-		Rt_ifOutMulticastPkts = prometheus.NewDesc("rt_ifOutMulticastPkts",
+		Rt_ifOutMulticastPkts = prometheus.NewDesc("edge_ethernet_ifOutMulticastPkts",
 			"Displays the number of transmitted multicast packets on this port.",
 			[]string{"hostip", "hostname", "job","ethernetportID","ifName","ifAlias"}, nil,
 		)
-		Rt_ifOutOctets = prometheus.NewDesc("rt_ifOutOctets",
+		Rt_ifOutOctets = prometheus.NewDesc("edge_ethernet_ifOutOctets",
 			"Displays the number of transmitted octets on this port.",
 			[]string{"hostip", "hostname", "job","ethernetportID","ifName","ifAlias"}, nil,
 		)
-		Rt_ifOutUcastPkts = prometheus.NewDesc("rt_ifOutUcastPkts",
+		Rt_ifOutUcastPkts = prometheus.NewDesc("edge_ethernet_ifOutUcastPkts",
 			"Displays the number of transmitted unicast packets on this port.",
 			[]string{"hostip", "hostname", "job","ethernetportID","ifName","ifAlias"}, nil,
 		)
-		Rt_ifSpeed = prometheus.NewDesc("rt_ifSpeed",
+		Rt_ifSpeed = prometheus.NewDesc("edge_ethernet_ifSpeed",
 			"An estimate of the interface's current bandwidth in bits per second.",
 			[]string{"hostip", "hostname", "job","ethernetportID","ifName","ifAlias"}, nil,
 		)
-		Rt_redundancyRole = prometheus.NewDesc("rt_redundancyRole",
+		Rt_redundancyRole = prometheus.NewDesc("edge_ethernet_redundancyRole",
 			"When redundancy is configured for 'Failover', indicates if it's role is 'Primary' or 'Secondary'.",
 			[]string{"hostip", "hostname", "job","ethernetportID","ifName","ifAlias"}, nil,
 		)
-		Rt_redundancyState = prometheus.NewDesc("rt_redundancyState",
+		Rt_redundancyState = prometheus.NewDesc("edge_ethernet_redundancyState",
 			"When redundancy is configured for 'Failover', indicates if it's state is 'Online' or 'Backup'.",
 			[]string{"hostip", "hostname", "job","ethernetportID","ifName","ifAlias"}, nil,
 		)

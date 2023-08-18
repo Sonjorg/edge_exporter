@@ -27,18 +27,31 @@ type LinecardData struct {
 
 }
 
-func LinecardCollector2()  (m []prometheus.Metric) {
-	hosts := config.GetIncludedHosts("linecard")//retrieving targets for this collector
-	if (len(hosts) <= 0) {
+func LinecardCollector2(successfulHosts []string)  (m []prometheus.Metric) {
+	includedHosts := config.GetIncludedHosts("linecard")//retrieving targets for this collector
+	if (len(includedHosts) <= 0) {
 		log.Print("no hosts, linecard")
 		return nil
 	}
+
+	var hosts []config.IncludedHosts
+	for i := range includedHosts {
+		for j := range successfulHosts {
+			if (includedHosts[i].Ip == successfulHosts[j]) {
+					hosts = append(hosts, includedHosts[j])
+			}
+		}
+	}
+	if len(hosts) <= 0 {
+		return
+	}
+
 	var (
-			Rt_ServiceStatus = prometheus.NewDesc("rt_ServiceStatus",
+			Rt_ServiceStatus = prometheus.NewDesc("edge_linecard_ServiceStatus",
 				"The service status of the module.",
 				[]string{"hostip", "hostname", "job","linecardID","rt_CardType","rt_Location"}, nil,
 			)
-			Rt_Status = prometheus.NewDesc("rt_Status",
+			Rt_Status = prometheus.NewDesc("edge_linecard_Status",
 				"Indicates the hardware initialization state for this card.",
 				[]string{"hostip", "hostname", "job","linecardID"}, nil,
 			)
