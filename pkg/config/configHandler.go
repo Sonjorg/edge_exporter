@@ -30,11 +30,16 @@ import (
 
     //GetConf is from stackoverflow
     func GetConf(c *Config) *Config {
-        yamlFile, err := os.ReadFile("config.yml")
+        /*file, err := os.Open("config.yml")
             if err != nil {
                      log.Print("yamlFile.Get err   # ", err)
+            }*/
+            b,err := os.ReadFile("config.yml")
+                        
+            if err != nil {
+                log.Fatal(err)
             }
-        err = yaml.Unmarshal(yamlFile, c)
+        err = yaml.Unmarshal(b, c)
         if err != nil {
               log.Print("yamlFile.Get err   # ", err)
          }
