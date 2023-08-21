@@ -20,10 +20,10 @@ func main() {
 
 	hosts := config.GetAllHosts()
 	for i := range hosts {
-		//Fetching sessioncookies and inserting them into the database
 		if (thishttp.SBCIsDown(hosts[i].Ip)){
 			continue
 		}
+		//Fetching sessioncookies and inserting them into the database
 		phpsessid, err := thishttp.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
 		if err!= nil {
 			log.Print(err)

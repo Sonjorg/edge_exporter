@@ -11,7 +11,7 @@ import (
 	"encoding/xml"
 	"log"
 	"time"
-
+	"fmt"
 	"github.com/prometheus/client_golang/prometheus"
 )
 
@@ -40,7 +40,7 @@ func SystemCollector() (m []prometheus.Metric, successfulHosts []string) {
 
 	hosts := config.GetAllHosts() //retrieving targets for this collector
 	if len(hosts) <= 0 {
-		log.Println("No hosts added to config.yml")
+		fmt.Println("No hosts added to config.yml")
 		return
 	}
 
@@ -88,14 +88,8 @@ func SystemCollector() (m []prometheus.Metric, successfulHosts []string) {
 	)
 
 	for i := 0; i < len(hosts); i++ {
-		dataStr := "https://" + hosts[i].Ip + "/rest/system/historicalstatistics/1"
 
 		timeReportedByExternalSystem := time.Now()
-		chassisType, serialNumber, err := utils.GetChassisLabels(hosts[i].Ip, "null")
-		if err != nil {
-			chassisType, serialNumber = "Error fetching chassisinfo", "Error fetching chassisinfo"
-			log.Print(err)
-		}
 		if (http.SBCIsDown(hosts[i].Ip)){
 			m = append(m, prometheus.NewMetricWithTimestamp(
 				timeReportedByExternalSystem,
@@ -104,6 +98,14 @@ func SystemCollector() (m []prometheus.Metric, successfulHosts []string) {
 			))
 			continue
 		}
+
+		dataStr := "https://" + hosts[i].Ip + "/rest/system/historicalstatistics/1"
+		chassisType, serialNumber, err := utils.GetChassisLabels(hosts[i].Ip, "null")
+		if err != nil {
+			chassisType, serialNumber = "Error fetching chassisinfo", "Error fetching chassisinfo"
+			log.Print(err)
+		}
+		
 		phpsessid, err := http.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
 		if err != nil {
 			log.Println("Error retrieving session cookie (system): ", log.Flags(), err)

@@ -12,6 +12,7 @@ import (
 	"gopkg.in/yaml.v2"
 	//"flag"
 	"log"
+    "fmt"
 )
 
 //Describing config.yml file
@@ -41,7 +42,7 @@ import (
             }
         err = yaml.Unmarshal(b, c)
         if err != nil {
-              log.Print("yamlFile.Get err   # ", err)
+              fmt.Print("yamlFile.Get err   # ", err)
          }
       return c
      }
