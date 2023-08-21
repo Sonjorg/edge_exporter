@@ -5,19 +5,18 @@
 package main
 
 import (
-	//"edge_exporter/pkg/collector"
+	"edge_exporter/pkg/collector"
 	"edge_exporter/pkg/config"
-	//"edge_exporter/pkg/database"
-	//thishttp "edge_exporter/pkg/http"
-	//"edge_exporter/pkg/utils"
-	"fmt"
-	//"log"
-	//"net/http"
+	"edge_exporter/pkg/database"
+	thishttp "edge_exporter/pkg/http"
+	"edge_exporter/pkg/utils"
+	"log"
+	"net/http"
 )
 
 func main() {
 	//Creating database and tables
-	/*database.InitializeDB()
+	database.InitializeDB()
 
 	hosts := config.GetAllHosts()
 	for i := range hosts {
@@ -44,6 +43,5 @@ func main() {
 
 	log.Println("Edge exporter running, listening on 5123")
 	select {}
-	*/
-	fmt.Println(config.GetConfig())
+	
 }
