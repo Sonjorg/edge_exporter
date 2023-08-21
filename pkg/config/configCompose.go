@@ -17,7 +17,7 @@ type HostCompose struct {
     Username          string  //"username"
     Password          string  //"password"
     Exclude           []string  //"exclude"
-    RoutingEntryTime  float64 //"routing-database-hours"
+    RoutingEntryTime  float64 //"routing_database_hours"
 }
 
     func getEnv(key, defaultValue string) string {
