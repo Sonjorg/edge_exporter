@@ -1,0 +1,46 @@
+version: '2.3'
+
+#volumes:
+#    prometheus_data: {}
+
+
+services:
+
+  KIRM077-SBC-01:
+    image: sondrjortest
+    container_name: KIRM077-SBC-01
+    user: root
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 10m
+        max-file: "3"
+    restart: unless-stopped
+    mem_reservation: "10M"
+    mem_limit: "20M"
+    authtimeout: 3    
+    hostname: test
+    ipaddress: ipadr   
+    username: un  
+    password: pw          
+    exclude: dfgfeg,ergergreg,regergerg,ergregreg           
+    routing-database-hours: 24
+  KIRM077-SBC-02:
+    image: sondrjortest
+    container_name: KIRM077-SBC-02
+    user: root
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 10m
+        max-file: "3"
+    restart: unless-stopped
+    mem_reservation: "10M"
+    mem_limit: "250M"
+    authtimeout: 3    
+    hostname: test
+    ipaddress: ipadr   
+    username: un  
+    password: pw          
+    exclude: dfgfeg,ergergreg,regergerg,ergregreg           
+    routing-database-hours: 24
