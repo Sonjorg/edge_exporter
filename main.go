@@ -1,22 +1,23 @@
 /* Copyright (C) 2023 Sondre Jørgensen - All Rights Reserved
  * You may use, distribute and modify this code under the
  * terms of the CC BY 4.0 license
-*/
+ */
 package main
 
 import (
-	"edge_exporter/pkg/collector"
+	//"edge_exporter/pkg/collector"
 	"edge_exporter/pkg/config"
-	"edge_exporter/pkg/database"
-	"edge_exporter/pkg/utils"
-	thishttp "edge_exporter/pkg/http"
-	"log"
-	"net/http"
+	//"edge_exporter/pkg/database"
+	//thishttp "edge_exporter/pkg/http"
+	//"edge_exporter/pkg/utils"
+	"fmt"
+	//"log"
+	//"net/http"
 )
 
 func main() {
 	//Creating database and tables
-	database.InitializeDB()
+	/*database.InitializeDB()
 
 	hosts := config.GetAllHosts()
 	for i := range hosts {
@@ -43,4 +44,6 @@ func main() {
 
 	log.Println("Edge exporter running, listening on 5123")
 	select {}
+	*/
+	fmt.Println(config.GetConfig())
 }

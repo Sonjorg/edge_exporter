@@ -26,11 +26,11 @@ func SBCIsDown(ipaddress string) bool{
 	client := &http.Client{Timeout: time.Duration(timeout) * time.Second}
 	req, err := http.NewRequest("GET", "https://"+ipaddress+"/", nil)
 	if err != nil {
-			fmt.Println("1", err)
+			log.Println("1", err)
 	}
 	_, err = client.Do(req)
 	if err != nil {
-			fmt.Println("2", err)
+			log.Println("2", err)
 	}
 	res := strings.Contains(err.Error(), "certificate")
 	fmt.Println(res)
