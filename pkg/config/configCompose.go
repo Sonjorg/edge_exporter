@@ -39,9 +39,8 @@ type HostCompose struct {
         password := getEnv("password", "Password empty")
         excludeString := os.Getenv("exclude")
         exclude := strings.Split(excludeString, ",")
-        routingEntry := getEnv("routing-database-hours", "24")
+        routingEntry := getEnv("routing_database_hours", "24")
         routingEntryTime, err := strconv.ParseFloat(routingEntry,64)
         hostCompose := HostCompose{Authtimeout: authtimeout, HostName: hostName, Ipaddress: ipaddress, Username: username, Password: password, Exclude: exclude, RoutingEntryTime: routingEntryTime}
         return hostCompose
-
     }

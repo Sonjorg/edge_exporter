@@ -24,7 +24,7 @@ services:
     username: un  
     password: pw          
     exclude: dfgfeg,ergergreg,regergerg,ergregreg           
-    routing-database-hours: 24
+    routing_database_hours: 24
   KIRM077-SBC-02:
     image: sondrjortest
     container_name: KIRM077-SBC-02
@@ -43,4 +43,4 @@ services:
     username: un  
     password: pw          
     exclude: dfgfeg,ergergreg,regergerg,ergregreg           
-    routing-database-hours: 24
+    routing_database_hours: 24
