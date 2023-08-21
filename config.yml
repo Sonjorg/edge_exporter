@@ -1,6 +1,6 @@
 ---
 
-authtimeout: 3  #all hosts will have max 3 sec timout
+authtimeout: 2  #all hosts will have max 3 sec timout
 hosts:
 - hostname:
   ipaddress:

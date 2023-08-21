@@ -21,7 +21,9 @@ import (
 
 
 func TestSBCIsUp(ipaddress string) {
-	client := &http.Client{}
+	cfg := config.GetConf(&config.Config{})
+	timeout := cfg.Authtimeout
+	client := &http.Client{Timeout: time.Duration(timeout) * time.Second}
 	req, err := http.NewRequest("GET", "https://"+ipaddress+"/", nil)
 	if err != nil {
 		fmt.Println("1", err)
