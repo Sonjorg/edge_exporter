@@ -32,7 +32,7 @@ func SBCIsDown(ipaddress string) bool{
 	if err != nil {
 			fmt.Println("2", err)
 	}
-	res := strings.Contains(err.Error(), "(60) SSL")
+	res := strings.Contains(err.Error(), "certificate")
 	fmt.Println(res)
 	return !res
 }
