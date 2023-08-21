@@ -5,22 +5,25 @@
 package main
 
 import (
-	//"edge_exporter/pkg/collector"
-	//"edge_exporter/pkg/config"
-	//"edge_exporter/pkg/database"
-	//"edge_exporter/pkg/utils"
+	"edge_exporter/pkg/collector"
+	"edge_exporter/pkg/config"
+	"edge_exporter/pkg/database"
+	"edge_exporter/pkg/utils"
 	thishttp "edge_exporter/pkg/http"
-	//"log"
-	//"net/http"
+	"log"
+	"net/http"
 )
 
 func main() {
 	//Creating database and tables
-	/*database.InitializeDB()
+	database.InitializeDB()
 
 	hosts := config.GetAllHosts()
 	for i := range hosts {
 		//Fetching sessioncookies and inserting them into the database
+		if (thishttp.SBCIsDown(hosts[i].Ip)){
+			continue
+		}
 		phpsessid, err := thishttp.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
 		if err!= nil {
 			log.Print(err)
@@ -39,6 +42,5 @@ func main() {
 	log.Fatal(http.ListenAndServe(":5123", nil))
 
 	log.Println("Edge exporter running, listening on 5123")
-	select {}*/
-	thishttp.TestSBCIsUp("10.237.77.99")
+	select {}
 }

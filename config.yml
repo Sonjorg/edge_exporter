@@ -2,15 +2,15 @@
 
 authtimeout: 2  #all hosts will have max 3 sec timout
 hosts:
-- hostname:
-  ipaddress:
-  username:
-  password:
+- hostname: host1
+  ipaddress: sddfdsf
+  username: sdfdsf
+  password: dfdsf
   routing-database-hours: 24 #For routingentry collector, data is stored in the database for 24 hours for this host
-- hostname:
-  ipaddress:
-  username:
-  password:
+- hostname: dsfdsf
+  ipaddress: dfdsfd
+  username: sdfdf
+  password: dfdfd
   routing-database-hours: 24
   exclude:
 #  - routingentry

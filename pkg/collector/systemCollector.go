@@ -96,6 +96,14 @@ func SystemCollector() (m []prometheus.Metric, successfulHosts []string) {
 			chassisType, serialNumber = "Error fetching chassisinfo", "Error fetching chassisinfo"
 			log.Print(err)
 		}
+		if (http.SBCIsDown(hosts[i].Ip)){
+			m = append(m, prometheus.NewMetricWithTimestamp(
+				timeReportedByExternalSystem,
+				prometheus.MustNewConstMetric(
+					Error_ip, prometheus.GaugeValue, 0, hosts[i].Ip, hosts[i].Hostname),
+			))
+			continue
+		}
 		phpsessid, err := http.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
 		if err != nil {
 			log.Println("Error retrieving session cookie (system): ", log.Flags(), err)
