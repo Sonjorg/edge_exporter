@@ -1,4 +1,4 @@
-version: '2.3'
+version: "2.3"
 
 #volumes:
 #    prometheus_data: {}
@@ -6,9 +6,9 @@ version: '2.3'
 
 services:
 
-  KIRM077-SBC-01:
-    image: sondrjortest
-    container_name: KIRM077-SBC-01
+  sondretest:
+    image: sondre
+    container_name: sondretest
     user: root
     logging:
       driver: "json-file"
@@ -25,9 +25,9 @@ services:
     password: "pw"          
     exclude: "dfgfeg,ergergreg,regergerg,ergregreg"           
     routing_database_hours: "24"
-  KIRM077-SBC-02:
-    image: sondrjortest
-    container_name: KIRM077-SBC-02
+  sondretest:
+    image: sondre
+    container_name: sondretest
     user: root
     logging:
       driver: "json-file"
