@@ -8,7 +8,6 @@ import (
 	"edge_exporter/pkg/database"
 	"edge_exporter/pkg/config"
 	"crypto/tls"
-	"fmt"
 	"log"
 	"net/http"
 	"net/url"
@@ -26,15 +25,14 @@ func SBCIsDown(ipaddress string) bool{
 	client := &http.Client{Timeout: time.Duration(timeout) * time.Second}
 	req, err := http.NewRequest("GET", "https://"+ipaddress+"/", nil)
 	if err != nil {
-			log.Println("1", err)
+			log.Println(err)
 	}
 	_, err = client.Do(req)
-	if err != nil {
-			log.Println("2", err)
-	}
+	
 	res := strings.Contains(err.Error(), "certificate")
 	if (!res) {
-		fmt.Println(res)
+		log.Println(err)
+
 	}
 	return !res
 }
