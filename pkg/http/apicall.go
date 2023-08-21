@@ -33,7 +33,9 @@ func SBCIsDown(ipaddress string) bool{
 			log.Println("2", err)
 	}
 	res := strings.Contains(err.Error(), "certificate")
-	fmt.Println(res)
+	if (!res) {
+		fmt.Println(res)
+	}
 	return !res
 }
 // The functions APISessionAuth(...) and getAPIData(...) utilizes curl-to-go translator but is modified for cookie management and storing these with sqlite.
