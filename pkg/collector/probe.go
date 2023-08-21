@@ -40,7 +40,6 @@ func (m *AllCollectors) Probe() {
 		m.metrics= append(m.metrics, metrics[i])
 	}
 }
-
 //Collect implements required collect function for all prometheus collectors
 func (collector *AllCollectors) Collect(c chan<- prometheus.Metric) {
 	for _, m := range collector.metrics {

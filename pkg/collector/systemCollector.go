@@ -108,7 +108,7 @@ func SystemCollector() (m []prometheus.Metric, successfulHosts []string) {
 			continue //trying next ip address
 		}
 		//fetching labels from DB or if not exist yet; from router
-		if chassisType == "database failure" {
+		if chassisType == "Error fetching chassisinfo" {
 			chassisType, serialNumber, err = utils.GetChassisLabels(hosts[i].Ip, phpsessid)
 			if err != nil {
 				chassisType, serialNumber = "Error fetching chassisinfo", "Error fetching chassisinfo"
