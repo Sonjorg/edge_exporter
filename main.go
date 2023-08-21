@@ -40,5 +40,5 @@ func main() {
 
 	log.Println("Edge exporter running, listening on 5123")
 	select {}*/
-	thishttp.TestSBCIsUp("10.237.77.30")
+	thishttp.TestSBCIsUp("10.237.77.99")
 }

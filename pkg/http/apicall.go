@@ -24,19 +24,18 @@ func TestSBCIsUp(ipaddress string) {
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", "https://"+ipaddress+"/", nil)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println("1", err)
 	}
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println("2", err)
 	}
 	defer resp.Body.Close()
 	bodyText, err := io.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println("3",err)
 	}
 	fmt.Printf("%s\n", bodyText)
-
 }
 
 // The functions APISessionAuth(...) and getAPIData(...) utilizes curl-to-go translator but is modified for cookie management and storing these with sqlite.
