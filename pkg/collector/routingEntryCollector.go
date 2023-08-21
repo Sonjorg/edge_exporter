@@ -67,36 +67,48 @@ type routingData struct {
 	Rt_QualityFailed  int    `xml:"rt_QualityFailed"`
 }
 
-func RoutingEntryCollector()(m []prometheus.Metric) {
+func RoutingEntryCollector(successfulHosts []string)(m []prometheus.Metric) {
 
-	hosts  := config.GetIncludedHosts("routingentry") //retrieving targets for this exporter
-	if len(hosts) <= 0 {
+	includedHosts  := config.GetIncludedHosts("routingentry") //retrieving targets for this exporter
+	if len(includedHosts) <= 0 {
 		log.Print("no hosts")
 		return
 	}
 
+	var hosts []config.IncludedHosts
+	for i := range includedHosts {
+		for j := range successfulHosts {
+			if (includedHosts[i].Ip == successfulHosts[j]) {
+					hosts = append(hosts, includedHosts[j])
+			}
+		}
+	}
+	if len(hosts) <= 0 {
+		return
+	}
+
 	var (
-		Rt_RuleUsage = prometheus.NewDesc("rt_RuleUsage",
+		Rt_RuleUsage = prometheus.NewDesc("edge_routingentry_RuleUsage",
 				"Displays the number of times this call route has been selected for a call.",
 				[]string{"hostip", "hostname",  "routing_table", "routing_entry"}, nil,
 			)
-			Rt_ASR = prometheus.NewDesc("rt_ASR",
+			Rt_ASR = prometheus.NewDesc("edge_routingentry_ASR",
 				"Displays the Answer-Seizure Ratio for this call route. (ASR is calculated by dividing the number of call attempts answered by the number of call attempts.)",
 				[]string{"hostip", "hostname",  "routing_table", "routing_entry"}, nil,
 			)
-			Rt_RoundTripDelay = prometheus.NewDesc("rt_RoundTripDelay",
+			Rt_RoundTripDelay = prometheus.NewDesc("edge_routingentry_RoundTripDelay",
 				"Displays the average round trip delay for this call route.",
 				[]string{"hostip", "hostname",  "routing_table", "routing_entry"}, nil,
 			)
-			Rt_Jitter = prometheus.NewDesc("rt_Jitter",
+			Rt_Jitter = prometheus.NewDesc("edge_routingentry_Jitter",
 				"Displays the average jitter for this call route.",
 				[]string{"hostip", "hostname",  "routing_table", "routing_entry"}, nil,
 			)
-			Rt_MOS = prometheus.NewDesc("rt_MOS",
+			Rt_MOS = prometheus.NewDesc("edge_routingentry_MOS",
 				"Displays the Mean Opinion Score (MOS) for this call route.",
 				[]string{"hostip", "hostname",  "routing_table", "routing_entry"}, nil,
 			)
-			Rt_QualityFailed = prometheus.NewDesc("rt_QualityFailed",
+			Rt_QualityFailed = prometheus.NewDesc("edge_routingentry_QualityFailed",
 				"Displays if this call route is currently passing or failing the associated quality metrics. If true then the rule is failing, if false then it is passing.",
 				[]string{"hostip", "hostname",  "routing_table", "routing_entry"}, nil,
 			)

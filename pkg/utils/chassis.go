@@ -1,5 +1,8 @@
 package utils
 
+//system status exporter
+//rest/system/historicalstatistics/1
+
 /* Copyright (C) 2023 Sondre Jørgensen - All Rights Reserved
  * You may use, distribute and modify this code under the
  * terms of the CC BY 4.0 license
@@ -42,12 +45,12 @@ func GetChassisLabels(ipaddress string, phpsessid string) (chassisType string, s
 				_, data,err := http.GetAPIData(dataStr, phpsessid)
 				if err != nil {
 
-					return "http error","http error",err
+					return "Error fetching chassisinfo","Error fetching chassisinfo",err
 				}
 				ssbc := &ChassisData{}
 				err = xml.Unmarshal(data, &ssbc) //Converting XML data to variables
 				if err != nil {
-					return "http error","http error",err
+					return "Error fetching chassisinfo","Error fetching chassisinfo",err
 				}
 
 				chassisType := ssbc.Chassis.Rt_Chassis_Type

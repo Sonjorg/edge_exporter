@@ -15,32 +15,31 @@ type AllCollectors struct{
 }
 
 func (m *AllCollectors) Probe() {
-	metrics := SystemCollector()
+	metrics, successfulHosts := SystemCollector()
 	for i := range metrics {
 		m.metrics= append(m.metrics, metrics[i])
 	}
-	metrics = LinecardCollector2()
+	metrics = LinecardCollector2(successfulHosts)
 	for i := range metrics {
 		m.metrics= append(m.metrics, metrics[i])
 	}
-	metrics = RoutingEntryCollector()
+	metrics = RoutingEntryCollector(successfulHosts)
 	for i := range metrics {
 		m.metrics= append(m.metrics, metrics[i])
 	}
-	metrics = EthernetPortCollector()
+	metrics = EthernetPortCollector(successfulHosts)
 	for i := range metrics {
 		m.metrics= append(m.metrics, metrics[i])
 	}
-	metrics = DiskPartitionCollector()
+	metrics = DiskPartitionCollector(successfulHosts)
 	for i := range metrics {
 		m.metrics= append(m.metrics, metrics[i])
 	}
-	metrics = CallStatsCollector()
+	metrics = CallStatsCollector(successfulHosts)
 	for i := range metrics {
 		m.metrics= append(m.metrics, metrics[i])
 	}
 }
-
 //Collect implements required collect function for all prometheus collectors
 func (collector *AllCollectors) Collect(c chan<- prometheus.Metric) {
 	for _, m := range collector.metrics {
