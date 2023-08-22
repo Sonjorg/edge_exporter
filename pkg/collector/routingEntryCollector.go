@@ -33,17 +33,6 @@ type routingTables3 struct {
 	Value string   `xml:",chardata"`
 }
 
-type routingTableX1 struct {
-	XMLName       xml.Name      `xml:"root"`
-	RoutingEntry2 routingEntry2 `xml:"routingtable"`
-}
-type routingEntryX2 struct {
-	RoutingEntry3 routingEntry3 `xml:"routingentry_pk"`
-}
-type routingEntry3 struct {
-	Attr  []string `xml:"id,attr"`
-	Value string   `xml:",chardata"`
-}
 
 //Will soon remove the following
 // Second request
