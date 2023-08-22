@@ -20,7 +20,7 @@ import (
 
 
 func SBCIsUp(ipaddress string) bool{
-	cfg := config.GetConf(&config.Config{})
+	cfg := config.GetConfig(&config.HostCompose{})
 	timeout := cfg.Authtimeout
 	client := &http.Client{Timeout: time.Duration(timeout) * time.Second}
 	req, err := http.NewRequest("GET", "https://"+ipaddress+"/", nil)
@@ -32,7 +32,6 @@ func SBCIsUp(ipaddress string) bool{
 	res := strings.Contains(err.Error(), "certificate")
 	if (!res) {
 		log.Println(err)
-
 	}
 	return res
 }
@@ -57,7 +56,7 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 		return phpsessid, nil
 	}
 
-	cfg := config.GetConf(&config.Config{})
+	cfg := config.GetConfig(&config.HostCompose{})
 	timeout := cfg.Authtimeout
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
