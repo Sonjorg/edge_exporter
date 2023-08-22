@@ -84,7 +84,7 @@ func SystemCollector(host *config.HostCompose) (m []prometheus.Metric, successfu
 		dataStr := "https://" + host.Ip + "/rest/system/historicalstatistics/1"
 		timeReportedByExternalSystem := time.Now()
 
-		if (http.SBCIsDown(host.Ip)){
+		if (!http.SBCIsUp(host.Ip)){
 			m = append(m, prometheus.NewMetricWithTimestamp(
 				timeReportedByExternalSystem,
 				prometheus.MustNewConstMetric(

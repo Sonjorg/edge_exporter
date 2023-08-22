@@ -14,7 +14,7 @@ hosts:
   routing-database-hours: 24
   exclude:
 #  - routingentry
-#  - system
+#  - ethernetport
 #  - diskpartition
 #  - systemcallstats
 #  - linecard

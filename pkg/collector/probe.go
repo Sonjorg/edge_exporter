@@ -7,7 +7,6 @@ package collector
 import (
 	"edge_exporter/pkg/config"
 	"net/http"
-
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
@@ -18,6 +17,7 @@ type AllCollectors struct{
 
 func (m *AllCollectors) Probe() {
 	cfg := config.GetConfig(&config.HostCompose{})
+
 	metrics, success := SystemCollector(cfg)
 	for i := range metrics {
 		m.metrics= append(m.metrics, metrics[i])
@@ -56,6 +56,7 @@ func (m *AllCollectors) Probe() {
 		}
 	}
 }
+
 //Collect implements required collect function for all prometheus collectors
 func (collector *AllCollectors) Collect(c chan<- prometheus.Metric) {
 	for _, m := range collector.metrics {
