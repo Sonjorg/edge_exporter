@@ -1,13 +1,15 @@
 /* Copyright (C) 2023 Sondre Jørgensen - All Rights Reserved
  * You may use, distribute and modify this code under the
  * terms of the CC BY 4.0 license
-*/
+ */
 package collector
 
 import (
+	"edge_exporter/pkg/config"
+	"net/http"
+
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"net/http"
 )
 
 type AllCollectors struct{
@@ -15,29 +17,43 @@ type AllCollectors struct{
 }
 
 func (m *AllCollectors) Probe() {
-	metrics, successfulHosts := SystemCollector()
+	cfg := config.GetConfig(&config.HostCompose{})
+	metrics, success := SystemCollector(cfg)
 	for i := range metrics {
 		m.metrics= append(m.metrics, metrics[i])
 	}
-	metrics = LinecardCollector2(successfulHosts)
-	for i := range metrics {
-		m.metrics= append(m.metrics, metrics[i])
-	}
-	metrics = RoutingEntryCollector(successfulHosts)
-	for i := range metrics {
-		m.metrics= append(m.metrics, metrics[i])
-	}
-	metrics = EthernetPortCollector(successfulHosts)
-	for i := range metrics {
-		m.metrics= append(m.metrics, metrics[i])
-	}
-	metrics = DiskPartitionCollector(successfulHosts)
-	for i := range metrics {
-		m.metrics= append(m.metrics, metrics[i])
-	}
-	metrics = CallStatsCollector(successfulHosts)
-	for i := range metrics {
-		m.metrics= append(m.metrics, metrics[i])
+	if success {
+		if (!config.Excluded("linecard")) {
+			metrics = LinecardCollector2(cfg)
+			for i := range metrics {
+				m.metrics= append(m.metrics, metrics[i])
+			}
+		}
+		if (!config.Excluded("routingentry")) {
+			metrics = RoutingEntryCollector(cfg)
+			for i := range metrics {
+				m.metrics= append(m.metrics, metrics[i])
+			}
+		}
+		if (!config.Excluded("ethernetport")) {
+			metrics = EthernetPortCollector(cfg)
+			for i := range metrics {
+				m.metrics= append(m.metrics, metrics[i])
+			}
+		}
+		if (!config.Excluded("diskpartition")) {
+
+			metrics = DiskPartitionCollector(cfg)
+			for i := range metrics {
+				m.metrics= append(m.metrics, metrics[i])
+			}
+		}
+		if (!config.Excluded("systemcallstats")) {
+			metrics = CallStatsCollector(cfg)
+			for i := range metrics {
+				m.metrics= append(m.metrics, metrics[i])
+			}
+		}
 	}
 }
 //Collect implements required collect function for all prometheus collectors

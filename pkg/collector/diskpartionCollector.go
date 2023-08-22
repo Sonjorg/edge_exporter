@@ -40,22 +40,7 @@ Rt_PartitionName    string `xml:"rt_PartitionName"`
 Rt_PartitionType    int    `xml:"rt_PartitionType"`
 }
 
-func DiskPartitionCollector(successfulHosts []string)(m []prometheus.Metric) {
-
-	includedHosts := config.GetIncludedHosts("diskpartition")//retrieving targets for this collector
-	if (len(includedHosts) <= 0) {
-		log.Print("no hosts included diskpartition")
-		return
-	}
-
-	var hosts []config.IncludedHosts
-	for i := range includedHosts {
-		for j := range successfulHosts {
-			if (includedHosts[i].Ip == successfulHosts[j]) {
-					hosts = append(hosts, includedHosts[j])
-			}
-		}
-	}
+func DiskPartitionCollector(host *config.HostCompose)(m []prometheus.Metric) {
 
 	var (
 		Rt_CurrentUsage = prometheus.NewDesc("edge_disk_CurrentUsage",
@@ -80,18 +65,17 @@ func DiskPartitionCollector(successfulHosts []string)(m []prometheus.Metric) {
 		)
 	)
 
-	for i := range hosts {
 
-		phpsessid,err := http.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
+		phpsessid,err := http.APISessionAuth(host.Username, host.Password, host.Ip)
 		if err != nil {
-			log.Print("Error auth", hosts[i].Ip, err)
-			continue
+			log.Print("Error auth", host.Ip, err)
+			return
 		}
 
-		_, data,err := http.GetAPIData("https://"+hosts[i].Ip+"/rest/diskpartition", phpsessid)
+		_, data,err := http.GetAPIData("https://"+host.Ip+"/rest/diskpartition", phpsessid)
 		if err != nil {
-			log.Print("Error fetching diskpartition data: ", hosts[i].Ip, err)
-			continue
+			log.Print("Error fetching diskpartition data: ", host.Ip, err)
+			return
 		}
 		disk := &diskPartition{}
 		xml.Unmarshal(data, &disk) //Converting XML data to variables
@@ -100,16 +84,16 @@ func DiskPartitionCollector(successfulHosts []string)(m []prometheus.Metric) {
 		disks := disk.DiskPartitionList.DiskPartitionEntry.Attr
 		if (len(disks) <= 0) {
 			log.Print("disks empty")
-			continue
+			return
 
 		}
 
 			for j := range disks {
 
-					url := "https://"+hosts[i].Ip+"/rest/diskpartition/"+disks[j]
+					url := "https://"+host.Ip+"/rest/diskpartition/"+disks[j]
 					_, data2, err := http.GetAPIData(url, phpsessid)
 						if err != nil {
-							log.Print("Error fetching diskpartition data = ", hosts[i].Ip, err)
+							log.Print("Error fetching diskpartition data = ", host.Ip, err)
 							continue
 						}
 
@@ -128,13 +112,12 @@ func DiskPartitionCollector(successfulHosts []string)(m []prometheus.Metric) {
 					partitionName := dData.DiskData.Rt_PartitionName
 					id := strconv.Itoa(j)
 
-					m = append(m, prometheus.MustNewConstMetric(Rt_CurrentUsage, prometheus.GaugeValue, metricValue1, hosts[i].Ip, hosts[i].Hostname,id, partitionName))
-					m = append(m, prometheus.MustNewConstMetric(Rt_MaximumSize, prometheus.GaugeValue, metricValue2, hosts[i].Ip, hosts[i].Hostname,id, partitionName))
-					m = append(m, prometheus.MustNewConstMetric(Rt_MemoryAvailable, prometheus.GaugeValue, metricValue3, hosts[i].Ip, hosts[i].Hostname,id, partitionName))
-					m = append(m, prometheus.MustNewConstMetric(Rt_MemoryUsed, prometheus.GaugeValue, metricValue4, hosts[i].Ip, hosts[i].Hostname,id, partitionName))
-					m = append(m, prometheus.MustNewConstMetric(Rt_PartitionType, prometheus.GaugeValue, metricValue5, hosts[i].Ip, hosts[i].Hostname,id, partitionName))
+					m = append(m, prometheus.MustNewConstMetric(Rt_CurrentUsage, prometheus.GaugeValue, metricValue1, host.Ip, host.Hostname,id, partitionName))
+					m = append(m, prometheus.MustNewConstMetric(Rt_MaximumSize, prometheus.GaugeValue, metricValue2, host.Ip, host.Hostname,id, partitionName))
+					m = append(m, prometheus.MustNewConstMetric(Rt_MemoryAvailable, prometheus.GaugeValue, metricValue3, host.Ip, host.Hostname,id, partitionName))
+					m = append(m, prometheus.MustNewConstMetric(Rt_MemoryUsed, prometheus.GaugeValue, metricValue4, host.Ip, host.Hostname,id, partitionName))
+					m = append(m, prometheus.MustNewConstMetric(Rt_PartitionType, prometheus.GaugeValue, metricValue5, host.Ip, host.Hostname,id, partitionName))
 		}
-	}
 	return m
 }
 

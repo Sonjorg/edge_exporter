@@ -51,25 +51,8 @@ Rt_redundancyRole		      int    `xml:"rt_redundancyRole"`
 Rt_redundancyState		      int    `xml:"rt_redundancyState"`
 }
 
-func EthernetPortCollector(successfulHosts []string)(m []prometheus.Metric) {
+func EthernetPortCollector(host *config.HostCompose)(m []prometheus.Metric) {
 
-	includedHosts := config.GetIncludedHosts("ethernetport")//retrieving targets for this exporter
-	if (len(includedHosts) <= 0) {
-		log.Print("no hosts")
-		return
-	}
-
-	var hosts []config.IncludedHosts
-	for i := range includedHosts {
-		for j := range successfulHosts {
-			if (includedHosts[i].Ip == successfulHosts[j]) {
-					hosts = append(hosts, includedHosts[j])
-			}
-		}
-	}
-	if len(hosts) <= 0 {
-		return
-	}
 var (
 	IfRedundancy = prometheus.NewDesc("edge_ethernet_ifRedundancy",
 			"ethernetport",
@@ -185,12 +168,10 @@ var (
 		)
 )
 
-	for i := range hosts {
-
-		phpsessid,err := http.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
+		phpsessid,err := http.APISessionAuth(host.Username, host.Password, host.Ip)
 		if err != nil {
-			log.Print("Error session cookie: ", hosts[i].Ip, err)
-			continue
+			log.Print("Error session cookie: ", host.Ip, err)
+			return
 		}
 		var ethernetportID []string
 			//Every router has these ethernetports regardless of SBC1000 or SBC2000, according to HDO
@@ -198,7 +179,7 @@ var (
 			ethernetportID = append(ethernetportID, "29")
 			ethernetportID = append(ethernetportID, "24")
 			for j := range ethernetportID {
-					url := "https://"+hosts[i].Ip+"/rest/ethernetport/"+ethernetportID[j]
+					url := "https://"+host.Ip+"/rest/ethernetport/"+ethernetportID[j]
 					_, data, err := http.GetAPIData(url, phpsessid)
 						if err != nil {
 							log.Print(err)
@@ -241,37 +222,37 @@ var (
 					metricValue29 := float64(eData.EthernetData.Rt_redundancyState)
 
 					if (metricValue1 != 0) { // As requested by HDO, if "IfRedundancy" = 0, don't include the following three metrics:
-						m = append(m, prometheus.MustNewConstMetric(Rt_redundancyRole, prometheus.GaugeValue, metricValue28, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
-						m = append(m, prometheus.MustNewConstMetric(Rt_redundancyState, prometheus.GaugeValue, metricValue29, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
-						m = append(m, prometheus.MustNewConstMetric(IfRedundantPort, prometheus.GaugeValue, metricValue2, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
+						m = append(m, prometheus.MustNewConstMetric(Rt_redundancyRole, prometheus.GaugeValue, metricValue28, host.Ip, host.Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
+						m = append(m, prometheus.MustNewConstMetric(Rt_redundancyState, prometheus.GaugeValue, metricValue29, host.Ip, host.Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
+						m = append(m, prometheus.MustNewConstMetric(IfRedundantPort, prometheus.GaugeValue, metricValue2, host.Ip, host.Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
 					}
-						m = append(m, prometheus.MustNewConstMetric(Rt_ifInBroadcastPkts, prometheus.GaugeValue, metricValue3, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
-						m = append(m, prometheus.MustNewConstMetric(Rt_ifInDiscards, prometheus.GaugeValue, metricValue4, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
-						m = append(m, prometheus.MustNewConstMetric(Rt_ifInErrors, prometheus.GaugeValue, metricValue5, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
-						m = append(m, prometheus.MustNewConstMetric(Rt_ifInFCSErrors, prometheus.GaugeValue, metricValue6, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
-						m = append(m, prometheus.MustNewConstMetric(Rt_ifInFragmentedPkts, prometheus.GaugeValue, metricValue7, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
-						m = append(m, prometheus.MustNewConstMetric(Rt_ifInMulticastPkts, prometheus.GaugeValue, metricValue8, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
-						m = append(m, prometheus.MustNewConstMetric(Rt_ifInOctets, prometheus.GaugeValue, metricValue9, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
-						m = append(m, prometheus.MustNewConstMetric(Rt_ifInOverSizedPkts, prometheus.GaugeValue, metricValue10, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
-						m = append(m, prometheus.MustNewConstMetric(Rt_ifInUcastPkts, prometheus.GaugeValue, metricValue11, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
-						m = append(m, prometheus.MustNewConstMetric(Rt_ifInUndersizedPkts, prometheus.GaugeValue, metricValue12, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
-						m = append(m, prometheus.MustNewConstMetric(Rt_ifInUnknwnProto, prometheus.GaugeValue, metricValue13, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
-						m = append(m, prometheus.MustNewConstMetric(Rt_ifInterfaceIndex, prometheus.GaugeValue, metricValue14, hosts[i].Ip, hosts[i].Hostname,"ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
-						m = append(m, prometheus.MustNewConstMetric(Rt_ifLastChange, prometheus.GaugeValue, metricValue15, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
-						m = append(m, prometheus.MustNewConstMetric(Rt_ifMtu, prometheus.GaugeValue, metricValue16, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
-						m = append(m, prometheus.MustNewConstMetric(Rt_ifOperatorStatus, prometheus.GaugeValue, metricValue18, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
-						m = append(m, prometheus.MustNewConstMetric(Rt_ifOutBroadcastPkts, prometheus.GaugeValue, metricValue19, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
-						m = append(m, prometheus.MustNewConstMetric(Rt_ifOutDeferredTransmissions, prometheus.GaugeValue, metricValue20, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
-						m = append(m, prometheus.MustNewConstMetric(Rt_ifOutDiscards, prometheus.GaugeValue, metricValue21, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
-						m = append(m, prometheus.MustNewConstMetric(Rt_ifOutErrors, prometheus.GaugeValue, metricValue22, hosts[i].Ip, hosts[i].Hostname,"ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
-						m = append(m, prometheus.MustNewConstMetric(Rt_ifOutLateCollissions, prometheus.GaugeValue, metricValue23, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
-						m = append(m, prometheus.MustNewConstMetric(Rt_ifOutMulticastPkts, prometheus.GaugeValue, metricValue24, hosts[i].Ip, hosts[i].Hostname,"ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
-						m = append(m, prometheus.MustNewConstMetric(Rt_ifOutOctets, prometheus.GaugeValue, metricValue25, hosts[i].Ip, hosts[i].Hostname,"ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
-						m = append(m, prometheus.MustNewConstMetric(Rt_ifOutUcastPkts, prometheus.GaugeValue, metricValue26, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
-						m = append(m, prometheus.MustNewConstMetric(Rt_ifSpeed, prometheus.GaugeValue, metricValue27, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
-						m = append(m, prometheus.MustNewConstMetric(IfRedundancy, prometheus.GaugeValue, metricValue1, hosts[i].Ip, hosts[i].Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
+						m = append(m, prometheus.MustNewConstMetric(Rt_ifInBroadcastPkts, prometheus.GaugeValue, metricValue3, host.Ip, host.Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
+						m = append(m, prometheus.MustNewConstMetric(Rt_ifInDiscards, prometheus.GaugeValue, metricValue4, host.Ip, host.Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
+						m = append(m, prometheus.MustNewConstMetric(Rt_ifInErrors, prometheus.GaugeValue, metricValue5, host.Ip, host.Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
+						m = append(m, prometheus.MustNewConstMetric(Rt_ifInFCSErrors, prometheus.GaugeValue, metricValue6, host.Ip, host.Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
+						m = append(m, prometheus.MustNewConstMetric(Rt_ifInFragmentedPkts, prometheus.GaugeValue, metricValue7, host.Ip, host.Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
+						m = append(m, prometheus.MustNewConstMetric(Rt_ifInMulticastPkts, prometheus.GaugeValue, metricValue8, host.Ip, host.Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
+						m = append(m, prometheus.MustNewConstMetric(Rt_ifInOctets, prometheus.GaugeValue, metricValue9, host.Ip, host.Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
+						m = append(m, prometheus.MustNewConstMetric(Rt_ifInOverSizedPkts, prometheus.GaugeValue, metricValue10, host.Ip, host.Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
+						m = append(m, prometheus.MustNewConstMetric(Rt_ifInUcastPkts, prometheus.GaugeValue, metricValue11, host.Ip, host.Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
+						m = append(m, prometheus.MustNewConstMetric(Rt_ifInUndersizedPkts, prometheus.GaugeValue, metricValue12, host.Ip, host.Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
+						m = append(m, prometheus.MustNewConstMetric(Rt_ifInUnknwnProto, prometheus.GaugeValue, metricValue13, host.Ip, host.Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
+						m = append(m, prometheus.MustNewConstMetric(Rt_ifInterfaceIndex, prometheus.GaugeValue, metricValue14, host.Ip, host.Hostname,"ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
+						m = append(m, prometheus.MustNewConstMetric(Rt_ifLastChange, prometheus.GaugeValue, metricValue15, host.Ip, host.Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
+						m = append(m, prometheus.MustNewConstMetric(Rt_ifMtu, prometheus.GaugeValue, metricValue16, host.Ip, host.Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
+						m = append(m, prometheus.MustNewConstMetric(Rt_ifOperatorStatus, prometheus.GaugeValue, metricValue18, host.Ip, host.Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
+						m = append(m, prometheus.MustNewConstMetric(Rt_ifOutBroadcastPkts, prometheus.GaugeValue, metricValue19, host.Ip, host.Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
+						m = append(m, prometheus.MustNewConstMetric(Rt_ifOutDeferredTransmissions, prometheus.GaugeValue, metricValue20, host.Ip, host.Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
+						m = append(m, prometheus.MustNewConstMetric(Rt_ifOutDiscards, prometheus.GaugeValue, metricValue21, host.Ip, host.Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
+						m = append(m, prometheus.MustNewConstMetric(Rt_ifOutErrors, prometheus.GaugeValue, metricValue22, host.Ip, host.Hostname,"ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
+						m = append(m, prometheus.MustNewConstMetric(Rt_ifOutLateCollissions, prometheus.GaugeValue, metricValue23, host.Ip, host.Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
+						m = append(m, prometheus.MustNewConstMetric(Rt_ifOutMulticastPkts, prometheus.GaugeValue, metricValue24, host.Ip, host.Hostname,"ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
+						m = append(m, prometheus.MustNewConstMetric(Rt_ifOutOctets, prometheus.GaugeValue, metricValue25, host.Ip, host.Hostname,"ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
+						m = append(m, prometheus.MustNewConstMetric(Rt_ifOutUcastPkts, prometheus.GaugeValue, metricValue26, host.Ip, host.Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
+						m = append(m, prometheus.MustNewConstMetric(Rt_ifSpeed, prometheus.GaugeValue, metricValue27, host.Ip, host.Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
+						m = append(m, prometheus.MustNewConstMetric(IfRedundancy, prometheus.GaugeValue, metricValue1, host.Ip, host.Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
 
 		}
-	}
+	
 	return m
 }

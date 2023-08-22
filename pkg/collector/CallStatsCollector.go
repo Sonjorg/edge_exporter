@@ -30,23 +30,8 @@ type callStatsData struct {
 	Rt_NumCallUnAnswered       int    `xml:"rt_NumCallUnAnswered"`
 }
 
-func CallStatsCollector(successfulHosts []string) (m []prometheus.Metric) {
-
-	includedHosts := config.GetIncludedHosts("systemcallstats") //retrieving targets for this collector
-	if len(includedHosts) <= 0 {
-		return
-	}
-	var hosts []config.IncludedHosts
-	for i := range includedHosts {
-		for j := range successfulHosts {
-			if (includedHosts[i].Ip == successfulHosts[j]) {
-					hosts = append(hosts, includedHosts[j])
-			}
-		}
-	}
-	if len(hosts) <= 0 {
-		return
-	}
+func CallStatsCollector(host *config.HostCompose) (m []prometheus.Metric) {
+	
 	var (
 		Rt_NumCallAttempts = prometheus.NewDesc("edge_callstats_NumCallAttempts",
 			"Total number of call attempts system wide since system came up.",
@@ -74,26 +59,24 @@ func CallStatsCollector(successfulHosts []string) (m []prometheus.Metric) {
 		)
 	)
 
-	for i := 0; i < len(hosts); i++ {
-
-		phpsessid, err := http.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
+		phpsessid, err := http.APISessionAuth(host.Username, host.Password, host.Ip)
 		if err != nil {
 			log.Print("Error retrieving session cookie = ", err, "\n")
-			continue //trying next ip address
+			return 
 		}
 
-		dataStr := "https://" + hosts[i].Ip + "/rest/systemcallstats"
+		dataStr := "https://" + host.Ip + "/rest/systemcallstats"
 		_, data, err := http.GetAPIData(dataStr, phpsessid)
 		if err != nil {
 			log.Print("Error collecting systemcall data = ", err, "\n")
-			continue
+			return
 		}
 
 		ssbc := &cSBCdata{}
 		err = xml.Unmarshal(data, &ssbc) //Converting XML data to variables
 		if err != nil {
 			log.Print("XML error callstats", err)
-			continue
+			return
 		}
 
 		metricValue1 := float64(ssbc.CallStatsData.Rt_NumCallAttempts)
@@ -103,12 +86,12 @@ func CallStatsCollector(successfulHosts []string) (m []prometheus.Metric) {
 		metricValue5 := float64(ssbc.CallStatsData.Rt_NumCallAbandonedNoTrunk)
 		metricValue6 := float64(ssbc.CallStatsData.Rt_NumCallUnAnswered)
 
-		m = append(m, prometheus.MustNewConstMetric(Rt_NumCallAttempts, prometheus.GaugeValue, metricValue1, hosts[i].Ip, hosts[i].Hostname))
-		m = append(m, prometheus.MustNewConstMetric(Rt_NumCallSucceeded, prometheus.GaugeValue, metricValue2, hosts[i].Ip, hosts[i].Hostname))
-		m = append(m, prometheus.MustNewConstMetric(Rt_NumCallFailed, prometheus.GaugeValue, metricValue3, hosts[i].Ip, hosts[i].Hostname))
-		m = append(m, prometheus.MustNewConstMetric(Rt_NumCallCurrentlyUp, prometheus.GaugeValue, metricValue4, hosts[i].Ip, hosts[i].Hostname))
-		m = append(m, prometheus.MustNewConstMetric(Rt_NumCallAbandonedNoTrunk, prometheus.GaugeValue, metricValue5, hosts[i].Ip, hosts[i].Hostname))
-		m = append(m, prometheus.MustNewConstMetric(Rt_NumCallUnAnswered, prometheus.GaugeValue, metricValue6, hosts[i].Ip, hosts[i].Hostname))
-	}
+		m = append(m, prometheus.MustNewConstMetric(Rt_NumCallAttempts, prometheus.GaugeValue, metricValue1, host.Ip, host.Hostname))
+		m = append(m, prometheus.MustNewConstMetric(Rt_NumCallSucceeded, prometheus.GaugeValue, metricValue2, host.Ip, host.Hostname))
+		m = append(m, prometheus.MustNewConstMetric(Rt_NumCallFailed, prometheus.GaugeValue, metricValue3, host.Ip, host.Hostname))
+		m = append(m, prometheus.MustNewConstMetric(Rt_NumCallCurrentlyUp, prometheus.GaugeValue, metricValue4, host.Ip, host.Hostname))
+		m = append(m, prometheus.MustNewConstMetric(Rt_NumCallAbandonedNoTrunk, prometheus.GaugeValue, metricValue5, host.Ip, host.Hostname))
+		m = append(m, prometheus.MustNewConstMetric(Rt_NumCallUnAnswered, prometheus.GaugeValue, metricValue6, host.Ip, host.Hostname))
+	
 	return m
 }

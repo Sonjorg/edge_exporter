@@ -27,24 +27,7 @@ type LinecardData struct {
 
 }
 
-func LinecardCollector2(successfulHosts []string)  (m []prometheus.Metric) {
-	includedHosts := config.GetIncludedHosts("linecard")//retrieving targets for this collector
-	if (len(includedHosts) <= 0) {
-		log.Print("no hosts, linecard")
-		return nil
-	}
-
-	var hosts []config.IncludedHosts
-	for i := range includedHosts {
-		for j := range successfulHosts {
-			if (includedHosts[i].Ip == successfulHosts[j]) {
-					hosts = append(hosts, includedHosts[j])
-			}
-		}
-	}
-	if len(hosts) <= 0 {
-		return
-	}
+func LinecardCollector2(host *config.HostCompose)  (m []prometheus.Metric) {
 
 	var (
 			Rt_ServiceStatus = prometheus.NewDesc("edge_linecard_ServiceStatus",
@@ -57,16 +40,15 @@ func LinecardCollector2(successfulHosts []string)  (m []prometheus.Metric) {
 			)
 		)
 
-	for i := range hosts {
 
-		phpsessid,err := http.APISessionAuth(hosts[i].Username, hosts[i].Password, hosts[i].Ip)
+		phpsessid,err := http.APISessionAuth(host.Username, host.Password, host.Ip)
 		if err != nil {
-			log.Print("Error auth", hosts[i].Ip, err)
-			continue
+			log.Print("Error auth", host.Ip, err)
+			return 
 		}
 
 		//chassis labels from db or http
-		chassisType, _, err := utils.GetChassisLabels(hosts[i].Ip,phpsessid)
+		chassisType, _, err := utils.GetChassisLabels(host.Ip,phpsessid)
 		if err!= nil {
 			chassisType = "db chassisData failed"
 			log.Print(err)
@@ -79,11 +61,11 @@ func LinecardCollector2(successfulHosts []string)  (m []prometheus.Metric) {
 		} else if (chassisType == "SBC2000") {
 			linecardID = []string {"1", "2"}
 		} else {
-			//Couldnt fetch chassis type from db or http: try next host
-			continue
+			//Couldnt fetch chassis type from db or http: return
+			return
 		}
 			for j := range linecardID {
-					url := "https://"+hosts[i].Ip+"/rest/linecard/"+linecardID[j]
+					url := "https://"+host.Ip+"/rest/linecard/"+linecardID[j]
 					_, data, err := http.GetAPIData(url, phpsessid)
 						if err != nil {
 							log.Print(err)
@@ -100,9 +82,9 @@ func LinecardCollector2(successfulHosts []string)  (m []prometheus.Metric) {
 					labelLocation := lData.LinecardData.Rt_Location
 					metricValue3 := float64(lData.LinecardData.Rt_ServiceStatus)
 					metricValue4 := float64(lData.LinecardData.Rt_Status)
-					m = append(m, prometheus.MustNewConstMetric(Rt_ServiceStatus, prometheus.GaugeValue, metricValue3, hosts[i].Ip, hosts[i].Hostname, "linecard",linecardID[j],labelCardType,labelLocation))
-					m = append(m, prometheus.MustNewConstMetric(Rt_Status, prometheus.GaugeValue, metricValue4, hosts[i].Ip, hosts[i].Hostname, "linecard",linecardID[j]))
+					m = append(m, prometheus.MustNewConstMetric(Rt_ServiceStatus, prometheus.GaugeValue, metricValue3, host.Ip, host.Hostname, "linecard",linecardID[j],labelCardType,labelLocation))
+					m = append(m, prometheus.MustNewConstMetric(Rt_Status, prometheus.GaugeValue, metricValue4, host.Ip, host.Hostname, "linecard",linecardID[j]))
 		}
-	}
+
 	return m
 }
