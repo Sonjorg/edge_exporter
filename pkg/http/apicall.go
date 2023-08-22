@@ -8,7 +8,6 @@ import (
 	"edge_exporter/pkg/database"
 	"edge_exporter/pkg/config"
 	"crypto/tls"
-	"fmt"
 	"log"
 	"net/http"
 	"net/url"
@@ -21,19 +20,20 @@ import (
 
 
 func SBCIsDown(ipaddress string) bool{
-	cfg := config.GetConfig(&config.HostCompose{})
+	cfg := config.GetConf(&config.Config{})
 	timeout := cfg.Authtimeout
 	client := &http.Client{Timeout: time.Duration(timeout) * time.Second}
 	req, err := http.NewRequest("GET", "https://"+ipaddress+"/", nil)
 	if err != nil {
-			log.Println("1", err)
+			log.Println(err)
 	}
 	_, err = client.Do(req)
-	if err != nil {
-			log.Println("2", err)
-	}
+	
 	res := strings.Contains(err.Error(), "certificate")
-	fmt.Println(res)
+	if (!res) {
+		log.Println(err)
+
+	}
 	return !res
 }
 // The functions APISessionAuth(...) and getAPIData(...) utilizes curl-to-go translator but is modified for cookie management and storing these with sqlite.

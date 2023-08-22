@@ -21,12 +21,12 @@ services:
     ports:
       - "4000:5123"
     environment:
-      authtimeout: "3"
+      authtimeout: "2"
       hostname: "test"
-      ipaddress: "ipadr"
-      username: "un"
-      password: "pw"
-      exclude: "dfgfeg,ergergreg,regergerg,ergregreg"
+      ipaddress: "10.237.77.30"
+      username: "prom"
+      password: "prom"
+      exclude: "systemcallstats,linecard"
       routing_database_hours: "24"
   testsondre2:
     image: sondre
