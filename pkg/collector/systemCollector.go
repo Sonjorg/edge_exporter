@@ -90,7 +90,7 @@ func SystemCollector(host *config.HostCompose) (m []prometheus.Metric, successfu
 				prometheus.MustNewConstMetric(
 					Error_ip, prometheus.GaugeValue, 0, host.Ip, host.Hostname),
 			))
-			return nil, false
+			return m, false
 		}
 
 		chassisType, serialNumber, err := utils.GetChassisLabels(host.Ip, "null")
