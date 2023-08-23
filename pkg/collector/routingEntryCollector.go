@@ -217,7 +217,7 @@ func RoutingEntryCollector(host *config.HostCompose)(m []prometheus.Metric) {
 						continue
 					}
 					routingE  := re.Routingtable.Sequence
-					routingEntries := strings.Split(routingE, ",")
+					routingEntries = strings.Split(routingE, ",")
 
 					rtdescription = re.Routingtable.Description
 
@@ -228,7 +228,7 @@ func RoutingEntryCollector(host *config.HostCompose)(m []prometheus.Metric) {
 						log.Print(err)
 					}
 				}
-				
+				fmt.Println(routingEntries)
 				if (len(routingEntries) <= 0) {
 						continue
 				}
