@@ -73,21 +73,42 @@ func TestXML(host *config.HostCompose){
 				log.Print("Error authentication", host.Ip, err)
 				return
 			}
-	_, data, err  := http.GetAPIData("https://"+host.Ip+"/rest/routingtable/2", phpsessid)
+
+			_, data, err  := http.GetAPIData("https://"+host.Ip+"/rest/routingtable", phpsessid)
+			if err != nil {
+				fmt.Print("Error routingtable data", host.Ip, err)
+				return
+			}
+			rt  := &routingTables{}
+			err = xml.Unmarshal(data, &rt) //Converting XML data to variables
+			if err != nil {
+				fmt.Print("XML error routingentry", err)
+				return
+			}
+			routingtables := rt.RoutingTables2.RoutingTables3.Attr
+		fmt.Println(routingtables)
+
+	_, data, err  = http.GetAPIData("https://"+host.Ip+"/rest/routingtable/2", phpsessid)
 	if err != nil {
 			log.Print("Error routingtable data", host.Ip, err)
 			return
 	}
-	rt  := &routingTableX{}
-				err = xml.Unmarshal(data, &rt) //Converting XML data to variables
+	re  := &routingTableX{}
+
+				err = xml.Unmarshal(data, &re) //Converting XML data to variables
 				if err != nil {
-					log.Print("XML error routingentry", err)
+					fmt.Print("XML error routingentry", err)
 					return
 				}
-				d := rt.Routingtable.Description
-				d2:= rt.Routingtable.Sequence
+				d := re.Routingtable.Description
+				d2:= re.Routingtable.Sequence
 
 	fmt.Println(d, d2)
+	_, data, err  = http.GetAPIData("https://"+host.Ip+"/rest/routingtable/", phpsessid)
+	if err != nil {
+			fmt.Print("Error routingtable data", host.Ip, err)
+			return
+	}
 	
 }
 
@@ -150,7 +171,7 @@ func RoutingEntryCollector(host *config.HostCompose)(m []prometheus.Metric) {
 			//If 24 hours has not passed since last data was stored in database, use this data
 			if (!DBexists || utils.Expired(timeSchedule, timeLast))  { //Routing data has expired, fetching new routingentries
 				fmt.Println("Fetching routing data from http")
-				_, data, err  := http.GetAPIData("https://"+host.Ip+"/rest/routingtable", phpsessid)
+				_, data, err  := http.GetAPIData("https://"+host.Ip+"/rest/routingtable/", phpsessid)
 				if err != nil {
 					fmt.Print("Error routingtable data", host.Ip, err)
 					return
@@ -167,7 +188,7 @@ func RoutingEntryCollector(host *config.HostCompose)(m []prometheus.Metric) {
 			}
 
 			if len(routingtables) <= 0 {
-				log.Print("Routingtables empty")
+				fmt.Print("Routingtables empty")
 				return //routingtables emtpy, try next host
 			}
 			for j  := range routingtables {
@@ -216,7 +237,7 @@ func RoutingEntryCollector(host *config.HostCompose)(m []prometheus.Metric) {
 					url  := "https://" + host.Ip + "/rest/routingtable/" + routingtables[j] + "/routingentry/" + routingEntries[k]
 					_, data3, err  := http.GetAPIData(url, phpsessid)
 					if err != nil {
-						log.Print(err)
+						fmt.Print(err)
 						continue
 					}
 

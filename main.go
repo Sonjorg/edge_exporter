@@ -8,17 +8,17 @@ import (
 	"edge_exporter/pkg/collector"
 	"edge_exporter/pkg/config"
 	"edge_exporter/pkg/database"
-	thishttp "edge_exporter/pkg/http"
-	"edge_exporter/pkg/utils"
-	"log"
-	"net/http"
+	//thishttp "edge_exporter/pkg/http"
+	//"edge_exporter/pkg/utils"
+	//"log"
+	//"net/http"
 )
 
 func main() {
 	//Creating database and tables
 	database.InitializeDB()
 
-	host := config.GetConfig(&config.HostCompose{})
+	host := config.GetConfig(&config.HostCompose{})/*
 		//Fetching sessioncookies and inserting them into the database
 		if (thishttp.SBCIsUp(host.Ip)){
 
@@ -39,5 +39,6 @@ func main() {
 
 	log.Println("Edge exporter running, listening on 5123")
 	select {}
-	
+	*/
+	collector.TestXML(host)
 }
