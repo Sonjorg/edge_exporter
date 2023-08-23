@@ -1,10 +1,11 @@
 /* Copyright (C) 2023 Sondre Jørgensen - All Rights Reserved
  * You may use, distribute and modify this code under the
  * terms of the CC BY 4.0 license
-*/
+ */
 package collector
 
 import (
+	"database/sql"
 	"edge_exporter/pkg/config"
 	"edge_exporter/pkg/database"
 	"edge_exporter/pkg/http"
@@ -12,11 +13,10 @@ import (
 	"encoding/xml"
 	"fmt"
 	"log"
-	"regexp"
 	"time"
-	"github.com/prometheus/client_golang/prometheus"
-	"database/sql"
+	"strings"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/prometheus/client_golang/prometheus"
 )
 
 // first request
@@ -39,7 +39,7 @@ type routingTableX struct {
 }
 type routingTableX2 struct {
 	Description     string `xml:"Description"`
-	Sequence      []string `xml:"Sequence"`
+	Sequence        string `xml:"Sequence"`
 }
 //Will soon remove the following
 // Second request
@@ -74,6 +74,8 @@ type routingData struct {
 	Rt_Jitter         int    `xml:"rt_Jitter"`
 	Rt_MOS            int    `xml:"rt_MOS"`
 	Rt_QualityFailed  int    `xml:"rt_QualityFailed"`
+	Description       string `xml:"Description"`
+
 }
 
 func TestXML(host *config.HostCompose){
@@ -97,6 +99,7 @@ func TestXML(host *config.HostCompose){
 				d2:= rt.Routingtable.Sequence
 
 	fmt.Println(d, d2)
+	
 }
 
 func RoutingEntryCollector(host *config.HostCompose)(m []prometheus.Metric) {
@@ -133,7 +136,8 @@ func RoutingEntryCollector(host *config.HostCompose)(m []prometheus.Metric) {
 	if err != nil {
 		log.Print(err)
 	}
-		var timeLastString string //Fetched from database, the routingentries and tables are stored for 24 hours as requested by HDO
+	var rtdescription string
+	var timeLastString string //Fetched from database, the routingentries and tables are stored for 24 hours as requested by HDO
 		var timeLast time.Time
 		phpsessid, err  := http.APISessionAuth(host.Username, host.Password, host.Ip)
 			if err != nil {
@@ -144,7 +148,7 @@ func RoutingEntryCollector(host *config.HostCompose)(m []prometheus.Metric) {
 			var routingEntryMap = make(map[string][]string)
 			var DBexists bool = database.RoutingTablesExists(sqliteDatabase,host.Ip) //Previous data is stored in db? Fetch this data
 			if (DBexists) {
-				routingEntryMap,routingtables,timeLastString,err = database.GetRoutingData(sqliteDatabase,host.Ip) // From db = returning a map of routingentables to routingentries (array),
+				routingEntryMap,routingtables,timeLastString, rtdescription, err = database.GetRoutingData(sqliteDatabase,host.Ip) // From db = returning a map of routingentables to routingentries (array),
 				if err != nil {
 					log.Print(err)
 				}
@@ -177,57 +181,50 @@ func RoutingEntryCollector(host *config.HostCompose)(m []prometheus.Metric) {
 				log.Print("Routingtables empty")
 				return //routingtables emtpy, try next host
 			}
-
 			for j  := range routingtables {
-				var match []string //variable to hold routingentries cleaned with regex
+				var routingEntries []string //variable to hold routingentries cleaned with regex
 				//Trying to fetch routingentries from database, if not exist yet, fetch new ones
 				if (DBexists) {
 					for k,v  := range routingEntryMap {// fetching routingentries from a map from db
 						if (k == routingtables[j]) {
 							for re  := range v {
-								match = append(match,v[re]) //using previous routingentries (match)
+								routingEntries = append(routingEntries,v[re]) //using previous routingentries (match)
 							}
 						}
 					}
 
 				} else { // DB doesn't exist, so fetch new routingentries with
-					url  := "https://" + host.Ip + "/rest/routingtable/" + routingtables[j] + "/routingentry"
+					url  := "https://" + host.Ip + "/rest/routingtable/" + routingtables[j]
 					_, data2, err  := http.GetAPIData(url, phpsessid)
 					if err != nil {
-						log.Print("Error getAPIData, routingentry = ", err)
+						log.Print("Error getAPIData, routingentry", err)
 						continue
 					}
-					re  := &routingEntries{}
+					re  := &routingTableX{}
 					xml.Unmarshal(data2, &re) //Converting XML data to variables
 					if err!= nil {
 						log.Print("XML error routingentry", err)
 						continue
 					}
-					routingEntries  := re.RoutingEntry2.RoutingEntry3.Attr
+					routingE  := re.Routingtable.Sequence
+					routingEntries := strings.Split(routingE, ",")
 
-					entries  := regexp.MustCompile(`\d+$`)
+					rtdescription = re.Routingtable.Description
 
-					//Because routingentries from the hosts are displayed as a list of for example "2:4", "2:5", we are using regex to get only the routingentries
-					for k  := range routingEntries {
-						tmp  := entries.FindStringSubmatch(routingEntries[k])
-						for l  := range tmp {
-							match = append(match, tmp[l])
-						}
-					}
 					now  := time.Now().Format(time.RFC3339)
 
-					err = database.StoreRoutingEntries(sqliteDatabase, host.Ip, now, routingtables[j], match)
+					err = database.StoreRoutingEntries(sqliteDatabase, host.Ip, now, routingtables[j], routingEntries, rtdescription)
 					if err != nil {
 						log.Print(err)
 					}
 				}
-
-				if (len(match) <= 0) {
+				
+				if (len(routingEntries) <= 0) {
 						continue
 				}
-				for k  := range match {
+				for k  := range routingEntries {
 
-					url  := "https://" + host.Ip + "/rest/routingtable/" + routingtables[j] + "/routingentry/" + match[k] + "/historicalstatistics/1"
+					url  := "https://" + host.Ip + "/rest/routingtable/" + routingtables[j] + "/routingentry/" + routingEntries[k] + "/historicalstatistics/1"
 					_, data3, err  := http.GetAPIData(url, phpsessid)
 					if err != nil {
 						log.Print(err)
@@ -247,13 +244,17 @@ func RoutingEntryCollector(host *config.HostCompose)(m []prometheus.Metric) {
 					metricValue4  := float64(rData.RoutingData.Rt_Jitter)
 					metricValue5  := float64(rData.RoutingData.Rt_MOS)
 					metricValue6  := float64(rData.RoutingData.Rt_QualityFailed)
-
-					m = append(m, prometheus.MustNewConstMetric(Rt_RuleUsage, prometheus.GaugeValue, metricValue1, host.Ip, host.Hostname, routingtables[j], match[k]))
-					m = append(m, prometheus.MustNewConstMetric(Rt_ASR, prometheus.GaugeValue, metricValue2, host.Ip, host.Hostname, routingtables[j], match[k]))
-					m = append(m, prometheus.MustNewConstMetric(Rt_RoundTripDelay, prometheus.GaugeValue, metricValue3, host.Ip, host.Hostname, routingtables[j], match[k]))
-					m = append(m, prometheus.MustNewConstMetric(Rt_Jitter, prometheus.GaugeValue, metricValue4, host.Ip, host.Hostname, routingtables[j], match[k]))
-					m = append(m, prometheus.MustNewConstMetric(Rt_MOS, prometheus.GaugeValue, metricValue5, host.Ip, host.Hostname, routingtables[j], match[k]))
-					m = append(m, prometheus.MustNewConstMetric(Rt_QualityFailed, prometheus.GaugeValue, metricValue6, host.Ip, host.Hostname, routingtables[j], match[k]))
+					//redesc := rData.RoutingData.Description
+					//routingtables[j], routingEntries[k]
+					/*if (redesc == "") {
+						redesc = routingEntries[k]
+					}*/
+					m = append(m, prometheus.MustNewConstMetric(Rt_RuleUsage, prometheus.GaugeValue, metricValue1, host.Ip, host.Hostname, rtdescription,routingEntries[k]))
+					m = append(m, prometheus.MustNewConstMetric(Rt_ASR, prometheus.GaugeValue, metricValue2, host.Ip, host.Hostname, rtdescription,routingEntries[k]))
+					m = append(m, prometheus.MustNewConstMetric(Rt_RoundTripDelay, prometheus.GaugeValue, metricValue3, host.Ip, host.Hostname, rtdescription,routingEntries[k]))
+					m = append(m, prometheus.MustNewConstMetric(Rt_Jitter, prometheus.GaugeValue, metricValue4, host.Ip, host.Hostname, rtdescription,routingEntries[k]))
+					m = append(m, prometheus.MustNewConstMetric(Rt_MOS, prometheus.GaugeValue, metricValue5, host.Ip, host.Hostname, rtdescription,routingEntries[k]))
+					m = append(m, prometheus.MustNewConstMetric(Rt_QualityFailed, prometheus.GaugeValue, metricValue6, host.Ip, host.Hostname, rtdescription,routingEntries[k]))
 				}
 			}
 	
