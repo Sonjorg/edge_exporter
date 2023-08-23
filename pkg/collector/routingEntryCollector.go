@@ -33,6 +33,7 @@ type routingTables3 struct {
 	Value string   `xml:",chardata"`
 }
 
+// Second request
 type routingTableX struct {
 	XMLName       xml.Name       `xml:"root"`
 	Routingtable  routingTableX2 `xml:"routingtable"`
@@ -42,7 +43,6 @@ type routingTableX2 struct {
 	Sequence        string `xml:"Sequence"`
 }
 //Will soon remove the following
-// Second request
 // rest/routingtable/4/routingentry
 
 // Third request
@@ -152,13 +152,13 @@ func RoutingEntryCollector(host *config.HostCompose)(m []prometheus.Metric) {
 				fmt.Println("Fetching routing data from http")
 				_, data, err  := http.GetAPIData("https://"+host.Ip+"/rest/routingtable", phpsessid)
 				if err != nil {
-					log.Print("Error routingtable data", host.Ip, err)
+					fmt.Print("Error routingtable data", host.Ip, err)
 					return
 				}
 				rt  := &routingTables{}
 				err = xml.Unmarshal(data, &rt) //Converting XML data to variables
 				if err != nil {
-					log.Print("XML error routingentry", err)
+					fmt.Print("XML error routingentry", err)
 					return
 				}
 				routingtables = rt.RoutingTables2.RoutingTables3.Attr
@@ -186,13 +186,13 @@ func RoutingEntryCollector(host *config.HostCompose)(m []prometheus.Metric) {
 					url  := "https://" + host.Ip + "/rest/routingtable/" + routingtables[j]
 					_, data2, err  := http.GetAPIData(url, phpsessid)
 					if err != nil {
-						log.Print("Error getAPIData, routingentry", err)
+						fmt.Print("Error getAPIData, routingentry", err)
 						continue
 					}
 					re  := &routingTableX{}
 					xml.Unmarshal(data2, &re) //Converting XML data to variables
 					if err!= nil {
-						log.Print("XML error routingentry", err)
+						fmt.Print("XML error routingentry", err)
 						continue
 					}
 					routingE  := re.Routingtable.Sequence
@@ -223,7 +223,7 @@ func RoutingEntryCollector(host *config.HostCompose)(m []prometheus.Metric) {
 					rData  := &rSBCdata{}
 					xml.Unmarshal(data3, &rData) //Converting XML data to variables
 					if err!= nil {
-						log.Print("XML error routing", err)
+						fmt.Print("XML error routing", err)
 						continue
 					}
 
