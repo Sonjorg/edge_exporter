@@ -44,24 +44,13 @@ type routingTableX2 struct {
 //Will soon remove the following
 // Second request
 // rest/routingtable/4/routingentry
-type routingEntries struct {
-	XMLName       xml.Name      `xml:"root"`
-	RoutingEntry2 routingEntry2 `xml:"routingentry_list"`
-}
-type routingEntry2 struct {
-	RoutingEntry3 routingEntry3 `xml:"routingentry_pk"`
-}
-type routingEntry3 struct {
-	Attr  []string `xml:"id,attr"`
-	Value string   `xml:",chardata"`
-}
 
 // Third request
 // rest/routingtable/2/routingentry/1/historicalstatistics/1
 type rSBCdata struct {
 	XMLname     xml.Name    `xml:"root"`
 	Status      rStatus     `xml:"status"`
-	RoutingData routingData `xml:"historicalstatistics"`
+	RoutingData routingData `xml:"routingentry"`
 }
 type rStatus struct {
 	HTTPcode string `xml:"http_code"`
@@ -224,7 +213,7 @@ func RoutingEntryCollector(host *config.HostCompose)(m []prometheus.Metric) {
 				}
 				for k  := range routingEntries {
 
-					url  := "https://" + host.Ip + "/rest/routingtable/" + routingtables[j] + "/routingentry/" + routingEntries[k] + "/historicalstatistics/1"
+					url  := "https://" + host.Ip + "/rest/routingtable/" + routingtables[j] + "/routingentry/" + routingEntries[k]
 					_, data3, err  := http.GetAPIData(url, phpsessid)
 					if err != nil {
 						log.Print(err)
@@ -244,17 +233,17 @@ func RoutingEntryCollector(host *config.HostCompose)(m []prometheus.Metric) {
 					metricValue4  := float64(rData.RoutingData.Rt_Jitter)
 					metricValue5  := float64(rData.RoutingData.Rt_MOS)
 					metricValue6  := float64(rData.RoutingData.Rt_QualityFailed)
-					//redesc := rData.RoutingData.Description
+					redesc := rData.RoutingData.Description
 					//routingtables[j], routingEntries[k]
-					/*if (redesc == "") {
+					if (redesc == "") {
 						redesc = routingEntries[k]
-					}*/
-					m = append(m, prometheus.MustNewConstMetric(Rt_RuleUsage, prometheus.GaugeValue, metricValue1, host.Ip, host.Hostname, rtdescription,routingEntries[k]))
-					m = append(m, prometheus.MustNewConstMetric(Rt_ASR, prometheus.GaugeValue, metricValue2, host.Ip, host.Hostname, rtdescription,routingEntries[k]))
-					m = append(m, prometheus.MustNewConstMetric(Rt_RoundTripDelay, prometheus.GaugeValue, metricValue3, host.Ip, host.Hostname, rtdescription,routingEntries[k]))
-					m = append(m, prometheus.MustNewConstMetric(Rt_Jitter, prometheus.GaugeValue, metricValue4, host.Ip, host.Hostname, rtdescription,routingEntries[k]))
-					m = append(m, prometheus.MustNewConstMetric(Rt_MOS, prometheus.GaugeValue, metricValue5, host.Ip, host.Hostname, rtdescription,routingEntries[k]))
-					m = append(m, prometheus.MustNewConstMetric(Rt_QualityFailed, prometheus.GaugeValue, metricValue6, host.Ip, host.Hostname, rtdescription,routingEntries[k]))
+					}
+					m = append(m, prometheus.MustNewConstMetric(Rt_RuleUsage, prometheus.GaugeValue, metricValue1, host.Ip, host.Hostname, rtdescription,redesc))
+					m = append(m, prometheus.MustNewConstMetric(Rt_ASR, prometheus.GaugeValue, metricValue2, host.Ip, host.Hostname, rtdescription,redesc))
+					m = append(m, prometheus.MustNewConstMetric(Rt_RoundTripDelay, prometheus.GaugeValue, metricValue3, host.Ip, host.Hostname, rtdescription,redesc))
+					m = append(m, prometheus.MustNewConstMetric(Rt_Jitter, prometheus.GaugeValue, metricValue4, host.Ip, host.Hostname, rtdescription,redesc))
+					m = append(m, prometheus.MustNewConstMetric(Rt_MOS, prometheus.GaugeValue, metricValue5, host.Ip, host.Hostname, rtdescription,redesc))
+					m = append(m, prometheus.MustNewConstMetric(Rt_QualityFailed, prometheus.GaugeValue, metricValue6, host.Ip, host.Hostname, rtdescription,redesc))
 				}
 			}
 	
