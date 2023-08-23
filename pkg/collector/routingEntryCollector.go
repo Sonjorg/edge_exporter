@@ -33,7 +33,14 @@ type routingTables3 struct {
 	Value string   `xml:",chardata"`
 }
 
-
+type routingTableX struct {
+	XMLName       xml.Name       `xml:"root"`
+	Routingtable  routingTableX2 `xml:"routingtable"`
+}
+type routingTableX2 struct {
+	Description     string `xml:"Description"`
+	Sequence      []string `xml:"Sequence"`
+}
 //Will soon remove the following
 // Second request
 // rest/routingtable/4/routingentry
@@ -67,6 +74,29 @@ type routingData struct {
 	Rt_Jitter         int    `xml:"rt_Jitter"`
 	Rt_MOS            int    `xml:"rt_MOS"`
 	Rt_QualityFailed  int    `xml:"rt_QualityFailed"`
+}
+
+func TestXML(host *config.HostCompose){
+	phpsessid, err  := http.APISessionAuth(host.Username, host.Password, host.Ip)
+			if err != nil {
+				log.Print("Error authentication", host.Ip, err)
+				return
+			}
+	_, data, err  := http.GetAPIData("https://"+host.Ip+"/rest/routingtable/2", phpsessid)
+	if err != nil {
+			log.Print("Error routingtable data", host.Ip, err)
+			return
+	}
+	rt  := &routingTableX{}
+				err = xml.Unmarshal(data, &rt) //Converting XML data to variables
+				if err != nil {
+					log.Print("XML error routingentry", err)
+					return
+				}
+				d := rt.Routingtable.Description
+				d2:= rt.Routingtable.Sequence
+
+	fmt.Println(d, d2)
 }
 
 func RoutingEntryCollector(host *config.HostCompose)(m []prometheus.Metric) {
