@@ -114,6 +114,7 @@ func TestXML(host *config.HostCompose){
 					if err!= nil {
 						fmt.Print("XML error routing", err)
 					}
+	fmt.Println(rData)
 	
 }
 
