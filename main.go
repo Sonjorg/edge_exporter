@@ -18,7 +18,6 @@ func main() {
 	//Creating database and tables
 	database.InitializeDB()
 
-	collector.TestXML()
 	host := config.GetConfig(&config.HostCompose{})
 		//Fetching sessioncookies and inserting them into the database
 		if (thishttp.SBCIsUp(host.Ip)){

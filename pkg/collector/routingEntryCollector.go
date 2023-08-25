@@ -88,7 +88,7 @@ func TestXML(host *config.HostCompose){
 			routingtables := rt.RoutingTables2.RoutingTables3.Attr
 		fmt.Println("routingtables ",routingtables)
 
-	_, data, err  = http.GetAPIData("https://"+host.Ip+"/rest/routingtable/2", phpsessid)
+	_, data, err  = http.GetAPIData("https://"+host.Ip+"/rest/routingtable/2/", phpsessid)
 	if err != nil {
 			log.Print("Error routingtable data", host.Ip, err)
 			return
@@ -104,11 +104,16 @@ func TestXML(host *config.HostCompose){
 				d2:= re.Routingtable.Sequence
 
 	fmt.Println("Sequence ",d, d2)
-	_, data, err  = http.GetAPIData("https://"+host.Ip+"/rest/routingtable/", phpsessid)
+	_, data3, err  := http.GetAPIData("https://"+host.Ip+"/rest/routingtable/routingentry/4", phpsessid)
 	if err != nil {
 			fmt.Print("Error routingtable data", host.Ip, err)
 			return
 	}
+	rData  := &rSBCdata{}
+					xml.Unmarshal(data3, &rData) //Converting XML data to variables
+					if err!= nil {
+						fmt.Print("XML error routing", err)
+					}
 	
 }
 
