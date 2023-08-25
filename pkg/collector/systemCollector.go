@@ -108,7 +108,7 @@ func SystemCollector(host *config.HostCompose) (m []prometheus.Metric, successfu
 					Error_ip, prometheus.GaugeValue, 0, host.Ip, host.Hostname),
 			))
 
-			return nil, false//trying next ip address
+			return m, false//trying next ip address
 		}
 		//fetching labels from DB or if not exist yet; from router
 		if chassisType == "Error fetching chassisinfo" {
@@ -127,7 +127,7 @@ func SystemCollector(host *config.HostCompose) (m []prometheus.Metric, successfu
 				prometheus.MustNewConstMetric(
 					Error_ip, prometheus.GaugeValue, 0, host.Ip, host.Hostname),
 			))
-			return nil, false
+			return m, false
 		}
 		ssbc := &sSBCdata{}
 		err = xml.Unmarshal(data, &ssbc) //Converting XML data to variables

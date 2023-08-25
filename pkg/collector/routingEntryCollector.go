@@ -86,7 +86,7 @@ func TestXML(host *config.HostCompose){
 				return
 			}
 			routingtables := rt.RoutingTables2.RoutingTables3.Attr
-		fmt.Println(routingtables)
+		fmt.Println("routingtables ",routingtables)
 
 	_, data, err  = http.GetAPIData("https://"+host.Ip+"/rest/routingtable/2", phpsessid)
 	if err != nil {
@@ -103,7 +103,7 @@ func TestXML(host *config.HostCompose){
 				d := re.Routingtable.Description
 				d2:= re.Routingtable.Sequence
 
-	fmt.Println(d, d2)
+	fmt.Println("Sequence ",d, d2)
 	_, data, err  = http.GetAPIData("https://"+host.Ip+"/rest/routingtable/", phpsessid)
 	if err != nil {
 			fmt.Print("Error routingtable data", host.Ip, err)
@@ -160,11 +160,11 @@ func RoutingEntryCollector(host *config.HostCompose)(m []prometheus.Metric) {
 			if (DBexists) {
 				routingEntryMap,routingtables,timeLastString, rtdescription, err = database.GetRoutingData(sqliteDatabase,host.Ip) // From db = returning a map of routingentables to routingentries (array),
 				if err != nil {
-					log.Print(err)
+					fmt.Print(err)
 				}
 				timeLast,err = time.Parse(time.RFC3339, timeLastString)
 				if err != nil {
-					log.Print(err)
+					fmt.Print(err)
 				}
 			}
 			timeSchedule  := host.RoutingEntryTime
@@ -225,7 +225,7 @@ func RoutingEntryCollector(host *config.HostCompose)(m []prometheus.Metric) {
 
 					err = database.StoreRoutingEntries(sqliteDatabase, host.Ip, now, routingtables[j], routingEntries, rtdescription)
 					if err != nil {
-						log.Print(err)
+						fmt.Print(err)
 					}
 				}
 				fmt.Println(routingEntries)
