@@ -88,33 +88,38 @@ func TestXML(host *config.HostCompose){
 			routingtables := rt.RoutingTables2.RoutingTables3.Attr
 		fmt.Println("routingtables ",routingtables)
 
-	_, data, err  = http.GetAPIData("https://"+host.Ip+"/rest/routingtable/2/", phpsessid)
-	if err != nil {
-			log.Print("Error routingtable data", host.Ip, err)
-			return
-	}
-	re  := &routingTableX{}
-
-				err = xml.Unmarshal(data, &re) //Converting XML data to variables
+		for i := range routingtables {
+				_, data, err  = http.GetAPIData("https://"+host.Ip+"/rest/routingtable/"+routingtables[i], phpsessid)
 				if err != nil {
-					fmt.Print("XML error routingentry", err)
-					return
+						log.Print("Error routingtable data", host.Ip, err)
+						return
 				}
-				d := re.Routingtable.Description
-				d2:= re.Routingtable.Sequence
+				re  := &routingTableX{}
 
-	fmt.Println("Sequence ",d, d2)
-	_, data3, err  := http.GetAPIData("https://"+host.Ip+"/rest/routingtable/routingentry/4", phpsessid)
-	if err != nil {
-			fmt.Print("Error routingtable data", host.Ip, err)
-			return
-	}
-	rData  := &rSBCdata{}
-					xml.Unmarshal(data3, &rData) //Converting XML data to variables
-					if err!= nil {
-						fmt.Print("XML error routing", err)
+							err = xml.Unmarshal(data, &re) //Converting XML data to variables
+							if err != nil {
+								fmt.Print("XML error routingentry", err)
+								return
+							}
+							d := re.Routingtable.Description
+							d2:= re.Routingtable.Sequence
+							routingentries := strings.Split(d2, ",")
+
+				fmt.Println("Sequence ",d, d2)
+				for j := range routingentries {
+					_, data3, err  := http.GetAPIData("https://"+host.Ip+"/rest/routingtable/"+ routingtables[i] + "/routingentry/"+routingentries[j], phpsessid)
+					if err != nil {
+							fmt.Print("Error routingtable data", host.Ip, err)
+							return
 					}
-	fmt.Println(rData)
+					rData  := &rSBCdata{}
+									xml.Unmarshal(data3, &rData) //Converting XML data to variables
+									if err!= nil {
+										fmt.Print("XML error routing", err)
+									}
+					fmt.Println(rData)
+				}
+			}
 	
 }
 
@@ -263,7 +268,7 @@ func RoutingEntryCollector(host *config.HostCompose)(m []prometheus.Metric) {
 					redesc := rData.RoutingData.Description
 					//routingtables[j], routingEntries[k]
 					if (redesc == "") {
-						redesc = routingEntries[k]
+						redesc = string(routingEntries[k])
 					}
 					m = append(m, prometheus.MustNewConstMetric(Rt_RuleUsage, prometheus.GaugeValue, metricValue1, host.Ip, host.Hostname, rtdescription,redesc))
 					m = append(m, prometheus.MustNewConstMetric(Rt_ASR, prometheus.GaugeValue, metricValue2, host.Ip, host.Hostname, rtdescription,redesc))
