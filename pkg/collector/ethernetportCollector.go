@@ -21,34 +21,18 @@ type ethernetData struct {
 Href                          string `xml:"href,attr"`
 IfName		                  string `xml:"ifName"`
 IfAlias                       string `xml:"ifAlias"`
-IfRedundancy                  int    `xml:"ifRedundancy"`
-IfRedundantPort               int    `xml:"ifRedundantPort"`
 Rt_ifInBroadcastPkts		  int    `xml:"rt_ifInBroadcastPkts"`
 Rt_ifInDiscards		          int    `xml:"rt_ifInDiscards"`
 Rt_ifInErrors		          int    `xml:"rt_ifInErrors"`
-Rt_ifInFCSErrors		      int    `xml:"rt_ifInFCSErrors"`
-Rt_ifInFragmentedPkts		  int    `xml:"rt_ifInFragmentedPkts"`
 Rt_ifInMulticastPkts		  int    `xml:"rt_ifInMulticastPkts"`
-Rt_ifInOctets		          int    `xml:"rt_ifInOctets"`
 Rt_ifInOverSizedPkts		  int    `xml:"rt_ifInOverSizedPkts"`
 Rt_ifInUcastPkts		      int    `xml:"rt_ifInUcastPkts"`
 Rt_ifInUndersizedPkts		  int    `xml:"rt_ifInUndersizedPkts"`
-Rt_ifInUnknwnProto		      int    `xml:"rt_ifInUnknwnProto"`
-Rt_ifInterfaceIndex	          int    `xml:"rt_ifInterfaceIndex"`
-Rt_ifLastChange		          int    `xml:"rt_ifLastChange"`
-Rt_ifMtu		              int    `xml:"rt_ifMtu"`
-Rt_ifOperatorStatus		      int    `xml:"rt_ifOperatorStatus"`
 Rt_ifOutBroadcastPkts		  int    `xml:"rt_ifOutBroadcastPkts"`//Displays the number of transmitted broadcast packets on this port.
-Rt_ifOutDeferredTransmissions int    `xml:"rt_ifOutDeferredTransmissions"`//Displays the number of Deferred Transmission errors detected on this port.
 Rt_ifOutDiscards		      int    `xml:"rt_ifOutDiscards"` //Displays the number of discard errors detected on this port.
 Rt_ifOutErrors		          int    `xml:"rt_ifOutErrors"` //Displays the number of errors detected on this port.
-Rt_ifOutLateCollissions		  int    `xml:"rt_ifOutLateCollissions"` //Displays the number of Late Collision errors detected on this port.
 Rt_ifOutMulticastPkts		  int    `xml:"rt_ifOutMulticastPkts"` //Displays the number of transmitted multicast packets on this port.
-Rt_ifOutOctets		          int    `xml:"rt_ifOutOctets"` //Displays the number of transmitted octets on this port.
 Rt_ifOutUcastPkts	    	  int    `xml:"rt_ifOutUcastPkts"` //Displays the number of transmitted unicast packets on this port.
-Rt_ifSpeed	                  int    `xml:"rt_ifSpeed"`
-Rt_redundancyRole		      int    `xml:"rt_redundancyRole"`
-Rt_redundancyState		      int    `xml:"rt_redundancyState"`
 }
 
 func EthernetPortCollector(host *config.HostCompose)(m []prometheus.Metric) {
