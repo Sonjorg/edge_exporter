@@ -25,7 +25,6 @@ func main() {
 	}
 		//Fetching sessioncookies and inserting them into the database
 		if (thishttp.SBCIsUp(host.Ip)){
-			collector.TestXML(host)
 
 			phpsessid, err := thishttp.APISessionAuth(host.Username, host.Password, host.Ip)
 			if err!= nil {
@@ -45,5 +44,4 @@ func main() {
 	log.Println("Edge exporter running, listening on 5123")
 	select {}
 	
-	//collector.TestXML()
 }
