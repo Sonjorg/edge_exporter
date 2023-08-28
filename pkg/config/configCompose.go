@@ -29,7 +29,7 @@ func getEnv(key, defaultValue string) string {
     return value
 }
 
-func GetConfig(hostCompose *HostCompose) *HostCompose{
+func GetConfig(hostCompose *HostCompose) (*HostCompose, error){
         authtimeout, err := strconv.ParseInt(getEnv("Authtimeout", "2"), 10, 64)
         if err != nil {
 			fmt.Print(err)
@@ -51,10 +51,13 @@ func GetConfig(hostCompose *HostCompose) *HostCompose{
             Exclude: exclude, 
             RoutingEntryTime: routingEntryTime,
         }
-    return hostCompose
+    return hostCompose, err
 }
 func Excluded(collectorName string) bool {
-    cfg := GetConfig(&HostCompose{})
+    cfg, err := GetConfig(&HostCompose{})
+    if err != nil {
+        fmt.Print(err)
+    }
     for i := range cfg.Exclude {
         if (cfg.Exclude[i] == collectorName) {
             return true

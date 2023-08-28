@@ -16,7 +16,10 @@ type AllCollectors struct{
 }
 
 func (m *AllCollectors) Probe() {
-	cfg := config.GetConfig(&config.HostCompose{})
+	cfg, err := config.GetConfig(&config.HostCompose{})
+	if err != nil {
+		println("probe ", err)
+	}
 
 	metrics, success := SystemCollector(cfg)
 	for i := range metrics {

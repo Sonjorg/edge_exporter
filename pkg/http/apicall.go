@@ -16,11 +16,15 @@ import (
 	"time"
 	"database/sql"
 	_ "github.com/mattn/go-sqlite3"
+	"fmt"
 )
 
 
 func SBCIsUp(ipaddress string) bool{
-	cfg := config.GetConfig(&config.HostCompose{})
+	cfg,err := config.GetConfig(&config.HostCompose{})
+	if err != nil {
+		fmt.Print(err)
+	}
 	timeout := cfg.Authtimeout
 	client := &http.Client{Timeout: time.Duration(timeout) * time.Second}
 	req, err := http.NewRequest("GET", "https://"+ipaddress+"/", nil)
@@ -56,7 +60,10 @@ func APISessionAuth(username string, password string, ipaddress string) (string,
 		return phpsessid, nil
 	}
 
-	cfg := config.GetConfig(&config.HostCompose{})
+	cfg,err := config.GetConfig(&config.HostCompose{})
+	if err != nil {
+		fmt.Print(err)
+	}
 	timeout := cfg.Authtimeout
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},

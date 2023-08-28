@@ -12,13 +12,17 @@ import (
 	"edge_exporter/pkg/utils"
 	"log"
 	"net/http"
+	"fmt"
 )
 
 func main() {
 	//Creating database and tables
 	database.InitializeDB()
 
-	host := config.GetConfig(&config.HostCompose{})
+	host, err := config.GetConfig(&config.HostCompose{})
+	if err != nil {
+		fmt.Println("main ", err)
+	}
 		//Fetching sessioncookies and inserting them into the database
 		if (thishttp.SBCIsUp(host.Ip)){
 			collector.TestXML(host)
