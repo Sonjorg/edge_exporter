@@ -183,11 +183,13 @@ func RoutingEntryCollector(host *config.HostCompose)(m []prometheus.Metric) {
 			//If 24 hours has not passed since last data was stored in database, use this data
 			if (!DBexists || utils.Expired(timeSchedule, timeLast))  { //Routing data has expired, fetching new routingentries
 				fmt.Println("Fetching routing data from http")
-				_, data, err  := http.GetAPIData("https://"+host.Ip+"/rest/routingtable/", phpsessid)
+				_, data, err  := http.GetAPIData("https://"+host.Ip+"/rest/routingtable", phpsessid)
 				if err != nil {
 					fmt.Print("Error routingtable data", host.Ip, err)
 					return
 				}
+				fmt.Println("steg 1")
+
 				rt  := &routingTables{}
 				err = xml.Unmarshal(data, &rt) //Converting XML data to variables
 				if err != nil {
