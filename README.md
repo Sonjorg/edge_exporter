@@ -3,6 +3,9 @@
 Used together with a Prometheus server where metrics can be gathered from sbc-host-ip:5123/metrics. Metric types are grouped as collectors where each collector can be excluded for each host, ref. Configuration.
 #### Developed by Sondre Jørgensen in cooperation with Sang Ngoc Nguyen at NTNU: Norwegian University of Science and Technology, sondre2409@gmail.com and 29sangu@gmail.com as part of our bachelor's thesis
 ### Configuration
+
+
+#### Configuration v2
 #### The exporter must be configured in config.yml in the root folder of this repository.
 ```
 ---
@@ -49,6 +52,57 @@ You should always use an external config.yml. Start an instance with:
 
 Metrics can be gathered from ```host:5123/metrics```
 
+#### Configuration version 2.0 (branch HDO)
+```
+version: "2.3"
+
+services:
+
+  sbchost1:
+    image: sondrjor/edge_exporter:2.0
+    container_name: sbchost1
+    user: root
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 10m
+        max-file: "3"
+    restart: unless-stopped
+    mem_reservation: "10M"
+    mem_limit: "20M"
+    ports:
+      - "4000:5123"
+    environment:
+      authtimeout: "2"
+      hostname: "sbchost1"
+      ipaddress: ""
+      username: ""
+      password: ""
+      exclude: "routingentry, systemcallstats, ethernetport,linecard,diskpartition"
+      routing_database_hours: "24"
+  sbchost2:
+    image: sondrjor/edge_exporter:2.0
+    container_name: sbchost2
+    user: root
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 10m
+        max-file: "3"
+    restart: unless-stopped
+    mem_reservation: "10M"
+    mem_limit: "250M"
+    ports:
+      - "4001:5123"
+    environment:
+      authtimeout: "2"
+      hostname: "test"
+      ipaddress: "ipadr"
+      username: "un"
+      password: "pw"
+      exclude: "systemcallstats,linecard"
+      routing_database_hours: "24"
+```
 
 ## Collectors and Metrics
 List of Collectors, the API endpoints they use and metrics they support:
