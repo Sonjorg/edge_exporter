@@ -25,9 +25,7 @@ Rt_ifInBroadcastPkts		  int    `xml:"rt_ifInBroadcastPkts"`
 Rt_ifInDiscards		          int    `xml:"rt_ifInDiscards"`
 Rt_ifInErrors		          int    `xml:"rt_ifInErrors"`
 Rt_ifInMulticastPkts		  int    `xml:"rt_ifInMulticastPkts"`
-Rt_ifInOverSizedPkts		  int    `xml:"rt_ifInOverSizedPkts"`
 Rt_ifInUcastPkts		      int    `xml:"rt_ifInUcastPkts"`
-Rt_ifInUndersizedPkts		  int    `xml:"rt_ifInUndersizedPkts"`
 Rt_ifOutBroadcastPkts		  int    `xml:"rt_ifOutBroadcastPkts"`//Displays the number of transmitted broadcast packets on this port.
 Rt_ifOutDiscards		      int    `xml:"rt_ifOutDiscards"` //Displays the number of discard errors detected on this port.
 Rt_ifOutErrors		          int    `xml:"rt_ifOutErrors"` //Displays the number of errors detected on this port.
@@ -55,16 +53,8 @@ var (
 			"Displays the number of received multicast packets on this port.",
 			[]string{"hostip", "hostname", "job","ethernetportID","ifName","ifAlias"}, nil,
 		)
-		Rt_ifInOverSizedPkts = prometheus.NewDesc("edge_ethernet_ifInOverSizedPkts",
-			"Displays the number of Oversized Packet errors detected on this port.",
-			[]string{"hostip", "hostname", "job","ethernetportID","ifName","ifAlias"}, nil,
-		)
 		Rt_ifInUcastPkts = prometheus.NewDesc("edge_ethernet_ifInUcastPkts",
 			"Displays the number of received unicast packets on this port.  ",
-			[]string{"hostip", "hostname", "job","ethernetportID","ifName","ifAlias"}, nil,
-		)
-		Rt_ifInUndersizedPkts = prometheus.NewDesc("edge_ethernet_ifInUndersizedPkts",
-			"Displays the number of Undersized Packet errors detected on this port.",
 			[]string{"hostip", "hostname", "job","ethernetportID","ifName","ifAlias"}, nil,
 		)
 		Rt_ifOutBroadcastPkts = prometheus.NewDesc("edge_ethernet_ifOutBroadcastPkts",
@@ -117,9 +107,7 @@ var (
 					metricValue4 := float64(eData.EthernetData.Rt_ifInDiscards)
 					metricValue5 := float64(eData.EthernetData.Rt_ifInErrors)
 					metricValue8 := float64(eData.EthernetData.Rt_ifInMulticastPkts)
-					metricValue10 := float64(eData.EthernetData.Rt_ifInOverSizedPkts)
 					metricValue11 := float64(eData.EthernetData.Rt_ifInUcastPkts)
-					metricValue12 := float64(eData.EthernetData.Rt_ifInUndersizedPkts)
 					metricValue19 := float64(eData.EthernetData.Rt_ifOutBroadcastPkts)
 					metricValue21 := float64(eData.EthernetData.Rt_ifOutDiscards)
 					metricValue22 := float64(eData.EthernetData.Rt_ifOutErrors)
@@ -130,9 +118,7 @@ var (
 						m = append(m, prometheus.MustNewConstMetric(Rt_ifInDiscards, prometheus.GaugeValue, metricValue4, host.Ip, host.Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
 						m = append(m, prometheus.MustNewConstMetric(Rt_ifInErrors, prometheus.GaugeValue, metricValue5, host.Ip, host.Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
 						m = append(m, prometheus.MustNewConstMetric(Rt_ifInMulticastPkts, prometheus.GaugeValue, metricValue8, host.Ip, host.Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
-						m = append(m, prometheus.MustNewConstMetric(Rt_ifInOverSizedPkts, prometheus.GaugeValue, metricValue10, host.Ip, host.Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
 						m = append(m, prometheus.MustNewConstMetric(Rt_ifInUcastPkts, prometheus.GaugeValue, metricValue11, host.Ip, host.Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
-						m = append(m, prometheus.MustNewConstMetric(Rt_ifInUndersizedPkts, prometheus.GaugeValue, metricValue12, host.Ip, host.Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
 						m = append(m, prometheus.MustNewConstMetric(Rt_ifOutBroadcastPkts, prometheus.GaugeValue, metricValue19, host.Ip, host.Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
 						m = append(m, prometheus.MustNewConstMetric(Rt_ifOutDiscards, prometheus.GaugeValue, metricValue21, host.Ip, host.Hostname, "ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
 						m = append(m, prometheus.MustNewConstMetric(Rt_ifOutErrors, prometheus.GaugeValue, metricValue22, host.Ip, host.Hostname,"ethernetport",ethernetportID[j],eData.EthernetData.IfName,eData.EthernetData.IfAlias))
