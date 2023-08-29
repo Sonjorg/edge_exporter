@@ -72,27 +72,27 @@ func RoutingEntryCollector(host *config.HostCompose)(m []prometheus.Metric) {
 	var (
 		Rt_RuleUsage = prometheus.NewDesc("edge_routingentry_RuleUsage",
 				"Displays the number of times this call route has been selected for a call.",
-				[]string{"hostip", "hostname",  "routing_table", "routing_entry"}, nil,
+				[]string{"hostip", "hostname",  "rt_description", "re_description", "routing_table", "routing_entry"}, nil,
 			)
 			Rt_ASR = prometheus.NewDesc("edge_routingentry_ASR",
 				"Displays the Answer-Seizure Ratio for this call route. (ASR is calculated by dividing the number of call attempts answered by the number of call attempts.)",
-				[]string{"hostip", "hostname",  "routing_table", "routing_entry"}, nil,
+				[]string{"hostip", "hostname",  "rt_description", "re_description", "routing_table", "routing_entry"}, nil,
 			)
 			Rt_RoundTripDelay = prometheus.NewDesc("edge_routingentry_RoundTripDelay",
 				"Displays the average round trip delay for this call route.",
-				[]string{"hostip", "hostname",  "routing_table", "routing_entry"}, nil,
+				[]string{"hostip", "hostname",  "rt_description", "re_description", "routing_table", "routing_entry"}, nil,
 			)
 			Rt_Jitter = prometheus.NewDesc("edge_routingentry_Jitter",
 				"Displays the average jitter for this call route.",
-				[]string{"hostip", "hostname",  "routing_table", "routing_entry"}, nil,
+				[]string{"hostip", "hostname",  "rt_description", "re_description", "routing_table", "routing_entry"}, nil,
 			)
 			Rt_MOS = prometheus.NewDesc("edge_routingentry_MOS",
 				"Displays the Mean Opinion Score (MOS) for this call route.",
-				[]string{"hostip", "hostname",  "routing_table", "routing_entry"}, nil,
+				[]string{"hostip", "hostname",  "rt_description", "re_description", "routing_table", "routing_entry"}, nil,
 			)
 			Rt_QualityFailed = prometheus.NewDesc("edge_routingentry_QualityFailed",
 				"Displays if this call route is currently passing or failing the associated quality metrics. If true then the rule is failing, if false then it is passing.",
-				[]string{"hostip", "hostname",  "routing_table", "routing_entry"}, nil,
+				[]string{"hostip", "hostname",  "rt_description", "re_description", "routing_table", "routing_entry", }, nil,
 			)
 	)
 
@@ -150,9 +150,10 @@ func RoutingEntryCollector(host *config.HostCompose)(m []prometheus.Metric) {
 				fmt.Print("Routingtables empty")
 				return //routingtables emtpy, try next host
 			}
-			var routingEntries []string //variable to hold routingentries cleaned with regex
 
 			for j  := range routingtables {
+				var routingEntries []string //variable to hold routingentries cleaned with regex
+
 				//Trying to fetch routingentries from database, if not exist yet, fetch new ones
 				if (DBexists) {
 					for k,v  := range routingEntryMap {// fetching routingentries from a map from db
@@ -222,12 +223,12 @@ func RoutingEntryCollector(host *config.HostCompose)(m []prometheus.Metric) {
 					if (redesc == "") {
 						redesc = string(routingEntries[k])
 					}
-					m = append(m, prometheus.MustNewConstMetric(Rt_RuleUsage, prometheus.GaugeValue, metricValue1, host.Ip, host.Hostname, rtdescription, redesc))
-					m = append(m, prometheus.MustNewConstMetric(Rt_ASR, prometheus.GaugeValue, metricValue2, host.Ip, host.Hostname, rtdescription, redesc))
-					m = append(m, prometheus.MustNewConstMetric(Rt_RoundTripDelay, prometheus.GaugeValue, metricValue3, host.Ip, host.Hostname, rtdescription, redesc))
-					m = append(m, prometheus.MustNewConstMetric(Rt_Jitter, prometheus.GaugeValue, metricValue4, host.Ip, host.Hostname, rtdescription, redesc))
-					m = append(m, prometheus.MustNewConstMetric(Rt_MOS, prometheus.GaugeValue, metricValue5, host.Ip, host.Hostname, rtdescription, redesc))
-					m = append(m, prometheus.MustNewConstMetric(Rt_QualityFailed, prometheus.GaugeValue, metricValue6, host.Ip, host.Hostname, rtdescription, redesc))
+					m = append(m, prometheus.MustNewConstMetric(Rt_RuleUsage, prometheus.GaugeValue, metricValue1, host.Ip, host.Hostname, routingtables[j], routingEntries[k], rtdescription, redesc))
+					m = append(m, prometheus.MustNewConstMetric(Rt_ASR, prometheus.GaugeValue, metricValue2, host.Ip, host.Hostname, routingtables[j], routingEntries[k], rtdescription, redesc))
+					m = append(m, prometheus.MustNewConstMetric(Rt_RoundTripDelay, prometheus.GaugeValue, metricValue3, host.Ip, host.Hostname, routingtables[j], routingEntries[k], rtdescription, redesc))
+					m = append(m, prometheus.MustNewConstMetric(Rt_Jitter, prometheus.GaugeValue, metricValue4, host.Ip, host.Hostname, routingtables[j], routingEntries[k], rtdescription, redesc))
+					m = append(m, prometheus.MustNewConstMetric(Rt_MOS, prometheus.GaugeValue, metricValue5, host.Ip, host.Hostname, routingtables[j], routingEntries[k], rtdescription, redesc))
+					m = append(m, prometheus.MustNewConstMetric(Rt_QualityFailed, prometheus.GaugeValue, metricValue6, host.Ip, host.Hostname, routingtables[j], routingEntries[k], rtdescription, redesc))
 				}
 			}
 	
