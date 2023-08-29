@@ -121,7 +121,6 @@ func RoutingEntryCollector(host *config.HostCompose)(m []prometheus.Metric) {
 				if err != nil {
 					fmt.Print(err)
 				}
-				fmt.Println(routingEntryMap,routingtables,timeLastString, rtdescription, err)
 			}
 
 			timeSchedule  := host.RoutingEntryTime
@@ -163,6 +162,7 @@ func RoutingEntryCollector(host *config.HostCompose)(m []prometheus.Metric) {
 							}
 						}
 					}
+					fmt.Println("Fetching routingdata from database")
 
 				} else { // DB doesn't exist, so fetch new routingentries with
 					url  := "https://" + host.Ip + "/rest/routingtable/" + routingtables[j]
@@ -189,7 +189,6 @@ func RoutingEntryCollector(host *config.HostCompose)(m []prometheus.Metric) {
 						fmt.Print(err)
 					}
 				}
-				fmt.Println("routingentries ", routingEntries)
 				if (len(routingEntries) <= 0) {
 						continue
 				}
@@ -216,19 +215,13 @@ func RoutingEntryCollector(host *config.HostCompose)(m []prometheus.Metric) {
 					metricValue5  := float64(rData.RoutingData.Rt_MOS)
 					metricValue6  := float64(rData.RoutingData.Rt_QualityFailed)
 					redesc := rData.RoutingData.Description
-					//routingtables[j], routingEntries[k]
-					if (rtdescription == "") {
-						rtdescription = string(routingtables[j])
-					}
-					if (redesc == "") {
-						redesc = string(routingEntries[k])
-					}
-					m = append(m, prometheus.MustNewConstMetric(Rt_RuleUsage, prometheus.GaugeValue, metricValue1, host.Ip, host.Hostname, routingtables[j], routingEntries[k], rtdescription, redesc))
-					m = append(m, prometheus.MustNewConstMetric(Rt_ASR, prometheus.GaugeValue, metricValue2, host.Ip, host.Hostname, routingtables[j], routingEntries[k], rtdescription, redesc))
-					m = append(m, prometheus.MustNewConstMetric(Rt_RoundTripDelay, prometheus.GaugeValue, metricValue3, host.Ip, host.Hostname, routingtables[j], routingEntries[k], rtdescription, redesc))
-					m = append(m, prometheus.MustNewConstMetric(Rt_Jitter, prometheus.GaugeValue, metricValue4, host.Ip, host.Hostname, routingtables[j], routingEntries[k], rtdescription, redesc))
-					m = append(m, prometheus.MustNewConstMetric(Rt_MOS, prometheus.GaugeValue, metricValue5, host.Ip, host.Hostname, routingtables[j], routingEntries[k], rtdescription, redesc))
-					m = append(m, prometheus.MustNewConstMetric(Rt_QualityFailed, prometheus.GaugeValue, metricValue6, host.Ip, host.Hostname, routingtables[j], routingEntries[k], rtdescription, redesc))
+					
+					m = append(m, prometheus.MustNewConstMetric(Rt_RuleUsage, prometheus.GaugeValue, metricValue1, host.Ip, host.Hostname, rtdescription, redesc, routingtables[j], routingEntries[k]))
+					m = append(m, prometheus.MustNewConstMetric(Rt_ASR, prometheus.GaugeValue, metricValue2, host.Ip, host.Hostname, rtdescription, redesc, routingtables[j], routingEntries[k]))
+					m = append(m, prometheus.MustNewConstMetric(Rt_RoundTripDelay, prometheus.GaugeValue, metricValue3, host.Ip, host.Hostname, rtdescription, redesc, routingtables[j], routingEntries[k] ))
+					m = append(m, prometheus.MustNewConstMetric(Rt_Jitter, prometheus.GaugeValue, metricValue4, host.Ip, host.Hostname, routingtables[j], rtdescription, redesc, routingEntries[k], ))
+					m = append(m, prometheus.MustNewConstMetric(Rt_MOS, prometheus.GaugeValue, metricValue5, host.Ip, host.Hostname, routingtables[j], rtdescription, redesc, routingEntries[k]))
+					m = append(m, prometheus.MustNewConstMetric(Rt_QualityFailed, prometheus.GaugeValue, metricValue6, host.Ip, host.Hostname, rtdescription, redesc, routingtables[j], routingEntries[k] ))
 				}
 			}
 	

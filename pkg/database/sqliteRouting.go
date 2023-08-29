@@ -6,7 +6,6 @@ package database
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	//"github.com/mattn/go-sqlite3" // Import go-sqlite3 library
 	//_ "github.com/mattn/go-sqlite3"
@@ -81,7 +80,6 @@ func GetRoutingData(db *sql.DB,ipaddress string) (map[string][]string,[]string,s
 				if err != nil{
 					log.Print(err)
 				}
-				fmt.Println("sql ",&r.Id, &r.Ipaddress,&r.Time,&r.RoutingTable, &r.RoutingEntry, &r.RtDesc)
 					routingEntries[r.RoutingTable] = append(routingEntries[r.RoutingTable], r.RoutingEntry)
 					time = r.Time
 					rtdesc = r.RtDesc
