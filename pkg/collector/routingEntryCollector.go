@@ -121,7 +121,9 @@ func RoutingEntryCollector(host *config.HostCompose)(m []prometheus.Metric) {
 				if err != nil {
 					fmt.Print(err)
 				}
+				fmt.Println(routingtables,timeLastString, rtdescription, err)
 			}
+
 			timeSchedule  := host.RoutingEntryTime
 			//If 24 hours has not passed since last data was stored in database, use this data
 			if (!DBexists || utils.Expired(timeSchedule, timeLast))  { //Routing data has expired, fetching new routingentries
