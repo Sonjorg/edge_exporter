@@ -1,11 +1,12 @@
 /* Copyright (C) 2023 Sondre Jørgensen - All Rights Reserved
  * You may use, distribute and modify this code under the
  * terms of the CC BY 4.0 license
-*/
+ */
 package database
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	//"github.com/mattn/go-sqlite3" // Import go-sqlite3 library
 	//_ "github.com/mattn/go-sqlite3"
@@ -61,27 +62,6 @@ func StoreRoutingEntries(db *sql.DB, ipaddress string, time string, routingTable
 	return nil
 }
 
-func DeleteRoutingTables(db *sql.DB, ipaddress string) {
-	stmt, _ := db.Prepare("delete from routingtables where ipaddress=?")
-
-    stmt.Exec(ipaddress)
-}
-
-func RoutingTablesExists(db * sql.DB,ip string) bool {
-	sqlStmt := `SELECT ipaddress FROM routingtables WHERE ipaddress = ?`
-    err := db.QueryRow(sqlStmt, ip).Scan(&ip)
-    if err != nil {
-        if err != sql.ErrNoRows {
-
-            log.Print(err)
-        }
-
-        return false
-    }
-
-    return true
-}
-
 func GetRoutingData(db *sql.DB,ipaddress string) (map[string][]string,[]string,string, string, error) {
 		row, err := db.Query("SELECT * FROM routingtables")
 		if err != nil {
@@ -101,16 +81,35 @@ func GetRoutingData(db *sql.DB,ipaddress string) (map[string][]string,[]string,s
 				if err != nil{
 					log.Print(err)
 				}
-				if (r.Ipaddress == ipaddress) {
+				fmt.Println("sql ",&r.Id, &r.Ipaddress,&r.Time,&r.RoutingTable, &r.RoutingEntry, &r.RtDesc)
 					routingEntries[r.RoutingTable] = append(routingEntries[r.RoutingTable], r.RoutingEntry)
 					time = r.Time
 					rtdesc = r.RtDesc
-
-				}
 		}
 
 		for key, _ := range routingEntries {
 			tables = append(tables, key)
 		}
 		return routingEntries, tables, time, rtdesc, err
+}
+
+func DeleteRoutingTables(db *sql.DB, ipaddress string) {
+	stmt, _ := db.Prepare("delete from routingtables where ipaddress=?")
+
+    stmt.Exec(ipaddress)
+}
+
+func RoutingTablesExists(db * sql.DB,ip string) bool {
+	sqlStmt := `SELECT ipaddress FROM routingtables WHERE ipaddress = ?`
+    err := db.QueryRow(sqlStmt, ip).Scan(&ip)
+    if err != nil {
+        if err != sql.ErrNoRows {
+
+            log.Print(err)
+        }
+
+        return false
+    }
+
+    return true
 }

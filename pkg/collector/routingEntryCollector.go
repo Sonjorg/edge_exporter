@@ -121,7 +121,7 @@ func RoutingEntryCollector(host *config.HostCompose)(m []prometheus.Metric) {
 				if err != nil {
 					fmt.Print(err)
 				}
-				fmt.Println(routingtables,timeLastString, rtdescription, err)
+				fmt.Println(routingEntryMap,routingtables,timeLastString, rtdescription, err)
 			}
 
 			timeSchedule  := host.RoutingEntryTime
