@@ -2,10 +2,11 @@
 ## Prometheus exporter for Ribbon Communications SBC Edge routers
 Used together with a Prometheus server where metrics can be gathered from sbc-host-ip:5123/metrics. Metric types are grouped as collectors where each collector can be excluded for each host, ref. Configuration.
 #### Developed by Sondre Jørgensen in cooperation with Sang Ngoc Nguyen at NTNU: Norwegian University of Science and Technology, sondre2409@gmail.com and 29sangu@gmail.com as part of our bachelor's thesis
+- Version v2 (github branch main, docker image sondrjor/edge_exporter:v2) is a version where each SBC host are configured in config.yml.
+- Version 2.0 (github branch hdo, docker image sondrjor/edge_exporter:2.0) is a version that uses a separate docker container for each SBC host. It uses docker compose, ref. Configuration version 2.0
 ### Configuration
 
-
-#### Configuration v2
+#### Configuration v2 (branch main)
 #### The exporter must be configured in config.yml in the root folder of this repository.
 ```
 ---
@@ -53,6 +54,7 @@ You should always use an external config.yml. Start an instance with:
 Metrics can be gathered from ```host:5123/metrics```
 
 #### Configuration version 2.0 (branch HDO)
+###### Each sbc host reside in separate docker containers
 ```
 version: "2.3"
 
