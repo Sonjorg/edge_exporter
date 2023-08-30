@@ -216,7 +216,9 @@ func RoutingEntryCollector(host *config.HostCompose) (m []prometheus.Metric) {
 			metricValue5 := float64(rData.RoutingData.Rt_MOS)
 			metricValue6 := float64(rData.RoutingData.Rt_QualityFailed)
 			redesc := rData.RoutingData.Description
-
+			
+			if rtdescription == "" { rtdescription = routingtables[j] }
+			if redesc == ""{ redesc = routingEntries[k] }
 			m = append(m, prometheus.MustNewConstMetric(Rt_RuleUsage, prometheus.GaugeValue, metricValue1, host.Ip, host.Hostname, rtdescription, redesc))
 			m = append(m, prometheus.MustNewConstMetric(Rt_ASR, prometheus.GaugeValue, metricValue2, host.Ip, host.Hostname, rtdescription, redesc))
 			m = append(m, prometheus.MustNewConstMetric(Rt_RoundTripDelay, prometheus.GaugeValue, metricValue3, host.Ip, host.Hostname, rtdescription, redesc))

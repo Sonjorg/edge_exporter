@@ -41,62 +41,63 @@ func SystemCollector(host *config.HostCompose) (m []prometheus.Metric, successfu
 	var (
 		Rt_CPUUsage = prometheus.NewDesc("edge_system_CPUUsage",
 			"Average percent usage of the CPU.",
-			[]string{"hostip", "hostname", "chassis_type", "serial_number"}, nil,
+			[]string{"hostip", "hostname"}, nil,
 		)
 		Rt_MemoryUsage = prometheus.NewDesc("edge_system_MemoryUsage",
 			"Average percent usage of system memory.",
-			[]string{"hostip", "hostname", "chassis_type", "serial_number"}, nil,
+			[]string{"hostip", "hostname"}, nil,
 		)
 		Rt_CPUUptime = prometheus.NewDesc("edge_system_CPUUptime",
 			"The total duration in seconds, that the system CPU has been UP and running.",
-			[]string{"hostip", "hostname", "chassis_type", "serial_number"}, nil,
+			[]string{"hostip", "hostname"}, nil,
 		)
 		Rt_FDUsage = prometheus.NewDesc("edge_disk_FDUsage",
 			"Number of file descriptors used by the system.",
-			[]string{"hostip", "hostname", "chassis_type", "serial_number"}, nil,
+			[]string{"hostip", "hostname"}, nil,
 		)
 		Rt_CPULoadAverage1m = prometheus.NewDesc("edge_system_CPULoadAverage1m",
 			"Average number of processes over the last one minute waiting to run because CPU is busy.",
-			[]string{"hostip", "hostname", "chassis_type", "serial_number"}, nil,
+			[]string{"hostip", "hostname"}, nil,
 		)
 		Rt_CPULoadAverage5m = prometheus.NewDesc("edge_system_CPULoadAverage5m",
 			"Average number of processes over the last five minutes waiting to run because CPU is busy.",
-			[]string{"hostip", "hostname", "chassis_type", "serial_number"}, nil,
+			[]string{"hostip", "hostname"}, nil,
 		)
 		Rt_CPULoadAverage15m = prometheus.NewDesc("edge_system_CPULoadAverage15m",
 			"Average number of processes over the last fifteen minutes waiting to run because CPU is busy.",
-			[]string{"hostip", "hostname", "chassis_type", "serial_number"}, nil,
+			[]string{"hostip", "hostname"}, nil,
 		)
 		Rt_TmpPartUsage = prometheus.NewDesc("edge_disk_TmpPartUsage",
 			"Percentage of the temporary partition used.",
-			[]string{"hostip", "hostname", "chassis_type", "serial_number"}, nil,
+			[]string{"hostip", "hostname"}, nil,
 		)
 		Rt_LoggingPartUsage = prometheus.NewDesc("edge_disk_LoggingPartUsage",
 			"Percentage of the logging partition used. This is applicable only for the SBC2000.",
-			[]string{"hostip", "hostname", "chassis_type", "serial_number"}, nil,
+			[]string{"hostip", "hostname" }, nil,
 		)
 		Error_ip = prometheus.NewDesc("edge_system_status",
 			"Returns 1 if the SBC Edge scrape was successful, and 0 if not.",
-			[]string{"hostip", "hostname"}, nil,
+			[]string{"hostip", "hostname", "chassis_type", "serial_number"}, nil,
 		)
 	)
 
 		dataStr := "https://" + host.Ip + "/rest/system/historicalstatistics/1"
 		timeReportedByExternalSystem := time.Now()
 
-		if (!http.SBCIsUp(host.Ip)){
+		//Trying to fetch chasisinfo from db first, indicated with "null"
+		sbcType, serialNumber, err := utils.GetChassisLabels(host.Ip, "null")
+		if err != nil {
+			sbcType, serialNumber = "Error fetching chassisinfo", "Error fetching chassisinfo"
+			log.Print(err)
+		}
+		if (!http.SBCIsUp(host.Ip)){ //A quick test to see if contact with sbc
+
 			m = append(m, prometheus.NewMetricWithTimestamp(
 				timeReportedByExternalSystem,
 				prometheus.MustNewConstMetric(
-					Error_ip, prometheus.GaugeValue, 0, host.Ip, host.Hostname),
+					Error_ip, prometheus.GaugeValue, 0, host.Ip, host.Hostname, sbcType, serialNumber),
 			))
 			return m, false
-		}
-
-		chassisType, serialNumber, err := utils.GetChassisLabels(host.Ip, "null")
-		if err != nil {
-			chassisType, serialNumber = "Error fetching chassisinfo", "Error fetching chassisinfo"
-			log.Print(err)
 		}
 		
 		phpsessid, err := http.APISessionAuth(host.Username, host.Password, host.Ip)
@@ -105,16 +106,16 @@ func SystemCollector(host *config.HostCompose) (m []prometheus.Metric, successfu
 			m = append(m, prometheus.NewMetricWithTimestamp(
 				timeReportedByExternalSystem,
 				prometheus.MustNewConstMetric(
-					Error_ip, prometheus.GaugeValue, 0, host.Ip, host.Hostname),
+					Error_ip, prometheus.GaugeValue, 0, host.Ip, host.Hostname, sbcType, serialNumber),
 			))
 
 			return m, false//trying next ip address
 		}
 		//fetching labels from DB or if not exist yet; from router
-		if chassisType == "Error fetching chassisinfo" {
-			chassisType, serialNumber, err = utils.GetChassisLabels(host.Ip, phpsessid)
+		if sbcType == "Error fetching chassisinfo" {
+			sbcType, serialNumber, err = utils.GetChassisLabels(host.Ip, phpsessid)
 			if err != nil {
-				chassisType, serialNumber = "Error fetching chassisinfo", "Error fetching chassisinfo"
+				sbcType, serialNumber = "Error fetching chassisinfo", "Error fetching chassisinfo"
 				log.Print(err)
 			}
 		}
@@ -148,15 +149,15 @@ func SystemCollector(host *config.HostCompose) (m []prometheus.Metric, successfu
 		m = append(m, prometheus.MustNewConstMetric(
 			Error_ip, prometheus.GaugeValue, 1, host.Ip, host.Hostname))
 
-		m = append(m, prometheus.MustNewConstMetric(Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue1, host.Ip, host.Hostname, chassisType, serialNumber))
-		m = append(m, prometheus.MustNewConstMetric(Rt_CPULoadAverage1m, prometheus.GaugeValue, metricValue2, host.Ip, host.Hostname, chassisType, serialNumber))
-		m = append(m, prometheus.MustNewConstMetric(Rt_CPULoadAverage5m, prometheus.GaugeValue, metricValue3, host.Ip, host.Hostname, chassisType, serialNumber))
-		m = append(m, prometheus.MustNewConstMetric(Rt_CPUUptime, prometheus.GaugeValue, metricValue4, host.Ip, host.Hostname, chassisType, serialNumber))
-		m = append(m, prometheus.MustNewConstMetric(Rt_CPUUsage, prometheus.GaugeValue, metricValue5, host.Ip, host.Hostname, chassisType, serialNumber))
-		m = append(m, prometheus.MustNewConstMetric(Rt_FDUsage, prometheus.GaugeValue, metricValue6, host.Ip, host.Hostname, chassisType, serialNumber))
-		m = append(m, prometheus.MustNewConstMetric(Rt_LoggingPartUsage, prometheus.GaugeValue, metricValue7, host.Ip, host.Hostname, chassisType, serialNumber))
-		m = append(m, prometheus.MustNewConstMetric(Rt_MemoryUsage, prometheus.GaugeValue, metricValue8, host.Ip, host.Hostname, chassisType, serialNumber))
-		m = append(m, prometheus.MustNewConstMetric(Rt_TmpPartUsage, prometheus.GaugeValue, metricValue9, host.Ip, host.Hostname, chassisType, serialNumber))
+		m = append(m, prometheus.MustNewConstMetric(Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue1, host.Ip, host.Hostname))
+		m = append(m, prometheus.MustNewConstMetric(Rt_CPULoadAverage1m, prometheus.GaugeValue, metricValue2, host.Ip, host.Hostname))
+		m = append(m, prometheus.MustNewConstMetric(Rt_CPULoadAverage5m, prometheus.GaugeValue, metricValue3, host.Ip, host.Hostname))
+		m = append(m, prometheus.MustNewConstMetric(Rt_CPUUptime, prometheus.GaugeValue, metricValue4, host.Ip, host.Hostname))
+		m = append(m, prometheus.MustNewConstMetric(Rt_CPUUsage, prometheus.GaugeValue, metricValue5, host.Ip, host.Hostname))
+		m = append(m, prometheus.MustNewConstMetric(Rt_FDUsage, prometheus.GaugeValue, metricValue6, host.Ip, host.Hostname))
+		m = append(m, prometheus.MustNewConstMetric(Rt_LoggingPartUsage, prometheus.GaugeValue, metricValue7, host.Ip, host.Hostname))
+		m = append(m, prometheus.MustNewConstMetric(Rt_MemoryUsage, prometheus.GaugeValue, metricValue8, host.Ip, host.Hostname))
+		m = append(m, prometheus.MustNewConstMetric(Rt_TmpPartUsage, prometheus.GaugeValue, metricValue9, host.Ip, host.Hostname))
 	
 	return m, true
 }
