@@ -1,9 +1,12 @@
 # Readme
 ## Prometheus exporter for Ribbon Communications SBC Edge routers
-Used together with a Prometheus server where metrics can be gathered from sbc-host-IP:5123/metrics. Metric types are grouped as collectors where each collector can be excluded for each host, ref. Configuration.
-#### Developed by Sondre Jørgensen in cooperation with Sang Ngoc Nguyen at NTNU: Norwegian University of Science and Technology (sondre2409@gmail.com and 29sangu@gmail.com), as part of our bachelor's thesis for and together with our client at the the health service's operational organization for the norwegian emergency network (HDO). 
+#### Developed by Sondre Jørgensen in cooperation with Sang Ngoc Nguyen at NTNU: Norwegian University of Science and Technology, sondre2409@gmail.com and 29sangu@gmail.com as part of our bachelor's thesis
+Used together with a Prometheus server where metrics can be gathered from exporter-host-ip:5123/metrics. Metric types are grouped as collectors where each collector can be excluded for each host, ref. Configuration.
+- Version v2 (github branch main, docker image sondrjor/edge_exporter:v2) is a version where each SBC host are configured in config.yml.
+- Version 2.0 (github branch hdo, docker image sondrjor/edge_exporter:2.0) is a version that uses a separate docker container for each SBC host. It uses docker compose, ref. Configuration version 2.0
+### Configuration
 
-### Configuration version main (v2)
+#### Configuration v2 (branch main)
 #### The exporter must be configured in config.yml in the root folder of this repository.
 ```
 ---
@@ -50,6 +53,58 @@ You should always use an external config.yml. Start an instance with:
 
 Metrics can be gathered from ```host:5123/metrics```
 
+#### Configuration version 2.0 (branch HDO)
+###### Each sbc host reside in separate docker containers
+```
+version: "2.3"
+
+services:
+
+  sbchost1:
+    image: sondrjor/edge_exporter:2.0
+    container_name: sbchost1
+    user: root
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 10m
+        max-file: "3"
+    restart: unless-stopped
+    mem_reservation: "10M"
+    mem_limit: "20M"
+    ports:
+      - "4000:5123"
+    environment:
+      authtimeout: "2"
+      hostname: "sbchost1"
+      ipaddress: ""
+      username: ""
+      password: ""
+      exclude: "routingentry, systemcallstats, ethernetport,linecard,diskpartition"
+      routing_database_hours: "24"
+  sbchost2:
+    image: sondrjor/edge_exporter:2.0
+    container_name: sbchost2
+    user: root
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 10m
+        max-file: "3"
+    restart: unless-stopped
+    mem_reservation: "10M"
+    mem_limit: "250M"
+    ports:
+      - "4001:5123"
+    environment:
+      authtimeout: "2"
+      hostname: "test"
+      ipaddress: "ipadr"
+      username: "un"
+      password: "pw"
+      exclude: "systemcallstats,linecard"
+      routing_database_hours: "24"
+```
 
 ## Collectors and Metrics
 List of Collectors, the API endpoints they use and metrics they support:
@@ -204,8 +259,9 @@ in either directory ```edge_exporter\Other\Grafana-Prometheus\grafanacloud``` or
 ## Tips for further development of the exporter
 ### Deployment of the exporter on a linux server
 **The exporter is developed and tested for the official ubuntu server image found at https://ubuntu.com/download/server.**
-- Download golang using the official download page: [install golang](https://go.dev/doc/install), and remember to reboot
-- To start the exporter and download all necessary packages, navigate to the SBCexporter directory and run
+- Download golang using the official download page: [install golang](https://go.dev/doc/install), and remember to reboot.
+- Do not install go with apt install because then it downloads an old go version which this repo does not support (this repo uses go 1.20), use wget.
+- To start the exporter and download all necessary packages, navigate to the sbc exporter directory and run
 
       go install
 ### To test go exporters:
@@ -216,7 +272,7 @@ in the edge_exporter directory, then use
 
     curl localhost:9100/metrics
 
-in another windows to view live metrics data that can be collected by prometheus
+in another windows to view live metrics data that can be collected by prometheus.
 
 ### To test a specific file, for use
 
