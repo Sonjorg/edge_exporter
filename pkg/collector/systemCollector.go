@@ -126,7 +126,7 @@ func SystemCollector(host *config.HostCompose) (m []prometheus.Metric, successfu
 			m = append(m, prometheus.NewMetricWithTimestamp(
 				timeReportedByExternalSystem,
 				prometheus.MustNewConstMetric(
-					Error_ip, prometheus.GaugeValue, 0, host.Ip, host.Hostname),
+					Error_ip, prometheus.GaugeValue, 0, host.Ip, host.Hostname, sbcType, serialNumber),
 			))
 			return m, false
 		}
@@ -147,7 +147,7 @@ func SystemCollector(host *config.HostCompose) (m []prometheus.Metric, successfu
 		metricValue9 := float64(ssbc.SystemData.Rt_TmpPartUsage)
 
 		m = append(m, prometheus.MustNewConstMetric(
-			Error_ip, prometheus.GaugeValue, 1, host.Ip, host.Hostname))
+			Error_ip, prometheus.GaugeValue, 1, host.Ip, host.Hostname, sbcType, serialNumber))
 
 		m = append(m, prometheus.MustNewConstMetric(Rt_CPULoadAverage15m, prometheus.GaugeValue, metricValue1, host.Ip, host.Hostname))
 		m = append(m, prometheus.MustNewConstMetric(Rt_CPULoadAverage1m, prometheus.GaugeValue, metricValue2, host.Ip, host.Hostname))
