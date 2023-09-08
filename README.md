@@ -55,6 +55,7 @@ Metrics can be gathered from ```host:5123/metrics```
 
 #### Configuration version 2.0 (branch HDO)
 ###### Each sbc host reside in separate docker containers
+###### Create the following docker-compose.yml file
 ```
 version: "2.3"
 
