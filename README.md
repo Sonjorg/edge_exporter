@@ -56,7 +56,8 @@ Metrics can be gathered from ```host:5123/metrics```
 #### Configuration version 2.0 (branch HDO)
 ###### Exporter for each SBC reside in separate docker containers
 
-Create the following docker-compose.yml file and run it with ``` docker-compose up ```
+Create the following docker-compose.yml file and run it with ``` docker-compose up ```.
+
 Alternatively run each docker instance with ``` docker run -e hostname=test -e ipaddress=111.111.111.111 -e username=un -e
 password=pw -e authtimeout=2 -e routing_database_hours=24 -p 4000:5123 --name container_name sondrjor/edge_exporter:2.0 ```
 
