@@ -39,9 +39,10 @@ func main() {
 		
 	http.HandleFunc("/metrics", collector.ProbeHandler)
 	
+	log.Println("Edge exporter running, listening on 5123")
+	
 	log.Fatal(http.ListenAndServe(":5123", nil))
 
-	log.Println("Edge exporter running, listening on 5123")
 	select {}
 	
 }
