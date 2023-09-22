@@ -75,7 +75,7 @@ func SystemCollector(host *config.HostCompose) (m []prometheus.Metric, successfu
 			"Percentage of the logging partition used. This is applicable only for the SBC2000.",
 			[]string{"hostip", "hostname" }, nil,
 		)
-		CoreSwitch_Temperature = prometheus.NewDesc("coreSwitch_temperature",
+		CoreSwitch_Temperature = prometheus.NewDesc("edge_system_temperature",
 		"Temperature of the core switch.",
 		[]string{"hostip", "hostname" }, nil,
 		)
