@@ -38,8 +38,7 @@ func CreateChassis(db *sql.DB) error {
 
 func InsertChassis(db *sql.DB, ipaddress string, chassisType string, serialNumber string) error{
 	log.Println("Inserting chassis data ...")
-	insertAuthSQL := `INSERT INTO chassis(ipaddress, chassistype, serialnumber) VALUES (?, ?, ?)`
-
+	insertAuthSQL := `INSERT OR REPLACE INTO chassis(ipaddress, chassistype, serialnumber) VALUES (?, ?, ?)`
 	statement, err := db.Prepare(insertAuthSQL) // Prepare statement.
                                                    // This is good to avoid SQL injections
 	if err != nil {

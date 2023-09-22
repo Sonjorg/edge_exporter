@@ -75,6 +75,10 @@ func SystemCollector(host *config.HostCompose) (m []prometheus.Metric, successfu
 			"Percentage of the logging partition used. This is applicable only for the SBC2000.",
 			[]string{"hostip", "hostname" }, nil,
 		)
+		CoreSwitch_Temperature = prometheus.NewDesc("coreSwitch_temperature",
+		"Temperature of the core switch.",
+		[]string{"hostip", "hostname" }, nil,
+		)
 		Error_ip = prometheus.NewDesc("edge_system_status",
 			"Returns 1 if the SBC Edge scrape was successful, and 0 if not.",
 			[]string{"hostip", "hostname", "chassis_type", "serial_number"}, nil,
@@ -85,13 +89,13 @@ func SystemCollector(host *config.HostCompose) (m []prometheus.Metric, successfu
 		timeReportedByExternalSystem := time.Now()
 
 		//Trying to fetch chasisinfo from db first, indicated with "null"
-		sbcType, serialNumber, err := utils.GetChassisLabels(host.Ip, "null")
-		if err != nil {
-			sbcType, serialNumber = "Error fetching chassisinfo", "Error fetching chassisinfo"
-			log.Print(err)
-		}
-		if (!http.SBCIsUp(host.Ip)){ //A quick test to see if contact with sbc
 
+		if (!http.SBCIsUp(host.Ip)){ //A quick test to see if contact with sbc
+			sbcType, serialNumber, err := utils.GetChassisLabelsDB(host.Ip)
+			if err != nil {
+				sbcType, serialNumber = "Error fetching chassisinfo", "Error fetching chassisinfo"
+				log.Print(err)
+			}
 			m = append(m, prometheus.NewMetricWithTimestamp(
 				timeReportedByExternalSystem,
 				prometheus.MustNewConstMetric(
@@ -103,6 +107,11 @@ func SystemCollector(host *config.HostCompose) (m []prometheus.Metric, successfu
 		phpsessid, err := http.APISessionAuth(host.Username, host.Password, host.Ip)
 		if err != nil {
 			log.Println("Error retrieving session cookie (system): ", log.Flags(), err)
+			sbcType, serialNumber, err := utils.GetChassisLabelsDB(host.Ip)
+			if err != nil {
+				sbcType, serialNumber = "Error fetching chassisinfo", "Error fetching chassisinfo"
+				log.Print(err)
+			}
 			m = append(m, prometheus.NewMetricWithTimestamp(
 				timeReportedByExternalSystem,
 				prometheus.MustNewConstMetric(
@@ -112,13 +121,12 @@ func SystemCollector(host *config.HostCompose) (m []prometheus.Metric, successfu
 			return m, false//trying next ip address
 		}
 		//fetching labels from DB or if not exist yet; from router
-		if sbcType == "Error fetching chassisinfo" {
-			sbcType, serialNumber, err = utils.GetChassisLabels(host.Ip, phpsessid)
+			sbcType, serialNumber,temperature, err := utils.GetChassisLabelsHTTP(host.Ip, phpsessid)
 			if err != nil {
-				sbcType, serialNumber = "Error fetching chassisinfo", "Error fetching chassisinfo"
+				sbcType, serialNumber,temperature = "Error fetching chassisinfo", "Error fetching chassisinfo",0
 				log.Print(err)
 			}
-		}
+		
 		//Fetching systemdata
 		_, data, err := http.GetAPIData(dataStr, phpsessid)
 		if err != nil {
@@ -145,6 +153,7 @@ func SystemCollector(host *config.HostCompose) (m []prometheus.Metric, successfu
 		metricValue7 := float64(ssbc.SystemData.Rt_LoggingPartUsage)
 		metricValue8 := float64(ssbc.SystemData.Rt_MemoryUsage)
 		metricValue9 := float64(ssbc.SystemData.Rt_TmpPartUsage)
+		metricValue10 := float64(temperature)
 
 		m = append(m, prometheus.MustNewConstMetric(
 			Error_ip, prometheus.GaugeValue, 1, host.Ip, host.Hostname, sbcType, serialNumber))
@@ -158,6 +167,8 @@ func SystemCollector(host *config.HostCompose) (m []prometheus.Metric, successfu
 		m = append(m, prometheus.MustNewConstMetric(Rt_LoggingPartUsage, prometheus.GaugeValue, metricValue7, host.Ip, host.Hostname))
 		m = append(m, prometheus.MustNewConstMetric(Rt_MemoryUsage, prometheus.GaugeValue, metricValue8, host.Ip, host.Hostname))
 		m = append(m, prometheus.MustNewConstMetric(Rt_TmpPartUsage, prometheus.GaugeValue, metricValue9, host.Ip, host.Hostname))
+		m = append(m, prometheus.MustNewConstMetric(CoreSwitch_Temperature, prometheus.GaugeValue, metricValue10, host.Ip, host.Hostname))
+
 	
 	return m, true
 }

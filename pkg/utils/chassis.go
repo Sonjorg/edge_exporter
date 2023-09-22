@@ -22,12 +22,48 @@ type ChassisData struct {
 }
 
 type chassis struct {
-	Rt_Chassis_Type   string `xml:"rt_Chassis_Type"`
-	SerialNumber      string `xml:"SerialNumber"`
+	Rt_Chassis_Type        string `xml:"rt_Chassis_Type"`
+	SerialNumber           string `xml:"SerialNumber"`
+	CoreSwitch_Temperature int    `xml:"rt_Chassis_CoreSwitch_Temp"`
 }
 
 
-func GetChassisLabels(ipaddress string, phpsessid string) (chassisType string, serialNumber string, err error){
+func GetChassisLabelsHTTP(ipaddress string, phpsessid string) (chassisType string, serialNumber string, temperature int, err error){
+
+				dataStr := "https://"+ipaddress+"/rest/chassis"
+				_, data,err := http.GetAPIData(dataStr, phpsessid)
+				if err != nil {
+
+					return "Error fetching chassisinfo","Error fetching chassisinfo", 0, err
+				}
+				ssbc := &ChassisData{}
+				err = xml.Unmarshal(data, &ssbc) //Converting XML data to variables
+				if err != nil {
+					return "Error fetching chassisinfo","Error fetching chassisinfo",0, err
+				}
+
+				chassisType = ssbc.Chassis.Rt_Chassis_Type
+				serialNumber = ssbc.Chassis.SerialNumber
+				temperature = ssbc.Chassis.CoreSwitch_Temperature
+				//DB
+				var sqliteDatabase *sql.DB
+				sqliteDatabase, err = sql.Open("sqlite3", "./sqlite-database.db")
+				if err != nil {
+					log.Print(err)
+				} // Open the created SQLite File
+				// Defer Closing the database
+				defer sqliteDatabase.Close()
+				if (!database.RowExists(sqliteDatabase, ipaddress)) {
+					err = database.InsertChassis(sqliteDatabase, ipaddress, chassisType, serialNumber)
+						if err != nil {
+							log.Print("insert chassis error", err)
+					}
+				}
+
+return chassisType, serialNumber, temperature, err
+
+}
+func GetChassisLabelsDB(ipaddress string) (chassisType string, serialNumber string, err error){
 
 	var sqliteDatabase *sql.DB
 	sqliteDatabase, err = sql.Open("sqlite3", "./sqlite-database.db")
@@ -37,32 +73,14 @@ func GetChassisLabels(ipaddress string, phpsessid string) (chassisType string, s
 	} // Open the created SQLite File
 	// Defer Closing the database
 	defer sqliteDatabase.Close()
+	
 	if (database.RowExists(sqliteDatabase, ipaddress)) {
-		chassisType, serialNumber, err = database.GetChassis(sqliteDatabase, ipaddress)
-		if (chassisType == "" || serialNumber == "" || err != nil) {
-			if (phpsessid != "null") {
-				dataStr := "https://"+ipaddress+"/rest/chassis"
-				_, data,err := http.GetAPIData(dataStr, phpsessid)
-				if err != nil {
-
+				chassisType, serialNumber, err = database.GetChassis(sqliteDatabase, ipaddress)
+				if (chassisType == "" || serialNumber == "" || err != nil) {
 					return "Error fetching chassisinfo","Error fetching chassisinfo",err
-				}
-				ssbc := &ChassisData{}
-				err = xml.Unmarshal(data, &ssbc) //Converting XML data to variables
-				if err != nil {
-					return "Error fetching chassisinfo","Error fetching chassisinfo",err
-				}
-
-				chassisType := ssbc.Chassis.Rt_Chassis_Type
-				serialNumber := ssbc.Chassis.SerialNumber
-
-				err = database.InsertChassis(sqliteDatabase, ipaddress, chassisType, serialNumber)
-					if err != nil {
-						log.Print("insert chassis error", err)
-					}
-				return string(chassisType), string(serialNumber), err
 			}
 		}
-	}
+	
 return chassisType, serialNumber, err
 }
+

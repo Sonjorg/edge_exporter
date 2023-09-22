@@ -48,7 +48,7 @@ func LinecardCollector2(host *config.HostCompose)  (m []prometheus.Metric) {
 		}
 
 		//chassis labels from db or http
-		chassisType, _, err := utils.GetChassisLabels(host.Ip,phpsessid)
+		chassisType, _, err := utils.GetChassisLabelsDB(host.Ip)
 		if err!= nil {
 			chassisType = "db chassisData failed"
 			log.Print(err)

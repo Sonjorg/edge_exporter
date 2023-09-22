@@ -31,7 +31,7 @@ func main() {
 				log.Print(err)
 			}
 			//Fetching SBC type and serialnumbers, and inserting them in database
-			_, _, err = utils.GetChassisLabels(host.Ip, phpsessid)
+			_, _,_, err = utils.GetChassisLabelsHTTP(host.Ip, phpsessid)
 			if err!= nil {
 				log.Print(err)
 			}
