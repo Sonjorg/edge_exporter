@@ -1,15 +1,17 @@
 /* Copyright (C) 2023 Sondre Jørgensen - All Rights Reserved
  * You may use, distribute and modify this code under the
  * terms of the CC BY 4.0 license
-*/
+ */
 package collector
 
 import (
-	"encoding/xml"
 	"edge_exporter/pkg/config"
 	"edge_exporter/pkg/http"
 	"edge_exporter/pkg/utils"
+	"encoding/xml"
+	"fmt"
 	"log"
+
 	"github.com/prometheus/client_golang/prometheus"
 )
 
@@ -58,10 +60,15 @@ func LinecardCollector2(host *config.HostCompose)  (m []prometheus.Metric) {
 		// There are two linecard linecardIDs which are different for type of SBC router
 		if (chassisType == "SBC1000") {
 			linecardID = []string {"7", "8"}
+			fmt.Println("1",linecardID)
 		} else if (chassisType == "SBC2000") {
 			linecardID = []string {"1", "2"}
+			fmt.Println("2",linecardID)
+
 		} else {
 			//Couldnt fetch chassis type from db or http: return
+			fmt.Println("3",linecardID)
+
 			return
 		}
 			for j := range linecardID {
