@@ -7,7 +7,7 @@ version: "2.3"
 services:
 
   testsondre1:
-    image: sondre
+    image: sondrjor/edge_exporter:2.1
     container_name: testsondre1
     user: root
     logging:
@@ -29,7 +29,7 @@ services:
       exclude: "systemcallstats,linecard"
       routing_database_hours: "24"
   testsondre2:
-    image: sondre
+    image: sondrjor/edge_exporter:2.1
     container_name: testsondre2
     user: root
     logging:
@@ -43,10 +43,10 @@ services:
     ports:
       - "4001:5123"
     environment:
-      authtimeout: "3"
+      authtimeout: "2"
       hostname: "test"
       ipaddress: "ipadr"
       username: "un"
       password: "pw"
-      exclude: "dfgfeg,ergergreg,regergerg,ergregreg"
+      exclude: "ethernetport,linecard,systemcallstats,routingentry,diskpartition"
       routing_database_hours: "24"
