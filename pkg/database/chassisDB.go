@@ -73,7 +73,7 @@ return "", "", err
 
 }
 
-func chassisExists(db * sql.DB, ip string) bool {
+func ChassisExists(db * sql.DB, ip string) bool {
     sqlStmt := `SELECT ipaddress FROM chassis WHERE ipaddress = ?`
     err := db.QueryRow(sqlStmt, ip).Scan(&ip)
     if err != nil {
