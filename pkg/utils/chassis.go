@@ -53,7 +53,7 @@ func GetChassisLabelsHTTP(ipaddress string, phpsessid string) (chassisType strin
 				} // Open the created SQLite File
 				// Defer Closing the database
 				defer sqliteDatabase.Close()
-				if (!database.RowExists(sqliteDatabase, ipaddress)) {
+				if (!database.ChassisExists(sqliteDatabase, ipaddress)) {
 					err = database.InsertChassis(sqliteDatabase, ipaddress, chassisType, serialNumber)
 						if err != nil {
 							log.Print("insert chassis error", err)
