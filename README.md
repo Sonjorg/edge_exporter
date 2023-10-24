@@ -49,7 +49,7 @@ Run:
 
 You should always use an external config.yml. Start an instance with:
 
-    sudo docker run -v path/to/your/config.yml:/usr/src/exporter/config.yml sondrjor/edge_exporter
+    sudo docker run -p 5123:5123 -v path/to/your/config.yml:/usr/src/exporter/config.yml sondrjor/edge_exporter
 
 Metrics can be gathered from ```host:5123/metrics```
 
