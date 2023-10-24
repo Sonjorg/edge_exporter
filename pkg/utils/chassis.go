@@ -37,7 +37,7 @@ func GetChassisLabels(ipaddress string, phpsessid string) (chassisType string, s
 	} // Open the created SQLite File
 	// Defer Closing the database
 	defer sqliteDatabase.Close()
-	if (database.RowExists(sqliteDatabase, ipaddress)) {
+	if (database.ChassisExists(sqliteDatabase, ipaddress)) {
 		chassisType, serialNumber, err = database.GetChassis(sqliteDatabase, ipaddress)
 		if (chassisType == "" || serialNumber == "" || err != nil) {
 			if (phpsessid != "null") {
