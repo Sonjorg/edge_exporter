@@ -74,7 +74,7 @@ func GetChassisLabelsDB(ipaddress string) (chassisType string, serialNumber stri
 	// Defer Closing the database
 	defer sqliteDatabase.Close()
 	
-	if (database.RowExists(sqliteDatabase, ipaddress)) {
+	if (database.ChassisExists(sqliteDatabase, ipaddress)) {
 				chassisType, serialNumber, err = database.GetChassis(sqliteDatabase, ipaddress)
 				if (chassisType == "" || serialNumber == "" || err != nil) {
 					return "Error fetching chassisinfo","Error fetching chassisinfo",err
