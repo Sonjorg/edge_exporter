@@ -9,7 +9,6 @@ import (
 	"edge_exporter/pkg/http"
 	"edge_exporter/pkg/utils"
 	"encoding/xml"
-	"fmt"
 	"log"
 
 	"github.com/prometheus/client_golang/prometheus"
