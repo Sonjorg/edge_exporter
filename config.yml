@@ -13,10 +13,11 @@ hosts:
   password: dfdfd
   routing-database-hours: 24
   exclude:
+#  - linecard
 #  - routingentry
-#  - system
 #  - diskpartition
 #  - systemcallstats
 #  - linecard
+# system collector is mandatory
 
 #Excluding the above collectors for this host
