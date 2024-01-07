@@ -7,7 +7,7 @@ Used together with a Prometheus server where metrics can be gathered from export
 - Version 2.1 (github branch hdo) Added temperature as a metric.
 ### Configuration
 
-#### Configuration v2 (branch main)
+#### Configuration v1 (branch main)
 #### The exporter must be configured in config.yml in the root folder of this repository.
 ```
 ---
